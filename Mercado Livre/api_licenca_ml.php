@@ -56,12 +56,12 @@ define('SYSTEM_NAME', 'Plena Nexus CRM');
 // 2. ARQUIVOS DE DADOS
 // ==================================================================
 
-$DATA_DIR = __DIR__ . '/';
+$DATA_DIR = __DIR__ . '/api_data/';
 
 // Diretório raiz é usado para dados
-// if (!file_exists($DATA_DIR)) {
-//     @mkdir($DATA_DIR, 0755, true);
-// }
+if (!file_exists($DATA_DIR)) {
+    @mkdir($DATA_DIR, 0755, true);
+}
 
 // Arquivos principais
 // Arquivos principais
