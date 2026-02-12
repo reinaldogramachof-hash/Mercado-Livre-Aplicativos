@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ativação de Software Vitalício</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .activation-card {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-color);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        h2 {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.025em;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            background-color: var(--primary-bg);
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .form-control:focus {
+            background-color: var(--primary-bg);
+            border-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-activate {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 0.8rem;
+            width: 100%;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-activate:hover:not(:disabled) {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-activate:active {
+            transform: translateY(0);
+        }
+
+        .btn-activate:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        #status-msg {
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            min-height: 1.2em;
+        }
+
+        .device-info {
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #475569;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="activation-card">
+        <div class="icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+        </div>
+        <h2>Ativação de Software</h2>
+        <p>Insira sua licença vitalícia adquirida para liberar o acesso ao sistema.</p>
+
+        <input type="email" id="email" class="form-control" placeholder="E-mail de Cadastro"
+            style="text-transform: none; font-family: sans-serif; margin-bottom: 1rem;">
+        <input type="text" id="license_key" class="form-control" placeholder="Sua Chave de Licença" autocomplete="off">
+
+        <button id="btn-activate" class="btn-activate">ATIVAR AGORA</button>
+
+        <div id="status-msg"></div>
+
+        <div class="device-info">
+            ID DO DISPOSITIVO:<br>
+            <span id="device-id" style="font-family: monospace;">---</span>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '../api_licenca_ml.php';
+        const APP_TARGET = './app.html';
+
+        // Gera Fingerprint Simples
+        function getDeviceId() {
+            let id = localStorage.getItem('plena_device_fingerprint');
+            if (!id) {
+                id = 'ML-' + Math.random().toString(36).substring(2, 10).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                localStorage.setItem('plena_device_fingerprint', id);
+            }
+            return id;
+        }
+
+        const deviceId = getDeviceId();
+        document.getElementById('device-id').innerText = deviceId;
+
+        document.getElementById('btn-activate').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-activate');
+            const msg = document.getElementById('status-msg');
+            const key = document.getElementById('license_key').value.trim().toUpperCase();
+            const email = document.getElementById('email').value.trim();
+
+            if (!key || !email) {
+                msg.style.color = '#ef4444';
+                msg.innerText = "Preencha todos os campos.";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "VERIFICANDO...";
+            msg.innerText = "";
+
+            try {
+                const response = await fetch(`${API_URL}?action=activate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // Grava as informações de licença (Compatível com plena-lock.js)
+                    const appId = 'plena_barbearia';
+                    localStorage.setItem(`plena_license_key_${appId}`, key);
+                    localStorage.setItem('plena_license_type', data.type || 'vitalicio_ml');
+                    localStorage.setItem('plena_license_token', data.token);
+
+                    msg.style.color = '#22c55e';
+                    msg.innerText = "Licença validada! Redirecionando...";
+
+                    setTimeout(() => {
+                        window.location.href = data.redirect || APP_TARGET;
+                    }, 1500);
+                } else {
+                    msg.style.color = '#ef4444';
+                    msg.innerText = data.message || "Erro na ativação.";
+                    btn.disabled = false;
+                    btn.innerText = "ATIVAR AGORA";
+                }
+            } catch (error) {
+                console.error(error);
+                msg.style.color = '#ef4444';
+                msg.innerHTML = "Erro de conexão com o servidor.<br><small>Certifique-se de usar a porta 9001 (start_nexus_test.bat)</small>";
+                btn.disabled = false;
+                btn.innerText = "ATIVAR AGORA";
+            }
+        });
+
+        // Formatação inteligente (Aplica padrão XXXX-XXXX-XXXX apenas se não for a chave mestra)
+        document.getElementById('license_key').addEventListener('input', (e) => {
+            let value = e.target.value.toUpperCase();
+
+            // Se começar com PLENA, desativa a formatação automática para não quebrar a chave mestra
+            if (value.startsWith('PLENA') || value.startsWith('PLEN-A')) {
+                e.target.value = value;
+                return;
+            }
+
+            // Para outras chaves, tenta manter o padrão XXXX-XXXX-XXXX
+            let clean = value.replace(/[^A-Z0-9]/g, '');
+            let formatted = '';
+            if (clean.length > 0) {
+                formatted = clean.substring(0, 4);
+                if (clean.length > 4) formatted += '-' + clean.substring(4, 8);
+                if (clean.length > 8) formatted += '-' + clean.substring(8, 12);
+                if (clean.length > 12) formatted += '-' + clean.substring(12, 16);
+            }
+            // Se o usuário estiver no meio da digitação da mestre, deixamos livre
+            if (value.length > 15) {
+                e.target.value = value;
+            } else {
+                e.target.value = formatted || value;
+            }
+        });
+    </script>
+</body>
+
+</html>
