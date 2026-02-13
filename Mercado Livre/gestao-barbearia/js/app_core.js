@@ -4,7 +4,15 @@ const DB_KEY = 'brand_barber_pro_v2';
 const defaultDB = {
     appointments: [],
     team: [
-        { id: 'adm', name: 'Administrador (Dono)', commission: 0 }
+        {
+            id: 'adm',
+            name: 'Administrador (Dono)',
+            commission: 0,
+            contract: 'CLT',
+            phone: '',
+            startDate: '',
+            notes: 'Acesso total'
+        }
     ],
     services: [
         { id: 's1', name: 'Corte Degradê', price: 40.00 },
@@ -363,57 +371,78 @@ function renderDashboard() {
 }
 // TEAM MANAGEMENT
 function renderTeam() {
-    const container = document.getElementById('team-list');
+    const list = document.getElementById('team-list');
+    if (!list) return;
+
     if (db.team.length === 0) {
-        container.innerHTML = `
-                    <div class="col-span-full text-center py-8">
-                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
-                        <p class="text-slate-400">Nenhum barbeiro cadastrado</p>
-                    </div>
-                `;
+        list.innerHTML = `
+            <div class="col-span-full text-center py-8">
+                <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                <p class="text-slate-400">Nenhum barbeiro cadastrado</p>
+            </div>
+        `;
         return;
     }
-    container.innerHTML = db.team.map(pro => {
+
+    list.innerHTML = db.team.map(t => {
+        // Calculate stats
+        const servicesCount = db.appointments.filter(a => a.proId === t.id && (a.status === 'done' || a.status === 'concluido')).length;
+
         const pendingCommissions = db.transactions
-            .filter(t => t.proId === pro.id && t.type === 'income' && !t.commissionPaid)
-            .reduce((sum, t) => sum + (t.commission || 0), 0);
-        const completedServices = db.transactions
-            .filter(t => t.proId === pro.id && t.type === 'income')
-            .length;
+            .filter(tr => tr.proId === t.id && tr.type === 'income' && !tr.commissionPaid)
+            .reduce((sum, tr) => sum + (tr.commission || 0), 0);
+
+        const rawPhone = t.phone ? t.phone.replace(/\D/g, '') : '';
+        const waLink = rawPhone ? `https://wa.me/55${rawPhone}` : null;
+
         return `
-                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm card-hover">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="bg-blue-50 p-3 rounded-full text-brand-blue">
-                                <i data-lucide="user" class="w-6 h-6"></i>
-                            </div>
-                            <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">
-                                Comissão: ${pro.commission}%
-                            </span>
-                        </div>
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">${sanitizeHTML(pro.name)}</h3>
-                        <div class="mt-4 space-y-3">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-slate-500">Serviços realizados:</span>
-                                <span class="font-bold">${completedServices}</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-slate-500">Comissões pendentes:</span>
-                                <span class="font-bold text-brand-blue">${fmtMoney(pendingCommissions)}</span>
-                            </div>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-                            <button onclick="payCommission('${pro.id}')" 
-                                    class="text-sm font-bold text-brand-blue hover:text-blue-800 ${pendingCommissions === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
-                                    ${pendingCommissions === 0 ? 'disabled' : ''}>
-                                Pagar Comissão
-                            </button>
-                            <button onclick="editTeam('${pro.id}')" 
-                                    class="text-slate-400 hover:text-slate-600">
-                                <i data-lucide="edit" class="w-4 h-4"></i>
-                            </button>
-                        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between h-full card-hover">
+            <div>
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                        <i data-lucide="user" class="w-6 h-6"></i>
                     </div>
-                `;
+                    <div class="flex flex-col items-end gap-1">
+                        <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded uppercase tracking-wider">
+                            ${t.contract || 'PJ'}
+                        </span>
+                        <span class="text-[10px] font-bold text-brand-blue uppercase">Comissão: ${t.commission}%</span>
+                    </div>
+                </div>
+                <h3 class="font-bold text-lg text-slate-800 mb-1">${sanitizeHTML(t.name)}</h3>
+                ${t.startDate ? `<p class="text-[10px] text-slate-400 mb-4 flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> Desde ${fmtDate(t.startDate)}</p>` : '<div class="mb-4"></div>'}
+                
+                <div class="space-y-2 mt-4">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">Serviços realizados:</span>
+                        <span class="font-bold text-slate-800">${servicesCount}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">Comissões pendentes:</span>
+                        <span class="font-bold ${pendingCommissions > 0 ? 'text-brand-blue' : 'text-slate-400'}">${fmtMoney(pendingCommissions)}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-50 flex gap-2">
+                <button onclick="payCommission('${t.id}')" 
+                    class="flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${pendingCommissions > 0 ? 'bg-blue-50 text-brand-blue hover:bg-blue-100' : 'bg-slate-50 text-slate-300 cursor-not-allowed'}"
+                    ${pendingCommissions === 0 ? 'disabled' : ''}>
+                    Pagar Comissão
+                </button>
+                <div class="flex gap-1">
+                    ${waLink ? `
+                        <a href="${waLink}" target="_blank" class="p-2 text-green-500 hover:bg-green-50 rounded-lg transition-colors" title="WhatsApp">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        </a>
+                    ` : ''}
+                    <button onclick="editTeam('${t.id}')" class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition-colors" title="Editar">
+                        <i data-lucide="edit-2" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        `;
     }).join('');
     lucide.createIcons();
 }
@@ -526,18 +555,71 @@ function renderFinance() {
     }).join('');
     lucide.createIcons();
 }
+
+
+function renderTeam() {
+    const list = document.getElementById('team-list');
+    if (!list) return;
+
+    list.innerHTML = db.team.map(t => {
+        // Calculate stats
+        const servicesCount = db.appointments.filter(a => a.proId === t.id && (a.status === 'done' || a.status === 'concluido')).length;
+
+        const pendingCommissions = db.transactions
+            .filter(tr => tr.proId === t.id && tr.type === 'income' && !tr.commissionPaid)
+            .reduce((sum, tr) => sum + (tr.commission || 0), 0);
+
+        return `
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between h-full">
+            <div>
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                        <i data-lucide="user" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-400 uppercase">Comissão: ${t.commission}%</span>
+                </div>
+                <h3 class="font-bold text-lg text-slate-800 mb-1">${t.name}</h3>
+                
+                <div class="space-y-2 mt-4">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">Serviços realizados:</span>
+                        <span class="font-bold text-slate-800">${servicesCount}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">Comissões pendentes:</span>
+                        <span class="font-bold ${pendingCommissions > 0 ? 'text-brand-blue' : 'text-slate-400'}">${fmtMoney(pendingCommissions)}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-50 flex gap-2">
+                <button onclick="payCommission('${t.id}')" 
+                    class="flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${pendingCommissions > 0 ? 'bg-blue-50 text-brand-blue hover:bg-blue-100' : 'bg-slate-50 text-slate-300 cursor-not-allowed'}"
+                    ${pendingCommissions === 0 ? 'disabled' : ''}>
+                    Pagar Comissão
+                </button>
+                 <button onclick="editTeam('${t.id}')" class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition-colors">
+                    <i data-lucide="edit-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+        `;
+    }).join('');
+    lucide.createIcons();
+}
+
 // CLIENTS MANAGEMENT
 function renderClients() {
     const container = document.getElementById('clients-list');
     if (db.clients.length === 0) {
         container.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-slate-400">
-                            <i data-lucide="user" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
-                            <p>Nenhum cliente cadastrado</p>
-                        </td>
-                    </tr>
-                `;
+            <tr>
+                <td colspan="5" class="px-6 py-8 text-center text-slate-400">
+                    <i data-lucide="user" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                    <p>Nenhum cliente cadastrado</p>
+                </td>
+            </tr>
+        `;
         return;
     }
     container.innerHTML = db.clients.map(client => {
@@ -547,21 +629,119 @@ function renderClients() {
         const lastVisit = clientTrans.length > 0
             ? clientTrans.sort((a, b) => new Date(b.date) - new Date(a.date))[0].date
             : null;
+
+        // WhatsApp Link Logic
+        const rawPhone = client.phone ? client.phone.replace(/\D/g, '') : '';
+        const waLink = rawPhone ? `https://wa.me/55${rawPhone}` : '#';
+
         return `
-                    <tr class="hover:bg-slate-50">
-                        <td class="px-6 py-4 font-medium text-slate-800">${sanitizeHTML(client.name)}</td>
-                        <td class="px-6 py-4 text-slate-600">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
-                        <td class="px-6 py-4 text-slate-500">${lastVisit ? fmtDate(lastVisit) : 'Nunca'}</td>
-                        <td class="px-6 py-4 font-bold text-brand-blue">${fmtMoney(totalSpent)}</td>
-                        <td class="px-6 py-4 text-center">
-                            <button onclick="editClient('${client.id}')" 
-                                    class="text-slate-400 hover:text-brand-blue">
-                                <i data-lucide="edit" class="w-4 h-4"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
+            <tr class="hover:bg-slate-50">
+                <td class="px-6 py-4">
+                    <div class="font-medium text-slate-800">${sanitizeHTML(client.name)}</div>
+                    ${client.email ? `<div class="text-xs text-slate-400">${sanitizeHTML(client.email)}</div>` : ''}
+                </td>
+                <td class="px-6 py-4 text-slate-600">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
+                <td class="px-6 py-4 text-slate-500">${lastVisit ? fmtDate(lastVisit) : 'Nunca'}</td>
+                <td class="px-6 py-4 font-bold text-brand-blue">${fmtMoney(totalSpent)}</td>
+                <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center gap-2">
+                        <!-- WhatsApp Action -->
+                        ${rawPhone ? `
+                        <a href="${waLink}" target="_blank" class="p-2 text-green-500 hover:bg-green-50 rounded-lg transition-colors" title="Chamar no WhatsApp">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        </a>` : ''}
+                        
+                        <!-- Quick Schedule -->
+                        <button onclick="openApptModal('${client.id}')" class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="Novo Agendamento">
+                            <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+                        </button>
+
+                        <!-- View Details (CRM) -->
+                        <button onclick="openClientDetails('${client.id}')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-lg transition-colors" title="Ver Detalhes">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
     }).join('');
+    lucide.createIcons();
+}
+
+// CRM LOGIC
+function openClientDetails(clientId) {
+    const client = db.clients.find(c => c.id === clientId);
+    if (!client) return;
+
+    // 1. Basic Info
+    document.getElementById('cd-name').textContent = client.name;
+    document.getElementById('cd-phone').textContent = client.phone || 'Sem telefone';
+
+    // 2. Stats Calculation
+    const clientTrans = db.transactions.filter(t => t.clientId === clientId && t.type === 'income');
+    const totalSpent = clientTrans.reduce((sum, t) => sum + t.amount, 0);
+    const visits = clientTrans.length;
+    const avgTicket = visits > 0 ? (totalSpent / visits) : 0;
+
+    document.getElementById('cd-total-spent').textContent = fmtMoney(totalSpent);
+    document.getElementById('cd-visits').textContent = visits;
+    document.getElementById('cd-avg-ticket').textContent = fmtMoney(avgTicket);
+
+    // 3. Notes & Extra Info
+    document.getElementById('cd-notes').textContent = client.notes || 'Nenhuma observação registrada.';
+    document.getElementById('cd-birthday').textContent = client.birthDate ? fmtDate(client.birthDate) : '-';
+
+    // Dates
+    const sortedDates = clientTrans.map(t => new Date(t.date)).sort((a, b) => a - b);
+    const firstVisit = sortedDates.length > 0 ? sortedDates[0] : null;
+    const lastVisit = sortedDates.length > 0 ? sortedDates[sortedDates.length - 1] : null;
+
+    document.getElementById('cd-first-visit').textContent = firstVisit ? firstVisit.toLocaleDateString('pt-BR') : '-';
+    document.getElementById('cd-last-visit').textContent = lastVisit ? lastVisit.toLocaleDateString('pt-BR') : '-';
+
+    // 4. Action Buttons
+    const btnWa = document.getElementById('cd-btn-whatsapp');
+    const rawPhone = client.phone ? client.phone.replace(/\D/g, '') : '';
+
+    if (rawPhone) {
+        btnWa.onclick = () => window.open(`https://wa.me/55${rawPhone}`, '_blank');
+        btnWa.classList.remove('opacity-50', 'cursor-not-allowed');
+    } else {
+        btnWa.onclick = null;
+        btnWa.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+
+    document.getElementById('cd-btn-schedule').onclick = () => {
+        closeModal('clientDetailsModal');
+        openApptModal(client.id);
+    };
+
+    document.getElementById('cd-btn-edit').onclick = () => {
+        closeModal('clientDetailsModal');
+        openClientModal(client); // Reuse existing edit modal
+    };
+
+    // 5. History Timeline
+    const historyContainer = document.getElementById('cd-history-list');
+    if (clientTrans.length === 0) {
+        historyContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum histórico encontrado.</p>';
+    } else {
+        historyContainer.innerHTML = clientTrans
+            .sort((a, b) => new Date(b.date) - new Date(a.date)) // Newest first
+            .map(t => `
+                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                    <div>
+                        <p class="font-bold text-slate-700 text-sm">${sanitizeHTML(t.description)}</p>
+                        <p class="text-xs text-slate-500">${fmtDate(t.date)} • ${t.proName || 'Barbearia'}</p>
+                    </div>
+                    <span class="font-bold text-green-600 text-sm">${fmtMoney(t.amount)}</span>
+                </div>
+            `).join('');
+    }
+
+    // Show Modal
+    const modal = document.getElementById('clientDetailsModal');
+    modal.classList.remove('hidden');
     lucide.createIcons();
 }
 // MODAIS E FORMULÁRIOS
@@ -602,9 +782,16 @@ function openTeamModal(professional = null) {
         document.getElementById('tm-id').value = professional.id;
         document.getElementById('tm-name').value = professional.name;
         document.getElementById('tm-comm').value = professional.commission;
+        document.getElementById('tm-contract').value = professional.contract || 'PJ';
+        document.getElementById('tm-phone').value = professional.phone || '';
+        document.getElementById('tm-start-date').value = professional.startDate || '';
+        document.getElementById('tm-notes').value = professional.notes || '';
+        document.querySelector('#teamModal h3').textContent = 'Editar Barbeiro';
     } else {
         document.querySelector('#teamModal form').reset();
         document.getElementById('tm-id').value = '';
+        document.getElementById('tm-contract').value = 'PJ';
+        document.querySelector('#teamModal h3').textContent = 'Novo Barbeiro';
     }
     document.getElementById('teamModal').classList.remove('hidden');
 }
@@ -646,6 +833,7 @@ function openClientModal(client = null) {
         document.getElementById('cli-name').value = client.name;
         document.getElementById('cli-phone').value = client.phone || '';
         document.getElementById('cli-email').value = client.email || '';
+        document.getElementById('cli-birthdate').value = client.birthDate || '';
         document.getElementById('cli-notes').value = client.notes || '';
     } else {
         document.querySelector('#clientModal form').reset();
@@ -737,15 +925,26 @@ function submitTeam(e) {
     const id = document.getElementById('tm-id').value;
     const name = document.getElementById('tm-name').value.trim();
     const commission = parseFloat(document.getElementById('tm-comm').value) || 0;
+    const contract = document.getElementById('tm-contract').value;
+    const phone = document.getElementById('tm-phone').value.trim();
+    const startDate = document.getElementById('tm-start-date').value;
+    const notes = document.getElementById('tm-notes').value.trim();
+
     if (!name) {
-        alert('Por favor, insira o nome do barbeiro.');
+        showNotification('Por favor, insira o nome do barbeiro.', 'error');
         return;
     }
+
     const professional = {
         id: id || getID(),
         name,
-        commission
+        commission,
+        contract,
+        phone,
+        startDate,
+        notes
     };
+
     if (id) {
         const index = db.team.findIndex(t => t.id === id);
         if (index !== -1) {
@@ -754,6 +953,7 @@ function submitTeam(e) {
     } else {
         db.team.push(professional);
     }
+
     save();
     closeModal('teamModal');
     renderTeam();
@@ -828,19 +1028,33 @@ function submitClient(e) {
     const name = document.getElementById('cli-name').value.trim();
     const phone = document.getElementById('cli-phone').value.trim();
     const email = document.getElementById('cli-email').value.trim();
+    const birthDate = document.getElementById('cli-birthdate').value;
     const notes = document.getElementById('cli-notes').value.trim();
+
     if (!name) {
         alert('Por favor, insira o nome do cliente.');
         return;
     }
+
+    // Preserve original creation date if editing
+    let originalCreatedAt = new Date().toISOString();
+    if (id) {
+        const existing = db.clients.find(c => c.id === id);
+        if (existing && existing.createdAt) {
+            originalCreatedAt = existing.createdAt;
+        }
+    }
+
     const client = {
         id: id || getID(),
         name,
         phone: phone || null,
         email: email || null,
+        birthDate: birthDate || null,
         notes: notes || null,
-        createdAt: new Date().toISOString()
+        createdAt: originalCreatedAt
     };
+
     if (id) {
         const index = db.clients.findIndex(c => c.id === id);
         if (index !== -1) {
@@ -888,6 +1102,156 @@ function cancelAppt(id) {
             showNotification('Agendamento cancelado!', 'success');
         }
     }
+}
+
+// EDIT FUNCTIONS
+function editTeam(id) {
+    const professional = db.team.find(p => p.id === id);
+    if (professional) {
+        openTeamModal(professional);
+    }
+}
+
+function editService(id) {
+    const service = db.services.find(s => s.id === id);
+    if (service) {
+        openServiceModal(service);
+    }
+}
+
+function editClient(id) {
+    const client = db.clients.find(c => c.id === id);
+    if (client) {
+        // We need to implement openClientModal or similar if it doesn't exist, 
+        // but based on renderClients, we have openClientDetails. 
+        // Let's check if there is an openClientModal for editing.
+        // For now, let's assuming client editing might be needed too.
+        // Checking app.html line 1591 shows 'clientModal'.
+        // We need to see if openClientModal handles data.
+        // For now, sticking to the requested Team and Service edits.
+        // But wait, the original code had editClient too.
+        const modal = document.getElementById('clientModal');
+        if (modal) {
+            document.getElementById('cli-id').value = client.id;
+            document.getElementById('cli-name').value = client.name;
+            document.getElementById('cli-phone').value = client.phone;
+            document.getElementById('cli-email').value = client.email || '';
+            document.getElementById('cli-birthdate').value = client.birthDate || '';
+            document.getElementById('cli-notes').value = client.notes || '';
+            modal.classList.remove('hidden');
+        }
+    }
+}
+
+// REPORTS
+function generateReport() {
+    const start = document.getElementById('rep-start').value;
+    const end = document.getElementById('rep-end').value;
+
+    if (!start || !end) {
+        alert('Selecione um período.');
+        return;
+    }
+
+    const startDate = new Date(start + 'T00:00:00');
+    const endDate = new Date(end + 'T23:59:59');
+
+    let income = 0;
+    let expense = 0;
+    let commission = 0;
+    const serviceCounts = {};
+
+    db.transactions.forEach(t => {
+        const tDate = new Date(t.date); // Presumes ISO string or valid date
+        if (isNaN(tDate.getTime())) return; // Skip invalid dates
+
+        // Ajuste simples de data (comparação de string também funcionaria se ISO)
+        // Mas objeto Date é mais seguro para ranges
+        if (tDate >= startDate && tDate <= endDate) {
+            const val = parseFloat(t.amount || 0);
+
+            if (t.type === 'income') {
+                income += val;
+                commission += parseFloat(t.commission || 0);
+
+                // Track services
+                if (t.description && t.description.startsWith('Serviço:')) {
+                    const svcName = t.description.split(' - ')[0].replace('Serviço: ', '').trim();
+                    serviceCounts[svcName] = (serviceCounts[svcName] || 0) + 1;
+                }
+
+            } else if (t.type === 'expense') {
+                expense += val;
+            }
+        }
+    });
+
+    // Update UI
+    document.getElementById('rep-inc').innerText = fmtMoney(income);
+    document.getElementById('rep-exp').innerText = fmtMoney(expense);
+    document.getElementById('rep-com').innerText = fmtMoney(commission);
+
+    // Top Services
+    const sortedServices = Object.entries(serviceCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+    const topSvcsEl = document.getElementById('top-services');
+    topSvcsEl.innerHTML = sortedServices.map(([name, count], i) => `
+        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+            <div class="flex items-center gap-3">
+                <span class="font-bold text-slate-400">#${i + 1}</span>
+                <span class="font-medium text-slate-700">${name}</span>
+            </div>
+            <span class="bg-blue-100 text-brand-blue text-xs font-bold px-2 py-1 rounded-full">${count} cortes</span>
+        </div>
+    `).join('') || '<p class="text-sm text-slate-400 text-center">Nenhum serviço neste período.</p>';
+
+    document.getElementById('report-result').classList.remove('hide');
+}
+
+function generateMonthReport() {
+    const date = new Date();
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    // Formato YYYY-MM-DD local
+    const toLocalISO = (d) => {
+        const offset = d.getTimezoneOffset() * 60000;
+        return new Date(d.getTime() - offset).toISOString().split('T')[0];
+    };
+
+    document.getElementById('rep-start').value = toLocalISO(firstDay);
+    document.getElementById('rep-end').value = toLocalISO(lastDay);
+
+    generateReport();
+}
+
+function shareReport() {
+    const start = document.getElementById('rep-start').value;
+    const end = document.getElementById('rep-end').value;
+    const inc = document.getElementById('rep-inc').innerText;
+    const exp = document.getElementById('rep-exp').innerText;
+    const com = document.getElementById('rep-com').innerText;
+
+    if (!start || !end) {
+        alert('Gere um relatório primeiro!');
+        return;
+    }
+
+    const fmtDateBr = (d) => d.split('-').reverse().join('/');
+
+    const text = `📊 *Relatório Financeiro*
+📅 Período: ${fmtDateBr(start)} a ${fmtDateBr(end)}
+
+💰 *Receita:* ${inc}
+💸 *Despesas:* ${exp}
+🤝 *Comissões:* ${com}
+
+Gerado pelo Sistema de Gestão.`;
+
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
 }
 function findOrCreateClient(name) {
     let client = db.clients.find(c => c.name.toLowerCase() === name.toLowerCase());
@@ -953,20 +1317,55 @@ function confirmCommissionPayment() {
 }
 function shareCommissionWhatsApp() {
     if (!currentCommissionData) return;
+
     const salonName = db.settings.businessName || 'SUA BARBEARIA';
-    let msg = `🔒 *FECHAMENTO DE CAIXA*\n`;
+    const date = new Date().toLocaleDateString('pt-BR');
+    const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    let msg = `🧾 *RECIBO DE COMISSÃO*\n`;
     msg += `💈 *${salonName.toUpperCase()}*\n`;
     msg += `📅 Data: ${date} às ${time}\n`;
     msg += `--------------------------------\n`;
-    msg += `📊 *RESUMO FINANCEIRO*\n`;
-    msg += `💰 Entradas: *${inc}*\n`;
-    msg += `📉 Despesas: ${exp}\n`;
-    msg += `👥 Comissões: ${com}\n`;
+    msg += `👤 *Profissional:* ${currentCommissionData.proName}\n`;
+    msg += `💰 *Valor Pago:* ${fmtMoney(currentCommissionData.amount)}\n`;
     msg += `--------------------------------\n`;
-    msg += `✨ *SALDO FINAL: ${bal}*\n`;
-    msg += `--------------------------------\n`;
-    msg += `_Documento de conferência interna_`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    msg += `✅ *PAGAMENTO REALIZADO*\n`;
+    msg += `_Comprovante digital gerado pelo sistema._`;
+
+    const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+}
+
+function printCommissionReceipt() {
+    if (!currentCommissionData) return;
+
+    const salonName = db.settings.businessName || 'SUA BARBEARIA';
+    const date = new Date().toLocaleDateString('pt-BR');
+    const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    const content = `
+        <div style="font-family: monospace; padding: 20px; max-width: 300px; margin: 0 auto; border: 1px dashed #000;">
+            <h2 style="text-align: center; margin: 0;">${salonName.toUpperCase()}</h2>
+            <p style="text-align: center; font-size: 12px; margin-bottom: 20px;">RECIBO DE PAGAMENTO DE COMISSÃO</p>
+            
+            <p><strong>DATA:</strong> ${date} ${time}</p>
+            <p><strong>PROFISSIONAL:</strong><br>${currentCommissionData.proName}</p>
+            <hr style="border-top: 1px dashed #000;">
+            
+            <p style="font-size: 18px; text-align: right;"><strong>VALOR: ${fmtMoney(currentCommissionData.amount)}</strong></p>
+            
+            <hr style="border-top: 1px dashed #000;">
+            <p style="text-align: center; font-size: 10px; margin-top: 20px;">ASSINATURA DO RESPONSÁVEL</p>
+            <br><br>
+            <hr style="border-top: 1px solid #000;">
+            <p style="text-align: center; font-size: 10px;">Sistema de Gestão</p>
+        </div>
+        <script>window.print(); window.onafterprint = function(){ window.close(); };</script>
+    `;
+
+    const win = window.open('', '_blank', 'width=400,height=600');
+    win.document.write(content);
+    win.document.close();
 }
 function printClosing() {
     const inc = document.getElementById('close-inc').textContent;
@@ -1360,4 +1759,144 @@ document.addEventListener('DOMContentLoaded', init);
 document.addEventListener('DOMContentLoaded', () => {
     updateTutorialProgress();
     loadChecklistState();
+
+    // Auto-check receipt status
+    const confirmed = localStorage.getItem('ml_receipt_confirmed');
+    if (confirmed === 'true') {
+        const btn = document.getElementById('btn-confirm-terms');
+        const badge = document.getElementById('terms-accepted-badge');
+        const dateEl = document.getElementById('terms-date');
+
+        if (btn && badge) {
+            btn.classList.add('hidden');
+            badge.classList.remove('hidden');
+            if (dateEl) dateEl.textContent = 'Confirmado em: ' + (localStorage.getItem('ml_receipt_date') || 'Anteriormente');
+        }
+    }
 });
+
+// ==========================================
+// AUDITORIA ML: Receipt Confirmation Logic
+// ==========================================
+async function confirmReceipt() {
+    const btn = document.getElementById('btn-confirm-terms');
+    const badge = document.getElementById('terms-accepted-badge');
+    const dateEl = document.getElementById('terms-date');
+    const licenseKey = localStorage.getItem('ml_license_key') || localStorage.getItem('license_key'); // Backup naming
+
+    if (!licenseKey) {
+        showNotification('Erro: Licença não encontrada. Por favor, reative o sistema.', 'error');
+        return;
+    }
+
+    // UI Loading State
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Confirmando...';
+
+    try {
+        // Adjust path if needed (assuming app.html is in gestao-barbearia/)
+        const apiPath = '../api_licenca_ml.php?action=confirm_receipt';
+
+        const response = await fetch(apiPath, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                license_key: licenseKey,
+                confirmation_text: "Declaro que recebi o acesso ao software, testei seu funcionamento e confirmo que ele atende ao anunciado."
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showNotification('Recebimento confirmado com sucesso!', 'success');
+
+            // Persist local state
+            const now = new Date().toLocaleString();
+            localStorage.setItem('ml_receipt_confirmed', 'true');
+            localStorage.setItem('ml_receipt_date', now);
+
+            // Update UI
+            btn.classList.add('hidden');
+            badge.classList.remove('hidden');
+            if (dateEl) dateEl.textContent = 'Confirmado em: ' + now;
+
+        } else {
+            throw new Error(data.message || 'Erro ao confirmar');
+        }
+    } catch (error) {
+        console.error(error);
+        showNotification('Erro de conexão: ' + error.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
+// ==========================================
+// MISSING MODAL FUNCTIONS (Restored)
+// ==========================================
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+function openTeamModal(professional = null) {
+    const modal = document.getElementById('teamModal');
+    if (!modal) return;
+
+    // Reset form
+    document.getElementById('tm-id').value = '';
+    document.getElementById('tm-name').value = '';
+    document.getElementById('tm-comm').value = '50';
+
+    if (professional) {
+        document.getElementById('tm-id').value = professional.id;
+        document.getElementById('tm-name').value = professional.name;
+        document.getElementById('tm-comm').value = professional.commission;
+    }
+    modal.classList.remove('hidden');
+}
+
+function openServiceModal(service = null) {
+    const modal = document.getElementById('serviceModal');
+    if (!modal) return;
+
+    // Reset form
+    document.getElementById('svc-id').value = '';
+    document.getElementById('svc-name').value = '';
+    document.getElementById('svc-price').value = '';
+
+    if (service) {
+        document.getElementById('svc-id').value = service.id;
+        document.getElementById('svc-name').value = service.name;
+        document.getElementById('svc-price').value = service.price;
+    }
+    modal.classList.remove('hidden');
+}
+
+function openClientModal(client = null) {
+    const modal = document.getElementById('clientModal');
+    if (!modal) return;
+
+    // Clear fields first
+    document.getElementById('cli-id').value = '';
+    document.getElementById('cli-name').value = '';
+    document.getElementById('cli-phone').value = '';
+    document.getElementById('cli-email').value = '';
+    document.getElementById('cli-birthdate').value = '';
+    document.getElementById('cli-notes').value = '';
+
+    if (client) {
+        document.getElementById('cli-id').value = client.id;
+        document.getElementById('cli-name').value = client.name;
+        document.getElementById('cli-phone').value = client.phone;
+        document.getElementById('cli-email').value = client.email || '';
+        document.getElementById('cli-birthdate').value = client.birthDate || '';
+        document.getElementById('cli-notes').value = client.notes || '';
+    }
+    modal.classList.remove('hidden');
+}

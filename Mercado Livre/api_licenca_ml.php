@@ -45,7 +45,7 @@ if (file_exists(__DIR__ . '/secrets.php'))
 
 // Configurações padrão
 if (!isset($ADMIN_SECRET) || empty($ADMIN_SECRET)) {
-    $ADMIN_SECRET = 'PLENA-MASTER-2026';
+    $ADMIN_SECRET = 'Rein@ldo1912';
 }
 
 // Constantes do sistema
@@ -69,6 +69,7 @@ $DB_FILE = $DATA_DIR . 'database_licenses_secure.json';
 $LEADS_FILE = $DATA_DIR . 'leads_crm.json';
 $PRODUCTS_FILE = $DATA_DIR . 'products_catalog.json';
 $FINANCE_FILE = $DATA_DIR . 'finance_transactions.json'; // Remapped from finance.json
+$RECEIPTS_FILE = $DATA_DIR . 'receipts_log.json'; // New File for Terms Acceptance
 $PARTNERS_FILE = $DATA_DIR . 'parceiros.json';         // Remapped from partners.json
 $TEAM_FILE = $DATA_DIR . 'team_members.json';
 $REPORTS_FILE = $DATA_DIR . 'reports_history.json';
@@ -88,7 +89,8 @@ $init_files = [
     $REPORTS_FILE => [],
     $LOGS_FILE => [],
     $APPS_CONFIG_FILE => [],
-    $NOTIFICATIONS_FILE => [] // New Init
+    $NOTIFICATIONS_FILE => [], // New Init
+    $RECEIPTS_FILE => []
 ];
 
 foreach ($init_files as $file => $default) {
@@ -204,8 +206,8 @@ function systemLog($message, $type = 'info')
 
     $logs[] = $logEntry;
 
-    if (count($logs) > 1000) {
-        $logs = array_slice($logs, -1000);
+    if (count($logs) > 5000) {
+        $logs = array_slice($logs, -5000);
     }
 
     @file_put_contents($LOGS_FILE, json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
@@ -264,18 +266,7 @@ if ($action === 'activate') {
         jsonResponse(["status" => "error", "message" => "Chave, E-mail e Dispositivo são obrigatórios"], 400);
     }
 
-    // BYPASS: Chave Mestra Universal (Sempre Vitalícia)
-    // Compara removendo hífens para ser tolerante a erros de digitação/formatação
-    $clean_key = str_replace('-', '', strtoupper($key));
-    if ($clean_key === 'PLENAVITALICIO2026') {
-        systemLog("Acesso via Chave Mestra (Vitalício) por $email", 'warning');
-        jsonResponse([
-            "status" => "success",
-            "token" => base64_encode('MASTER-VITALICIO|' . $device),
-            "type" => "vitalicio_ml",
-            "message" => "Acesso Vitalício Liberado!"
-        ]);
-    }
+
 
     $content = @file_get_contents($DB_FILE);
     $db = $content ? json_decode($content, true) : [];
@@ -482,6 +473,55 @@ if ($action === 'validate' || $action === 'validate_access') {
     } else {
         jsonResponse(["valid" => false, "message" => "Licença já está em uso em outro dispositivo"], 403);
     }
+}
+
+// ACTION: CONFIRM RECEIPT (DIGITAL SIGNATURE)
+if ($action === 'confirm_receipt') {
+    $key = $data['license_key'] ?? '';
+    // $device = $data['device_id'] ?? ''; // Optional validation
+    $text = $data['confirmation_text'] ?? '';
+
+    if (empty($key) || empty($text)) {
+        jsonResponse(["success" => false, "message" => "Chave e texto de confirmação obrigatórios"], 400);
+    }
+
+    $content = @file_get_contents($DB_FILE);
+    $db = $content ? json_decode($content, true) : [];
+
+    // Validate License exists
+    if (!isset($db[$key])) {
+        // Try case insensitive find
+        foreach ($db as $k => $v) {
+            if (strtoupper($k) === strtoupper($key)) {
+                $key = $k;
+                break;
+            }
+        }
+        if (!isset($db[$key])) {
+            jsonResponse(["success" => false, "message" => "Licença inválida"], 404);
+        }
+    }
+
+    // Append to Receipts Log
+    $receipts_db = json_decode(@file_get_contents($RECEIPTS_FILE), true) ?? [];
+
+    $receipt_entry = [
+        'id' => uniqid('rec_'),
+        'timestamp' => date('Y-m-d H:i:s'),
+        'license_key' => $key,
+        'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+        'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+        'confirmation_text' => $text,
+        'client_email' => $db[$key]['client'] ?? 'unknown'
+    ];
+
+    $receipts_db[] = $receipt_entry;
+    @file_put_contents($RECEIPTS_FILE, json_encode($receipts_db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+    // Log System Event
+    systemLog("Termos aceitos para licença $key (IP: {$receipt_entry['ip']})", 'legal');
+
+    jsonResponse(['success' => true, 'message' => 'Aceite registrado com sucesso.']);
 }
 
 // ==================================================================
@@ -1406,6 +1446,93 @@ if ($action === 'settle_partner') {
     } else {
         jsonResponse(['error' => 'Parceiro não encontrado'], 404);
     }
+}
+
+
+// ADMIN DASHBOARD STATS
+if ($action === 'dashboard_stats') {
+    if (!checkAuth($data, $_GET, $server))
+        jsonResponse(['error' => 'Acesso Negado'], 403);
+
+    // Load Data
+    $finance = json_decode(@file_get_contents($FINANCE_FILE), true) ?? [];
+    $licenses = json_decode(@file_get_contents($DB_FILE), true) ?? [];
+
+    $total_revenue = 0;
+    $monthly_revenue = 0;
+    $current_month = date('Y-m');
+
+    // Calc Revenue
+    foreach ($finance as $t) {
+        if (($t['type'] ?? '') === 'income') {
+            $val = floatval($t['amount'] ?? 0);
+            $total_revenue += $val;
+            if (strpos($t['date'], $current_month) === 0) {
+                $monthly_revenue += $val;
+            }
+        }
+    }
+
+    // Calc Licenses
+    $active_count = 0;
+    $devices_count = 0;
+    $top_products = [];
+
+    foreach ($licenses as $l) {
+        if (($l['status'] ?? '') === 'active') {
+            $active_count++;
+        }
+        if (!empty($l['device_id'])) {
+            $devices_count++;
+        }
+        $prod = $l['product'] ?? 'Desconhecido';
+        if (!isset($top_products[$prod]))
+            $top_products[$prod] = 0;
+        $top_products[$prod]++;
+    }
+
+    arsort($top_products);
+    $top_products = array_slice($top_products, 0, 5);
+
+    jsonResponse([
+        'total_revenue' => $total_revenue,
+        'monthly_revenue' => $monthly_revenue,
+        'active_subscriptions' => $active_count,
+        'active_devices_count' => $devices_count,
+        'top_products' => $top_products
+    ]);
+}
+
+// LIST ALL LICENSES
+if ($action === 'list') {
+    if (!checkAuth($data, $_GET, $server))
+        jsonResponse(['error' => 'Acesso Negado'], 403);
+
+    $db = json_decode(@file_get_contents($DB_FILE), true) ?? [];
+    $list = [];
+    foreach ($db as $key => $val) {
+        $val['key'] = $key; // Inject key
+        $list[] = $val;
+    }
+    // Sort by Date DESC
+    usort($list, function ($a, $b) {
+        return strtotime($b['created_at']) - strtotime($a['created_at']);
+    });
+
+    jsonResponse($list);
+}
+
+// GET RECEIPTS
+if ($action === 'get_receipts') {
+    if (!checkAuth($data, $_GET, $server))
+        jsonResponse(['error' => 'Acesso Negado'], 403);
+
+    $receipts = json_decode(@file_get_contents($RECEIPTS_FILE), true) ?? [];
+    // Ensure array list
+    if (!empty($receipts) && array_keys($receipts) !== range(0, count($receipts) - 1))
+        $receipts = array_values($receipts);
+
+    jsonResponse(array_reverse($receipts));
 }
 
 // READ SYSTEM LOGS

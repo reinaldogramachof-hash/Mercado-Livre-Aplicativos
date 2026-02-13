@@ -372,7 +372,7 @@
                                     <th class="px-6 py-3">Telefone</th>
                                     <th class="px-6 py-3">Última Visita</th>
                                     <th class="px-6 py-3">Total Gasto</th>
-                                    <th class="px-6 py-3 text-center">Ações</th>
+                                    <th class="px-6 py-3 text-center">Ações Rápidas</th>
                                 </tr>
                             </thead>
                             <tbody id="clients-list" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -1404,17 +1404,19 @@
                         <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
                             id="terms-box">
                             <i data-lucide="check-circle-2" class="w-12 h-12 text-slate-300 mb-3" id="terms-icon"></i>
-                            <h3 class="font-bold text-slate-800 text-lg mb-2" id="terms-title">Confirmação de Leitura
-                            </h3>
+                            <h3 class="font-bold text-slate-800 text-lg mb-2" id="terms-title">Confirmação de
+                                Recebimento</h3>
                             <p class="text-sm text-slate-500 mb-6 max-w-lg" id="terms-desc">
-                                Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
-                                Política de Privacidade e sua responsabilidade sobre os backups.
+                                Declaro que recebi o acesso ao software, testei seu funcionamento e confirmo que ele
+                                atende ao anunciado.
+                                Reconheço que esta é uma licença digital de uso perpétuo e estou ciente da política de
+                                backups locais.
                             </p>
-                            <button onclick="confirmTerms()" id="btn-confirm-terms"
+                            <button onclick="confirmReceipt()" id="btn-confirm-terms"
                                 class="bg-brand-blue hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
-                                <span>Li, Compreendi e Concordo</span>
-                                <i data-lucide="arrow-right"
-                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                                <span>Confirmo o Recebimento e Funcionamento</span>
+                                <i data-lucide="check-circle"
+                                    class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                             </button>
                             <div id="terms-accepted-badge"
                                 class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
@@ -1505,13 +1507,50 @@
             <form onsubmit="submitTeam(event)" class="space-y-4">
                 <input type="hidden" id="tm-id">
                 <input type="text" id="tm-name" required placeholder="Nome do Barbeiro"
-                    class="w-full border p-2 rounded-lg">
-                <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-                    <label class="text-xs font-bold text-blue-800 uppercase mb-1 block">Comissão Padrão (%)</label>
-                    <input type="number" id="tm-comm" required class="w-full border p-2 rounded-lg" placeholder="Ex: 50"
-                        min="0" max="100" step="1">
+                    class="w-full border p-2 rounded-lg text-sm focus:border-brand-blue outline-none">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Tipo de
+                            Contrato</label>
+                        <select id="tm-contract" required
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                            <option value="PJ">PJ / Parceiro</option>
+                            <option value="Diária">Diária</option>
+                            <option value="CLT">CLT / Contratado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Data de Início</label>
+                        <input type="date" id="tm-start-date"
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Salvar</button>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 border border-blue-100 p-3 rounded-lg">
+                        <label class="text-[10px] font-bold text-blue-800 uppercase mb-1 block">Comissão (%)</label>
+                        <input type="number" id="tm-comm" required class="w-full border p-2 rounded-lg text-sm"
+                            placeholder="Ex: 50" min="0" max="100" step="1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">WhatsApp /
+                            Telefone</label>
+                        <input type="text" id="tm-phone" placeholder="(00) 00000-0000"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-blue outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Observações Gerais</label>
+                    <textarea id="tm-notes" rows="2" placeholder="Notas sobre o contrato ou profissional..."
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-blue outline-none resize-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-black transition-colors shadow-lg active:scale-95">
+                    Salvar Barbeiro
+                </button>
             </form>
         </div>
     </div>
@@ -1548,8 +1587,8 @@
                 <div>
                     <label class="text-xs font-bold text-slate-500 uppercase">Tipo</label>
                     <select id="exp-type" class="w-full border p-2 rounded-lg mt-1 font-bold">
-                        <option value="expense">ðŸ”´ Saída (Despesa)</option>
-                        <option value="income">ðŸŸ¢ Entrada (Receita)</option>
+                        <option value="expense">🔴 Saída (Despesa)</option>
+                        <option value="income">🟢 Entrada (Receita)</option>
                     </select>
                 </div>
                 <div>
@@ -1600,6 +1639,10 @@
                     class="w-full border p-2 rounded-lg">
                 <input type="tel" id="cli-phone" placeholder="Telefone (WhatsApp)" class="w-full border p-2 rounded-lg">
                 <input type="email" id="cli-email" placeholder="E-mail" class="w-full border p-2 rounded-lg">
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-500 ml-1">Data de Nascimento</label>
+                    <input type="date" id="cli-birthdate" class="w-full border p-2 rounded-lg">
+                </div>
                 <textarea id="cli-notes" placeholder="Observações" class="w-full border p-2 rounded-lg"
                     rows="3"></textarea>
                 <button type="submit" class="w-full bg-brand-blue text-white py-3 rounded-lg font-bold">Salvar
@@ -1667,45 +1710,145 @@
         </div>
     </div>
     <!-- Commission Modal -->
-    <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="glass bg-white/95 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            <div class="bg-gradient-to-r from-brand-blue to-brand-dark p-6 text-center text-white">
-                <h3 class="font-bold text-lg">Pagamento de Comissão</h3>
-                <p class="text-xs text-white/80 mt-1">Confirmação de Pagamento</p>
+    <!-- Commission Modal (Removed Duplicate) -->
+
+    <!-- Client Details Modal (CRM) -->
+    <div id="clientDetailsModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div
+            class="glass bg-white/95 rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div
+                class="bg-gradient-to-r from-brand-blue to-brand-dark p-6 text-white flex justify-between items-start shrink-0">
+                <div>
+                    <h3 id="cd-name" class="font-bold text-xl">Nome do Cliente</h3>
+                    <p id="cd-phone" class="text-white/80 text-sm mt-1">Telefone</p>
+                </div>
+                <button onclick="closeModal('clientDetailsModal')" class="text-white/60 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="text-center mb-6">
-                    <p class="text-sm text-slate-500">Valor a pagar para</p>
-                    <h3 id="comm-pro-name" class="font-bold text-xl text-slate-800 my-2">--</h3>
-                    <div class="bg-green-50 text-green-700 font-bold text-2xl py-3 rounded-xl border border-green-100">
-                        <span id="comm-value">R$ 0,00</span>
+
+            <div class="p-0 overflow-y-auto flex-1">
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-3 gap-0 border-b border-slate-100 bg-slate-50">
+                    <div class="p-4 text-center border-r border-slate-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold">Total Gasto</p>
+                        <p id="cd-total-spent" class="text-lg font-bold text-brand-blue">R$ 0,00</p>
+                    </div>
+                    <div class="p-4 text-center border-r border-slate-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold">Visitas</p>
+                        <p id="cd-visits" class="text-lg font-bold text-slate-800">0</p>
+                    </div>
+                    <div class="p-4 text-center">
+                        <p class="text-xs text-slate-500 uppercase font-bold">Ticket Médio</p>
+                        <p id="cd-avg-ticket" class="text-lg font-bold text-green-600">R$ 0,00</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <button onclick="shareCommissionWhatsApp()"
-                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
-                    </button>
+
+                <div class="p-6 space-y-6">
+                    <!-- Actions Toolbar -->
+                    <div class="flex gap-3">
+                        <button id="cd-btn-whatsapp"
+                            class="flex-1 bg-[#25D366] text-white py-2 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2 transition-colors">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                        </button>
+                        <button id="cd-btn-schedule"
+                            class="flex-1 bg-brand-blue text-white py-2 rounded-lg font-bold text-sm hover:bg-brand-dark flex justify-center items-center gap-2 transition-colors">
+                            <i data-lucide="calendar-plus" class="w-4 h-4"></i> Agendar
+                        </button>
+                        <button id="cd-btn-edit"
+                            class="px-3 bg-slate-100 text-slate-600 py-2 rounded-lg hover:bg-slate-200 transition-colors">
+                            <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Notes & Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                            <h4 class="font-bold text-yellow-800 mb-2 flex items-center text-sm">
+                                <i data-lucide="sticky-note" class="w-4 h-4 mr-2"></i> Notas & Preferências
+                            </h4>
+                            <p id="cd-notes" class="text-sm text-slate-700 italic">Nenhuma observação.</p>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-slate-500">Primeira Visita</span>
+                                <span id="cd-first-visit" class="font-medium text-slate-800">-</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-slate-500">Última Visita</span>
+                                <span id="cd-last-visit" class="font-medium text-slate-800">-</span>
+                            </div>
+                            <div class="flex justify-between pb-2">
+                                <span class="text-slate-500">Aniversário</span>
+                                <span id="cd-birthday" class="font-medium text-slate-800">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Timeline -->
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-4 flex items-center">
+                            <i data-lucide="clock" class="w-4 h-4 mr-2 text-slate-400"></i>
+                            Histórico de Agendamentos
+                        </h4>
+                        <div id="cd-history-list" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Print Container (Hidden) -->
+    <div id="print-area" class="hidden"></div>
+    <!-- Commission Payment Modal -->
+    <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass bg-white/95 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white">
+                <h3 class="font-bold text-xl flex items-center">
+                    <i data-lucide="wallet" class="w-6 h-6 mr-3"></i> Pagamento de Comissão
+                </h3>
+                <p class="text-blue-100 text-sm mt-1">Confirme os dados antes de realizar o pagamento.</p>
+            </div>
+            <div class="p-6">
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-6">
+                    <p class="text-xs text-slate-500 uppercase font-bold mb-1">Profissional</p>
+                    <p id="comm-pro-name" class="text-lg font-bold text-slate-800 mb-4">Nome do Barbeiro</p>
+
+                    <p class="text-xs text-slate-500 uppercase font-bold mb-1">Valor a Pagar</p>
+                    <p id="comm-value" class="text-3xl font-bold text-green-600">R$ 0,00</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
                     <button onclick="printCommissionReceipt()"
-                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
-                        <i data-lucide="printer" class="w-4 h-4"></i> Recibo
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors">
+                        <i data-lucide="printer" class="w-5 h-5"></i> Recibo PDF
+                    </button>
+                    <button onclick="shareCommissionWhatsApp()"
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl font-bold transition-colors">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp
                     </button>
                 </div>
+
                 <button onclick="confirmCommissionPayment()"
-                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold text-sm hover:bg-black transition-colors flex justify-center items-center gap-2">
-                    <i data-lucide="check-circle" class="w-4 h-4"></i>
-                    Confirmar Pagamento
+                    class="w-full py-4 bg-brand-blue hover:bg-brand-dark text-white rounded-xl font-bold text-lg shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2 mb-3">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i> Confirmar Pagamento
                 </button>
+
                 <button onclick="closeModal('commissionModal')"
-                    class="w-full mt-3 text-slate-500 text-xs font-bold hover:text-red-500">
+                    class="w-full py-3 text-slate-400 hover:text-red-500 font-medium transition-colors">
                     Cancelar
                 </button>
             </div>
         </div>
     </div>
-    <!-- Print Container (Hidden) -->
-    <div id="print-area" class="hidden"></div>
+
     <!-- JavaScript -->
     <script src="js/app_core.js"></script>
+</body>
 
 </html>
