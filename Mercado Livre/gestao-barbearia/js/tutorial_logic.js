@@ -62,8 +62,8 @@ function updateTutorialProgress() {
         const btn = document.querySelector(`button[onclick="scrollToSection('${section}')"]`);
         if (btn) {
             if (progress.includes(section)) {
-                btn.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
-                btn.classList.remove('hover:bg-gray-50', 'border-gray-200');
+                btn.classList.add('bg-green-100', 'dark:bg-green-900/30', 'text-green-700', 'dark:text-green-400', 'border-green-200', 'dark:border-green-800/50');
+                btn.classList.remove('hover:bg-gray-50', 'dark:hover:bg-slate-800', 'border-gray-200', 'dark:border-white/10');
                 // Adicionar check se não tiver
                 if (!btn.innerHTML.includes('✓')) {
                     btn.innerHTML = `✓ ${btn.innerText.replace(/^\d+\.\s/, '')}`; // Remove número antigo se quiser, ou só add check

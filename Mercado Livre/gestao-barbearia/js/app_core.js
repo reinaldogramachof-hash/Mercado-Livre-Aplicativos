@@ -206,16 +206,16 @@ function installApp() {
         // Wait for the user to respond to the prompt
         deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
+                // Usuário aceitou a instalação
             } else {
-                console.log('User dismissed the A2HS prompt');
+                // Usuário recusou a instalação
             }
             deferredPrompt = null;
         });
     }
 }
 window.addEventListener('appinstalled', (evt) => {
-    console.log('App successfully installed');
+    // App instalado com sucesso
 });
 // ROTEAMENTO E NAVEGAÇÃO
 function router(view) {
@@ -317,14 +317,14 @@ function renderDashboard() {
                 `;
     } else {
         agendaList.innerHTML = todayAppts.map(appt => `
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex justify-between items-center ${appt.status === 'canceled' ? 'opacity-60' : ''}">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-white/5 flex justify-between items-center ${appt.status === 'canceled' ? 'opacity-60' : ''}">
                         <div class="flex items-center gap-4">
-                            <div class="bg-white px-3 py-2 rounded-lg border text-center min-w-[70px]">
-                                <span class="block font-bold text-lg text-slate-800">${appt.time}</span>
+                            <div class="bg-white dark:bg-slate-800 px-3 py-2 rounded-lg border dark:border-white/10 text-center min-w-[70px]">
+                                <span class="block font-bold text-lg text-slate-800 dark:text-white">${appt.time}</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-900">${sanitizeHTML(appt.client)}</h4>
-                                <p class="text-xs text-slate-500">
+                                <h4 class="font-bold text-slate-900 dark:text-white">${sanitizeHTML(appt.client)}</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">
                                     ${sanitizeHTML(appt.serviceName)} com <strong>${sanitizeHTML(appt.proName)}</strong>
                                 </p>
                                 <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full ${appt.status === 'pending' ? 'badge-pending' : appt.status === 'done' ? 'badge-done' : 'badge-canceled'}">
@@ -334,10 +334,10 @@ function renderDashboard() {
                         </div>
                         <div class="flex gap-2">
                             ${appt.status === 'pending' ? `
-                                <button onclick="cancelAppt('${appt.id}')" class="p-2 text-slate-400 hover:text-red-500" title="Cancelar">
+                                <button onclick="cancelAppt('${appt.id}')" class="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Cancelar">
                                     <i data-lucide="x" class="w-5 h-5"></i>
                                 </button>
-                                <button onclick="finishAppt('${appt.id}')" class="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200" title="Finalizar">
+                                <button onclick="finishAppt('${appt.id}')" class="p-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors" title="Finalizar">
                                     <i data-lucide="check" class="w-5 h-5"></i>
                                 </button>
                             ` : ''}
@@ -358,10 +358,10 @@ function renderDashboard() {
         upcomingList.innerHTML = '<p class="text-center text-slate-400 py-4">Nenhum agendamento futuro</p>';
     } else {
         upcomingList.innerHTML = upcoming.map(appt => `
-                    <div class="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg border border-slate-100">
+                    <div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-white/5 transition-colors">
                         <div>
-                            <p class="text-sm font-medium text-slate-800">${sanitizeHTML(appt.client)}</p>
-                            <p class="text-xs text-slate-500">${fmtDate(appt.date)} às ${appt.time}</p>
+                            <p class="text-sm font-medium text-slate-800 dark:text-white">${sanitizeHTML(appt.client)}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">${fmtDate(appt.date)} às ${appt.time}</p>
                         </div>
                         <span class="text-sm text-brand-blue font-bold">${sanitizeHTML(appt.serviceName)}</span>
                     </div>
@@ -396,47 +396,47 @@ function renderTeam() {
         const waLink = rawPhone ? `https://wa.me/55${rawPhone}` : null;
 
         return `
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between h-full card-hover">
+        <div class="bg-white dark:bg-barber-card p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 flex flex-col justify-between h-full card-hover">
             <div>
                 <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400">
                         <i data-lucide="user" class="w-6 h-6"></i>
                     </div>
                     <div class="flex flex-col items-end gap-1">
-                        <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded uppercase tracking-wider">
+                        <span class="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded uppercase tracking-wider">
                             ${t.contract || 'PJ'}
                         </span>
-                        <span class="text-[10px] font-bold text-brand-blue uppercase">Comissão: ${t.commission}%</span>
+                        <span class="text-[10px] font-bold text-brand-blue dark:text-brand-lightblue uppercase">Comissão: ${t.commission}%</span>
                     </div>
                 </div>
-                <h3 class="font-bold text-lg text-slate-800 mb-1">${sanitizeHTML(t.name)}</h3>
-                ${t.startDate ? `<p class="text-[10px] text-slate-400 mb-4 flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> Desde ${fmtDate(t.startDate)}</p>` : '<div class="mb-4"></div>'}
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white mb-1">${sanitizeHTML(t.name)}</h3>
+                ${t.startDate ? `<p class="text-[10px] text-slate-400 dark:text-slate-500 mb-4 flex items-center"><i data-lucide="calendar" class="w-3 h-3 mr-1"></i> Desde ${fmtDate(t.startDate)}</p>` : '<div class="mb-4"></div>'}
                 
                 <div class="space-y-2 mt-4">
                     <div class="flex justify-between text-sm">
-                        <span class="text-slate-500">Serviços realizados:</span>
-                        <span class="font-bold text-slate-800">${servicesCount}</span>
+                        <span class="text-slate-500 dark:text-slate-400">Serviços realizados:</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-200">${servicesCount}</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-slate-500">Comissões pendentes:</span>
-                        <span class="font-bold ${pendingCommissions > 0 ? 'text-brand-blue' : 'text-slate-400'}">${fmtMoney(pendingCommissions)}</span>
+                        <span class="text-slate-500 dark:text-slate-400">Comissões pendentes:</span>
+                        <span class="font-bold ${pendingCommissions > 0 ? 'text-brand-blue dark:text-brand-lightblue' : 'text-slate-400 dark:text-slate-600'}">${fmtMoney(pendingCommissions)}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-slate-50 flex gap-2">
+            <div class="mt-6 pt-4 border-t border-slate-50 dark:border-white/5 flex gap-2">
                 <button onclick="payCommission('${t.id}')" 
-                    class="flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${pendingCommissions > 0 ? 'bg-blue-50 text-brand-blue hover:bg-blue-100' : 'bg-slate-50 text-slate-300 cursor-not-allowed'}"
+                    class="flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${pendingCommissions > 0 ? 'bg-blue-50 dark:bg-blue-900/30 text-brand-blue dark:text-brand-lightblue hover:bg-blue-100 dark:hover:bg-blue-900/50' : 'bg-slate-50 dark:bg-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed'}"
                     ${pendingCommissions === 0 ? 'disabled' : ''}>
                     Pagar Comissão
                 </button>
                 <div class="flex gap-1">
                     ${waLink ? `
-                        <a href="${waLink}" target="_blank" class="p-2 text-green-500 hover:bg-green-50 rounded-lg transition-colors" title="WhatsApp">
+                        <a href="${waLink}" target="_blank" class="p-2 text-green-500 hover:bg-green-50 dark:hover:bg-green-950/30 rounded-lg transition-colors" title="WhatsApp">
                             <i data-lucide="message-circle" class="w-5 h-5"></i>
                         </a>
                     ` : ''}
-                    <button onclick="editTeam('${t.id}')" class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition-colors" title="Editar">
+                    <button onclick="editTeam('${t.id}')" class="p-2 text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Editar">
                         <i data-lucide="edit-2" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -463,15 +463,15 @@ function renderServices() {
             .filter(t => t.serviceId === service.id)
             .length;
         return `
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center card-hover">
+                    <div class="bg-white dark:bg-barber-card p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm flex justify-between items-center card-hover transition-all">
                         <div>
-                            <span class="font-bold text-slate-800">${service.name}</span>
-                            <p class="text-xs text-slate-500 mt-1">${serviceCount} realizados</p>
+                            <span class="font-bold text-slate-800 dark:text-white">${service.name}</span>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${serviceCount} realizados</p>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="font-bold text-brand-blue">${fmtMoney(service.price)}</span>
+                            <span class="font-bold text-brand-blue dark:text-brand-lightblue">${fmtMoney(service.price)}</span>
                             <button onclick="editService('${service.id}')" 
-                                    class="text-slate-400 hover:text-slate-600">
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -527,26 +527,26 @@ function renderFinance() {
     tbody.innerHTML = filtered.map(t => {
         const isIncome = t.type === 'income';
         return `
-                    <tr class="hover:bg-slate-50 group border-b border-slate-100">
-                        <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${fmtDate(t.date)}</td>
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 group border-b border-slate-100 dark:border-white/5 transition-colors">
+                        <td class="px-6 py-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">${fmtDate(t.date)}</td>
                         <td class="px-6 py-4">
-                            <div class="font-medium text-slate-800">${sanitizeHTML(t.description)}</div>
-                        ${t.category ? `<div class="text-xs text-slate-400">${sanitizeHTML(t.category)}</div>` : ''}
+                            <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(t.description)}</div>
+                        ${t.category ? `<div class="text-xs text-slate-400 dark:text-slate-500">${sanitizeHTML(t.category)}</div>` : ''}
                     </td>
-                    <td class="px-6 py-4">${t.proName ? sanitizeHTML(t.proName) : '-'}</td>
+                    <td class="px-6 py-4 dark:text-slate-300">${t.proName ? sanitizeHTML(t.proName) : '-'}</td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isIncome ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isIncome ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'}">
                                 ${isIncome ? 'Entrada' : 'Saída'}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
                             ${isIncome ? '+' : '-'} ${fmtMoney(t.amount)}
                         </td>
-                        <td class="px-6 py-4 text-right text-sm text-slate-500">
+                        <td class="px-6 py-4 text-right text-sm text-slate-500 dark:text-slate-400">
                             ${t.commission ? fmtMoney(t.commission) : '-'}
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <button onclick="editTransaction('${t.id}')" class="text-slate-400 hover:text-blue-600 transition-colors">
+                            <button onclick="editTransaction('${t.id}')" class="text-slate-400 hover:text-blue-600 dark:hover:text-brand-lightblue transition-colors">
                                 <i data-lucide="edit-2" class="w-4 h-4"></i>
                             </button>
                         </td>
@@ -557,65 +557,14 @@ function renderFinance() {
 }
 
 
-function renderTeam() {
-    const list = document.getElementById('team-list');
-    if (!list) return;
-
-    list.innerHTML = db.team.map(t => {
-        // Calculate stats
-        const servicesCount = db.appointments.filter(a => a.proId === t.id && (a.status === 'done' || a.status === 'concluido')).length;
-
-        const pendingCommissions = db.transactions
-            .filter(tr => tr.proId === t.id && tr.type === 'income' && !tr.commissionPaid)
-            .reduce((sum, tr) => sum + (tr.commission || 0), 0);
-
-        return `
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between h-full">
-            <div>
-                <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                        <i data-lucide="user" class="w-6 h-6"></i>
-                    </div>
-                    <span class="text-xs font-bold text-slate-400 uppercase">Comissão: ${t.commission}%</span>
-                </div>
-                <h3 class="font-bold text-lg text-slate-800 mb-1">${t.name}</h3>
-                
-                <div class="space-y-2 mt-4">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-slate-500">Serviços realizados:</span>
-                        <span class="font-bold text-slate-800">${servicesCount}</span>
-                    </div>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-slate-500">Comissões pendentes:</span>
-                        <span class="font-bold ${pendingCommissions > 0 ? 'text-brand-blue' : 'text-slate-400'}">${fmtMoney(pendingCommissions)}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-slate-50 flex gap-2">
-                <button onclick="payCommission('${t.id}')" 
-                    class="flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${pendingCommissions > 0 ? 'bg-blue-50 text-brand-blue hover:bg-blue-100' : 'bg-slate-50 text-slate-300 cursor-not-allowed'}"
-                    ${pendingCommissions === 0 ? 'disabled' : ''}>
-                    Pagar Comissão
-                </button>
-                 <button onclick="editTeam('${t.id}')" class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition-colors">
-                    <i data-lucide="edit-2" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </div>
-        `;
-    }).join('');
-    lucide.createIcons();
-}
-
 // CLIENTS MANAGEMENT
 function renderClients() {
     const container = document.getElementById('clients-list');
     if (db.clients.length === 0) {
         container.innerHTML = `
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-slate-400">
-                    <i data-lucide="user" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                <td colspan="5" class="px-6 py-8 text-center text-slate-400 dark:text-slate-500">
+                    <i data-lucide="user" class="w-12 h-12 mx-auto mb-4 text-slate-300 dark:text-slate-600"></i>
                     <p>Nenhum cliente cadastrado</p>
                 </td>
             </tr>
@@ -635,29 +584,29 @@ function renderClients() {
         const waLink = rawPhone ? `https://wa.me/55${rawPhone}` : '#';
 
         return `
-            <tr class="hover:bg-slate-50">
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 border-b border-slate-100 dark:border-white/5 transition-colors">
                 <td class="px-6 py-4">
-                    <div class="font-medium text-slate-800">${sanitizeHTML(client.name)}</div>
-                    ${client.email ? `<div class="text-xs text-slate-400">${sanitizeHTML(client.email)}</div>` : ''}
+                    <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(client.name)}</div>
+                    ${client.email ? `<div class="text-xs text-slate-400 dark:text-slate-500">${sanitizeHTML(client.email)}</div>` : ''}
                 </td>
-                <td class="px-6 py-4 text-slate-600">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
-                <td class="px-6 py-4 text-slate-500">${lastVisit ? fmtDate(lastVisit) : 'Nunca'}</td>
-                <td class="px-6 py-4 font-bold text-brand-blue">${fmtMoney(totalSpent)}</td>
+                <td class="px-6 py-4 text-slate-600 dark:text-slate-400">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
+                <td class="px-6 py-4 text-slate-500 dark:text-slate-500">${lastVisit ? fmtDate(lastVisit) : 'Nunca'}</td>
+                <td class="px-6 py-4 font-bold text-brand-blue dark:text-brand-lightblue">${fmtMoney(totalSpent)}</td>
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center gap-2">
                         <!-- WhatsApp Action -->
                         ${rawPhone ? `
-                        <a href="${waLink}" target="_blank" class="p-2 text-green-500 hover:bg-green-50 rounded-lg transition-colors" title="Chamar no WhatsApp">
+                        <a href="${waLink}" target="_blank" class="p-2 text-green-500 hover:bg-green-50 dark:hover:bg-green-950/30 rounded-lg transition-colors" title="Chamar no WhatsApp">
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                         </a>` : ''}
                         
                         <!-- Quick Schedule -->
-                        <button onclick="openApptModal('${client.id}')" class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="Novo Agendamento">
+                        <button onclick="openApptModal('${client.id}')" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Novo Agendamento">
                             <i data-lucide="calendar-plus" class="w-4 h-4"></i>
                         </button>
 
                         <!-- View Details (CRM) -->
-                        <button onclick="openClientDetails('${client.id}')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-lg transition-colors" title="Ver Detalhes">
+                        <button onclick="openClientDetails('${client.id}')" class="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Ver Detalhes">
                             <i data-lucide="user" class="w-4 h-4"></i>
                         </button>
                     </div>
@@ -729,12 +678,12 @@ function openClientDetails(clientId) {
         historyContainer.innerHTML = clientTrans
             .sort((a, b) => new Date(b.date) - new Date(a.date)) // Newest first
             .map(t => `
-                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                <div class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-white/5 transition-all">
                     <div>
-                        <p class="font-bold text-slate-700 text-sm">${sanitizeHTML(t.description)}</p>
-                        <p class="text-xs text-slate-500">${fmtDate(t.date)} • ${t.proName || 'Barbearia'}</p>
+                        <p class="font-bold text-slate-700 dark:text-white text-sm">${sanitizeHTML(t.description)}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">${fmtDate(t.date)} • ${t.proName || 'Barbearia'}</p>
                     </div>
-                    <span class="font-bold text-green-600 text-sm">${fmtMoney(t.amount)}</span>
+                    <span class="font-bold text-green-600 dark:text-green-400 text-sm">${fmtMoney(t.amount)}</span>
                 </div>
             `).join('');
     }
@@ -1198,14 +1147,14 @@ function generateReport() {
 
     const topSvcsEl = document.getElementById('top-services');
     topSvcsEl.innerHTML = sortedServices.map(([name, count], i) => `
-        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+        <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-white/5">
             <div class="flex items-center gap-3">
-                <span class="font-bold text-slate-400">#${i + 1}</span>
-                <span class="font-medium text-slate-700">${name}</span>
+                <span class="font-bold text-slate-400 dark:text-slate-600">#${i + 1}</span>
+                <span class="font-medium text-slate-700 dark:text-slate-300">${name}</span>
             </div>
-            <span class="bg-blue-100 text-brand-blue text-xs font-bold px-2 py-1 rounded-full">${count} cortes</span>
+            <span class="bg-blue-100 dark:bg-blue-900/30 text-brand-blue dark:text-brand-lightblue text-xs font-bold px-2 py-1 rounded-full">${count} cortes</span>
         </div>
-    `).join('') || '<p class="text-sm text-slate-400 text-center">Nenhum serviço neste período.</p>';
+    `).join('') || '<p class="text-sm text-slate-400 dark:text-slate-500 text-center">Nenhum serviço neste período.</p>';
 
     document.getElementById('report-result').classList.remove('hide');
 }
@@ -1343,27 +1292,62 @@ function printCommissionReceipt() {
     const date = new Date().toLocaleDateString('pt-BR');
     const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    const content = `
-        <div style="font-family: monospace; padding: 20px; max-width: 300px; margin: 0 auto; border: 1px dashed #000;">
-            <h2 style="text-align: center; margin: 0;">${salonName.toUpperCase()}</h2>
-            <p style="text-align: center; font-size: 12px; margin-bottom: 20px;">RECIBO DE PAGAMENTO DE COMISSÃO</p>
+    const createReceiptBlock = (title) => `
+        <div style="font-family: 'Courier New', monospace; padding: 10px; max-width: 300px; margin: 0 auto; border: 1px dashed #000; margin-bottom: 20px;">
+            <h2 style="text-align: center; margin: 0; font-size: 18px;">${salonName.toUpperCase()}</h2>
+            <p style="text-align: center; font-size: 12px; margin: 5px 0 15px 0; border-bottom: 1px solid #000; padding-bottom: 5px;">${title}</p>
             
-            <p><strong>DATA:</strong> ${date} ${time}</p>
-            <p><strong>PROFISSIONAL:</strong><br>${currentCommissionData.proName}</p>
-            <hr style="border-top: 1px dashed #000;">
+            <p style="margin: 5px 0; font-size: 12px;"><strong>DATA:</strong> ${date} ${time}</p>
+            <p style="margin: 5px 0; font-size: 12px;"><strong>PROFISSIONAL:</strong><br>${currentCommissionData.proName}</p>
+            <p style="margin: 5px 0; font-size: 12px;"><strong>TIPO:</strong> COMISSÃO DE SERVIÇOS</p>
             
-            <p style="font-size: 18px; text-align: right;"><strong>VALOR: ${fmtMoney(currentCommissionData.amount)}</strong></p>
+            <table style="width: 100%; margin-top: 15px; border-top: 1px dashed #000;">
+                <tr>
+                    <td style="font-size: 16px; padding-top: 5px;"><strong>TOTAL PAGO:</strong></td>
+                    <td style="font-size: 16px; text-align: right; padding-top: 5px;"><strong>${fmtMoney(currentCommissionData.amount)}</strong></td>
+                </tr>
+            </table>
             
-            <hr style="border-top: 1px dashed #000;">
-            <p style="text-align: center; font-size: 10px; margin-top: 20px;">ASSINATURA DO RESPONSÁVEL</p>
-            <br><br>
-            <hr style="border-top: 1px solid #000;">
-            <p style="text-align: center; font-size: 10px;">Sistema de Gestão</p>
+            <div style="margin-top: 30px; text-align: center;">
+                <div style="border-top: 1px solid #000; margin-bottom: 5px;"></div>
+                <p style="font-size: 10px; margin: 0;">ASSINATURA DO PROFISSIONAL</p>
+            </div>
+
+            <div style="margin-top: 25px; text-align: center;">
+                <div style="border-top: 1px solid #000; margin-bottom: 5px;"></div>
+                <p style="font-size: 10px; margin: 0;">ASSINATURA DO RESPONSÁVEL</p>
+            </div>
+            
+            <p style="text-align: center; font-size: 9px; margin-top: 15px; color: #666;">Sistema de Gestão - ${new Date().getFullYear()}</p>
         </div>
-        <script>window.print(); window.onafterprint = function(){ window.close(); };</script>
     `;
 
-    const win = window.open('', '_blank', 'width=400,height=600');
+    const content = `
+        <html>
+        <head>
+            <title>Recibo de Comissão</title>
+            <style>
+                @media print {
+                    body { margin: 0; padding: 0; }
+                    @page { margin: 0; }
+                }
+            </style>
+        </head>
+        <body>
+            ${createReceiptBlock('RECIBO - VIA DO PROFISSIONAL')}
+            <div style="text-align: center; margin: 10px 0; font-size: 10px; color: #999;">----------------- CORTE AQUI -----------------</div>
+            ${createReceiptBlock('RECIBO - VIA DA BARBEARIA')}
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(function() { window.close(); }, 500);
+                };
+            </script>
+        </body>
+        </html>
+    `;
+
+    const win = window.open('', '_blank', 'width=350,height=800');
     win.document.write(content);
     win.document.close();
 }
@@ -1502,38 +1486,34 @@ function downloadBackup() {
 
 // NOTIFICATION SYSTEM
 function showNotification(message, type = 'info') {
-    // Cores baseadas no tipo
     const colors = {
-        success: 'bg-green-500',
-        error: 'bg-red-500',
-        info: 'bg-blue-500',
+        success: 'bg-green-600 dark:bg-green-500',
+        error: 'bg-red-600 dark:bg-red-500',
+        info: 'bg-blue-600 dark:bg-brand-blue',
         warning: 'bg-orange-500'
     };
     const colorClass = colors[type] || colors.info;
 
     // Criar elemento
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 ${colorClass} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-y-[-100%] opacity-0 flex items-center gap-2 font-medium`;
+    notification.className = `fixed top-4 right-4 ${colorClass} text-white px-6 py-3 rounded-xl shadow-2xl z-[100] transform transition-all duration-300 translate-y-[-20%] opacity-0 flex items-center gap-2 font-bold backdrop-blur-md border border-white/10`;
     notification.innerHTML = `
         <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" class="w-5 h-5"></i>
-        <span>${message}</span>
+        <span>${sanitizeHTML(message)}</span>
     `;
 
-    // Adicionar ao DOM
     document.body.appendChild(notification);
     lucide.createIcons();
 
     // Animar entrada
     requestAnimationFrame(() => {
-        notification.classList.remove('translate-y-[-100%]', 'opacity-0');
+        notification.classList.remove('translate-y-[-20%]', 'opacity-0');
     });
 
     // Remover após 3 segundos
     setTimeout(() => {
-        notification.classList.add('translate-y-[-100%]', 'opacity-0');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
+        notification.classList.add('translate-y-[-20%]', 'opacity-0');
+        setTimeout(() => notification.remove(), 300);
     }, 3500);
 }
 function restoreBackup(input) {
@@ -1620,31 +1600,9 @@ function updateDataStatus() {
     const totalTeam = db.team.length;
     const totalServices = db.services.length;
     const totalClients = db.clients.length;
-    console.log(`Dados atualizados: ${totalAppts} agendamentos, ${totalTeam} barbeiros, ${totalServices} serviços, ${totalClients} clientes`);
+    // Status dos dados atualizado
 }
-function showNotification(message, type = 'info') {
-    // Criar elemento de notificação
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
-        type === 'error' ? 'bg-red-500 text-white' :
-            'bg-blue-500 text-white'
-        }`;
-    notification.innerHTML = `
-                <div class="flex items-center">
-                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
-                       class="w-5 h-5 mr-2"></i>
-                    <span>${sanitizeHTML(message)}</span>
-                </div>
-            `;
-    document.body.appendChild(notification);
-    lucide.createIcons();
-    // Remover após 3 segundos
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+
 // OFFLINE SUPPORT
 window.addEventListener('online', () => {
     showNotification('Conexão restaurada!', 'success');
@@ -1682,11 +1640,11 @@ function updateTutorialProgress() {
         const btn = document.querySelector(`[onclick="scrollToSection('${id}')"]`);
         if (btn) {
             if (completed.includes(id)) {
-                btn.classList.add('bg-green-100', 'border-green-300', 'text-green-700');
-                btn.classList.remove('border-gray-200');
+                btn.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-800/50', 'text-green-700', 'dark:text-green-400');
+                btn.classList.remove('border-gray-200', 'dark:border-white/10');
             } else {
-                btn.classList.remove('bg-green-100', 'border-green-300', 'text-green-700');
-                btn.classList.add('border-gray-200');
+                btn.classList.remove('bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-800/50', 'text-green-700', 'dark:text-green-400');
+                btn.classList.add('border-gray-200', 'dark:border-white/10');
             }
         }
     });

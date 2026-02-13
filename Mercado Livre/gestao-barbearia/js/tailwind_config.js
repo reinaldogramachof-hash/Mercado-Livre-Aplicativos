@@ -1,19 +1,25 @@
 ﻿tailwind.config = {
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
                 brand: {
-                    blue: '#2563EB',      // Primary Blue
-                    dark: '#0F172A',      // Slate 900
-                    black: '#020617',     // Slate 950
-                    orange: '#F59E0B',    // Amber 500
-                    gray: '#64748B',      // Slate 500
-                    lightblue: '#60A5FA', // Blue 400
-                    surface: '#FFFFFF'
+                    blue: '#2563EB',
+                    dark: '#0F172A',
+                    black: '#020617',
+                    orange: '#F59E0B',
+                    gray: '#64748B',
+                    lightblue: '#60A5FA',
+                    surface: '#FFFFFF',
+                    "electric-blue": '#3B82F6',
+                    "gold": '#D4AF37'
                 },
                 barber: {
-                    light: '#F8FAFC',     // Slate 50
-                    soft: '#E2E8F0'       // Slate 200
+                    light: '#F8FAFC',
+                    soft: '#E2E8F0',
+                    dark: '#0B0F19',
+                    card: '#151B2C',
+                    border: 'rgba(255, 255, 255, 0.08)'
                 }
             },
             fontFamily: {
