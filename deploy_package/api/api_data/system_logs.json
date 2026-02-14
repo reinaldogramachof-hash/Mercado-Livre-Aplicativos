@@ -58,5 +58,11 @@
         "type": "warning",
         "message": "Acesso via Chave Mestra (Vitalício) por teste@cliente.com",
         "ip": "::1"
+    },
+    {
+        "timestamp": "2026-02-13 22:05:53",
+        "type": "admin",
+        "message": "Licença D669-F209-6F77 criada manualmente para Reinaldo Gramacho",
+        "ip": "::1"
     }
 ]
