@@ -251,6 +251,13 @@ if (empty($json_input) && php_sapi_name() === 'cli') {
     $json_input = file_get_contents('php://stdin');
 }
 $data = json_decode($json_input, true) ?? [];
+
+// ==================================================================
+// PATCH DE SEGURANÇA: Compatibilidade de Parâmetros
+// ==================================================================
+// Garante que o script entenda tanto 'device_id' (Legado) quanto 'device_fingerprint' (Novo Lock.js)
+$device_input = $data['device_id'] ?? $data['device_fingerprint'] ?? '';
+
 $server = $_SERVER;
 
 // ==================================================================
@@ -260,7 +267,7 @@ $server = $_SERVER;
 if ($action === 'activate') {
     $key = $data['license_key'] ?? '';
     $email = $data['email'] ?? '';
-    $device = $data['device_id'] ?? '';
+    $device = $device_input;
 
     if (empty($key) || empty($email) || empty($device)) {
         jsonResponse(["status" => "error", "message" => "Chave, E-mail e Dispositivo são obrigatórios"], 400);
@@ -322,7 +329,43 @@ if ($action === 'activate') {
     }
 }
 
-// ACTION: GENERATE (ADMIN ONLY)
+// ACTION: CREATE (SPECIFIC CLIENT)
+if ($action === 'create') {
+    if (!checkAuth($data, $_GET, $server))
+        jsonResponse(['error' => 'Acesso Negado'], 403);
+
+    $client = $data['client'] ?? '';
+    $email = $data['email'] ?? '';
+    $product = $data['product'] ?? 'Gestão Barbearia';
+
+    if (empty($client))
+        jsonResponse(['status' => 'error', 'message' => 'Nome do cliente obrigatório'], 400);
+
+    $content = @file_get_contents($DB_FILE);
+    $db = $content ? json_decode($content, true) : [];
+
+    // Generate Single Key
+    $newKey = strtoupper(substr(md5(uniqid(rand(), true)), 0, 12));
+    $newKey = implode('-', str_split($newKey, 4)); // XXXX-XXXX-XXXX
+
+    $db[$newKey] = [
+        'product' => $product,
+        'type' => 'vitalicio_ml',
+        'status' => 'active', // Created specifically for a client = Active/Ready
+        'created_at' => date('Y-m-d H:i:s'),
+        'client' => $client . ($email ? " ($email)" : ""),
+        'device_id' => null,
+        'price' => 0.00 // Admin generated
+    ];
+
+    @file_put_contents($DB_FILE, json_encode($db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
+
+    systemLog("Licença $newKey criada manualmente para $client", 'admin');
+
+    jsonResponse(['status' => 'success', 'key' => $newKey]);
+}
+
+// ACTION: GENERATE (BULK / ANONYMOUS)
 if ($action === 'generate') {
     if (!checkAuth($data, $_GET, $server))
         jsonResponse(['error' => 'Acesso Negado'], 403);
@@ -361,118 +404,65 @@ function btoa($data)
     return base64_encode($data);
 }
 
-if ($action === 'validate' || $action === 'validate_access') {
+// ==================================================================
+// ACTION: VALIDATE ACCESS (Chamada pelo Lock.js)
+// ==================================================================
+if ($action === 'validate_access' || $action === 'validate') {
     $key = $data['license_key'] ?? '';
-    $device = $data['device_fingerprint'] ?? '';
-    $app_id = $data['app_id'] ?? ''; // NEW: APP ID Scope
+    $app_id = $data['app_id'] ?? '';
+    $device = $device_input; // Usa o parâmetro sanitizado
 
     if (empty($key)) {
-        jsonResponse(["valid" => false, "message" => "Chave de licença é obrigatória"], 400);
+        jsonResponse(["valid" => false, "message" => "Licença não informada"], 400);
     }
-
-    // --- MASTER KEY REMOVIDA (SECURITY UPGRADE) ---
-    // A validação agora exige chaves nominais criadas via Admin (Tipo Developer).
-    // O bloco "if ($key === 'PLENA-MASTER-2026')" foi removido.
-    // ----------------------------------------------------------------
-    // -------------------------
-    // -------------------------
 
     $content = @file_get_contents($DB_FILE);
     $db = $content ? json_decode($content, true) : [];
-    if (!is_array($db))
-        $db = [];
 
-    // Procura chave (Case Insensitive force)
+    // Busca Licença (Case Insensitive)
     if (!isset($db[$key])) {
-        // Tenta achar independente do case
-        $found = false;
         foreach ($db as $k => $v) {
             if (strtoupper($k) === strtoupper($key)) {
                 $key = $k;
-                $found = true;
                 break;
             }
         }
-        if (!$found) {
-            jsonResponse(["valid" => false, "message" => "Licença não encontrada"], 404);
-        }
+    }
+
+    if (!isset($db[$key])) {
+        jsonResponse(["valid" => false, "message" => "Licença inválida ou não encontrada no rede."], 404);
     }
 
     $license = $db[$key];
 
-    // --- NEW: APP ID SCOPE CHECK ---
-    if (!empty($app_id)) {
-        $productReq = strtolower(str_replace([' ', '_', '-'], '', $app_id)); // e.g. "plenapdv"
-        // Adjust product name from DB to similar format
-        // $license['product'] ex: "Plena PDV" -> "plenapdv"
-        $licenseProd = strtolower(str_replace([' ', '_', '-'], '', $license['product'] ?? ''));
-
-        // Special case: "plena" prefix might be missing or added
-        // Let's rely on containment or equality
-        // If app_id is "plena_pdv" and product is "Plena PDV" -> exact match after normalize
-        // If app_id is "pdv" and product is "Plena PDV" -> contains
-
-        // Logic: The License Product MUST contain the core name of the App ID
-        // Or better: The normalized License Product must EQUAL normalized App ID (assuming consistent naming)
-        // Let's implement a mapping check or strict normalize.
-
-        // Fix for "Plena Alugueis" vs "plena_alugueis" vs "plena_aluguel"
-        $valid = ($productReq === $licenseProd);
-
-        // Fallback for known variations if needed, or strict.
-        // User wants strict scoping.
-        if (!$valid) {
-            systemLog("Tentativa de uso cruzado: Chave do '{$license['product']}' no App '$app_id'", 'warning');
-            jsonResponse(["valid" => false, "message" => "Esta licença pertence ao produto '{$license['product']}' e não pode bloquear o aplicativo '$app_id'."], 403);
-        }
-    }
-    // -------------------------------
-
-    // Verifica status
+    // 1. Verifica Status Global
     if (($license['status'] ?? 'active') !== 'active') {
-        jsonResponse(["valid" => false, "message" => "Licença inativa ou bloqueada"], 403);
+        jsonResponse(["valid" => false, "message" => "Licença inativa ou bloqueada."], 403);
     }
 
-    // Verifica expiração
-    if (!empty($license['expires_at']) && strtotime($license['expires_at']) < time()) {
-        $db[$key]['status'] = 'expired';
-        @file_put_contents($DB_FILE, json_encode($db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        jsonResponse(["valid" => false, "message" => "Licença expirada"], 403);
-    }
+    // 2. Validação de Dispositivo (Airlock)
+    // Se a licença já tem um dispositivo gravado, DEVE bater com o atual.
+    $registeredDevice = $license['device_id'] ?? null;
 
-    // Lógica de dispositivo
-    $currentDevice = $license['device_id'] ?? null;
-
-    if (empty($currentDevice)) {
-        // Primeiro uso
-        $db[$key]['device_id'] = $device;
-        $db[$key]['activated_at'] = date('Y-m-d H:i:s');
-        $db[$key]['last_access'] = date('Y-m-d H:i:s');
-        $db[$key]['access_count'] = ($license['access_count'] ?? 0) + 1;
-        @file_put_contents($DB_FILE, json_encode($db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-        systemLog("Licença $key ativada no dispositivo: $device (App: $app_id)", 'info');
-        jsonResponse([
-            "valid" => true,
-            "message" => "Licença ativada com sucesso!",
-            "app_link" => $license['app_link'] ?? '#',
-            "is_scoped_new" => true
-        ]);
-    } elseif ($currentDevice === $device) {
-        // Mesmo dispositivo
-        $db[$key]['last_access'] = date('Y-m-d H:i:s');
-        $db[$key]['access_count'] = ($license['access_count'] ?? 0) + 1;
-        @file_put_contents($DB_FILE, json_encode($db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-        jsonResponse([
-            "valid" => true,
-            "message" => "Acesso permitido",
-            "app_link" => $license['app_link'] ?? '#',
-            "is_scoped" => true
-        ]);
+    if (!empty($registeredDevice)) {
+        if ($registeredDevice !== $device) {
+            // KILL SWITCH ATIVADO
+            systemLog("Bloqueio: Licença $key tentou acesso com ID $device (Esperado: $registeredDevice)", 'security');
+            jsonResponse(["valid" => false, "message" => "Violação de Segurança: Esta licença pertence a outro dispositivo."], 403);
+        }
     } else {
-        jsonResponse(["valid" => false, "message" => "Licença já está em uso em outro dispositivo"], 403);
+        // Se estiver vazio no servidor (primeiro acesso pós-reset), vincula agora (Auto-Bind).
+        $db[$key]['device_id'] = $device;
+        $db[$key]['last_access'] = date('Y-m-d H:i:s');
+        @file_put_contents($DB_FILE, json_encode($db, JSON_PRETTY_PRINT));
     }
+
+    // 3. Sucesso
+    jsonResponse([
+        "valid" => true,
+        "message" => "Acesso Autorizado",
+        "registered_device" => $device
+    ]);
 }
 
 // ACTION: CONFIRM RECEIPT (DIGITAL SIGNATURE)

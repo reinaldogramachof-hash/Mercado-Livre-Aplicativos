@@ -112,6 +112,12 @@ function init() {
     router('dashboard');
     // Inicializar Tutorial
     initTutorial();
+    // Lógica de Auditoria ML
+    const receiptConfirmed = localStorage.getItem('ml_receipt_confirmed');
+    if (!receiptConfirmed) {
+        const modal = document.getElementById('welcome-receipt-modal');
+        if (modal) modal.classList.remove('hidden');
+    }
 }
 // ==========================================
 // LÓGICA DO MANUAL (TUTORIAL)
@@ -1597,7 +1603,6 @@ function clearFinanceFilters() {
 // UTILITÁRIOS GERAIS
 function updateDataStatus() {
     const totalAppts = db.appointments.length;
-    const totalTeam = db.team.length;
     const totalServices = db.services.length;
     const totalClients = db.clients.length;
     // Status dos dados atualizado
