@@ -1,0 +1,25 @@
+# Temporary Deploy Folders
+deploy_package/
+deploy_production/
+deploy_ready/
+deploy_production_verify*/
+
+# Compressed archives (keep only the final installer)
+*.zip
+!instalador_hostgator.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+test_output.txt
+debug_log.txt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local Dev Tools (if not needed in repo)
+dev_router.php
