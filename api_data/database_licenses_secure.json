@@ -1,0 +1,10 @@
+{
+    "GPRO-VITALICIO-2026": {
+        "product": "Gestão Barbearia",
+        "type": "vitalicio_ml",
+        "status": "pending",
+        "created_at": "2026-02-14 10:00:00",
+        "price": 97.0,
+        "client": "admin@teste.com"
+    }
+}
