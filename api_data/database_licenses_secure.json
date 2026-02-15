@@ -4,7 +4,26 @@
         "type": "vitalicio_ml",
         "status": "pending",
         "created_at": "2026-02-14 10:00:00",
-        "price": 97.0,
+        "price": 97,
         "client": "admin@teste.com"
+    },
+    "85A6-764A-8FE2": {
+        "client": "Reinaldo Gramacho",
+        "product": "Gestão Beleza",
+        "price": 97,
+        "status": "active",
+        "created_at": "2026-02-15 03:14:30",
+        "type": "venda_ml",
+        "device_id": "dev_a7fhhgrww",
+        "activated_at": "2026-02-15 03:14:44",
+        "last_ip": "::1"
+    },
+    "C956-D7D0-D602": {
+        "client": "Reinaldo Gramacho",
+        "product": "Gestão Beleza",
+        "price": 97,
+        "status": "pending",
+        "created_at": "2026-02-15 03:50:13",
+        "type": "venda_ml"
     }
 }

@@ -77,6 +77,30 @@
             "type": "info",
             "msg": "Recibo confirmado para chave PLENA-VITALICIO-2026",
             "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-15 03:14:30",
+            "type": "info",
+            "msg": "Geradas 1 chaves para Reinaldo Gramacho",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-15 03:14:44",
+            "type": "info",
+            "msg": "Sucesso: Chave 85A6-764A-8FE2 ativada no device dev_a7fhhgrww",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-15 03:14:49",
+            "type": "info",
+            "msg": "Recibo confirmado para chave PLENA-VITALICIO-2026",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-15 03:50:13",
+            "type": "info",
+            "msg": "Geradas 1 chaves para Reinaldo Gramacho",
+            "ip": "::1"
         }
     ]
 }
