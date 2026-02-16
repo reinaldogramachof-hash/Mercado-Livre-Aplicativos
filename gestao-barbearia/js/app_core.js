@@ -41,9 +41,14 @@ const defaultDB = {
     tutorial: {
         completedSteps: [],
         checklistState: {}
-    }
+    },
+    inventory: [],
+    stockMovements: []
 };
 let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+// Migração: garantir que campos novos existam em bancos antigos
+if (!db.inventory) db.inventory = [];
+if (!db.stockMovements) db.stockMovements = [];
 // UTILITÁRIOS
 const sanitizeHTML = (str) => {
     if (!str) return '';
@@ -294,6 +299,18 @@ const tutorialSections = [
 function initTutorial() {
     updateTutorialProgress();
 }
+function updateDateDisplay() {
+    const update = () => {
+        const now = new Date();
+        const optsDate = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('pt-BR', optsDate);
+        const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const el = document.getElementById('current-date');
+        if (el) el.textContent = `${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)} • ${timeStr}`;
+    };
+    update(); // Initial call
+    setInterval(update, 1000); // Update every second
+}
 function scrollToSection(id) {
     const el = document.getElementById(id);
     if (el) {
@@ -409,6 +426,7 @@ function router(view) {
         dashboard: 'Agenda',
         team: 'Barbeiros',
         services: 'Serviços',
+        inventory: 'Estoque',
         finance: 'Financeiro',
         clients: 'Clientes',
         reports: 'Relatórios',
@@ -428,6 +446,8 @@ function router(view) {
         renderTeam();
     } else if (view === 'services') {
         renderServices();
+    } else if (view === 'inventory') {
+        renderInventory();
     } else if (view === 'finance') {
         renderFinance();
     } else if (view === 'clients') {
@@ -1967,3 +1987,442 @@ function openClientModal(client = null) {
     }
     modal.classList.remove('hidden');
 }
+
+// ==========================================
+// CONTROLE DE ESTOQUE
+// ==========================================
+const INVENTORY_CATEGORIES = {
+    cosmeticos: 'Cosméticos',
+    laminas: 'Lâminas/Descartáveis',
+    higiene: 'Higiene',
+    equipamentos: 'Equipamentos',
+    bebidas: 'Bebidas',
+    outros: 'Outros'
+};
+const MOVEMENT_REASONS = {
+    compra: 'Compra',
+    venda: 'Venda',
+    uso_interno: 'Uso Interno',
+    perda: 'Perda/Avaria',
+    ajuste: 'Ajuste Manual'
+};
+
+function getProductStatus(product) {
+    if (product.quantity <= 0) return { label: 'Esgotado', key: 'critical', color: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400' };
+    if (product.quantity <= product.minQuantity) return { label: 'Baixo', key: 'low', color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400' };
+    return { label: 'OK', key: 'ok', color: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' };
+}
+
+function getInventoryStats() {
+    const totalProducts = db.inventory.length;
+    const totalValue = db.inventory.reduce((sum, p) => sum + (p.quantity * p.unitPrice), 0);
+    const lowStock = db.inventory.filter(p => p.quantity <= p.minQuantity).length;
+    const today = new Date();
+    const movementsMonth = db.stockMovements.filter(m => {
+        const mDate = new Date(m.date);
+        return mDate.getMonth() === today.getMonth() && mDate.getFullYear() === today.getFullYear();
+    }).length;
+    return { totalProducts, totalValue, lowStock, movementsMonth };
+}
+
+function renderInventory() {
+    const stats = getInventoryStats();
+    document.getElementById('inv-total-products').textContent = stats.totalProducts;
+    document.getElementById('inv-total-value').textContent = fmtMoney(stats.totalValue);
+    document.getElementById('inv-low-stock').textContent = stats.lowStock;
+    document.getElementById('inv-movements-month').textContent = stats.movementsMonth;
+
+    const searchTerm = (document.getElementById('inv-search')?.value || '').toLowerCase();
+    const filterCategory = document.getElementById('inv-filter-category')?.value || 'all';
+    const filterStatus = document.getElementById('inv-filter-status')?.value || 'all';
+
+    let filtered = db.inventory.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchTerm) ||
+            (p.supplier && p.supplier.toLowerCase().includes(searchTerm));
+        const matchesCategory = filterCategory === 'all' || p.category === filterCategory;
+        const status = getProductStatus(p);
+        const matchesStatus = filterStatus === 'all' || status.key === filterStatus;
+        return matchesSearch && matchesCategory && matchesStatus;
+    });
+
+    const tbody = document.getElementById('inventory-list');
+    const emptyMsg = document.getElementById('inv-empty-msg');
+
+    if (filtered.length === 0 && db.inventory.length === 0) {
+        tbody.innerHTML = '';
+        emptyMsg.classList.remove('hidden');
+        emptyMsg.innerHTML = `
+            <i data-lucide="package-open" class="w-16 h-16 mx-auto mb-4 text-slate-200 dark:text-slate-700"></i>
+            <p class="text-slate-400 dark:text-slate-500 font-medium">Nenhum produto cadastrado</p>
+            <p class="text-xs text-slate-300 dark:text-slate-600 mt-1">Clique em "Novo Produto" para começar</p>
+        `;
+    } else if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyMsg.classList.remove('hidden');
+        emptyMsg.innerHTML = `
+            <i data-lucide="search-x" class="w-12 h-12 mx-auto mb-3 text-slate-200 dark:text-slate-700"></i>
+            <p class="text-slate-400 dark:text-slate-500 font-medium">Nenhum produto encontrado</p>
+            <p class="text-xs text-slate-300 dark:text-slate-600 mt-1">Tente ajustar os filtros</p>
+        `;
+    } else {
+        emptyMsg.classList.add('hidden');
+        tbody.innerHTML = filtered.map(p => {
+            const status = getProductStatus(p);
+            const catLabel = INVENTORY_CATEGORIES[p.category] || p.category;
+            return `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 border-b border-slate-100 dark:border-white/5 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(p.name)}</div>
+                        ${p.supplier ? `<div class="text-xs text-slate-400 dark:text-slate-500">${sanitizeHTML(p.supplier)}</div>` : ''}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">${sanitizeHTML(catLabel)}</span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="font-bold text-lg ${p.quantity <= p.minQuantity ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-white'}">${p.quantity}</span>
+                    </td>
+                    <td class="px-6 py-4 text-center text-slate-500 dark:text-slate-400">${p.minQuantity}</td>
+                    <td class="px-6 py-4 text-right font-medium text-slate-700 dark:text-slate-300">${fmtMoney(p.unitPrice)}</td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${status.color}">${status.label}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end gap-1">
+                            <button onclick="openStockMovementModal('${p.id}')" class="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Movimentar">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="openInventoryModal(db.inventory.find(x=>x.id==='${p.id}'))" class="p-1.5 text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" title="Editar">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteInventoryProduct('${p.id}')" class="p-1.5 text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors" title="Excluir">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    renderRecentMovements();
+    lucide.createIcons();
+}
+
+function renderRecentMovements() {
+    const container = document.getElementById('inv-movements-list');
+    const emptyEl = document.getElementById('inv-movements-empty');
+    const recent = [...db.stockMovements]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 15);
+
+    if (recent.length === 0) {
+        if (emptyEl) emptyEl.style.display = 'block';
+        return;
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    container.innerHTML = recent.map(m => {
+        const isIn = m.type === 'in';
+        const reasonLabel = MOVEMENT_REASONS[m.reason] || m.reason;
+        return `
+            <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border border-slate-50 dark:border-white/5">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isIn ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}">
+                    <i data-lucide="${isIn ? 'arrow-down-left' : 'arrow-up-right'}" class="w-4 h-4 ${isIn ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                        <p class="text-sm font-medium text-slate-800 dark:text-white truncate">${sanitizeHTML(m.productName)}</p>
+                        <span class="text-xs font-bold flex-shrink-0 ml-2 ${isIn ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${isIn ? '+' : '-'}${m.quantity}</span>
+                    </div>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span class="text-[10px] text-slate-400 dark:text-slate-500">${fmtDate(m.date)}</span>
+                        <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded">${sanitizeHTML(reasonLabel)}</span>
+                        ${m.notes ? `<span class="text-[10px] text-slate-400 dark:text-slate-600 truncate">${sanitizeHTML(m.notes)}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function filterInventory() {
+    renderInventory();
+}
+
+function openInventoryModal(product = null) {
+    const modal = document.getElementById('inventoryModal');
+    if (!modal) return;
+
+    document.getElementById('inv-id').value = '';
+    document.getElementById('inv-name').value = '';
+    document.getElementById('inv-category').value = 'cosmeticos';
+    document.getElementById('inv-price').value = '';
+    document.getElementById('inv-quantity').value = '';
+    document.getElementById('inv-min-quantity').value = '';
+    document.getElementById('inv-supplier').value = '';
+    document.getElementById('inv-notes').value = '';
+    document.getElementById('inv-modal-title').textContent = 'Novo Produto';
+
+    if (product) {
+        document.getElementById('inv-id').value = product.id;
+        document.getElementById('inv-name').value = product.name;
+        document.getElementById('inv-category').value = product.category;
+        document.getElementById('inv-price').value = product.unitPrice;
+        document.getElementById('inv-quantity').value = product.quantity;
+        document.getElementById('inv-min-quantity').value = product.minQuantity;
+        document.getElementById('inv-supplier').value = product.supplier || '';
+        document.getElementById('inv-notes').value = product.notes || '';
+        document.getElementById('inv-modal-title').textContent = 'Editar Produto';
+    }
+
+    modal.classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function submitInventoryProduct(e) {
+    e.preventDefault();
+    const id = document.getElementById('inv-id').value;
+    const name = document.getElementById('inv-name').value.trim();
+    const category = document.getElementById('inv-category').value;
+    const unitPrice = parseFloat(document.getElementById('inv-price').value) || 0;
+    const quantity = parseInt(document.getElementById('inv-quantity').value) || 0;
+    const minQuantity = parseInt(document.getElementById('inv-min-quantity').value) || 0;
+    const supplier = document.getElementById('inv-supplier').value.trim();
+    const notes = document.getElementById('inv-notes').value.trim();
+
+    if (!name) {
+        showNotification('Nome do produto é obrigatório!', 'warning');
+        return;
+    }
+
+    if (id) {
+        const idx = db.inventory.findIndex(p => p.id === id);
+        if (idx !== -1) {
+            const oldQty = db.inventory[idx].quantity;
+            db.inventory[idx] = { ...db.inventory[idx], name, category, unitPrice, quantity, minQuantity, supplier, notes };
+            if (quantity !== oldQty) {
+                const diff = quantity - oldQty;
+                db.stockMovements.push({
+                    id: getID(),
+                    productId: id,
+                    productName: name,
+                    type: diff > 0 ? 'in' : 'out',
+                    quantity: Math.abs(diff),
+                    reason: 'ajuste',
+                    date: new Date().toISOString().split('T')[0],
+                    notes: 'Ajuste via edição do produto'
+                });
+            }
+            showNotification('Produto atualizado com sucesso!', 'success');
+        }
+    } else {
+        const newProduct = {
+            id: getID(),
+            name,
+            category,
+            unitPrice,
+            quantity,
+            minQuantity,
+            supplier,
+            notes,
+            createdAt: new Date().toISOString()
+        };
+        db.inventory.push(newProduct);
+        if (quantity > 0) {
+            db.stockMovements.push({
+                id: getID(),
+                productId: newProduct.id,
+                productName: name,
+                type: 'in',
+                quantity,
+                reason: 'ajuste',
+                date: new Date().toISOString().split('T')[0],
+                notes: 'Estoque inicial'
+            });
+        }
+        showNotification('Produto cadastrado com sucesso!', 'success');
+    }
+
+    save();
+    closeModal('inventoryModal');
+    renderInventory();
+}
+
+function deleteInventoryProduct(id) {
+    const product = db.inventory.find(p => p.id === id);
+    if (!product) return;
+    if (!confirm(`Excluir o produto "${product.name}"? Esta ação não pode ser desfeita.`)) return;
+
+    db.inventory = db.inventory.filter(p => p.id !== id);
+    db.stockMovements = db.stockMovements.filter(m => m.productId !== id);
+    save();
+    renderInventory();
+    showNotification('Produto excluído.', 'info');
+}
+
+function openStockMovementModal(productId = null) {
+    const modal = document.getElementById('stockMovementModal');
+    if (!modal) return;
+
+    const select = document.getElementById('mov-product');
+    select.innerHTML = '<option value="">Selecione um produto...</option>' +
+        db.inventory.map(p => `<option value="${p.id}" ${p.id === productId ? 'selected' : ''}>${sanitizeHTML(p.name)} (${p.quantity} un)</option>`).join('');
+
+    document.getElementById('mov-type').value = 'in';
+    document.getElementById('mov-quantity').value = '';
+    document.getElementById('mov-reason').value = 'compra';
+    document.getElementById('mov-notes').value = '';
+
+    if (productId) {
+        updateMovementProductInfo();
+    } else {
+        document.getElementById('mov-product-info').classList.add('hidden');
+    }
+
+    modal.classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function updateMovementProductInfo() {
+    const productId = document.getElementById('mov-product').value;
+    const infoDiv = document.getElementById('mov-product-info');
+    if (!productId) {
+        infoDiv.classList.add('hidden');
+        return;
+    }
+    const product = db.inventory.find(p => p.id === productId);
+    if (product) {
+        document.getElementById('mov-current-stock').textContent = product.quantity + ' unidades';
+        infoDiv.classList.remove('hidden');
+    }
+}
+
+function submitStockMovement(e) {
+    e.preventDefault();
+    const productId = document.getElementById('mov-product').value;
+    const type = document.getElementById('mov-type').value;
+    const quantity = parseInt(document.getElementById('mov-quantity').value) || 0;
+    const reason = document.getElementById('mov-reason').value;
+    const notes = document.getElementById('mov-notes').value.trim();
+
+    if (!productId) {
+        showNotification('Selecione um produto!', 'warning');
+        return;
+    }
+    if (quantity <= 0) {
+        showNotification('Quantidade deve ser maior que zero!', 'warning');
+        return;
+    }
+
+    const product = db.inventory.find(p => p.id === productId);
+    if (!product) return;
+
+    if (type === 'out' && product.quantity < quantity) {
+        showNotification(`Estoque insuficiente! Disponível: ${product.quantity} unidades.`, 'warning');
+        return;
+    }
+
+    // Atualizar quantidade do produto
+    if (type === 'in') {
+        product.quantity += quantity;
+    } else {
+        product.quantity -= quantity;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const movementId = getID();
+
+    // Registrar movimentação de estoque
+    db.stockMovements.push({
+        id: movementId,
+        productId,
+        productName: product.name,
+        type,
+        quantity,
+        reason,
+        date: today,
+        notes
+    });
+
+    // ==========================================
+    // INTEGRAÇÃO FINANCEIRA AUTOMÁTICA
+    // Compra → Despesa | Venda → Receita | Perda → Despesa
+    // ==========================================
+    const totalAmount = quantity * product.unitPrice;
+
+    if (reason === 'compra') {
+        // Compra de produto = DESPESA no financeiro
+        db.transactions.push({
+            id: getID(),
+            date: today,
+            description: `Compra: ${quantity}x ${product.name}`,
+            amount: totalAmount,
+            type: 'expense',
+            category: 'Estoque - Compra',
+            proName: null,
+            proId: null,
+            clientId: null,
+            stockMovementId: movementId,
+            productId: productId
+        });
+    } else if (reason === 'venda') {
+        // Venda de produto = RECEITA no financeiro
+        db.transactions.push({
+            id: getID(),
+            date: today,
+            description: `Venda Produto: ${quantity}x ${product.name}`,
+            amount: totalAmount,
+            type: 'income',
+            category: 'Estoque - Venda',
+            proName: null,
+            proId: null,
+            clientId: null,
+            commission: 0,
+            stockMovementId: movementId,
+            productId: productId
+        });
+    } else if (reason === 'perda') {
+        // Perda/Avaria = DESPESA (prejuízo) no financeiro
+        db.transactions.push({
+            id: getID(),
+            date: today,
+            description: `Perda/Avaria: ${quantity}x ${product.name}`,
+            amount: totalAmount,
+            type: 'expense',
+            category: 'Estoque - Perda',
+            proName: null,
+            proId: null,
+            clientId: null,
+            stockMovementId: movementId,
+            productId: productId
+        });
+    }
+
+    save();
+    closeModal('stockMovementModal');
+    renderInventory();
+
+    const actionText = type === 'in' ? 'Entrada' : 'Saída';
+    showNotification(`${actionText} de ${quantity}x ${product.name} registrada!`, 'success');
+
+    // Notificação de lançamento financeiro
+    if (reason === 'compra' || reason === 'venda' || reason === 'perda') {
+        const finType = reason === 'venda' ? 'Receita' : 'Despesa';
+        setTimeout(() => {
+            showNotification(`💰 ${finType} de ${fmtMoney(totalAmount)} registrada no Financeiro (${MOVEMENT_REASONS[reason]})`, 'info');
+        }, 800);
+    }
+
+    // Alerta de estoque baixo
+    if (product.quantity <= product.minQuantity && product.quantity > 0) {
+        setTimeout(() => {
+            showNotification(`⚠️ Atenção: "${product.name}" está com estoque baixo (${product.quantity} un)!`, 'warning');
+        }, 2000);
+    } else if (product.quantity <= 0) {
+        setTimeout(() => {
+            showNotification(`🔴 ALERTA: "${product.name}" esgotou!`, 'warning');
+        }, 2000);
+    }
+}
+
+

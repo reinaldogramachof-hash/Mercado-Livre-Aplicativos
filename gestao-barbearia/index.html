@@ -75,11 +75,15 @@
         <!-- Sidebar Padronizada -->
         <aside id="sidebar"
             class="sidebar glass-dark text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
-            <div class="h-20 flex items-center px-6 bg-gradient-to-r from-brand-blue to-brand-dark">
-                <i data-lucide="scissors" class="w-8 h-8 mr-3"></i>
+            <div
+                class="h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-amber-500/20">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mr-3 shadow-lg shadow-amber-500/20 flex-shrink-0">
+                    <i data-lucide="crown" class="w-5 h-5 text-slate-900"></i>
+                </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-tight uppercase">GESTÃO BARBEARIA</h1>
-                    <p class="text-xs text-white/90 font-medium">Sistema de Gestão Profissional</p>
+                    <h1 class="text-lg font-bold tracking-tight uppercase text-white">GESTÃO BARBEARIA</h1>
+                    <p class="text-[11px] text-amber-300/70 font-medium tracking-wide">Sistema PRO • Gestão Completa</p>
                 </div>
             </div>
             <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
@@ -127,6 +131,12 @@
                     <i data-lucide="scissors" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium">Serviços</span>
                 </button>
+                <button onclick="router('inventory')"
+                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    id="nav-inventory">
+                    <i data-lucide="package" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
+                    <span class="font-medium">Estoque</span>
+                </button>
                 <!-- SISTEMA -->
                 <div class="px-4 mb-2 mt-4">
                     <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Sistema</span>
@@ -144,16 +154,20 @@
                     <span class="font-medium">Manual de Uso</span>
                 </button>
             </nav>
-            <div class="p-6 border-t border-white/10 text-center">
-                <p class="text-xs text-gray-500">Licença Vitalícia</p>
-                <p class="text-[10px] text-gray-600 mt-1">Sistema de Gestão</p>
+            <div class="p-4 border-t border-white/10 text-center">
+                <div
+                    class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                    <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                    <span class="text-[11px] font-bold text-amber-400 tracking-wide">LICENÇA VITALÍCIA</span>
+                </div>
+                <p class="text-[10px] text-slate-500">v7.0 PRO • Gestão Completa</p>
             </div>
         </aside>
         <!-- Main Content -->
         <main class="main-content min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
             <!-- Header -->
             <header
-                class="glass h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-white/20">
+                class="glass h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-white/5">
                 <div class="flex items-center gap-4">
                     <button onclick="toggleSidebar()"
                         class="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
@@ -321,6 +335,164 @@
                     </div>
                     <!-- Services Grid -->
                     <div id="services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </section>
+                <!-- Inventory View -->
+                <section id="view-inventory" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800 dark:text-white">Controle de Estoque</h2>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Produtos, insumos e movimentações</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="openStockMovementModal()"
+                                class="flex items-center gap-2 px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg text-sm font-medium hover:bg-black dark:hover:bg-slate-600 transition-colors">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                                Movimentação
+                            </button>
+                            <button onclick="openInventoryModal()"
+                                class="flex items-center gap-2 px-4 py-2 bg-brand-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors shadow-lg shadow-blue-200 dark:shadow-none">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                                Novo Produto
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div
+                            class="bg-white dark:bg-barber-card p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">Total
+                                        Produtos</p>
+                                    <h3 id="inv-total-products"
+                                        class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0</h3>
+                                </div>
+                                <div
+                                    class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                    <i data-lucide="package" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-barber-card p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">Valor
+                                        em Estoque</p>
+                                    <h3 id="inv-total-value"
+                                        class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">R$ 0,00</h3>
+                                </div>
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                    <i data-lucide="dollar-sign" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-barber-card p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">Itens
+                                        em Baixa</p>
+                                    <h3 id="inv-low-stock"
+                                        class="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">0</h3>
+                                </div>
+                                <div
+                                    class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                                    <i data-lucide="alert-triangle"
+                                        class="w-5 h-5 text-amber-600 dark:text-amber-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-barber-card p-4 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">
+                                        Movimentações</p>
+                                    <h3 id="inv-movements-month"
+                                        class="text-2xl font-bold text-slate-800 dark:text-white mt-1">0</h3>
+                                </div>
+                                <div
+                                    class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                                    <i data-lucide="arrow-left-right"
+                                        class="w-5 h-5 text-slate-600 dark:text-slate-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Search and Filters -->
+                    <div class="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <div class="relative flex-1 w-full">
+                            <i data-lucide="search"
+                                class="absolute left-3 top-2.5 w-4 h-4 text-slate-400 dark:text-slate-500"></i>
+                            <input type="text" id="inv-search" onkeyup="filterInventory()"
+                                placeholder="Buscar produto..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-barber-card text-sm dark:text-white focus:border-brand-blue outline-none">
+                        </div>
+                        <select id="inv-filter-category" onchange="filterInventory()"
+                            class="px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg text-sm bg-white dark:bg-barber-card dark:text-white outline-none">
+                            <option value="all">Todas Categorias</option>
+                            <option value="cosmeticos">Cosméticos</option>
+                            <option value="laminas">Lâminas/Descartáveis</option>
+                            <option value="higiene">Higiene</option>
+                            <option value="equipamentos">Equipamentos</option>
+                            <option value="bebidas">Bebidas</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                        <select id="inv-filter-status" onchange="filterInventory()"
+                            class="px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg text-sm bg-white dark:bg-barber-card dark:text-white outline-none">
+                            <option value="all">Todos Status</option>
+                            <option value="ok">OK</option>
+                            <option value="low">Estoque Baixo</option>
+                            <option value="critical">Crítico</option>
+                        </select>
+                    </div>
+                    <!-- Products Table -->
+                    <div
+                        class="bg-white dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 overflow-hidden mb-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider">
+                                    <tr>
+                                        <th class="px-6 py-3">Produto</th>
+                                        <th class="px-6 py-3">Categoria</th>
+                                        <th class="px-6 py-3 text-center">Qtd Atual</th>
+                                        <th class="px-6 py-3 text-center">Qtd Mín.</th>
+                                        <th class="px-6 py-3 text-right">Val. Unit.</th>
+                                        <th class="px-6 py-3 text-center">Status</th>
+                                        <th class="px-6 py-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-list"
+                                    class="divide-y divide-slate-100 dark:divide-white/5 text-sm">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="inv-empty-msg" class="hidden text-center py-12">
+                            <i data-lucide="package-open"
+                                class="w-16 h-16 mx-auto mb-4 text-slate-200 dark:text-slate-700"></i>
+                            <p class="text-slate-400 dark:text-slate-500 font-medium">Nenhum produto cadastrado</p>
+                            <p class="text-xs text-slate-300 dark:text-slate-600 mt-1">Clique em "Novo Produto" para
+                                começar</p>
+                        </div>
+                    </div>
+                    <!-- Recent Movements -->
+                    <div
+                        class="bg-white dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 p-6">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                            <i data-lucide="clock" class="w-4 h-4 mr-2 text-slate-400 dark:text-slate-500"></i>
+                            Últimas Movimentações
+                        </h3>
+                        <div id="inv-movements-list" class="space-y-3 max-h-72 overflow-y-auto pr-2">
+                            <div id="inv-movements-empty" class="text-center py-6">
+                                <p class="text-sm text-slate-400 dark:text-slate-500">Nenhuma movimentação registrada
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
                 <!-- Finance View -->
                 <section id="view-finance" class="view-section hide fade-in">
@@ -2144,6 +2316,153 @@
                         Cancelar
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Inventory Product Modal -->
+        <div id="inventoryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div
+                class="bg-white dark:bg-barber-card rounded-2xl shadow-2xl w-full max-w-md p-6 border dark:border-white/5">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white" id="inv-modal-title">Novo Produto</h3>
+                    <button onclick="closeModal('inventoryModal')"
+                        class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-white">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <form onsubmit="submitInventoryProduct(event)" class="space-y-4">
+                    <input type="hidden" id="inv-id">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Nome do
+                            Produto</label>
+                        <input type="text" id="inv-name" required placeholder="Ex: Pomada Modeladora"
+                            class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white focus:border-brand-blue outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Categoria</label>
+                            <select id="inv-category" required
+                                class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                                <option value="cosmeticos">Cosméticos</option>
+                                <option value="laminas">Lâminas/Descartáveis</option>
+                                <option value="higiene">Higiene</option>
+                                <option value="equipamentos">Equipamentos</option>
+                                <option value="bebidas">Bebidas</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Valor
+                                Unitário (R$)</label>
+                            <input type="number" id="inv-price" required step="0.01" min="0" placeholder="0,00"
+                                class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 p-3 rounded-lg">
+                            <label
+                                class="text-[10px] font-bold text-blue-800 dark:text-blue-400 uppercase mb-1 block">Qtd
+                                Inicial</label>
+                            <input type="number" id="inv-quantity" required min="0" placeholder="0"
+                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                        </div>
+                        <div
+                            class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 p-3 rounded-lg">
+                            <label
+                                class="text-[10px] font-bold text-amber-800 dark:text-amber-400 uppercase mb-1 block">Qtd
+                                Mínima</label>
+                            <input type="number" id="inv-min-quantity" required min="0" placeholder="5"
+                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label
+                            class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Fornecedor
+                            (Opcional)</label>
+                        <input type="text" id="inv-supplier" placeholder="Ex: Distribuidora X"
+                            class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                    </div>
+                    <div>
+                        <label
+                            class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Observações</label>
+                        <textarea id="inv-notes" rows="2" placeholder="Notas sobre o produto..."
+                            class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none resize-none"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-brand-blue text-white py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 dark:shadow-none active:scale-95">
+                        Salvar Produto
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stock Movement Modal -->
+        <div id="stockMovementModal"
+            class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div
+                class="bg-white dark:bg-barber-card rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden border dark:border-white/5">
+                <div class="bg-gradient-to-r from-brand-blue to-brand-dark p-6 text-white text-center">
+                    <h3 class="font-bold text-lg flex items-center justify-center">
+                        <i data-lucide="arrow-left-right" class="w-5 h-5 mr-2"></i> Movimentação de Estoque
+                    </h3>
+                    <p class="text-blue-100 text-sm mt-1">Registrar entrada ou saída de produto</p>
+                </div>
+                <form onsubmit="submitStockMovement(event)" class="p-6 space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Produto</label>
+                        <select id="mov-product" required onchange="updateMovementProductInfo()"
+                            class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none mt-1">
+                            <option value="">Selecione um produto...</option>
+                        </select>
+                    </div>
+                    <div id="mov-product-info"
+                        class="hidden bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-100 dark:border-white/5">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-500 dark:text-slate-400">Estoque Atual:</span>
+                            <span id="mov-current-stock" class="font-bold text-slate-800 dark:text-white">0</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tipo</label>
+                        <select id="mov-type" required
+                            class="w-full border dark:border-white/10 p-2.5 rounded-lg mt-1 font-bold bg-white dark:bg-slate-800 dark:text-white outline-none">
+                            <option value="in">🟢 Entrada</option>
+                            <option value="out">🔴 Saída</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Quantidade</label>
+                            <input type="number" id="mov-quantity" required min="1" placeholder="0"
+                                class="w-full border dark:border-white/10 p-2.5 rounded-lg mt-1 text-lg font-bold bg-white dark:bg-slate-800 dark:text-white outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Motivo</label>
+                            <select id="mov-reason" required
+                                class="w-full border dark:border-white/10 p-2.5 rounded-lg mt-1 bg-white dark:bg-slate-800 dark:text-white outline-none text-sm">
+                                <option value="compra">Compra</option>
+                                <option value="venda">Venda</option>
+                                <option value="uso_interno">Uso Interno</option>
+                                <option value="perda">Perda/Avaria</option>
+                                <option value="ajuste">Ajuste Manual</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Observação
+                            (Opcional)</label>
+                        <input type="text" id="mov-notes" placeholder="Ex: Reposição semanal"
+                            class="w-full border dark:border-white/10 p-2.5 rounded-lg mt-1 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-brand-blue text-white py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 dark:shadow-none active:scale-95">
+                        Registrar Movimentação
+                    </button>
+                </form>
             </div>
         </div>
 

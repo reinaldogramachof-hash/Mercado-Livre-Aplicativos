@@ -57,9 +57,11 @@ body {
 }
 
 .active-nav {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border-left: 3px solid #60A5FA;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-left: 3px solid #D4AF37;
     color: white !important;
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Utilities */
