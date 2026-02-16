@@ -1164,6 +1164,94 @@
                 .catch((err) => console.error('Service Worker Error', err));
         }
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

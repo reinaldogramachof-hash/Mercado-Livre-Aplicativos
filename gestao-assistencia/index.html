@@ -12,397 +12,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Gestão Assistencia">
-    <link rel="manifest"
-        href='data:application/manifest+json,{"name":"Gestão Assistencia","short_name": "Gestão Assistencia","start_url":".","display":"standalone","background_color":"#F3F4F6","theme_color":"#2563EB","icons":[{"src":"https://unpkg.com/lucide-static@0.16.29/icons/wrench.svg","sizes":"192x192","type":"image/svg+xml"}]}'>
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#2563EB',
-                            dark: '#1e40af',
-                            black: '#1a1a1a',
-                            green: '#10B981',
-                            red: '#EF4444',
-                            yellow: '#F59E0B',
-                            purple: '#8B5CF6',
-                            orange: '#F97316'
-                        },
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        /* CSS Padronizado */
-        :root {
-            --brand-blue: #2563EB;
-            --brand-dark: #1e40af;
-            --brand-black: #1a1a1a;
-            --brand-green: #10B981;
-            --brand-red: #EF4444;
-            --brand-yellow: #F59E0B;
-            --brand-purple: #8B5CF6;
-            --brand-orange: #F97316;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F3F4F6;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Gráfico CSS */
-        .chart-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 180px;
-            gap: 2%;
-        }
-
-        .bar-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            height: 100%;
-            position: relative;
-        }
-
-        .bar-wrapper {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 2px;
-            height: 100%;
-            width: 100%;
-        }
-
-        .bar {
-            width: 45%;
-            border-radius: 6px 6px 0 0;
-            transition: height 0.5s ease;
-            min-height: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .bar:hover::after {
-            content: attr(data-value);
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 10;
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .badge-info {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        /* Status Colors */
-        .status-received {
-            background-color: #F3F4F6;
-            color: #374151;
-        }
-
-        .status-analyzing {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .status-waiting {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-ready {
-            background-color: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-delivered {
-            background-color: #E5E7EB;
-            color: #4B5563;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Print Styles */
-        @media print {
-
-            .sidebar,
-            .no-print,
-            header,
-            button,
-            .fab-container,
-            .hidden-print {
-                display: none !important;
-            }
-
-            .main-content {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-            }
-
-            body {
-                background: white !important;
-                color: black !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .view-section {
-                padding: 0 !important;
-                display: block !important;
-            }
-
-            .view-section.hide {
-                display: none !important;
-            }
-
-            .fixed.inset-0:not(.hidden) {
-                position: absolute !important;
-                overflow: visible !important;
-                z-index: 9999 !important;
-                background: white !important;
-            }
-
-            .fixed.inset-0:not(.hidden)>div {
-                box-shadow: none !important;
-                border: none !important;
-                max-width: 100% !important;
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .modal-backdrop {
-                background-color: transparent !important;
-                backdrop-filter: none !important;
-            }
-        }
-
-        /* Tutorial Steps */
-        .step-number {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        /* Checklist */
-        .checklist-item {
-            transition: all 0.2s ease;
-        }
-
-        .checklist-item.completed {
-            opacity: 0.7;
-            text-decoration: line-through;
-        }
-
-        /* Code-like examples */
-        .code-block {
-            background: #1a1a1a;
-            color: #f8f8f2;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            overflow-x: auto;
-            margin: 8px 0;
-        }
-
-        /* Progress bar */
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #2563EB, #1e40af);
-            transition: width 0.5s ease;
-        }
-
-        /* Estoque Specific */
-        .stock-low {
-            background-color: #FEF3C7 !important;
-            border-left: 4px solid #F59E0B !important;
-        }
-
-        .stock-critical {
-            background-color: #FEE2E2 !important;
-            border-left: 4px solid #EF4444 !important;
-        }
-
-        .stock-ok {
-            background-color: #DCFCE7 !important;
-            border-left: 4px solid #10B981 !important;
-        }
-
-        .stock-movement-in {
-            color: #10B981;
-            font-weight: bold;
-        }
-
-        .stock-movement-out {
-            color: #EF4444;
-            font-weight: bold;
-        }
-
-        .stock-movement-adjust {
-            color: #F59E0B;
-            font-weight: bold;
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -445,8 +70,8 @@
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-blue to-brand-dark">
+        class="sidebar glass-dark text-white transition-transform duration-300 flex flex-col shadow-2xl border-r border-white/5">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#C2410C]/50 to-transparent border-b border-white/5">
             <i data-lucide="wrench" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO ASSISTENCIA</h1>
@@ -545,10 +170,10 @@
 
                 <div class="relative group">
                     <div
-                        class="absolute -inset-1 bg-plena-blue/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                        class="absolute -inset-1 bg-brand-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
                     </div>
                     <button onclick="openOrderModal()"
-                        class="relative flex items-center px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                        class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
                         <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                         <span class="hidden sm:inline">Nova O.S.</span>
                         <span class="sm:hidden">Nova</span>
@@ -569,11 +194,11 @@
                             <div>
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Em Andamento
                                 </p>
-                                <h3 id="dash-active" class="text-3xl font-bold text-plena-blue">0</h3>
+                                <h3 id="dash-active" class="text-3xl font-bold text-brand-primary">0</h3>
                                 <p class="text-xs text-gray-500 mt-1">OS ativas</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-blue/10 flex items-center justify-center">
-                                <i data-lucide="clock" class="w-6 h-6 text-plena-blue"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="clock" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -628,7 +253,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-plena-blue"></i>
+                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-brand-primary"></i>
                                 Ações Rápidas
                             </h3>
                             <div class="space-y-3">
@@ -659,7 +284,7 @@
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="font-bold text-gray-800">Ordens de Serviço Recentes</h3>
                             <button onclick="router('orders')"
-                                class="text-sm text-plena-blue hover:text-brand-dark font-medium">
+                                class="text-sm text-brand-primary hover:text-brand-dark font-medium">
                                 Ver todas →
                             </button>
                         </div>
@@ -711,7 +336,7 @@
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="search-order" onkeyup="renderOrders()" placeholder="Buscar..."
-                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <div>
                             <input type="date" id="filter-start" onchange="renderOrders()"
@@ -791,7 +416,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openClientModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>
                             Novo Cliente
                         </button>
@@ -805,7 +430,7 @@
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="search-client" onkeyup="renderClients()"
                                 placeholder="Buscar cliente..."
-                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                     </div>
 
@@ -844,7 +469,7 @@
                             Novo Produto
                         </button>
                         <button onclick="openMovementModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="move" class="w-4 h-4"></i>
                             Movimentação
                         </button>
@@ -857,11 +482,11 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Produtos</p>
-                                <h3 id="inv-total" class="text-3xl font-bold text-plena-blue">0</h3>
+                                <h3 id="inv-total" class="text-3xl font-bold text-brand-primary">0</h3>
                                 <p class="text-xs text-gray-500 mt-1">Itens cadastrados</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-blue/10 flex items-center justify-center">
-                                <i data-lucide="package" class="w-6 h-6 text-plena-blue"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="package" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -911,7 +536,7 @@
                                 <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
                                 <input type="text" id="search-inventory" onkeyup="renderInventory()"
                                     placeholder="Buscar produto..."
-                                    class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                             </div>
                             <div class="flex gap-2">
                                 <select id="filter-category" onchange="renderInventory()"
@@ -1007,7 +632,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTransactionModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Novo Lançamento
                         </button>
@@ -1023,8 +648,8 @@
                                 <h3 id="cash-balance" class="text-3xl font-bold text-gray-900">R$ 0,00</h3>
                                 <p class="text-xs text-gray-500 mt-1">Disponível</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-blue/10 flex items-center justify-center">
-                                <i data-lucide="wallet" class="w-6 h-6 text-plena-blue"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -1106,7 +731,7 @@
                     <button onclick="generateMonthlyReport()"
                         class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover text-left">
                         <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                            <i data-lucide="wrench" class="w-6 h-6 text-plena-blue"></i>
+                            <i data-lucide="wrench" class="w-6 h-6 text-brand-primary"></i>
                         </div>
                         <h3 class="font-bold text-gray-800 mb-2">Relatório Mensal</h3>
                         <p class="text-sm text-gray-600">Resumo completo do mês atual</p>
@@ -1148,7 +773,7 @@
                     <!-- Company Settings -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="font-bold text-gray-800 mb-6 flex items-center">
-                            <i data-lucide="building" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            <i data-lucide="building" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Configurações da Empresa
                         </h3>
 
@@ -1174,7 +799,7 @@
                                     class="w-full border p-2 rounded-lg text-sm">
                             </div>
                             <button onclick="saveCompanySettings()"
-                                class="w-full bg-plena-blue text-white py-3 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors mt-4">
+                                class="w-full bg-brand-primary text-white py-3 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors mt-4">
                                 Salvar Configurações
                             </button>
                         </div>
@@ -1184,7 +809,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
@@ -1246,7 +871,7 @@
                     <!-- Cabeçalho Hero -->
                     <div class="text-center mb-10 pt-4">
                         <div
-                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-brand-dark rounded-2xl mb-4 shadow-lg">
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand-primary to-brand-dark rounded-2xl mb-4 shadow-lg">
                             <i data-lucide="wrench" class="w-12 h-12 text-white"></i>
                         </div>
                         <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
@@ -1254,7 +879,7 @@
                         <div class="mt-4 flex flex-wrap justify-center gap-2">
                             <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para Iniciantes</span>
                             <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e Desktop</span>
-                            <span class="px-3 py-1 bg-purple-100 text-plena-blue rounded-full text-xs font-bold">⚡ Rápido e Prático</span>
+                            <span class="px-3 py-1 bg-purple-100 text-brand-primary rounded-full text-xs font-bold">⚡ Rápido e Prático</span>
                         </div>
                     </div>
 
@@ -1262,7 +887,7 @@
                     <div id="instalacao" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">1</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">1</div>
                                 <h3 class="text-xl font-bold text-gray-800">Instalação do Sistema</h3>
                             </div>
                         </div>
@@ -1354,7 +979,7 @@
                     <div id="controle-estoque" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">2</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">2</div>
                                 <h3 class="text-xl font-bold text-gray-800">Controle de Estoque - Guia Completo</h3>
                             </div>
                         </div>
@@ -1461,14 +1086,14 @@
                     <div id="integracao-os-estoque" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">3</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">3</div>
                                 <h3 class="text-xl font-bold text-gray-800">Integração O.S. + Estoque</h3>
                             </div>
                         </div>
 
                         <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-200 mb-6">
                             <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                                <i data-lucide="link" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="link" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Fluxo Integrado de Trabalho
                             </h4>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
@@ -1531,7 +1156,7 @@
                     <div id="backup" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">4</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4</div>
                                 <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
                             </div>
                         </div>
@@ -1617,7 +1242,7 @@
                             Nossa equipe de suporte responde em até 24h úteis.
                         </p>
                         <a href="mailto:suporte@gestao.app"
-                            class="inline-flex items-center text-plena-blue font-bold hover:underline">
+                            class="inline-flex items-center text-brand-primary font-bold hover:underline">
                             <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
                             suporte@gestao.app
                         </a>
@@ -1632,7 +1257,7 @@
                     <!-- Header Institucional -->
                     <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
                         <div
-                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-blue to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
                             <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
                         </div>
                         <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
@@ -1645,7 +1270,7 @@
                         <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                             <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
                                 <div class="p-2 bg-blue-50 rounded-lg mr-3">
-                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                    <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 Termos de Uso
                             </h3>
@@ -1706,7 +1331,7 @@
                         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                             <div class="flex-1">
                                 <h3 class="font-bold text-xl mb-2 flex items-center">
-                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-blue"></i>
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-brand-primary"></i>
                                     Suporte Premium Especializado
                                 </h3>
                                 <p class="text-gray-300 text-sm mb-6 leading-relaxed">
@@ -1721,7 +1346,7 @@
                                     </div>
                                     <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
                                         <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
-                                        <p class="font-bold text-plena-blue">Até 24h Úteis</p>
+                                        <p class="font-bold text-brand-primary">Até 24h Úteis</p>
                                     </div>
                                 </div>
                             </div>
@@ -1767,7 +1392,7 @@
 
                 <!-- Client Info -->
                 <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <h4 class="text-sm font-bold text-plena-blue mb-4 flex items-center">
+                    <h4 class="text-sm font-bold text-brand-primary mb-4 flex items-center">
                         <i data-lucide="user" class="w-4 h-4 mr-2"></i>
                         Dados do Cliente
                     </h4>
@@ -1775,13 +1400,13 @@
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Nome do Cliente *</label>
                             <input type="text" id="order-client" required
-                                class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                                class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                                 placeholder="Nome completo">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">WhatsApp/Telefone</label>
                             <input type="text" id="order-phone"
-                                class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                                class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                                 placeholder="(00) 00000-0000">
                         </div>
                     </div>
@@ -1797,13 +1422,13 @@
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Tipo de Equipamento *</label>
                             <input type="text" id="order-device" required
-                                class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                                class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                                 placeholder="Ex: iPhone 11, Notebook Dell, etc.">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Marca</label>
                             <input type="text" id="order-brand"
-                                class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                                class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                                 placeholder="Ex: Apple, Samsung, etc.">
                         </div>
                     </div>
@@ -1811,13 +1436,13 @@
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Número de Série/IMEI</label>
                             <input type="text" id="order-serial"
-                                class="w-full border p-2 rounded-lg bg-white font-mono focus:border-plena-blue outline-none"
+                                class="w-full border p-2 rounded-lg bg-white font-mono focus:border-brand-primary outline-none"
                                 placeholder="Opcional">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Senha/Acesso</label>
                             <input type="text" id="order-password"
-                                class="w-full border p-2 rounded-lg bg-yellow-50 focus:border-plena-blue outline-none"
+                                class="w-full border p-2 rounded-lg bg-yellow-50 focus:border-brand-primary outline-none"
                                 placeholder="Senha do dispositivo">
                         </div>
                     </div>
@@ -1828,13 +1453,13 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Defeito Relatado *</label>
                         <textarea id="order-problem" required rows="3"
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="Descreva o problema conforme relatado pelo cliente..."></textarea>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Diagnóstico/Serviço</label>
                         <textarea id="order-diagnosis" rows="3"
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="Laudo técnico e serviço a ser realizado..."></textarea>
                     </div>
                 </div>
@@ -1862,13 +1487,13 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Mão de Obra (R$)</label>
                         <input type="number" step="0.01" id="order-labor"
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="0.00" value="0">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Desconto (R$)</label>
                         <input type="number" step="0.01" id="order-discount"
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none text-red-500"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none text-red-500"
                             placeholder="0.00" value="0">
                     </div>
                 </div>
@@ -1894,14 +1519,14 @@
                         </div>
                         <div class="flex justify-between border-t pt-2 mt-2">
                             <span class="font-bold text-gray-900 text-lg">TOTAL</span>
-                            <span id="order-total" class="text-2xl font-bold text-plena-blue">R$ 0,00</span>
+                            <span id="order-total" class="text-2xl font-bold text-brand-primary">R$ 0,00</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="sticky bottom-0 bg-white pt-4 border-t">
                     <button type="submit"
-                        class="w-full bg-plena-blue text-white py-4 rounded-xl font-bold hover:bg-brand-dark transition-all text-lg shadow-lg">
+                        class="w-full bg-brand-primary text-white py-4 rounded-xl font-bold hover:bg-brand-dark transition-all text-lg shadow-lg">
                         Salvar Ordem de Serviço
                     </button>
                 </div>
@@ -1925,7 +1550,7 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Nome do Produto *</label>
                     <input type="text" id="product-name" required
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="Ex: Tela iPhone 12, Bateria Samsung, etc.">
                 </div>
 
@@ -1933,13 +1558,13 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Código</label>
                         <input type="text" id="product-code"
-                            class="w-full border p-2 rounded-lg bg-white font-mono focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white font-mono focus:border-brand-primary outline-none"
                             placeholder="Auto ou manual">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Categoria *</label>
                         <input type="text" id="product-category" required list="categories"
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="Ex: Telas, Baterias, Peças">
                         <datalist id="categories">
                             <option value="Telas">
@@ -1957,13 +1582,13 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Estoque Atual</label>
                         <input type="number" id="product-stock" min="0" step="1" required
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             value="0">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Estoque Mínimo</label>
                         <input type="number" id="product-min-stock" min="0" step="1" required
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             value="3">
                     </div>
                 </div>
@@ -1972,13 +1597,13 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Custo (R$)</label>
                         <input type="number" step="0.01" id="product-cost" required
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="0.00" value="0">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Venda (R$)</label>
                         <input type="number" step="0.01" id="product-price" required
-                            class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="0.00" value="0">
                     </div>
                 </div>
@@ -1986,14 +1611,14 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Fornecedor</label>
                     <input type="text" id="product-supplier"
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="Nome do fornecedor">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                     <textarea id="product-notes" rows="2"
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="Detalhes adicionais..."></textarea>
                 </div>
 
@@ -2058,14 +1683,14 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Quantidade *</label>
                     <input type="number" id="movement-quantity" min="1" step="1" required
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="0">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Valor Unitário (R$)</label>
                     <input type="number" step="0.01" id="movement-unit-value"
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="0.00">
                 </div>
 
@@ -2085,7 +1710,7 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                     <textarea id="movement-notes" rows="2"
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="Detalhes da movimentação..."></textarea>
                 </div>
 
@@ -2097,7 +1722,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
                     Registrar Movimentação
                 </button>
             </form>
@@ -2266,7 +1891,7 @@
                         <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
                     </button>
                     <button onclick="window.print()"
-                        class="bg-plena-blue text-white py-3 rounded-lg font-bold hover:bg-brand-dark flex justify-center items-center gap-2">
+                        class="bg-brand-primary text-white py-3 rounded-lg font-bold hover:bg-brand-dark flex justify-center items-center gap-2">
                         <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
                     </button>
                     <button onclick="usePartsFromOrder()" id="btn-use-parts"
@@ -2311,14 +1936,14 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
                     <input type="number" id="trans-amount" step="0.01" min="0.01" required
-                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-blue outline-none"
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-brand-primary outline-none"
                         placeholder="0,00">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
                     <input type="text" id="trans-desc" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Ex: Pagamento de OS #001, Compra de peças, etc.">
                 </div>
 
@@ -2341,7 +1966,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
                     Salvar Lançamento
                 </button>
             </form>
@@ -2364,7 +1989,7 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Nome Completo *</label>
                     <input type="text" id="client-name" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Nome do cliente">
                 </div>
 
@@ -2372,13 +1997,13 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
                         <input type="text" id="client-phone"
-                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                             placeholder="(00) 00000-0000">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
                         <input type="email" id="client-email"
-                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                             placeholder="cliente@email.com">
                     </div>
                 </div>
@@ -2386,19 +2011,19 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
                     <input type="text" id="client-address"
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Endereço completo">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                     <textarea id="client-notes" rows="2"
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Informações adicionais..."></textarea>
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
                     Salvar Cliente
                 </button>
             </form>
@@ -2493,13 +2118,13 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Quantidade</label>
                     <input type="number" id="part-quantity" min="1" step="1" value="1"
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none">
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações (opcional)</label>
                     <input type="text" id="part-notes"
-                        class="w-full border p-2 rounded-lg bg-white focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                         placeholder="Ex: Cor preta, versão Pro, etc.">
                 </div>
 
@@ -4168,5 +3793,93 @@
             router('dashboard');
         });
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 </html>

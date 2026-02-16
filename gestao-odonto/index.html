@@ -13,325 +13,22 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Gestão Odonto">
 
-    <link rel="manifest"
-        href='data:application/manifest+json,{"name":"Gestão Odonto","short_name":"Gestão Odonto","start_url":".","display":"standalone","background_color":"#F0F9FF","theme_color":"#0E7490","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBFNzQ5MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMCAyMmgtNWEyIDIgMCAwIDEtMi0yVjRhMiAyIDAgMCAxIDItMmgxNGEyIDIgMCAwIDEgMiAydjE2YTIgMiAwIDAgMS0yIDJoLTUiLz48cGF0aCBkPSJtMTkgMjEtMTAtN2wxMC03Ii8+PC9zdmc+","sizes":"192x192","type":"image/svg+xml"}]}'>
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#0E7490',
-                            teal: '#14B8A6',
-                            cyan: '#06B6D4',
-                            dark: '#164E63',
-                            lightblue: '#22D3EE',
-                            purple: '#8B5CF6',
-                            pink: '#EC4899',
-                            green: '#10B981',
-                            amber: '#F59E0B',
-                            red: '#EF4444'
-                        },
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        /* CSS Otimizado - Mantendo estrutura similar */
-        :root {
-            --brand-blue: #0E7490;
-            --brand-teal: #14B8A6;
-            --brand-cyan: #06B6D4;
-            --brand-dark: #164E63;
-            --brand-lightblue: #22D3EE;
-            --brand-purple: #8B5CF6;
-            --brand-pink: #EC4899;
-            --brand-green: #10B981;
-            --brand-amber: '#F59E0B';
-            --brand-red: #EF4444;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F0F9FF;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .badge-info {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Status Indicators */
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-
-        .status-agendado {
-            background-color: #3B82F6;
-        }
-
-        .status-confirmado {
-            background-color: #10B981;
-        }
-
-        .status-em-atendimento {
-            background-color: #F59E0B;
-        }
-
-        .status-concluido {
-            background-color: #8B5CF6;
-        }
-
-        .status-cancelado {
-            background-color: #EF4444;
-        }
-
-        .status-falta {
-            background-color: #6B7280;
-        }
-
-        /* Progress bar */
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #0E7490, #14B8A6);
-            transition: width 0.5s ease;
-        }
-
-        /* Print Styles */
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-
-            body {
-                background: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                height: 100vh;
-                margin: 0;
-                padding: 0;
-            }
-
-            body>* {
-                display: none !important;
-            }
-
-            #receiptModal {
-                display: flex !important;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                background: white;
-                z-index: 9999;
-                align-items: flex-start;
-                justify-content: center;
-                overflow: visible !important;
-            }
-
-            #receiptModal .bg-white {
-                box-shadow: none !important;
-                max-width: 100% !important;
-                width: 100% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            #receipt-content {
-                padding: 40px !important;
-                width: 100%;
-                font-size: 12pt;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        /* Timeline */
-        .timeline-item {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #0E7490;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px #0E7490;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 23px;
-            width: 2px;
-            height: calc(100% + 5px);
-            background-color: #e5e7eb;
-        }
-
-        .timeline-item:last-child::after {
-            display: none;
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -374,7 +71,7 @@
     <!-- Sidebar -->
     <aside id="sidebar"
         class="sidebar bg-gradient-to-b from-brand-dark to-gray-900 text-white transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-blue to-plena-teal">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#0891B2]/50 to-transparent border-b border-white/5">
             <i data-lucide="tooth" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO ODONTO</h1>
@@ -466,7 +163,7 @@
 
             <div class="flex items-center gap-2 sm:gap-3">
                 <button onclick="openAppointmentModal()"
-                    class="relative flex items-center px-4 py-2.5 bg-gradient-to-r from-plena-blue to-plena-teal text-white rounded-lg text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-cyan-200 active:scale-95">
+                    class="relative flex items-center px-4 py-2.5 bg-gradient-to-r from-brand-primary to-brand-primary text-white rounded-lg text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-cyan-200 active:scale-95">
                     <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                     <span class="hidden sm:inline">Novo Agendamento</span>
                     <span class="sm:hidden">Novo</span>
@@ -526,7 +223,7 @@
                             <div>
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Próximas
                                     Consultas</p>
-                                <h3 id="dash-next" class="text-2xl font-bold text-plena-blue">0</h3>
+                                <h3 id="dash-next" class="text-2xl font-bold text-brand-primary">0</h3>
                                 <p class="text-xs text-gray-500 mt-1">Próximos 7 dias</p>
                             </div>
                             <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
@@ -608,12 +305,12 @@
                     <div class="flex items-center gap-3">
                         <div class="relative">
                             <i data-lucide="calendar"
-                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-plena-blue"></i>
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-primary"></i>
                             <input type="date" id="schedule-date" onchange="renderSchedule()"
-                                class="pl-10 pr-4 py-2.5 rounded-lg border-2 border-plena-blue/20 text-sm bg-plena-blue/5 font-bold text-brand-dark focus:border-plena-blue outline-none">
+                                class="pl-10 pr-4 py-2.5 rounded-lg border-2 border-brand-primary/20 text-sm bg-brand-primary/5 font-bold text-brand-dark focus:border-brand-primary outline-none">
                         </div>
                         <button onclick="openAppointmentModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Consulta
                         </button>
@@ -643,10 +340,10 @@
                                 class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="search-patients" onkeyup="renderPatients()"
                                 placeholder="Buscar paciente..."
-                                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <button onclick="openPatientModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>
                             Novo Paciente
                         </button>
@@ -668,7 +365,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTreatmentModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Novo Tratamento
                         </button>
@@ -706,7 +403,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openFinancialModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Movimentação
                         </button>
@@ -760,7 +457,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openStockModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Novo Item
                         </button>
@@ -829,7 +526,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <button onclick="generateReport('monthly')"
                         class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left">
-                        <i data-lucide="file-text" class="w-8 h-8 text-plena-blue mb-3"></i>
+                        <i data-lucide="file-text" class="w-8 h-8 text-brand-primary mb-3"></i>
                         <h3 class="font-bold text-gray-800 mb-2">Relatório Mensal</h3>
                         <p class="text-sm text-gray-600">Faturamento, despesas e resultados do mês</p>
                     </button>
@@ -850,7 +547,7 @@
                         <p class="text-sm text-gray-600">Personalize sua clínica</p>
                     </div>
                     <button onclick="saveSettings()"
-                        class="flex items-center gap-2 px-6 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors shadow-lg shadow-blue-200">
+                        class="flex items-center gap-2 px-6 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors shadow-lg shadow-blue-200">
                         <i data-lucide="save" class="w-4 h-4"></i>
                         Salvar Alterações
                     </button>
@@ -860,27 +557,27 @@
                     <!-- Clinic Data -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="home" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            <i data-lucide="home" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Dados da Clínica
                         </h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Nome da Clínica</label>
                                 <input type="text" id="clinic-name"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                                     placeholder="Ex: Sorriso Perfeito Odontologia">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Responsável Técnico
                                     (CRO)</label>
                                 <input type="text" id="dentist-cro"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                                     placeholder="CRO-XXXXX">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
                                 <input type="text" id="clinic-phone"
-                                    class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none"
+                                    class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                                     placeholder="(00) 00000-0000">
                             </div>
                         </div>
@@ -897,13 +594,13 @@
                                 <label class="text-xs font-bold text-gray-500 uppercase">Tempo Padrão de Consulta
                                     (min)</label>
                                 <input type="number" id="appointment-duration" value="30"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Lembrete por WhatsApp (horas
                                     antes)</label>
                                 <input type="number" id="reminder-hours" value="24"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                             </div>
                         </div>
                     </div>
@@ -956,7 +653,7 @@
             <section id="view-manual" class="view-section hide fade-in">
                 <!-- Manual Hero -->
                 <div
-                    class="bg-gradient-to-r from-plena-blue to-plena-teal rounded-3xl p-8 text-white mb-8 relative overflow-hidden shadow-lg shadow-cyan-900/20">
+                    class="bg-gradient-to-r from-brand-primary to-brand-primary rounded-3xl p-8 text-white mb-8 relative overflow-hidden shadow-lg shadow-cyan-900/20">
                     <div class="relative z-10 grid md:grid-cols-2 gap-8 items-center">
                         <div>
                             <div
@@ -1064,7 +761,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     1</div>
                                 <h3 class="text-lg font-bold text-gray-800">Instalação e Acesso (PWA)</h3>
                             </div>
@@ -1107,7 +804,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="install" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1121,7 +818,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     2</div>
                                 <h3 class="text-lg font-bold text-gray-800">Configurações Iniciais</h3>
                             </div>
@@ -1149,7 +846,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="config" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1163,7 +860,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     3</div>
                                 <h3 class="text-lg font-bold text-gray-800">Gestão de Pacientes</h3>
                             </div>
@@ -1186,7 +883,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="patients" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1200,7 +897,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     4</div>
                                 <h3 class="text-lg font-bold text-gray-800">Agenda e Consultas</h3>
                             </div>
@@ -1235,7 +932,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="agenda" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1249,7 +946,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     5</div>
                                 <h3 class="text-lg font-bold text-gray-800">Planos de Tratamento</h3>
                             </div>
@@ -1275,7 +972,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="treatments" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1289,7 +986,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     6</div>
                                 <h3 class="text-lg font-bold text-gray-800">Financeiro e Estoque</h3>
                             </div>
@@ -1314,7 +1011,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="finance" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1328,7 +1025,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-blue group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     7</div>
                                 <h3 class="text-lg font-bold text-gray-800">Backup e Segurança</h3>
                             </div>
@@ -1356,7 +1053,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-blue focus:ring-plena-blue form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="backup" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1377,7 +1074,7 @@
             <section id="view-about" class="view-section hide fade-in">
                 <div class="max-w-4xl mx-auto text-center pb-12">
                     <div
-                        class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-plena-teal rounded-2xl mb-4 shadow-lg">
+                        class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand-primary to-brand-primary rounded-2xl mb-4 shadow-lg">
                         <i data-lucide="tooth" class="w-12 h-12 text-white"></i>
                     </div>
                     <h1 class="text-3xl font-bold text-gray-800 mb-2">Gestão Odonto: A Solução Inteligente para sua Clínica</h1>
@@ -1393,7 +1090,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                             <div class="flex items-start">
                                 <i data-lucide="smartphone"
-                                    class="w-8 h-8 text-plena-blue mr-4 flex-shrink-0 mt-1"></i>
+                                    class="w-8 h-8 text-brand-primary mr-4 flex-shrink-0 mt-1"></i>
                                 <div>
                                     <h4 class="font-bold text-gray-800">100% Mobile e Offline</h4>
                                     <p class="text-sm text-gray-600">Acesse e gerencie de qualquer lugar, a qualquer
@@ -1401,7 +1098,7 @@
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <i data-lucide="lock" class="w-8 h-8 text-plena-blue mr-4 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="lock" class="w-8 h-8 text-brand-primary mr-4 flex-shrink-0 mt-1"></i>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Privacidade Total</h4>
                                     <p class="text-sm text-gray-600">Seus dados são armazenados exclusivamente no seu
@@ -1410,28 +1107,28 @@
                             </div>
                             <div class="flex items-start">
                                 <i data-lucide="calendar-check"
-                                    class="w-8 h-8 text-plena-blue mr-4 flex-shrink-0 mt-1"></i>
+                                    class="w-8 h-8 text-brand-primary mr-4 flex-shrink-0 mt-1"></i>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Agenda Inteligente</h4>
                                     <p class="text-sm text-gray-600">Visualize seus compromissos, agende novas consultas e evite conflitos de horário com facilidade.</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <i data-lucide="zap" class="w-8 h-8 text-plena-blue mr-4 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="zap" class="w-8 h-8 text-brand-primary mr-4 flex-shrink-0 mt-1"></i>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Automação que Facilita</h4>
                                     <p class="text-sm text-gray-600">Lembretes automáticos de consulta, controle de tratamentos e status de agendamento com um clique.</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <i data-lucide="clipboard-list" class="w-8 h-8 text-plena-blue mr-4 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="clipboard-list" class="w-8 h-8 text-brand-primary mr-4 flex-shrink-0 mt-1"></i>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Gestão Completa</h4>
                                     <p class="text-sm text-gray-600">Prontuário de pacientes, controle financeiro e de estoque de materiais, tudo em um só lugar.</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <i data-lucide="file-text" class="w-8 h-8 text-plena-blue mr-4 flex-shrink-0 mt-1"></i>
+                                <i data-lucide="file-text" class="w-8 h-8 text-brand-primary mr-4 flex-shrink-0 mt-1"></i>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Recibos e Orçamentos</h4>
                                     <p class="text-sm text-gray-600">Gere recibos de pagamento e orçamentos profissionais para seus pacientes em segundos.</p>
@@ -1472,32 +1169,32 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Nome Completo *</label>
                         <input type="text" id="patient-name" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">CPF</label>
                         <input type="text" id="patient-cpf"
-                            class="mask-doc w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="mask-doc w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Nascimento</label>
                         <input type="date" id="patient-birth"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">WhatsApp *</label>
                         <input type="text" id="patient-phone" required
-                            class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
                         <input type="text" id="patient-address"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                         <textarea id="patient-notes" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="flex gap-2 pt-4">
@@ -1506,7 +1203,7 @@
                         Excluir Paciente
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
                         Salvar Paciente
                     </button>
                 </div>
@@ -1530,29 +1227,29 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="appointment-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data *</label>
                         <input type="date" id="appointment-date" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Hora *</label>
                         <input type="time" id="appointment-time" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Duração (min)</label>
                         <input type="number" id="appointment-duration-input" value="30"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Procedimento *</label>
                         <select id="appointment-procedure" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione o procedimento</option>
                             <option value="consulta">Consulta</option>
                             <option value="limpeza">Limpeza Dental</option>
@@ -1567,7 +1264,7 @@
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                         <textarea id="appointment-notes" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="flex gap-2 pt-4">
@@ -1576,7 +1273,7 @@
                         Cancelar Agendamento
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
                         Salvar Agendamento
                     </button>
                 </div>
@@ -1600,14 +1297,14 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="treatment-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Tipo de Tratamento *</label>
                         <select id="treatment-type" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione o tipo</option>
                             <option value="ortodontia">Ortodontia</option>
                             <option value="implante">Implante</option>
@@ -1621,17 +1318,17 @@
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Descrição *</label>
                         <textarea id="treatment-description" rows="3" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Valor Total *</label>
                         <input type="text" id="treatment-value" required
-                            class="mask-currency w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="mask-currency w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Número de Sessões</label>
                         <input type="number" id="treatment-sessions" value="1"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                 </div>
         </div>
@@ -1641,7 +1338,7 @@
                 Excluir Tratamento
             </button>
             <button type="submit"
-                class="flex-1 bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
+                class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
                 Salvar Tratamento
             </button>
         </div>
@@ -1679,12 +1376,12 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
                     <input type="text" id="financial-amount" required
-                        class="mask-currency w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-blue outline-none">
+                        class="mask-currency w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-brand-primary outline-none">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
                     <input type="text" id="financial-description" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none">
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -1712,7 +1409,7 @@
                         Excluir
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
                         Salvar Movimentação
                     </button>
                 </div>
@@ -1734,24 +1431,24 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Nome do Item *</label>
                     <input type="text" id="stock-name" required
-                        class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                        class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Quantidade *</label>
                         <input type="number" id="stock-quantity" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Mínimo Desejado</label>
                         <input type="number" id="stock-minimum"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
                     <select id="stock-category"
-                        class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none bg-white">
+                        class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                         <option value="medicamento">Medicamento</option>
                         <option value="material">Material</option>
                         <option value="equipamento">Equipamento</option>
@@ -1764,7 +1461,7 @@
                         Excluir
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
                         Salvar Item
                     </button>
                 </div>
@@ -2064,7 +1761,7 @@
                             <p class="text-xs text-gray-500">${t.type}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs font-bold text-plena-blue">${fmtMoney(t.value)}</p>
+                            <p class="text-xs font-bold text-brand-primary">${fmtMoney(t.value)}</p>
                             <div class="progress-bar w-20">
                                 <div class="progress-fill" style="width: ${calculateProgress(t)}%"></div>
                             </div>
@@ -2224,7 +1921,7 @@
                         <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Nenhum paciente cadastrado</h3>
                         <p class="text-gray-500 mb-4">Comece cadastrando seu primeiro paciente</p>
-                        <button onclick="openPatientModal()" class="bg-plena-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
+                        <button onclick="openPatientModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
                             Cadastrar Primeiro Paciente
                         </button>
                     </div>
@@ -2235,8 +1932,8 @@
             container.innerHTML = patients.map(p => `
                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-hover cursor-pointer" onclick="openPatientModal('${p.id}')">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-plena-blue/10 flex items-center justify-center">
-                            <i data-lucide="user" class="w-6 h-6 text-plena-blue"></i>
+                        <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                            <i data-lucide="user" class="w-6 h-6 text-brand-primary"></i>
                         </div>
                         <div class="flex-1">
                             <h3 class="font-bold text-gray-800 truncate">${sanitizeHTML(p.name)}</h3>
@@ -2250,7 +1947,7 @@
                     <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between">
                         <span class="text-xs text-gray-500">Cadastrado em ${fmtDate(p.createdAt)}</span>
                         <button onclick="event.stopPropagation(); openAppointmentModal(null, '${p.id}')" 
-                                class="text-xs bg-plena-blue text-white px-3 py-1 rounded hover:bg-brand-dark">
+                                class="text-xs bg-brand-primary text-white px-3 py-1 rounded hover:bg-brand-dark">
                             Agendar
                         </button>
                     </div>
@@ -2534,7 +2231,7 @@
                             ${t.status === 'active' ? 'Ativo' : 'Concluído'}
                         </span>
                     </td>
-                    <td class="px-6 py-4 font-bold text-plena-blue">${fmtMoney(t.value)}</td>
+                    <td class="px-6 py-4 font-bold text-brand-primary">${fmtMoney(t.value)}</td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
                             <div class="progress-bar flex-1">
@@ -2794,7 +2491,7 @@
                         <i data-lucide="package" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Estoque vazio</h3>
                         <p class="text-gray-500 mb-4">Comece cadastrando seus materiais e medicamentos</p>
-                        <button onclick="openStockModal()" class="bg-plena-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
+                        <button onclick="openStockModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
                             Adicionar Primeiro Item
                         </button>
                     </div>
@@ -3054,6 +2751,94 @@
         // INICIALIZAR APLICATIVO
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

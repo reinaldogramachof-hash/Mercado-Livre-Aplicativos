@@ -12,204 +12,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FeiraMaster">
-    <link rel="manifest"
-        href='data:application/manifest+json,{"name":"FeiraMaster","short_name":"FeiraMaster","start_url":".","display":"standalone","background_color":"#F3F4F6","theme_color":"#10B981","icons":[{"src":"https://unpkg.com/lucide-static@0.16.29/icons/store.svg","sizes":"192x192","type":"image/svg+xml"}]}'>
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        feira: {
-                            green: '#10B981',
-                            dark: '#059669',
-                            orange: '#F59E0B',
-                            red: '#EF4444',
-                            blue: '#3B82F6',
-                            purple: '#8B5CF6',
-                            black: '#1a1a1a'
-                        },
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        :root {
-            --feira-green: #10B981;
-            --feira-dark: #059669;
-            --feira-orange: #F59E0B;
-            --feira-red: #EF4444;
-            --feira-blue: #3B82F6;
-            --feira-purple: #8B5CF6;
-            --feira-black: #1a1a1a;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F3F4F6;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .badge-info {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Print Styles */
-        @media print {
-            .sidebar, .no-print, header, button, .fab-container, .hidden-print {
-                display: none !important;
-            }
-
-            .main-content {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-            }
-
-            body {
-                background: white !important;
-                color: black !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .view-section {
-                padding: 0 !important;
-                display: block !important;
-            }
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -3280,6 +3098,94 @@
             init();
         });
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

@@ -12,347 +12,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Software Premium - Gestão Card">
-    <link rel="manifest" href="data:application/manifest+json,{}">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            indigo: '#4F46E5',
-                            dark: '#312E81',
-                            black: '#1a1a1a',
-                            green: '#10B981',
-                            red: '#EF4444',
-                            yellow: '#F59E0B',
-                            blue: '#3B82F6'
-                        },
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    }
-                }
-            }
-        }
-        function confirmTerms() {
-            if (!confirm('Tem certeza que leu e concorda com todos os termos apresentados?')) return;
-
-            // Update DB
-            db.settings.termsAccepted = true;
-            db.settings.termsAcceptedAt = new Date().toISOString();
-            save();
-
-            // Update Visuals
-            updateTermsVisuals();
-
-            // Celebration Effect
-            const btn = document.getElementById('btn-confirm-terms');
-            if (btn) {
-                // Confetti or visual feedback could go here
-                alert('Obrigado! Seu aceite foi registrado com sucesso.');
-            }
-        }
-
-        function updateTermsVisuals() {
-            const hasAccepted = db.settings.termsAccepted;
-            const termsBox = document.getElementById('terms-box');
-            const btn = document.getElementById('btn-confirm-terms');
-            const badge = document.getElementById('terms-accepted-badge');
-            const icon = document.getElementById('terms-icon');
-            const title = document.getElementById('terms-title');
-            const desc = document.getElementById('terms-desc');
-
-            if (hasAccepted && termsBox) {
-                // Change Box Style
-                termsBox.classList.remove('bg-gray-50', 'border-gray-200');
-                termsBox.classList.add('bg-green-50', 'border-green-200');
-
-                // Hide Button / Show Badge
-                if (btn) btn.classList.add('hidden');
-                if (badge) {
-                    badge.classList.remove('hidden');
-                    badge.classList.add('flex');
-                }
-
-                // Update Date
-                const dateElement = document.getElementById('terms-date');
-                if (dateElement && db.settings.termsAcceptedAt) {
-                    const dateObj = new Date(db.settings.termsAcceptedAt);
-                    dateElement.textContent = 'Confirmado em: ' + dateObj.toLocaleString('pt-BR');
-                }
-
-                // Update Icon and Text
-                if (icon) {
-                    icon.setAttribute('class', 'w-16 h-16 text-green-500 mb-3 transition-colors duration-500');
-                    icon.setAttribute('data-lucide', 'shield-check');
-                    if (window.lucide) lucide.createIcons();
-                }
-                if (title) {
-                    title.textContent = 'Termos Aceitos e Válidos';
-                    title.classList.add('text-green-800');
-                }
-                if (desc) {
-                    desc.textContent = 'Obrigado por sua transparência e confiança. Seu uso está regularizado.';
-                    desc.classList.add('text-green-700');
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        :root {
-            --brand-indigo: #4F46E5;
-            --brand-dark: #312E81;
-            --brand-black: #1a1a1a;
-            --brand-green: #10B981;
-            --brand-red: #EF4444;
-            --brand-yellow: #F59E0B;
-            --brand-blue: #3B82F6;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F3F4F6;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Gráfico CSS Avançado */
-        .chart-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 180px;
-            gap: 2%;
-        }
-
-        .bar-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            height: 100%;
-            position: relative;
-        }
-
-        .bar-wrapper {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 2px;
-            height: 100%;
-            width: 100%;
-        }
-
-        .bar {
-            width: 45%;
-            border-radius: 6px 6px 0 0;
-            transition: height 0.5s ease;
-            min-height: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .bar:hover::after {
-            content: attr(data-value);
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 10;
-        }
-
-        .x-label {
-            font-size: 10px;
-            color: #666;
-            text-align: center;
-            margin-top: 8px;
-            font-weight: 500;
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Card Gradient */
-        .card-gradient {
-            background: linear-gradient(135deg, #4F46E5 0%, #312E81 100%);
-        }
-
-        /* MANUAL STYLES */
-        .step-number {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .checklist-item input[type="checkbox"]:checked+span {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-
-        .checklist-item.completed {
-            opacity: 0.7;
-        }
-
-        .code-block {
-            background: #1f2937;
-            color: #10b981;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            border-radius: 999px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4F46E5, #312E81);
-            transition: width 0.5s ease;
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -395,8 +70,8 @@
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-indigo to-brand-dark">
+        class="sidebar glass-dark text-white transition-transform duration-300 flex flex-col shadow-2xl border-r border-white/5">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#4338CA]/50 to-transparent border-b border-white/5">
             <i data-lucide="credit-card" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO CARD</h1>
@@ -485,10 +160,10 @@
 
                 <div class="relative group">
                     <div
-                        class="absolute -inset-1 bg-plena-indigo/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                        class="absolute -inset-1 bg-brand-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
                     </div>
                     <button onclick="openExpenseModal()"
-                        class="relative flex items-center px-4 py-2.5 bg-plena-indigo text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-indigo-200 active:scale-95">
+                        class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-indigo-200 active:scale-95">
                         <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                         <span class="hidden sm:inline">Nova Compra</span>
                         <span class="sm:hidden">Nova</span>
@@ -532,7 +207,7 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="font-bold text-gray-800 flex items-center text-lg">
-                            <i data-lucide="calendar-clock" class="mr-2 w-5 h-5 text-plena-indigo"></i>
+                            <i data-lucide="calendar-clock" class="mr-2 w-5 h-5 text-brand-primary"></i>
                             Faturas Abertas (Mês Atual)
                         </h3>
                         <span class="text-xs bg-indigo-100 text-indigo-700 font-bold px-3 py-1 rounded-full uppercase"
@@ -552,8 +227,8 @@
                                 <h3 id="dash-limit-available" class="text-3xl font-bold text-gray-900">R$ 0,00</h3>
                                 <p class="text-xs text-gray-500 mt-1">Em todos os cartões</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-indigo/10 flex items-center justify-center">
-                                <i data-lucide="wallet" class="w-6 h-6 text-plena-indigo"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -595,7 +270,7 @@
                             <h3 class="font-bold text-gray-800">Gastos por Cartão (Mês Atual)</h3>
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-plena-indigo"></div>
+                                    <div class="w-3 h-3 rounded-full bg-brand-primary"></div>
                                     <span class="text-xs text-gray-600">Utilizado</span>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -611,7 +286,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-plena-indigo"></i>
+                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-brand-primary"></i>
                                 Melhor Cartão para Hoje
                             </h3>
                             <div id="best-card-today" class="space-y-4">
@@ -631,7 +306,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="font-bold text-gray-800">Compras Recentes</h3>
                         <button onclick="router('invoice')"
-                            class="text-sm text-plena-indigo hover:text-brand-dark font-medium">
+                            class="text-sm text-brand-primary hover:text-brand-dark font-medium">
                             Ver todas →
                         </button>
                     </div>
@@ -649,7 +324,7 @@
                         <p class="text-sm text-gray-600">Gerencie todos os seus cartões de crédito</p>
                     </div>
                     <button onclick="openCardModal()"
-                        class="flex items-center gap-2 px-4 py-2.5 bg-plena-indigo text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all">
+                        class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                         Adicionar Cartão
                     </button>
@@ -704,7 +379,7 @@
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="search-term" onkeyup="renderInvoiceView()" placeholder="Buscar..."
-                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-indigo outline-none text-sm">
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <div>
                             <input type="date" id="filter-start" onchange="renderInvoiceView()"
@@ -737,7 +412,7 @@
                         </div>
                         <div class="flex gap-3 mt-4 md:mt-0">
                             <button onclick="payInvoice()"
-                                class="text-sm font-bold text-plena-indigo hover:underline px-4 py-2 border border-plena-indigo rounded-lg hover:bg-plena-indigo hover:text-white transition-colors">
+                                class="text-sm font-bold text-brand-primary hover:underline px-4 py-2 border border-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-colors">
                                 Marcar como Paga
                             </button>
                             <button onclick="shareInvoice()"
@@ -804,7 +479,7 @@
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
-                                class="flex-1 bg-plena-indigo text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                                class="flex-1 bg-brand-primary text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                                 Gerar Relatório
                             </button>
                             <button onclick="generateFullReport()"
@@ -882,7 +557,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-plena-indigo"></i>
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
@@ -957,7 +632,7 @@
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="auto-backup" class="sr-only peer" checked>
                                     <div
-                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-plena-indigo">
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-primary">
                                     </div>
                                 </label>
                             </div>
@@ -970,13 +645,13 @@
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="notifications" class="sr-only peer" checked>
                                     <div
-                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-plena-indigo">
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-primary">
                                     </div>
                                 </label>
                             </div>
 
                             <button onclick="saveSettings()"
-                                class="w-full bg-plena-indigo text-white py-3 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors mt-4">
+                                class="w-full bg-brand-primary text-white py-3 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors mt-4">
                                 Salvar Configurações
                             </button>
                         </div>
@@ -991,7 +666,7 @@
                     <!-- Hero Header -->
                     <div class="text-center mb-10 pt-4">
                         <div
-                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-indigo to-brand-dark rounded-2xl mb-4 shadow-lg">
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand-primary to-brand-dark rounded-2xl mb-4 shadow-lg">
                             <i data-lucide="credit-card" class="w-12 h-12 text-white"></i>
                         </div>
                         <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
@@ -1002,7 +677,7 @@
                                 Controle Total</span>
                             <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile &
                                 Desktop</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-plena-indigo rounded-full text-xs font-bold">⚡
+                            <span class="px-3 py-1 bg-indigo-100 text-brand-primary rounded-full text-xs font-bold">⚡
                                 Gestão Inteligente</span>
                         </div>
                     </div>
@@ -1010,7 +685,7 @@
                     <!-- Progress Bar -->
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-indigo"></i>
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Seu Progresso no Aprendizado
                         </h3>
                         <div class="mb-4">
@@ -1052,7 +727,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">1
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">1
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Instalação no Celular</h3>
                             </div>
@@ -1104,7 +779,7 @@
                     <div id="config" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">2
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">2
                                 </div>
                                 <h3 class="text-xl font-bold">Configuração & Primeiro Cartão</h3>
                             </div>
@@ -1119,7 +794,7 @@
                     <div id="gestao" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">3
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">3
                                 </div>
                                 <h3 class="text-xl font-bold">Gestão de Cartões</h3>
                             </div>
@@ -1134,7 +809,7 @@
                     <div id="relatorios" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">4
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4
                                 </div>
                                 <h3 class="text-xl font-bold">Relatórios</h3>
                             </div>
@@ -1150,7 +825,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">5
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">5
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
                             </div>
@@ -1329,7 +1004,7 @@
                     <div id="faq" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">6
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">6
                                 </div>
                                 <h3 class="text-xl font-bold">Dúvidas Frequentes</h3>
                             </div>
@@ -1359,7 +1034,7 @@
                     <div id="checklist" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-indigo to-brand-dark text-white">7
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">7
                                 </div>
                                 <h3 class="text-xl font-bold">Checklist - Sua Rotina Financeira</h3>
                             </div>
@@ -1418,7 +1093,7 @@
 
                             <div class="space-y-4">
                                 <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100">
-                                    <h4 class="font-bold text-plena-indigo uppercase text-sm mb-3">💳 Mês Fechando</h4>
+                                    <h4 class="font-bold text-brand-primary uppercase text-sm mb-3">💳 Mês Fechando</h4>
                                     <div class="space-y-3">
                                         <div class="checklist-item flex items-center">
                                             <input type="checkbox" id="check-2-1"
@@ -1501,7 +1176,7 @@
                     <div class="text-center text-gray-500 text-sm mt-12 pb-6">
                         <p>💡 Dúvidas? Entre em contato:</p>
                         <a href="mailto:suporte@gestao.app"
-                            class="text-plena-indigo font-bold hover:underline">suporte@gestao.app</a>
+                            class="text-brand-primary font-bold hover:underline">suporte@gestao.app</a>
                         <p class="mt-2 text-xs">Gestão Card v4.1 Pro • Software Premium</p>
                     </div>
                 </div>
@@ -1514,7 +1189,7 @@
                     <!-- 1. Header Institucional -->
                     <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
                         <div
-                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-indigo to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
                             <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
                         </div>
                         <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
@@ -1527,7 +1202,7 @@
                         <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                             <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
                                 <div class="p-2 bg-blue-50 rounded-lg mr-3">
-                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-indigo"></i>
+                                    <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 Termos de Uso
                             </h3>
@@ -1588,7 +1263,7 @@
                         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                             <div class="flex-1">
                                 <h3 class="font-bold text-xl mb-2 flex items-center">
-                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-indigo"></i>
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-brand-primary"></i>
                                     Suporte Premium Especializado
                                 </h3>
                                 <p class="text-gray-300 text-sm mb-6 leading-relaxed">
@@ -1603,7 +1278,7 @@
                                     </div>
                                     <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
                                         <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
-                                        <p class="font-bold text-plena-indigo">Até 24h Úteis</p>
+                                        <p class="font-bold text-brand-primary">Até 24h Úteis</p>
                                     </div>
                                 </div>
                             </div>
@@ -1631,7 +1306,7 @@
                             </p>
 
                             <button onclick="confirmTerms()" id="btn-confirm-terms"
-                                class="bg-plena-indigo hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                class="bg-brand-primary hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
                                 <span>Li, Compreendi e Concordo</span>
                                 <i data-lucide="arrow-right"
                                     class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
@@ -1695,7 +1370,7 @@
                     </div>
                 </div>
                 <button type="submit"
-                    class="w-full bg-plena-indigo text-white py-3 rounded-xl font-bold hover:bg-brand-dark">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold hover:bg-brand-dark">
                     Salvar Cartão
                 </button>
             </form>
@@ -1740,7 +1415,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-plena-indigo text-white py-3 rounded-xl font-bold hover:bg-brand-dark">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold hover:bg-brand-dark">
                     Confirmar Compra
                 </button>
             </form>
@@ -1750,7 +1425,7 @@
     <!-- CLOSING MODAL -->
     <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            <div class="bg-gradient-to-r from-plena-indigo to-brand-dark p-6 text-center text-white">
+            <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Fechamento de Faturas</h3>
                 <p id="close-month" class="text-sm text-gray-300 mt-1">Mês Atual</p>
                 <p id="close-time" class="text-xs text-gray-500 mt-0">--:--</p>
@@ -1789,7 +1464,7 @@
                 </div>
 
                 <button onclick="closeAllInvoices()"
-                    class="w-full bg-plena-indigo text-white py-3 rounded-lg font-bold text-sm hover:bg-brand-dark transition-colors flex justify-center items-center gap-2 mb-3">
+                    class="w-full bg-brand-primary text-white py-3 rounded-lg font-bold text-sm hover:bg-brand-dark transition-colors flex justify-center items-center gap-2 mb-3">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                     Fechar Todas as Faturas
                 </button>
@@ -2095,7 +1770,7 @@
                 chartHTML += `
                     <div class="bar-group">
                         <div class="bar-wrapper">
-                            <div class="bar bg-plena-indigo" 
+                            <div class="bar bg-brand-primary" 
                                  style="height:${usedHeight}%"
                                  data-value="${fmtMoney(data.used)} usado"></div>
                             <div class="bar bg-gray-300" 
@@ -2148,7 +1823,7 @@
             const available = bestCard.limit - used;
 
             container.innerHTML = `
-                <div class="bg-gradient-to-r from-plena-indigo to-brand-dark p-5 rounded-2xl text-white shadow-lg">
+                <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-5 rounded-2xl text-white shadow-lg">
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <span class="font-bold text-sm opacity-90">${bestCard.name}</span>
@@ -2184,7 +1859,7 @@
                         <span class="text-gray-500">${fmtMoney(available)} disp.</span>
                     </div>
                     <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full ${pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : 'bg-plena-indigo'}" 
+                        <div class="h-full ${pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : 'bg-brand-primary'}" 
                              style="width: ${pct}%"></div>
                     </div>
                 </div>`;
@@ -2286,7 +1961,7 @@
                             <span class="font-bold">${fmtMoney(used)}</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full ${pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : 'bg-plena-indigo'}" 
+                            <div class="h-full ${pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : 'bg-brand-primary'}" 
                                  style="width: ${pct}%"></div>
                         </div>
                     </div>
@@ -2825,7 +2500,7 @@
                             <span>${data.unpaid > 0 ? fmtMoney(data.unpaid) + ' em aberto' : 'Tudo pago'}</span>
                         </div>
                         <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                            <div class="bg-plena-indigo h-full transition-all duration-500" 
+                            <div class="bg-brand-primary h-full transition-all duration-500" 
                                  style="width: ${percentage}%"></div>
                         </div>
                     </div>
@@ -3182,7 +2857,7 @@
 
             // Mostrar botão de instalação
             const installButton = document.createElement('button');
-            installButton.className = 'fixed bottom-4 right-4 bg-plena-indigo text-white px-4 py-2 rounded-lg shadow-lg z-40';
+            installButton.className = 'fixed bottom-4 right-4 bg-brand-primary text-white px-4 py-2 rounded-lg shadow-lg z-40';
             installButton.innerHTML = '<i data-lucide="download" class="w-4 h-4 inline mr-2"></i>Instalar App';
             installButton.onclick = () => {
                 deferredPrompt.prompt();
@@ -3224,6 +2899,94 @@
             document.body.classList.add('in-iframe');
         }
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

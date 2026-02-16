@@ -12,283 +12,22 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Gestão Delivery">
 
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Gestão Delivery","short_name": "Gestão Delivery","start_url":".","display":"standalone","background_color":"#F3F4F6","theme_color":"#7C3AED","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI1NjNFQiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0zIDIydj01bDUuNS01LjVNMjEgMTJhOSA5IDAgMSAwLTkgOWMtMi41MiAwLTQuOC0xLTEwLjUtNS41TDIgMjIiLz48cGF0aCBkPSJNMTYgM2w1IDUiLz48cGF0aCBkPSJtMjEgMy01IDUiLz48L3N2Zz4=","sizes":"192x192","type":"image/svg+xml"}]}'>
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            primary: '#7C3AED',
-                            secondary: '#10B981',
-                            danger: '#EF4444',
-                            warning: '#F59E0B',
-                            dark: '#1F2937',
-                            light: '#F3F4F6'
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        :root {
-            --brand-primary: #7C3AED;
-            --brand-secondary: #10B981;
-            --brand-danger: #EF4444;
-            --brand-warning: #F59E0B;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F3F4F6;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .badge-info {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .step-number {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #7C3AED, #5b21b6);
-            transition: width 0.5s ease;
-        }
-
-        .order-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid;
-        }
-
-        .order-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .order-status-pending {
-            border-left-color: #F59E0B;
-        }
-
-        .order-status-preparing {
-            border-left-color: #3B82F6;
-        }
-
-        .order-status-ready {
-            border-left-color: #10B981;
-        }
-
-        .order-status-delivering {
-            border-left-color: #8B5CF6;
-        }
-
-        .order-status-delivered {
-            border-left-color: #6B7280;
-        }
-
-        .main-content {
-            padding-bottom: 0;
-        }
-
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-
-            body {
-                background: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                height: 100vh;
-                margin: 0;
-                padding: 0;
-            }
-
-            body>* {
-                display: none !important;
-            }
-
-            #receiptModal {
-                display: flex !important;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                background: white;
-                z-index: 9999;
-                align-items: flex-start;
-                justify-content: center;
-                overflow: visible !important;
-            }
-
-            #receiptModal .bg-white {
-                box-shadow: none !important;
-                max-width: 100% !important;
-                width: 100% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            #receipt-content {
-                padding: 40px !important;
-                width: 100%;
-                font-size: 12pt;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
-        }
-
-        .status-dot.pending {
-            background-color: #F59E0B;
-        }
-
-        .status-dot.preparing {
-            background-color: #3B82F6;
-        }
-
-        .status-dot.ready {
-            background-color: #10B981;
-        }
-
-        .status-dot.delivering {
-            background-color: #8B5CF6;
-        }
-
-        .status-dot.delivered {
-            background-color: #6B7280;
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -330,7 +69,7 @@
 
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar bg-brand-dark text-white transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-primary to-purple-900">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-brand-primary to-purple-900">
             <i data-lucide="package" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO DELIVERY</h1>
@@ -392,8 +131,8 @@
 
             <div class="flex items-center gap-2 sm:gap-3">
                 <div class="relative group">
-                    <div class="absolute -inset-1 bg-plena-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                    <button onclick="openNewOrderModal()" class="relative flex items-center px-4 py-2.5 bg-plena-primary text-white rounded-lg text-sm font-bold hover:bg-purple-800 transition-all shadow-lg shadow-purple-200 active:scale-95">
+                    <div class="absolute -inset-1 bg-brand-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                    <button onclick="openNewOrderModal()" class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-purple-800 transition-all shadow-lg shadow-purple-200 active:scale-95">
                         <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                         <span class="hidden sm:inline">Novo Pedido</span>
                         <span class="sm:hidden">Novo</span>
@@ -409,15 +148,15 @@
                 <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <div>
                         <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                            <i data-lucide="shopping-bag" class="w-5 h-5 text-plena-primary"></i>
+                            <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-primary"></i>
                             Visão Geral do Dia
                         </h3>
                         <p class="text-sm text-gray-500">Acompanhe o desempenho em tempo real</p>
                     </div>
                     <div class="flex items-center gap-3 w-full sm:w-auto">
                         <div class="relative w-full sm:w-auto">
-                            <i data-lucide="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-plena-primary"></i>
-                            <input type="date" id="date-selector" onchange="renderDashboard()" value="" class="w-full sm:w-auto pl-10 pr-4 py-2.5 rounded-lg border-2 border-plena-primary/20 text-sm bg-plena-primary/5 font-bold text-brand-dark focus:border-plena-primary focus:ring-4 focus:ring-plena-primary/10 outline-none transition-all cursor-pointer hover:bg-plena-primary/10">
+                            <i data-lucide="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-primary"></i>
+                            <input type="date" id="date-selector" onchange="renderDashboard()" value="" class="w-full sm:w-auto pl-10 pr-4 py-2.5 rounded-lg border-2 border-brand-primary/20 text-sm bg-brand-primary/5 font-bold text-brand-dark focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 outline-none transition-all cursor-pointer hover:bg-brand-primary/10">
                         </div>
                     </div>
                 </div>
@@ -431,8 +170,8 @@
                                 <h3 id="dash-today-orders" class="text-3xl font-bold text-gray-900">0</h3>
                                 <p class="text-xs text-gray-500 mt-1">Total de pedidos</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-primary/10 flex items-center justify-center">
-                                <i data-lucide="package" class="w-6 h-6 text-plena-primary"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="package" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -501,11 +240,11 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-plena-primary"></i>
+                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-brand-primary"></i>
                                 Ações Rápidas
                             </h3>
                             <div class="space-y-3">
-                                <button onclick="openNewOrderModal()" class="w-full bg-plena-primary text-white py-3 rounded-lg text-sm font-bold hover:bg-purple-800 transition-colors flex items-center justify-center gap-2">
+                                <button onclick="openNewOrderModal()" class="w-full bg-brand-primary text-white py-3 rounded-lg text-sm font-bold hover:bg-purple-800 transition-colors flex items-center justify-center gap-2">
                                     <i data-lucide="plus" class="w-4 h-4"></i>
                                     Novo Pedido
                                 </button>
@@ -538,7 +277,7 @@
                         <p class="text-sm text-gray-600">Gerencie todos os pedidos do estabelecimento</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button onclick="openNewOrderModal()" class="flex items-center gap-2 px-4 py-2 bg-plena-primary text-white rounded-lg text-sm font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-200">
+                        <button onclick="openNewOrderModal()" class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-200">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Novo Pedido
                         </button>
@@ -550,7 +289,7 @@
                     <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                            <input type="text" id="search-orders" onkeyup="renderOrders()" placeholder="Buscar pedido ou cliente..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-primary outline-none text-sm">
+                            <input type="text" id="search-orders" onkeyup="renderOrders()" placeholder="Buscar pedido ou cliente..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <div>
                             <input type="date" id="filter-start-date" onchange="renderOrders()" class="w-full border p-2 rounded-lg text-sm bg-white">
@@ -606,7 +345,7 @@
                         <p class="text-sm text-gray-600">Gerencie os produtos do seu estabelecimento</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button onclick="openNewProductModal()" class="flex items-center gap-2 px-4 py-2 bg-plena-primary text-white rounded-lg text-sm font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-200">
+                        <button onclick="openNewProductModal()" class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-200">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Novo Produto
                         </button>
@@ -616,7 +355,7 @@
                 <!-- Categories Filter -->
                 <div class="mb-6">
                     <div class="flex gap-2 overflow-x-auto pb-2">
-                        <button onclick="filterMenuByCategory('all')" class="px-4 py-2 bg-plena-primary text-white rounded-lg text-sm font-bold whitespace-nowrap">Todos</button>
+                        <button onclick="filterMenuByCategory('all')" class="px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold whitespace-nowrap">Todos</button>
                         <!-- Categories will be populated by JavaScript -->
                     </div>
                 </div>
@@ -716,11 +455,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
-                            <input type="date" id="rep-start" class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary outline-none">
+                            <input type="date" id="rep-start" class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
-                            <input type="date" id="rep-end" class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary outline-none">
+                            <input type="date" id="rep-end" class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()" class="flex-1 bg-brand-dark text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-900 transition-colors shadow-lg shadow-gray-200 flex items-center justify-center gap-2">
@@ -751,7 +490,7 @@
                         </div>
                         <div class="bg-purple-50 p-6 rounded-xl text-center border border-purple-100">
                             <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
-                                <i data-lucide="users" class="w-6 h-6 text-plena-primary"></i>
+                                <i data-lucide="users" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Clientes</p>
                             <p id="rep-customers" class="text-2xl font-bold text-purple-700 mt-2">0</p>
@@ -805,8 +544,8 @@
                     <!-- 1. Dados do Estabelecimento -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
                         <h3 class="font-bold text-gray-800 mb-6 flex items-center text-lg">
-                            <div class="p-2 bg-plena-primary/10 rounded-lg mr-3">
-                                <i data-lucide="store" class="w-5 h-5 text-plena-primary"></i>
+                            <div class="p-2 bg-brand-primary/10 rounded-lg mr-3">
+                                <i data-lucide="store" class="w-5 h-5 text-brand-primary"></i>
                             </div>
                             Dados do Estabelecimento
                         </h3>
@@ -814,22 +553,22 @@
                         <div class="space-y-5 flex-1">
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Nome do Estabelecimento</label>
-                                <input type="text" id="set-establishment-name" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="Ex: Pizzaria do João">
+                                <input type="text" id="set-establishment-name" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="Ex: Pizzaria do João">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">CNPJ</label>
-                                <input type="text" id="set-establishment-cnpj" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="00.000.000/0000-00">
+                                <input type="text" id="set-establishment-cnpj" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="00.000.000/0000-00">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Telefone</label>
-                                <input type="tel" id="set-establishment-phone" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="(11) 99999-9999">
+                                <input type="tel" id="set-establishment-phone" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="(11) 99999-9999">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Endereço</label>
-                                <input type="text" id="set-establishment-address" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="Endereço completo">
+                                <input type="text" id="set-establishment-address" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="Endereço completo">
                             </div>
                         </div>
-                        <button onclick="saveGlobalSettings()" class="mt-4 w-full bg-plena-primary text-white py-3 rounded-xl text-sm font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-100 flex items-center justify-center gap-2">
+                        <button onclick="saveGlobalSettings()" class="mt-4 w-full bg-brand-primary text-white py-3 rounded-xl text-sm font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-100 flex items-center justify-center gap-2">
                             <i data-lucide="save" class="w-4 h-4"></i>
                             Salvar Dados
                         </button>
@@ -879,10 +618,10 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="font-bold text-gray-800 flex items-center">
-                                <i data-lucide="tag" class="w-5 h-5 mr-2 text-plena-primary"></i>
+                                <i data-lucide="tag" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Categorias de Produtos
                             </h3>
-                            <button onclick="toggleCategoryForm()" class="flex items-center gap-2 px-3 py-1.5 bg-plena-primary text-white text-sm rounded-lg hover:bg-purple-800">
+                            <button onclick="toggleCategoryForm()" class="flex items-center gap-2 px-3 py-1.5 bg-brand-primary text-white text-sm rounded-lg hover:bg-purple-800">
                                 <i data-lucide="plus" class="w-4 h-4"></i> Nova
                             </button>
                         </div>
@@ -915,7 +654,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-plena-primary"></i>
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
@@ -964,7 +703,7 @@
                 <div class="max-w-6xl mx-auto pb-12">
                     <!-- Cabeçalho Hero -->
                     <div class="text-center mb-10 pt-4">
-                        <div class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-primary to-purple-900 rounded-2xl mb-4 shadow-lg">
+                        <div class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand-primary to-purple-900 rounded-2xl mb-4 shadow-lg">
                             <i data-lucide="package" class="w-12 h-12 text-white" aria-label="Ícone de Entrega - Manual de Uso"></i>
                         </div>
                         <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
@@ -972,14 +711,14 @@
                         <div class="mt-4 flex flex-wrap justify-center gap-2">
                             <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para Iniciantes</span>
                             <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e Desktop</span>
-                            <span class="px-3 py-1 bg-purple-100 text-plena-primary rounded-full text-xs font-bold">⚡ Rápido e Prático</span>
+                            <span class="px-3 py-1 bg-purple-100 text-brand-primary rounded-full text-xs font-bold">⚡ Rápido e Prático</span>
                         </div>
                     </div>
 
                     <!-- Barra de Progresso do Tutorial -->
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-primary"></i>
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Seu Progresso no Aprendizado
                         </h3>
                         <div class="mb-4">
@@ -1020,7 +759,7 @@
                     <div id="instalacao" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">1</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">1</div>
                                 <h3 class="text-xl font-bold text-gray-800">Instalação do App no Celular</h3>
                             </div>
                             <button onclick="markSectionComplete('instalacao')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1115,7 +854,7 @@
                     <div id="configuracao" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">2</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">2</div>
                                 <h3 class="text-xl font-bold text-gray-800">Configuração Inicial (10 Minutos)</h3>
                             </div>
                             <button onclick="markSectionComplete('configuracao')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1200,7 +939,7 @@
 
                             <div class="space-y-4">
                                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
-                                    <h4 class="font-bold text-plena-primary mb-3 flex items-center">
+                                    <h4 class="font-bold text-brand-primary mb-3 flex items-center">
                                         <i data-lucide="tag" class="w-5 h-5 mr-2"></i>
                                         PASSO 3: Criar Categorias
                                     </h4>
@@ -1251,7 +990,7 @@
                     <div id="cadastro-produtos" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">3</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">3</div>
                                 <h3 class="text-xl font-bold text-gray-800">Cadastro do Cardápio</h3>
                             </div>
                             <button onclick="markSectionComplete('cadastro-produtos')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1323,7 +1062,7 @@
                             <!-- Cartão 3 -->
                             <div class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100">
                                 <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-3">
-                                    <i data-lucide="filter" class="w-5 h-5 text-plena-primary"></i>
+                                    <i data-lucide="filter" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 <h4 class="font-bold text-gray-800 mb-2">Organizar por Categorias</h4>
                                 <p class="text-sm text-gray-600 mb-3">Facilite a busca:</p>
@@ -1352,17 +1091,17 @@
                             </h4>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="bg-white p-4 rounded-lg border text-center">
-                                    <i data-lucide="camera" class="w-6 h-6 text-plena-primary mx-auto mb-2"></i>
+                                    <i data-lucide="camera" class="w-6 h-6 text-brand-primary mx-auto mb-2"></i>
                                     <p class="text-xs font-bold">Fotos</p>
                                     <p class="text-xs text-gray-600">Use fotos reais dos produtos</p>
                                 </div>
                                 <div class="bg-white p-4 rounded-lg border text-center">
-                                    <i data-lucide="pen-tool" class="w-6 h-6 text-plena-primary mx-auto mb-2"></i>
+                                    <i data-lucide="pen-tool" class="w-6 h-6 text-brand-primary mx-auto mb-2"></i>
                                     <p class="text-xs font-bold">Descrições</p>
                                     <p class="text-xs text-gray-600">Descreva ingredientes principais</p>
                                 </div>
                                 <div class="bg-white p-4 rounded-lg border text-center">
-                                    <i data-lucide="star" class="w-6 h-6 text-plena-primary mx-auto mb-2"></i>
+                                    <i data-lucide="star" class="w-6 h-6 text-brand-primary mx-auto mb-2"></i>
                                     <p class="text-xs font-bold">Destaques</p>
                                     <p class="text-xs text-gray-600">Mantenha promoções em evidência</p>
                                 </div>
@@ -1374,7 +1113,7 @@
                     <div id="pedidos" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">4</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">4</div>
                                 <h3 class="text-xl font-bold text-gray-800">Gestão de Pedidos</h3>
                             </div>
                             <button onclick="markSectionComplete('pedidos')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1385,7 +1124,7 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
                                 <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                                    <i data-lucide="clipboard-list" class="w-5 h-5 mr-2 text-plena-primary"></i>
+                                    <i data-lucide="clipboard-list" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                     Fluxo de Pedidos
                                 </h4>
                                 <p class="text-sm text-gray-700 mb-4">Do recebimento à entrega:</p>
@@ -1412,7 +1151,7 @@
                                         </div>
                                     </li>
                                     <li class="flex items-start">
-                                        <div class="w-8 h-8 rounded-full bg-purple-100 text-plena-primary flex items-center justify-center mr-3 text-xs font-bold">4</div>
+                                        <div class="w-8 h-8 rounded-full bg-purple-100 text-brand-primary flex items-center justify-center mr-3 text-xs font-bold">4</div>
                                         <div>
                                             <strong>Em Entrega</strong>
                                             <p class="text-gray-600 text-xs mt-1">Entregador a caminho do cliente</p>
@@ -1455,7 +1194,7 @@
                                                 <div class="status-dot ready mr-2"></div>
                                                 <span class="text-sm">Pronto</span>
                                             </div>
-                                            <button class="text-xs bg-purple-100 text-plena-primary px-2 py-1 rounded">→ Entregar</button>
+                                            <button class="text-xs bg-purple-100 text-brand-primary px-2 py-1 rounded">→ Entregar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1488,7 +1227,7 @@
                     <div id="entregas" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">5</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">5</div>
                                 <h3 class="text-xl font-bold text-gray-800">Gestão de Entregas</h3>
                             </div>
                             <button onclick="markSectionComplete('entregas')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1591,7 +1330,7 @@
                     <div id="backup" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">6</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">6</div>
                                 <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
                             </div>
                             <button onclick="markSectionComplete('backup')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1699,7 +1438,7 @@
                     <div id="checklist" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-primary to-purple-900 text-white">7</div>
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-purple-900 text-white">7</div>
                                 <h3 class="text-xl font-bold text-gray-800">Checklist Interativo de Rotina</h3>
                             </div>
                             <button onclick="markSectionComplete('checklist')" class="text-xs text-gray-500 hover:text-green-600">
@@ -1769,8 +1508,8 @@
                             <div class="space-y-4">
                                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
                                     <div class="flex items-center justify-between mb-3">
-                                        <h4 class="font-bold text-plena-primary uppercase text-sm">Fechamento do Dia</h4>
-                                        <span class="text-xs bg-purple-100 text-plena-primary px-2 py-1 rounded">ANÁLISE</span>
+                                        <h4 class="font-bold text-brand-primary uppercase text-sm">Fechamento do Dia</h4>
+                                        <span class="text-xs bg-purple-100 text-brand-primary px-2 py-1 rounded">ANÁLISE</span>
                                     </div>
                                     <div id="checklist-3" class="space-y-3">
                                         <div class="checklist-item flex items-center">
@@ -1868,7 +1607,7 @@
 
                     <!-- Final Completion Card -->
                     <div class="mt-12 text-center max-w-2xl mx-auto p-8 bg-gradient-to-b from-green-50 to-white border border-green-200 rounded-3xl shadow-lg relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-plena-primary"></div>
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-brand-primary"></div>
 
                         <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6 shadow-sm">
                             <i data-lucide="award" class="w-10 h-10 text-green-600"></i>
@@ -1887,7 +1626,7 @@
                                 Voltar ao Topo
                             </button>
 
-                            <button onclick="router('dashboard')" class="w-full sm:w-auto px-8 py-3 bg-plena-primary text-white rounded-xl font-bold hover:bg-purple-800 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <button onclick="router('dashboard')" class="w-full sm:w-auto px-8 py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-purple-800 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                 Ir para o Dashboard
                             </button>
                         </div>
@@ -1901,7 +1640,7 @@
                     </p>
                     <p class="text-[10px] text-gray-400">
                         Software Premium • 
-                        <a href="mailto:suporte@gestao.app" class="text-plena-primary hover:underline">
+                        <a href="mailto:suporte@gestao.app" class="text-brand-primary hover:underline">
                             suporte@gestao.app
                         </a>
                     </p>
@@ -1916,7 +1655,7 @@
                 <div class="max-w-4xl mx-auto pb-12">
                     <!-- 1. Header Institucional -->
                     <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
-                        <div class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-primary to-purple-900 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-200">
+                        <div class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-purple-900 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-200">
                             <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
                         </div>
                         <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
@@ -1929,7 +1668,7 @@
                         <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                             <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
                                 <div class="p-2 bg-blue-50 rounded-lg mr-3">
-                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-primary"></i>
+                                    <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 Termos de Uso
                             </h3>
@@ -1978,7 +1717,7 @@
                         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                             <div class="flex-1">
                                 <h3 class="font-bold text-xl mb-2 flex items-center">
-                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-primary"></i>
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-brand-primary"></i>
                                     Suporte Premium Especializado
                                 </h3>
                                 <p class="text-gray-300 text-sm mb-6 leading-relaxed">
@@ -1992,7 +1731,7 @@
                                     </div>
                                     <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
                                         <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
-                                        <p class="font-bold text-plena-primary">Até 24h Úteis</p>
+                                        <p class="font-bold text-brand-primary">Até 24h Úteis</p>
                                     </div>
                                 </div>
                             </div>
@@ -2016,7 +1755,7 @@
                                 Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a Política de Privacidade e sua responsabilidade sobre os backups.
                             </p>
 
-                            <button onclick="confirmTerms()" id="btn-confirm-terms" class="bg-plena-primary hover:bg-purple-800 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-purple-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                            <button onclick="confirmTerms()" id="btn-confirm-terms" class="bg-brand-primary hover:bg-purple-800 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-purple-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
                                 <span>Li, Compreendi e Concordo</span>
                                 <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
                             </button>
@@ -2061,23 +1800,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- LEFT COLUMN: Customer Data -->
                     <div class="space-y-5">
-                        <div class="flex items-center gap-2 text-plena-primary font-bold uppercase text-xs tracking-wider mb-2">
+                        <div class="flex items-center gap-2 text-brand-primary font-bold uppercase text-xs tracking-wider mb-2">
                             <i data-lucide="user" class="w-4 h-4"></i> Dados do Cliente
                         </div>
 
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Nome do Cliente</label>
-                            <input type="text" id="order-customer-name" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="Ex: João Silva">
+                            <input type="text" id="order-customer-name" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="Ex: João Silva">
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                                <input type="tel" id="order-customer-phone" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="(11) 99999-9999">
+                                <input type="tel" id="order-customer-phone" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="(11) 99999-9999">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Tipo</label>
-                                <select id="order-type" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all">
+                                <select id="order-type" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all">
                                     <option value="delivery">Entrega</option>
                                     <option value="pickup">Retirada</option>
                                 </select>
@@ -2086,12 +1825,12 @@
 
                         <div id="delivery-address-fields">
                             <label class="text-xs font-bold text-gray-500 uppercase">Endereço de Entrega</label>
-                            <input type="text" id="order-delivery-address" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="Rua, Número, Bairro, Complemento">
+                            <input type="text" id="order-delivery-address" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="Rua, Número, Bairro, Complemento">
                         </div>
 
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                            <textarea id="order-notes" rows="3" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all" placeholder="Observações do pedido..."></textarea>
+                            <textarea id="order-notes" rows="3" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all" placeholder="Observações do pedido..."></textarea>
                         </div>
                     </div>
 
@@ -2101,7 +1840,7 @@
                             <div class="flex items-center gap-2 text-green-600 font-bold uppercase text-xs tracking-wider">
                                 <i data-lucide="shopping-cart" class="w-4 h-4"></i> Itens do Pedido
                             </div>
-                            <button type="button" onclick="openQuickMenuModal()" class="text-xs bg-plena-primary text-white px-3 py-1.5 rounded-lg hover:bg-purple-800">
+                            <button type="button" onclick="openQuickMenuModal()" class="text-xs bg-brand-primary text-white px-3 py-1.5 rounded-lg hover:bg-purple-800">
                                 <i data-lucide="plus" class="w-3 h-3 inline mr-1"></i> Adicionar Item
                             </button>
                         </div>
@@ -2128,7 +1867,7 @@
 
                         <div class="mt-6">
                             <label class="text-xs font-bold text-gray-500 uppercase">Forma de Pagamento</label>
-                            <select id="order-payment-method" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary focus:border-transparent outline-none transition-all">
+                            <select id="order-payment-method" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all">
                                 <option value="cash">Dinheiro</option>
                                 <option value="card">Cartão</option>
                                 <option value="pix">PIX</option>
@@ -2142,7 +1881,7 @@
                     <button type="button" onclick="closeModal('newOrderModal')" class="px-4 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">
                         Cancelar
                     </button>
-                    <button type="submit" class="flex-1 bg-plena-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-purple-800 transition-all">
+                    <button type="submit" class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-purple-800 transition-all">
                         Finalizar Pedido
                     </button>
                 </div>
@@ -2163,7 +1902,7 @@
             <div class="mb-4">
                 <div class="relative">
                     <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                    <input type="text" id="menu-search" placeholder="Buscar produto..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-primary outline-none text-sm">
+                    <input type="text" id="menu-search" placeholder="Buscar produto..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                 </div>
             </div>
 
@@ -2189,22 +1928,22 @@
                 <div class="space-y-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Nome do Produto</label>
-                        <input type="text" id="product-name" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary outline-none transition-all" placeholder="Ex: Pizza Margherita">
+                        <input type="text" id="product-name" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none transition-all" placeholder="Ex: Pizza Margherita">
                     </div>
 
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
-                        <textarea id="product-description" rows="2" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary outline-none transition-all" placeholder="Descrição do produto..."></textarea>
+                        <textarea id="product-description" rows="2" class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none transition-all" placeholder="Descrição do produto..."></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Preço (R$)</label>
-                            <input type="number" step="0.01" id="product-price" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary outline-none transition-all" placeholder="0,00">
+                            <input type="number" step="0.01" id="product-price" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none transition-all" placeholder="0,00">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
-                            <select id="product-category" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-primary outline-none transition-all">
+                            <select id="product-category" required class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none transition-all">
                                 <!-- Categories will be populated by JavaScript -->
                             </select>
                         </div>
@@ -2221,7 +1960,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="w-full bg-plena-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-purple-800 transition-all mt-2">
+                    <button type="submit" class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-purple-800 transition-all mt-2">
                         Salvar Produto
                     </button>
                 </div>
@@ -2717,7 +2456,7 @@
                                     <button onclick="updateOrderStatus('${order.id}', 'ready')" class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">→ Pronto</button>
                                 ` : ''}
                                 ${order.status === 'ready' ? `
-                                    <button onclick="updateOrderStatus('${order.id}', 'delivering')" class="text-xs bg-purple-100 text-plena-primary px-2 py-1 rounded">→ Entregar</button>
+                                    <button onclick="updateOrderStatus('${order.id}', 'delivering')" class="text-xs bg-purple-100 text-brand-primary px-2 py-1 rounded">→ Entregar</button>
                                 ` : ''}
                             </div>
                         </div>
@@ -2746,7 +2485,7 @@
                             <p class="text-xs text-gray-500">${sanitizeHTML(order.customerName)} • ${timeAgo}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-sm font-bold text-plena-primary">${fmtMoney(order.total)}</p>
+                            <p class="text-sm font-bold text-brand-primary">${fmtMoney(order.total)}</p>
                             <span class="text-xs ${order.status === 'delivered' ? 'text-green-600' : 'text-yellow-600'}">${getStatusLabel(order.status)}</span>
                         </div>
                     </div>
@@ -2832,7 +2571,7 @@
                             <div class="text-xs text-gray-500">${sanitizeHTML(order.customerPhone)}</div>
                         </td>
                         <td class="px-6 py-4">${itemCount} item(s)</td>
-                        <td class="px-6 py-4 font-bold text-plena-primary">${fmtMoney(order.total)}</td>
+                        <td class="px-6 py-4 font-bold text-brand-primary">${fmtMoney(order.total)}</td>
                         <td class="px-6 py-4">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}">
                                 ${getStatusLabel(order.status)}
@@ -2866,7 +2605,7 @@
                 'pending': 'bg-yellow-100 text-yellow-700',
                 'preparing': 'bg-blue-100 text-blue-700',
                 'ready': 'bg-green-100 text-green-700',
-                'delivering': 'bg-purple-100 text-plena-primary',
+                'delivering': 'bg-purple-100 text-brand-primary',
                 'delivered': 'bg-gray-100 text-gray-700',
                 'cancelled': 'bg-red-100 text-red-700'
             };
@@ -2926,14 +2665,14 @@
             container.innerHTML = filteredProducts.map(product => {
                 const category = db.categories.find(c => c.id === product.categoryId);
                 return `
-                    <div class="bg-white p-3 rounded-lg border border-gray-200 hover:border-plena-primary transition-colors cursor-pointer" onclick="addOrderItem('${product.id}')">
+                    <div class="bg-white p-3 rounded-lg border border-gray-200 hover:border-brand-primary transition-colors cursor-pointer" onclick="addOrderItem('${product.id}')">
                         <div class="flex justify-between items-start mb-2">
                             <h4 class="font-bold text-gray-800 text-sm">${sanitizeHTML(product.name)}</h4>
                             ${category ? `<span class="text-xs px-2 py-0.5 rounded" style="background:${category.color}20; color:${category.color}">${category.name}</span>` : ''}
                         </div>
                         <p class="text-xs text-gray-600 mb-2 line-clamp-2">${sanitizeHTML(product.description || '')}</p>
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-plena-primary">${fmtMoney(product.price)}</span>
+                            <span class="font-bold text-brand-primary">${fmtMoney(product.price)}</span>
                             <i data-lucide="plus" class="w-4 h-4 text-gray-400"></i>
                         </div>
                     </div>
@@ -3175,7 +2914,7 @@
                         <i data-lucide="utensils" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Nenhum produto cadastrado</h3>
                         <p class="text-gray-500 mb-4">Comece cadastrando seus produtos</p>
-                        <button onclick="openNewProductModal()" class="bg-plena-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-800">
+                        <button onclick="openNewProductModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-800">
                             Cadastrar Primeiro Produto
                         </button>
                     </div>
@@ -3199,7 +2938,7 @@
                                 ${category ? `<span class="text-xs px-2 py-1 rounded" style="background:${category.color}20; color:${category.color}">${category.name}</span>` : ''}
                             </div>
                             <div class="text-right">
-                                <p class="font-bold text-plena-primary">${fmtMoney(product.price)}</p>
+                                <p class="font-bold text-brand-primary">${fmtMoney(product.price)}</p>
                             </div>
                         </div>
                     </div>
@@ -3330,11 +3069,11 @@
                     <div class="flex justify-between items-start mb-2">
                         <div>
                             <span class="font-bold text-gray-800">Pedido #${order.id.slice(-4)}</span>
-                            <span class="ml-2 text-xs px-2 py-1 rounded-full ${order.status === 'ready' ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-plena-primary'}">
+                            <span class="ml-2 text-xs px-2 py-1 rounded-full ${order.status === 'ready' ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-brand-primary'}">
                                 ${getStatusLabel(order.status)}
                             </span>
                         </div>
-                        <span class="text-sm font-bold text-plena-primary">${fmtMoney(order.total)}</span>
+                        <span class="text-sm font-bold text-brand-primary">${fmtMoney(order.total)}</span>
                     </div>
                     
                     <div class="mb-3">
@@ -3348,7 +3087,7 @@
                             ${fmtDateTime(order.date)}
                         </div>
                         ${order.status === 'ready' ? `
-                            <button onclick="assignDelivery('${order.id}')" class="text-xs bg-plena-primary text-white px-3 py-1.5 rounded-lg hover:bg-purple-800">
+                            <button onclick="assignDelivery('${order.id}')" class="text-xs bg-brand-primary text-white px-3 py-1.5 rounded-lg hover:bg-purple-800">
                                 Atribuir Entregador
                             </button>
                         ` : `
@@ -3625,7 +3364,7 @@
             if (isDestructive) {
                 btnConfirm.className = "flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-200";
             } else {
-                btnConfirm.className = "flex-1 px-4 py-2 bg-plena-primary text-white rounded-xl font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-200";
+                btnConfirm.className = "flex-1 px-4 py-2 bg-brand-primary text-white rounded-xl font-bold hover:bg-purple-800 transition-colors shadow-lg shadow-purple-200";
             }
 
             currentConfirmCallback = onConfirm;
@@ -3698,5 +3437,93 @@
         // Initialize the application
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 </html>

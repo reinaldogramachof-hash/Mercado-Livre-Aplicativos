@@ -12,283 +12,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Software Premium - Gestão Financas">
-    <link rel="manifest" href="data:application/manifest+json,{}">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            green: '#10B981',
-                            dark: '#047857',
-                            black: '#1a1a1a',
-                            blue: '#3B82F6',
-                            red: '#EF4444',
-                            yellow: '#F59E0B',
-                            orange: '#FF6600'
-                        },
-                        success: '#10B981',
-                        danger: '#EF4444'
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        /* CSS Otimizado */
-        :root {
-            --brand-green: #10B981;
-            --brand-dark: #047857;
-            --brand-black: #1a1a1a;
-            --brand-blue: #3B82F6;
-            --brand-red: #EF4444;
-            --brand-yellow: #F59E0B;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F3F4F6;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Gráfico CSS Avançado */
-        .chart-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 180px;
-            gap: 2%;
-        }
-
-        .bar-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            height: 100%;
-            position: relative;
-        }
-
-        .bar-wrapper {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 2px;
-            height: 100%;
-            width: 100%;
-        }
-
-        .bar {
-            width: 45%;
-            border-radius: 6px 6px 0 0;
-            transition: height 0.5s ease;
-            min-height: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .bar:hover::after {
-            content: attr(data-value);
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 10;
-        }
-
-        .x-label {
-            font-size: 10px;
-            color: #666;
-            text-align: center;
-            margin-top: 8px;
-            font-weight: 500;
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Rounded bars for financial chart */
-        .rounded-bar {
-            border-radius: 8px 8px 0 0;
-            transition: all 0.3s ease;
-        }
-
-        .rounded-bar:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-        }
-
-        /* MANUAL STYLES */
-        .step-number {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .checklist-item input[type="checkbox"]:checked+span {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-
-        .checklist-item.completed {
-            opacity: 0.7;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            border-radius: 999px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10B981, #047857);
-            transition: width 0.5s ease;
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -331,7 +70,7 @@
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        class="sidebar glass-dark text-white transition-transform duration-300 flex flex-col shadow-2xl border-r border-white/5">
         <div class="h-20 flex items-center px-6 bg-gradient-to-r from-brand-green to-brand-dark">
             <i data-lucide="piggy-bank" class="w-8 h-8 mr-3"></i>
             <div>
@@ -855,8 +594,8 @@
                 <div class="max-w-4xl mx-auto">
                     <!-- Hero Section -->
                     <div class="text-center mb-10">
-                        <div class="inline-flex items-center justify-center p-3 bg-plena-blue/10 rounded-2xl mb-4">
-                            <i data-lucide="book-open" class="w-8 h-8 text-plena-blue"></i>
+                        <div class="inline-flex items-center justify-center p-3 bg-brand-primary/10 rounded-2xl mb-4">
+                            <i data-lucide="book-open" class="w-8 h-8 text-brand-primary"></i>
                         </div>
                         <h2 class="text-3xl font-bold text-gray-800 mb-3">Manual de Uso</h2>
                         <p class="text-gray-600 max-w-lg mx-auto">Guia completo para você dominar todas as funcionalidades do seu Controle Financeiro Pessoal.</p>
@@ -866,7 +605,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-gray-800">Seu Progresso no Aprendizado</h3>
-                            <span id="tutorial-percent" class="text-plena-blue font-bold">0%</span>
+                            <span id="tutorial-percent" class="text-brand-primary font-bold">0%</span>
                         </div>
                         <div class="progress-bar mb-2">
                             <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
@@ -876,82 +615,82 @@
 
                     <!-- Manual Navigation Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-                        <div onclick="scrollToSection('instalacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('instalacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
                                     <i data-lucide="smartphone" class="w-5 h-5 text-blue-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Instalação</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Instalação</h4>
                             </div>
                             <p class="text-sm text-gray-500">Como instalar no seu celular.</p>
                         </div>
 
-                        <div onclick="scrollToSection('config')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('config')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center">
                                     <i data-lucide="settings" class="w-5 h-5 text-orange-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Ajustes</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Ajustes</h4>
                             </div>
                             <p class="text-sm text-gray-500">Configurações e moeda.</p>
                         </div>
 
-                        <div onclick="scrollToSection('cadastros')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('cadastros')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
                                     <i data-lucide="layers" class="w-5 h-5 text-green-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Categorias</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Categorias</h4>
                             </div>
                             <p class="text-sm text-gray-500">Personalizar tipos de gastos.</p>
                         </div>
 
-                        <div onclick="scrollToSection('operacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('operacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center">
                                     <i data-lucide="plus-circle" class="w-5 h-5 text-purple-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Transações</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Transações</h4>
                             </div>
                             <p class="text-sm text-gray-500">Lançar ganhos e despesas.</p>
                         </div>
 
-                        <div onclick="scrollToSection('relatorios')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('relatorios')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center">
                                     <i data-lucide="bar-chart-3" class="w-5 h-5 text-yellow-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Gestão</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Gestão</h4>
                             </div>
                             <p class="text-sm text-gray-500">Análise de gastos e saldo.</p>
                         </div>
 
-                        <div onclick="scrollToSection('seguranca')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('seguranca')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
                                     <i data-lucide="shield" class="w-5 h-5 text-red-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Segurança</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Segurança</h4>
                             </div>
                             <p class="text-sm text-gray-500">Backup e proteção de dados.</p>
                         </div>
 
-                        <div onclick="scrollToSection('suporte')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('suporte')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
                                     <i data-lucide="help-circle" class="w-5 h-5 text-gray-600"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Suporte</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Suporte</h4>
                             </div>
                             <p class="text-sm text-gray-500">FAQ e ajuda rápida.</p>
                         </div>
 
-                        <div onclick="scrollToSection('checklist')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                        <div onclick="scrollToSection('checklist')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
                             <div class="flex items-center gap-3 mb-3">
-                                <div class="w-10 h-10 rounded-full bg-plena-blue/10 flex items-center justify-center">
-                                    <i data-lucide="check-square" class="w-5 h-5 text-plena-blue"></i>
+                                <div class="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                    <i data-lucide="check-square" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
-                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Checklist</h4>
+                                <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Checklist</h4>
                             </div>
                             <p class="text-sm text-gray-500">Rotina diária recomendada.</p>
                         </div>
@@ -1155,12 +894,12 @@
                             <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                                 <div class="flex items-center justify-between mb-6">
                                     <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 rounded-xl bg-plena-blue text-white flex items-center justify-center">
+                                        <div class="w-12 h-12 rounded-xl bg-brand-primary text-white flex items-center justify-center">
                                             <i data-lucide="check-square" class="w-6 h-6"></i>
                                         </div>
                                         <h3 class="text-xl font-bold text-gray-800">Checklist Financeiro</h3>
                                     </div>
-                                    <button onclick="resetChecklist()" class="text-sm text-plena-blue hover:text-brand-dark font-medium">Reiniciar</button>
+                                    <button onclick="resetChecklist()" class="text-sm text-brand-primary hover:text-brand-dark font-medium">Reiniciar</button>
                                 </div>
                                 <div id="checklist-items" class="space-y-3">
                                     <!-- Gerado via JS -->
@@ -1571,7 +1310,7 @@
             container.innerHTML = checklistData.map(item => {
                 const isDone = db.tutorial.checklistState[item.id];
                 return `
-                    <div onclick="toggleChecklistItem('${item.id}')" class="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-plena-blue cursor-pointer transition-all ${isDone ? 'bg-gray-50 opacity-75' : 'bg-white shadow-sm'}">
+                    <div onclick="toggleChecklistItem('${item.id}')" class="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-brand-primary cursor-pointer transition-all ${isDone ? 'bg-gray-50 opacity-75' : 'bg-white shadow-sm'}">
                         <div class="w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${isDone ? 'bg-green-500 border-green-500 text-white' : 'border-gray-200'}">
                             ${isDone ? '<i data-lucide="check" class="w-4 h-4"></i>' : ''}
                         </div>
@@ -2724,6 +2463,94 @@
             document.body.classList.add('in-iframe');
         }
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

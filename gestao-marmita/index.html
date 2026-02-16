@@ -15,300 +15,18 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#F59E0B',
-                            dark: '#D97706',
-                            black: '#0f172a',
-                            orange: '#f59e0b',
-                            gray: '#334155',
-                            lightblue: '#FBBF24'
-                        },
-                        marmita: {
-                            light: '#F1F5F9',
-                            soft: '#E2E8F0'
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        /* CSS Otimizado Padronizado */
-        :root {
-            --brand-blue: #F59E0B;
-            --brand-dark: #D97706;
-            --brand-black: #0f172a;
-            --brand-orange: #f59e0b;
-            --marmita-light: #F1F5F9;
-            --marmita-soft: #E2E8F0;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F8FAFC;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile Toggle */
-        .sidebar.open {
-            transform: translateX(0) !important;
-        }
-
-        /* Print Optimization V4 */
-        @media print {
-            @page {
-                margin: 1cm;
-                size: A4;
-            }
-
-            body {
-                background: white;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .sidebar,
-            .no-print,
-            button,
-            .modal-backdrop,
-            header,
-            .hide {
-                display: none !important;
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-                width: 100% !important;
-                height: auto !important;
-                overflow: visible !important;
-            }
-
-            .view-section {
-                display: none !important;
-            }
-
-            /* Show specific sections only when printing */
-            #view-reports,
-            #view-finance {
-                display: block !important;
-            }
-        }
-
-        /* Enhanced Print Styles */
-        @media print {
-            #report-result {
-                display: block !important;
-                visibility: visible !important;
-            }
-
-            #report-result .grid {
-                display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 1rem !important;
-            }
-
-            #report-result button {
-                display: none !important;
-            }
-
-            /* Finance Table Formatting */
-            #view-finance table {
-                width: 100% !important;
-                font-size: 10pt !important;
-                border-collapse: collapse !important;
-            }
-
-            #view-finance th,
-            #view-finance td {
-                border: 1px solid #e2e8f0 !important;
-                padding: 8px !important;
-                color: black !important;
-            }
-
-            /* Hide Actions column in print */
-            #view-finance th:last-child,
-            #view-finance td:last-child {
-                display: none !important;
-            }
-
-            /* Hide inputs and filters */
-            #view-finance input,
-            #view-finance select,
-            #view-finance .flex.gap-2 {
-                display: none !important;
-            }
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-pending {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-done {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-canceled {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* Status Colors */
-        .status-pending {
-            background-color: #FEF3C7;
-            border-color: #F59E0B;
-            color: #92400E;
-        }
-
-        .status-done {
-            background-color: #DCFCE7;
-            border-color: #10B981;
-            color: #166534;
-        }
-
-        .status-canceled {
-            background-color: #FEE2E2;
-            border-color: #EF4444;
-            color: #991B1B;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Agenda Time Slot */
-        .time-slot {
-            transition: all 0.2s ease;
-        }
-
-        .time-slot:hover {
-            background-color: #E2E8F0 !important;
-        }
-
-        /* Service Card Gradient */
-        .service-gradient {
-            background: linear-gradient(135deg, #60A5FA 0%, #2563EB 100%);
-        }
-
-        /* Estilos para Manual Interativo */
-        .step-number {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-right: 1rem;
-        }
-
-        .checklist-item input[type="checkbox"]:checked+span {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-
-        .code-block {
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-family: monospace;
-            font-size: 0.875rem;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 9999px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
-            transition: width 0.3s ease;
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-slate-800 antialiased">
@@ -352,7 +70,7 @@
     <!-- Sidebar Padronizada -->
     <aside id="sidebar"
         class="sidebar bg-brand-black text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-blue to-brand-dark">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#C2410C]/50 to-transparent border-b border-white/5">
             <i data-lucide="utensils" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO MARMITA</h1>
@@ -450,10 +168,10 @@
 
                 <div class="relative group">
                     <div
-                        class="absolute -inset-1 bg-plena-blue/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                        class="absolute -inset-1 bg-brand-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
                     </div>
                     <button onclick="openOrderModal()"
-                        class="relative flex items-center px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-orange-200 active:scale-95">
+                        class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-orange-200 active:scale-95">
                         <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                         <span class="hidden sm:inline">Lançar Novo Pedido</span>
                         <span class="sm:hidden">Novo</span>
@@ -477,8 +195,8 @@
                                 <h3 id="dash-appt-today" class="text-3xl font-bold text-slate-900">0</h3>
                                 <p class="text-xs text-slate-500 mt-1">Total de marmitas pedidas</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-blue/10 flex items-center justify-center">
-                                <i data-lucide="calendar" class="w-6 h-6 text-plena-blue"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="calendar" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -502,11 +220,11 @@
                             <div>
                                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Comissões a
                                     Pagar</p>
-                                <h3 id="dash-comm-pending" class="text-2xl font-bold text-plena-blue">R$ 0,00</h3>
+                                <h3 id="dash-comm-pending" class="text-2xl font-bold text-brand-primary">R$ 0,00</h3>
                                 <p class="text-xs text-slate-500 mt-1">Total pendente</p>
                             </div>
                             <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                                <i data-lucide="dollar-sign" class="w-6 h-6 text-plena-blue"></i>
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -516,7 +234,7 @@
                 <div
                     class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8 overflow-hidden relative group">
                     <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <i data-lucide="utensils-crosses" class="w-16 h-16 text-plena-blue"></i>
+                        <i data-lucide="utensils-crosses" class="w-16 h-16 text-brand-primary"></i>
                     </div>
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
@@ -555,7 +273,7 @@
                             <input type="date" id="agenda-date" onchange="renderDashboard()"
                                 class="border rounded-lg p-2 text-sm bg-white">
                             <button onclick="openOrderModal()"
-                                class="flex items-center gap-2 px-3 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold">
+                                class="flex items-center gap-2 px-3 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold">
                                 <i data-lucide="plus" class="w-4 h-4"></i> Novo
                             </button>
                         </div>
@@ -568,7 +286,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="font-bold text-slate-800">Últimos Pedidos</h3>
                         <button onclick="router('finance')"
-                            class="text-sm text-plena-blue hover:text-brand-dark font-medium">
+                            class="text-sm text-brand-primary hover:text-brand-dark font-medium">
                             Ver financeiro completo →
                         </button>
                     </div>
@@ -587,7 +305,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTeamModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>
                             Novo Integrante
                         </button>
@@ -607,7 +325,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openServiceModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                             Novo Item
                         </button>
@@ -627,7 +345,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openExpenseModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                             Novo Lançamento
                         </button>
@@ -656,7 +374,7 @@
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
                             <input type="text" id="search-term" onkeyup="renderFinance()" placeholder="Buscar..."
-                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <div>
                             <input type="date" id="filter-start" onchange="renderFinance()"
@@ -713,7 +431,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openClientModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>
                             Novo Cliente
                         </button>
@@ -760,7 +478,7 @@
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
-                                class="flex-1 bg-plena-blue text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                                class="flex-1 bg-brand-primary text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                                 Gerar Relatório
                             </button>
                             <button onclick="generateMonthReport()"
@@ -864,7 +582,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                             <h3 class="font-bold text-slate-800 mb-4 flex items-center">
-                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
@@ -925,7 +643,7 @@
                     <!-- Cabeçalho Hero -->
                     <div class="text-center mb-10 pt-4">
                         <div
-                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-brand-dark rounded-2xl mb-4 shadow-lg">
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand-primary to-brand-dark rounded-2xl mb-4 shadow-lg">
                             <i data-lucide="utensils" class="w-12 h-12 text-white"
                                 aria-label="Ícone de Talheres - Manual de Uso"></i>
                         </div>
@@ -937,7 +655,7 @@
                                 Iniciantes</span>
                             <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
                                 Desktop</span>
-                            <span class="px-3 py-1 bg-orange-100 text-plena-blue rounded-full text-xs font-bold">⚡
+                            <span class="px-3 py-1 bg-orange-100 text-brand-primary rounded-full text-xs font-bold">⚡
                                 Rápido
                                 e Prático</span>
                         </div>
@@ -946,7 +664,7 @@
                     <!-- Barra de Progresso do Tutorial -->
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Seu Progresso no Aprendizado
                         </h3>
                         <div class="mb-4">
@@ -995,7 +713,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">1
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">1
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Instalação do Sistema</h3>
                             </div>
@@ -1074,7 +792,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">2
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">2
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Configuração Inicial (10 Minutos)</h3>
                             </div>
@@ -1151,7 +869,7 @@
 
                             <div class="space-y-4">
                                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
-                                    <h4 class="font-bold text-plena-blue mb-3 flex items-center">
+                                    <h4 class="font-bold text-brand-primary mb-3 flex items-center">
                                         <i data-lucide="users" class="w-5 h-5 mr-2"></i>
                                         PASSO 3: Cadastrar Equipe
                                     </h4>
@@ -1182,16 +900,16 @@
                                     <p class="text-sm text-gray-700">Seu sistema já está pronto para uso!</p>
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
                                         <div class="bg-white p-3 rounded-lg border text-center">
-                                            <i data-lucide="calendar" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                             <p class="text-xs font-bold">Ver Pedidos</p>
                                         </div>
                                         <div class="bg-white p-3 rounded-lg border text-center">
-                                            <i data-lucide="users" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                            <i data-lucide="users" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                             <p class="text-xs font-bold">Equipe</p>
                                         </div>
                                         <div class="bg-white p-3 rounded-lg border text-center">
                                             <i data-lucide="shopping-bag"
-                                                class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                                class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                             <p class="text-xs font-bold">Cardápio</p>
                                         </div>
                                     </div>
@@ -1205,7 +923,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">3
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">3
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Gestão de Pedidos e Comissões</h3>
                             </div>
@@ -1218,7 +936,7 @@
                         <div
                             class="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border border-blue-200 mb-6">
                             <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                                <i data-lucide="calendar-check" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="calendar-check" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Fluxo do Pedido
                             </h4>
                             <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
@@ -1315,7 +1033,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">4
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Relatórios e Análise de Performance</h3>
                             </div>
@@ -1363,7 +1081,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">5
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">5
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
                             </div>
@@ -1464,7 +1182,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">6
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">6
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Dúvidas Frequentes (FAQ)</h3>
                             </div>
@@ -1535,7 +1253,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">7
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">7
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Checklist de Rotina da Marmitaria</h3>
                             </div>
@@ -1621,7 +1339,7 @@
                             Nossa equipe de suporte responde em até 24h úteis.
                         </p>
                         <a href="mailto:suporte@gestao.app"
-                            class="inline-flex items-center text-plena-blue font-bold hover:underline">
+                            class="inline-flex items-center text-brand-primary font-bold hover:underline">
                             <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
                             suporte@gestao.app
                         </a>
@@ -1641,7 +1359,7 @@
                     <!-- 1. Header Institucional -->
                     <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 text-center">
                         <div
-                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-blue to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
                             <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
                         </div>
                         <h2 class="text-3xl font-bold text-slate-800 mb-1">Central de Segurança e Legalidade</h2>
@@ -1654,7 +1372,7 @@
                         <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
                             <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
                                 <div class="p-2 bg-blue-50 rounded-lg mr-3">
-                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                    <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 Termos de Uso
                             </h3>
@@ -1724,7 +1442,7 @@
                         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                             <div class="flex-1">
                                 <h3 class="font-bold text-xl mb-2 flex items-center">
-                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-blue"></i>
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-brand-primary"></i>
                                     Suporte Premium Especializado
                                 </h3>
                                 <p class="text-slate-300 text-sm mb-6 leading-relaxed">
@@ -1742,7 +1460,7 @@
                                     <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
                                         <p class="text-xs text-slate-400 uppercase font-bold">Tempo de Resposta (SLA)
                                         </p>
-                                        <p class="font-bold text-plena-blue">Até 24h Úteis</p>
+                                        <p class="font-bold text-brand-primary">Até 24h Úteis</p>
                                     </div>
                                 </div>
                             </div>
@@ -1772,7 +1490,7 @@
                             </p>
 
                             <button onclick="confirmTerms()" id="btn-confirm-terms"
-                                class="bg-plena-blue hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-orange-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                class="bg-brand-primary hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-orange-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
                                 <span>Li, Compreendi e Concordo</span>
                                 <i data-lucide="arrow-right"
                                     class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
@@ -1822,7 +1540,7 @@
                 <div>
                     <label class="text-xs font-bold text-slate-500 uppercase">Cliente</label>
                     <input type="text" id="ap-client" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Nome / WhatsApp / Endereço">
                 </div>
 
@@ -1860,7 +1578,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-orange-200 hover:bg-brand-dark transition-all mt-2">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-orange-200 hover:bg-brand-dark transition-all mt-2">
                     Confirmar Pedido
                 </button>
             </form>
@@ -1979,7 +1697,7 @@
                 <input type="email" id="cli-email" placeholder="E-mail" class="w-full border p-2 rounded-lg">
                 <textarea id="cli-notes" placeholder="Observações" class="w-full border p-2 rounded-lg"
                     rows="3"></textarea>
-                <button type="submit" class="w-full bg-plena-blue text-white py-3 rounded-lg font-bold">Salvar
+                <button type="submit" class="w-full bg-brand-primary text-white py-3 rounded-lg font-bold">Salvar
                     Cliente</button>
             </form>
         </div>
@@ -1988,7 +1706,7 @@
     <!-- Closing Modal -->
     <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            <div class="bg-gradient-to-r from-plena-blue to-brand-dark p-6 text-center text-white">
+            <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Fechamento do Dia</h3>
                 <p id="close-date" class="text-sm text-white/90 mt-1">Hoje</p>
                 <p id="close-time" class="text-xs text-white/70 mt-0">--:--</p>
@@ -2048,7 +1766,7 @@
     <!-- Commission Modal -->
     <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            <div class="bg-gradient-to-r from-plena-blue to-brand-dark p-6 text-center text-white">
+            <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Pagamento de Comissão</h3>
                 <p class="text-xs text-white/80 mt-1">Confirmação de Pagamento</p>
             </div>
@@ -2240,7 +1958,7 @@
                     // Adicionar indicador visual de licença
                     if (!docInput.parentElement.querySelector('.lock-icon')) {
                         docInput.parentElement.insertAdjacentHTML('beforeend',
-                            `<span class="lock-icon text-[10px] text-plena-blue font-bold flex items-center mt-1"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Licença Vitalícia Ativa</span>`
+                            `<span class="lock-icon text-[10px] text-brand-primary font-bold flex items-center mt-1"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Licença Vitalícia Ativa</span>`
                         );
                     }
                 }
@@ -2433,7 +2151,7 @@
                             <p class="text-sm font-medium text-slate-800">${sanitizeHTML(appt.client)}</p>
                             <p class="text-xs text-slate-500">${fmtDate(appt.date)} às ${appt.time}</p>
                         </div>
-                        <span class="text-sm text-plena-blue font-bold">${sanitizeHTML(appt.serviceName)}</span>
+                        <span class="text-sm text-brand-primary font-bold">${sanitizeHTML(appt.serviceName)}</span>
                     </div>
                 `).join('');
             }
@@ -2467,7 +2185,7 @@
                 return `
                     <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm card-hover">
                         <div class="flex justify-between items-start mb-4">
-                            <div class="bg-blue-50 p-3 rounded-full text-plena-blue">
+                            <div class="bg-blue-50 p-3 rounded-full text-brand-primary">
                                 <i data-lucide="user" class="w-6 h-6"></i>
                             </div>
                             <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">
@@ -2483,13 +2201,13 @@
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-slate-500">Comissões pendentes:</span>
-                                <span class="font-bold text-plena-blue">${fmtMoney(pendingCommissions)}</span>
+                                <span class="font-bold text-brand-primary">${fmtMoney(pendingCommissions)}</span>
                             </div>
                         </div>
                         
                         <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
                             <button onclick="payCommission('${pro.id}')" 
-                                    class="text-sm font-bold text-plena-blue hover:text-blue-800 ${pendingCommissions === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                                    class="text-sm font-bold text-brand-primary hover:text-blue-800 ${pendingCommissions === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
                                     ${pendingCommissions === 0 ? 'disabled' : ''}>
                                 Pagar Comissão
                             </button>
@@ -2531,7 +2249,7 @@
                             <p class="text-xs text-slate-500 mt-1">${serviceCount} vendidos</p>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="font-bold text-plena-blue">${fmtMoney(service.price)}</span>
+                            <span class="font-bold text-brand-primary">${fmtMoney(service.price)}</span>
                             <button onclick="editService('${service.id}')" 
                                     class="text-slate-400 hover:text-slate-600">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
@@ -2664,10 +2382,10 @@
                         <td class="px-6 py-4 font-medium text-slate-800">${sanitizeHTML(client.name)}</td>
                         <td class="px-6 py-4 text-slate-600">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
                         <td class="px-6 py-4 text-slate-500">${lastVisit ? fmtDate(lastVisit) : 'Nunca'}</td>
-                        <td class="px-6 py-4 font-bold text-plena-blue">${fmtMoney(totalSpent)}</td>
+                        <td class="px-6 py-4 font-bold text-brand-primary">${fmtMoney(totalSpent)}</td>
                         <td class="px-6 py-4 text-center">
                             <button onclick="editClient('${client.id}')" 
-                                    class="text-slate-400 hover:text-plena-blue">
+                                    class="text-slate-400 hover:text-brand-primary">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </button>
                         </td>
@@ -3754,6 +3472,94 @@
             loadChecklistState();
         });
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

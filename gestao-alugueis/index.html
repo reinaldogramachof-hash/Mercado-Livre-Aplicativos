@@ -13,385 +13,24 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Gestão Alugueis">
 
-    <link rel="manifest"
-        href='data:application/manifest+json,{"name":"Gestão Alugueis","short_name": "Gestão Alugueis","start_url":".","display":"standalone","background_color":"#F3F4F6","theme_color":"#2563EB","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI1NjNFQiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Im0zIDkgOS03IDkgN3YxMWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMnoiLz48cG9seWxpbmUgcG9pbnRzPSI5IDIyIDkgMTIgMTUgMTIgMTUgMjIiLz48L3N2Zz4=","sizes":"192x192","type":"image/svg+xml"}]}'>
+    <link rel="manifest" href="manifest.json">
 
 
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#2563EB',
-                            dark: '#1e3a8a',
-                            black: '#0f172a',
-                            orange: '#f59e0b',
-                            gray: '#334155',
-                            lightblue: '#60A5FA',
-                            purple: '#7C3AED'
-                        },
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
-    <style>
-        /* CSS Otimizado */
-        :root {
-            --brand-blue: #2563EB;
-            --brand-dark: #1e3a8a;
-            --brand-black: #0f172a;
-            --brand-orange: '#f59e0b';
-            --brand-gray: #334155;
-            --brand-lightblue: #60A5FA;
-        }
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F3F4F6;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .badge-warning {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .badge-danger {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Tutorial Steps */
-        .step-number {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        /* Checklist */
-        .checklist-item {
-            transition: all 0.2s ease;
-        }
-
-        .checklist-item.completed {
-            opacity: 0.7;
-            text-decoration: line-through;
-        }
-
-        /* Code-like examples */
-        .code-block {
-            background: #1a1a1a;
-            color: #f8f8f2;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            overflow-x: auto;
-            margin: 8px 0;
-        }
-
-        /* Progress bar */
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #7C3AED, #5b21b6);
-            transition: width 0.5s ease;
-        }
-
-        .main-content {
-            padding-bottom: 0;
-        }
-
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-
-            body {
-                background: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                height: 100vh;
-                margin: 0;
-                padding: 0;
-            }
-
-            /* Hide everything by default */
-            body>* {
-                display: none !important;
-            }
-
-            /* Only show the active modal if it's the receipt modal */
-            #receiptModal {
-                display: flex !important;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                background: white;
-                z-index: 9999;
-                align-items: flex-start;
-                /* Align top for print */
-                justify-content: center;
-                overflow: visible !important;
-            }
-
-            #receiptModal .bg-white {
-                box-shadow: none !important;
-                max-width: 100% !important;
-                width: 100% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            /* Specific Print Adjustments for Receipt Content */
-            #receipt-content {
-                padding: 40px !important;
-                /* Standard A4 padding */
-                width: 100%;
-                font-size: 12pt;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        /* Print Styles */
-        @media print {
-
-            /* Hide UI elements */
-            .sidebar,
-            .mobile-nav,
-            .header-search,
-            .view-section>div:first-child,
-            /* Hide section titles */
-            button:not(.print-only),
-            .no-print,
-            #month-selector-container,
-            #report-filters-card,
-            .data-entry-fab {
-                display: none !important;
-            }
-
-            /* Adjust Layout */
-            body,
-            main {
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                overflow: visible !important;
-            }
-
-            main {
-                margin-left: 0 !important;
-                padding-bottom: 0 !important;
-            }
-
-            .content-area {
-                padding: 0 !important;
-            }
-
-            /* Report Header Visibility */
-            #print-header {
-                display: block !important;
-                margin-bottom: 2rem;
-                border-bottom: 2px solid #eee;
-                padding-bottom: 1rem;
-            }
-
-            /* Typography */
-            body {
-                font-size: 11pt;
-                color: #000;
-            }
-
-            h2,
-            h3 {
-                color: #000 !important;
-            }
-
-            /* Cards for Print */
-            .bg-white,
-            .bg-gray-50,
-            .bg-green-50,
-            .bg-red-50,
-            .bg-blue-50 {
-                background: white !important;
-                border: 1px solid #ddd !important;
-                box-shadow: none !important;
-                break-inside: avoid;
-            }
-
-            /* Table optimization */
-            table {
-                width: 100% !important;
-                border-collapse: collapse;
-            }
-
-            th,
-            td {
-                border: 1px solid #ddd !important;
-                padding: 8px !important;
-            }
-
-            /* Colors functionality */
-            .text-green-600 {
-                color: #166534 !important;
-            }
-
-            .text-red-600 {
-                color: #dc2626 !important;
-            }
-
-            /* Force chart bars to print background colors */
-            .print-color-exact {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -434,8 +73,8 @@
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-blue to-brand-dark">
+        class="sidebar glass-dark text-white transition-transform duration-300 flex flex-col shadow-2xl border-r border-white/5">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#1E40AF]/50 to-transparent border-b border-white/5">
             <i data-lucide="home" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO ALUGUEIS</h1>
@@ -520,10 +159,10 @@
 
                 <div class="relative group">
                     <div
-                        class="absolute -inset-1 bg-plena-purple/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                        class="absolute -inset-1 bg-brand-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
                     </div>
                     <button onclick="openPropertyModal()"
-                        class="relative flex items-center px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                        class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
                         <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                         <span class="hidden sm:inline">Novo Imóvel</span>
                         <span class="sm:hidden">Novo</span>
@@ -542,7 +181,7 @@
                     class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <div>
                         <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                            <i data-lucide="layout-dashboard" class="w-5 h-5 text-plena-blue"></i>
+                            <i data-lucide="layout-dashboard" class="w-5 h-5 text-brand-primary"></i>
                             Visão Geral
                         </h3>
                         <p class="text-sm text-gray-500">Acompanhe o desempenho mensal</p>
@@ -550,9 +189,9 @@
                     <div class="flex items-center gap-3 w-full sm:w-auto">
                         <div class="relative w-full sm:w-auto">
                             <i data-lucide="calendar"
-                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-plena-blue"></i>
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-primary"></i>
                             <input type="month" id="month-selector" onchange="renderDashboard()"
-                                class="w-full sm:w-auto pl-10 pr-4 py-2.5 rounded-lg border-2 border-plena-purple/20 text-sm bg-plena-purple/5 font-bold text-brand-dark focus:border-plena-purple focus:ring-4 focus:ring-plena-purple/10 outline-none transition-all cursor-pointer hover:bg-plena-purple/10">
+                                class="w-full sm:w-auto pl-10 pr-4 py-2.5 rounded-lg border-2 border-brand-primary/20 text-sm bg-brand-primary/5 font-bold text-brand-dark focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 outline-none transition-all cursor-pointer hover:bg-brand-primary/10">
                         </div>
                     </div>
                 </div>
@@ -566,8 +205,8 @@
                                 <h3 id="dash-occupancy" class="text-3xl font-bold text-gray-900">0/0</h3>
                                 <p class="text-xs text-gray-500 mt-1">Imóveis ocupados</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-plena-purple/10 flex items-center justify-center">
-                                <i data-lucide="home" class="w-6 h-6 text-plena-blue"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="home" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -637,7 +276,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="calendar" class="w-4 h-4 mr-2 text-plena-blue"></i>
+                                <i data-lucide="calendar" class="w-4 h-4 mr-2 text-brand-primary"></i>
                                 Próximos Vencimentos
                             </h3>
                             <div id="upcoming-payments" class="space-y-3">
@@ -726,7 +365,7 @@
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="search-transactions" onkeyup="renderTransactions()"
                                 placeholder="Buscar..."
-                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-purple outline-none text-sm">
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <div>
                             <input type="date" id="filter-start-date" onchange="renderTransactions()"
@@ -839,12 +478,12 @@
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
                             <input type="date" id="rep-start"
-                                class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                                class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
                             <input type="date" id="rep-end"
-                                class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue outline-none">
+                                class="w-full border border-gray-300 p-2.5 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
@@ -939,8 +578,8 @@
                     <!-- 1. Dados do Proprietário -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
                         <h3 class="font-bold text-gray-800 mb-6 flex items-center text-lg">
-                            <div class="p-2 bg-plena-purple/10 rounded-lg mr-3">
-                                <i data-lucide="user-circle-2" class="w-5 h-5 text-plena-blue"></i>
+                            <div class="p-2 bg-brand-primary/10 rounded-lg mr-3">
+                                <i data-lucide="user-circle-2" class="w-5 h-5 text-brand-primary"></i>
                             </div>
                             Dados do Proprietário
                         </h3>
@@ -951,21 +590,21 @@
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Nome do
                                     Estabelecimento</label>
                                 <input type="text" id="set-establishment-name"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-blue focus:border-transparent outline-none transition-all"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                     placeholder="Ex: Imobiliária Silva Ltda">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Nome / Razão
                                     Social</label>
                                 <input type="text" id="set-owner-name"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-blue focus:border-transparent outline-none transition-all"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                     placeholder="Ex: João Silva Imóveis">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">CPF /
                                     CNPJ</label>
                                 <input type="text" id="set-owner-doc"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-plena-purple focus:border-transparent outline-none transition-all"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-2 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                     placeholder="000.000.000-00">
                                 <p class="text-[10px] text-gray-400 mt-1">Este dado aparecerá no rodapé dos recibos.
                                 </p>
@@ -981,8 +620,8 @@
                     <!-- 2. Multas e Juros -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
                         <h3 class="font-bold text-gray-800 mb-6 flex items-center text-lg">
-                            <div class="p-2 bg-plena-purple/10 rounded-lg mr-3">
-                                <i data-lucide="percent" class="w-5 h-5 text-plena-blue"></i>
+                            <div class="p-2 bg-brand-primary/10 rounded-lg mr-3">
+                                <i data-lucide="percent" class="w-5 h-5 text-brand-primary"></i>
                             </div>
                             Multas e Juros (Cálculo Automático)
                         </h3>
@@ -993,7 +632,7 @@
                                     (%)</label>
                                 <div class="relative mt-2">
                                     <input type="number" step="0.1" id="set-late-fee"
-                                        class="w-full border border-gray-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-plena-purple focus:border-transparent outline-none transition-all pl-3"
+                                        class="w-full border border-gray-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all pl-3"
                                         placeholder="2.0">
                                     <span class="absolute right-4 top-3 text-gray-400 text-sm">%</span>
                                 </div>
@@ -1003,7 +642,7 @@
                                     (%)</label>
                                 <div class="relative mt-2">
                                     <input type="number" step="0.001" id="set-daily-interest"
-                                        class="w-full border border-gray-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-plena-purple focus:border-transparent outline-none transition-all pl-3"
+                                        class="w-full border border-gray-300 p-3 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all pl-3"
                                         placeholder="0.033">
                                     <span class="absolute right-4 top-3 text-gray-400 text-sm">%</span>
                                 </div>
@@ -1021,11 +660,11 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="font-bold text-gray-800 flex items-center">
-                                <i data-lucide="tag" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="tag" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Categorias de Despesas
                             </h3>
                             <button onclick="toggleCatForm()"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-plena-purple text-white text-sm rounded-lg hover:bg-brand-dark">
+                                class="flex items-center gap-2 px-3 py-1.5 bg-brand-primary text-white text-sm rounded-lg hover:bg-brand-dark">
                                 <i data-lucide="plus" class="w-4 h-4"></i> Nova
                             </button>
                         </div>
@@ -1062,7 +701,7 @@
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
@@ -1118,7 +757,7 @@
                     <!-- Cabeçalho Hero -->
                     <div class="text-center mb-10 pt-4">
                         <div
-                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-brand-dark rounded-2xl mb-4 shadow-lg">
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand-primary to-brand-dark rounded-2xl mb-4 shadow-lg">
                             <i data-lucide="home" class="w-12 h-12 text-white"
                                 aria-label="Ícone de Casa - Manual de Uso"></i>
                         </div>
@@ -1130,7 +769,7 @@
                                 Iniciantes</span>
                             <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">?? Mobile e
                                 Desktop</span>
-                            <span class="px-3 py-1 bg-blue-100 text-plena-blue rounded-full text-xs font-bold">? Rápido
+                            <span class="px-3 py-1 bg-blue-100 text-brand-primary rounded-full text-xs font-bold">? Rápido
                                 e Prático</span>
                         </div>
                     </div>
@@ -1138,7 +777,7 @@
                     <!-- Barra de Progresso do Tutorial -->
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Seu Progresso no Aprendizado
                         </h3>
                         <div class="mb-4">
@@ -1187,7 +826,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">1
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">1
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Instalação do App no Celular</h3>
                             </div>
@@ -1340,7 +979,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">2
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">2
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Configuração Inicial (10 Minutos)</h3>
                             </div>
@@ -1450,7 +1089,7 @@
 
                             <div class="space-y-4">
                                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
-                                    <h4 class="font-bold text-plena-blue mb-3 flex items-center">
+                                    <h4 class="font-bold text-brand-primary mb-3 flex items-center">
                                         <i data-lucide="users" class="w-5 h-5 mr-2"></i>
                                         PASSO 3: Dados do Inquilino (IMPORTANTE)
                                     </h4>
@@ -1524,15 +1163,15 @@
                             </p>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
                                 <div class="bg-white p-3 rounded-lg border text-center">
-                                    <i data-lucide="eye" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                    <i data-lucide="eye" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                     <p class="text-xs font-bold">Ver Dashboard</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-lg border text-center">
-                                    <i data-lucide="bell" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                    <i data-lucide="bell" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                     <p class="text-xs font-bold">Receber Lembretes</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-lg border text-center">
-                                    <i data-lucide="file-text" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                    <i data-lucide="file-text" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                     <p class="text-xs font-bold">Emitir Recibos</p>
                                 </div>
                             </div>
@@ -1544,7 +1183,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">3
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">3
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Cobrança, Pagamentos e Recibos</h3>
                             </div>
@@ -1610,7 +1249,7 @@
                             <div
                                 class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100">
                                 <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-3">
-                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                    <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 <h4 class="font-bold text-gray-800 mb-2">Enviar Recibo</h4>
                                 <p class="text-sm text-gray-600 mb-3">Dois tipos disponíveis:</p>
@@ -1697,7 +1336,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">4
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Relatórios e Análise Financeira</h3>
                             </div>
@@ -1710,14 +1349,14 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
                                 <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                                    <i data-lucide="bar-chart-3" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                    <i data-lucide="bar-chart-3" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                     Relatório Mensal Automático
                                 </h4>
                                 <p class="text-sm text-gray-700 mb-4">Todo dia 1º, faça este passo a passo:</p>
                                 <ol class="space-y-3 text-sm">
                                     <li class="flex items-start">
                                         <div
-                                            class="w-6 h-6 rounded-full bg-plena-blue/20 text-plena-blue flex items-center justify-center mr-2 text-xs font-bold">
+                                            class="w-6 h-6 rounded-full bg-brand-primary/20 text-brand-primary flex items-center justify-center mr-2 text-xs font-bold">
                                             1</div>
                                         <div>
                                             <strong>Clique em "Relatórios" no menu</strong>
@@ -1726,7 +1365,7 @@
                                     </li>
                                     <li class="flex items-start">
                                         <div
-                                            class="w-6 h-6 rounded-full bg-plena-blue/20 text-plena-blue flex items-center justify-center mr-2 text-xs font-bold">
+                                            class="w-6 h-6 rounded-full bg-brand-primary/20 text-brand-primary flex items-center justify-center mr-2 text-xs font-bold">
                                             2</div>
                                         <div>
                                             <strong>Clique em "Relatório Completo"</strong>
@@ -1735,7 +1374,7 @@
                                     </li>
                                     <li class="flex items-start">
                                         <div
-                                            class="w-6 h-6 rounded-full bg-plena-blue/20 text-plena-blue flex items-center justify-center mr-2 text-xs font-bold">
+                                            class="w-6 h-6 rounded-full bg-brand-primary/20 text-brand-primary flex items-center justify-center mr-2 text-xs font-bold">
                                             3</div>
                                         <div>
                                             <strong>Analise os resultados:</strong>
@@ -1749,7 +1388,7 @@
                                     </li>
                                     <li class="flex items-start">
                                         <div
-                                            class="w-6 h-6 rounded-full bg-plena-blue/20 text-plena-blue flex items-center justify-center mr-2 text-xs font-bold">
+                                            class="w-6 h-6 rounded-full bg-brand-primary/20 text-brand-primary flex items-center justify-center mr-2 text-xs font-bold">
                                             4</div>
                                         <div>
                                             <strong>Compartilhe com seu contador</strong>
@@ -1820,7 +1459,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">5
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">5
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
                             </div>
@@ -2001,7 +1640,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">6
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">6
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Dúvidas Frequentes (FAQ)</h3>
                             </div>
@@ -2102,7 +1741,7 @@
                                     class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
                                     <div class="flex items-center gap-3 font-bold text-gray-700">
                                         <div
-                                            class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-plena-blue">
+                                            class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-brand-primary">
                                             <i data-lucide="printer" class="w-4 h-4"></i>
                                         </div>
                                         Posso imprimir recibos para assinar manualmente?
@@ -2239,7 +1878,7 @@
                                             </div>
                                             <div class="text-center p-3 bg-purple-50 rounded-lg">
                                                 <i data-lucide="monitor"
-                                                    class="w-6 h-6 text-plena-blue mx-auto mb-2"></i>
+                                                    class="w-6 h-6 text-brand-primary mx-auto mb-2"></i>
                                                 <p class="text-xs font-bold">Computador</p>
                                                 <p class="text-xs text-gray-600">Windows, Mac, Linux</p>
                                             </div>
@@ -2263,9 +1902,9 @@
                         </div>
 
                         <div
-                            class="mt-8 p-4 bg-gradient-to-r from-plena-blue/10 to-blue-50 rounded-xl border border-plena-blue/20">
+                            class="mt-8 p-4 bg-gradient-to-r from-brand-primary/10 to-blue-50 rounded-xl border border-brand-primary/20">
                             <h4 class="font-bold text-gray-800 mb-2 flex items-center">
-                                <i data-lucide="message-circle" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                <i data-lucide="message-circle" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Ainda com dúvidas?
                             </h4>
                             <p class="text-sm text-gray-700 mb-3">
@@ -2273,7 +1912,7 @@
                             </p>
                             <div class="flex flex-col sm:flex-row gap-3">
                                 <a href="mailto:suporte@gestao.app"
-                                    class="inline-flex items-center justify-center bg-plena-purple text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                                    class="inline-flex items-center justify-center bg-brand-primary text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                                     <i data-lucide="mail" class="w-4 h-4 mr-2"></i>
                                     Enviar E-mail para Suporte
                                 </a>
@@ -2291,7 +1930,7 @@
                         class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-plena-blue to-brand-dark text-white">7
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">7
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Checklist Interativo de Rotina</h3>
                             </div>
@@ -2377,10 +2016,10 @@
                             <div class="space-y-4">
                                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
                                     <div class="flex items-center justify-between mb-3">
-                                        <h4 class="font-bold text-plena-blue uppercase text-sm">Fim do Mês (Dia 25-31)
+                                        <h4 class="font-bold text-brand-primary uppercase text-sm">Fim do Mês (Dia 25-31)
                                         </h4>
                                         <span
-                                            class="text-xs bg-blue-100 text-plena-blue px-2 py-1 rounded">ANÁLISE</span>
+                                            class="text-xs bg-blue-100 text-brand-primary px-2 py-1 rounded">ANÁLISE</span>
                                     </div>
                                     <div id="checklist-3" class="space-y-3">
                                         <div class="checklist-item flex items-center">
@@ -2516,7 +2155,7 @@
                     <div
                         class="mt-12 text-center max-w-2xl mx-auto p-8 bg-gradient-to-b from-green-50 to-white border border-green-200 rounded-3xl shadow-lg relative overflow-hidden">
                         <!-- Background Decoration -->
-                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-plena-blue">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-brand-primary">
                         </div>
 
                         <div
@@ -2540,7 +2179,7 @@
                             </button>
 
                             <button onclick="router('dashboard')"
-                                class="w-full sm:w-auto px-8 py-3 bg-plena-purple text-white rounded-xl font-bold hover:bg-brand-dark transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                class="w-full sm:w-auto px-8 py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-brand-dark transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                 Ir para o Dashboard
                             </button>
                         </div>
@@ -2559,7 +2198,7 @@
                     </p>
                     <p class="text-[10px] text-gray-400">
                         Software Premium  
-                        <a href="mailto:suporte@gestao.app" class="text-plena-blue hover:underline">
+                        <a href="mailto:suporte@gestao.app" class="text-brand-primary hover:underline">
                             suporte@gestao.app
                         </a>
                     </p>
@@ -2577,7 +2216,7 @@
                 <!-- 1. Header Institucional -->
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
                     <div
-                        class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-blue to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+                        class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
                         <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
                     </div>
                     <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
@@ -2590,7 +2229,7 @@
                     <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                         <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
                             <div class="p-2 bg-blue-50 rounded-lg mr-3">
-                                <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                             </div>
                             Termos de Uso
                         </h3>
@@ -2651,7 +2290,7 @@
                     <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                         <div class="flex-1">
                             <h3 class="font-bold text-xl mb-2 flex items-center">
-                                <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-blue"></i>
+                                <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-brand-primary"></i>
                                 Suporte Premium Especializado
                             </h3>
                             <p class="text-gray-300 text-sm mb-6 leading-relaxed">
@@ -2666,7 +2305,7 @@
                                 </div>
                                 <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
                                     <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
-                                    <p class="font-bold text-plena-blue">Até 24h Úteis</p>
+                                    <p class="font-bold text-brand-primary">Até 24h Úteis</p>
                                 </div>
                             </div>
                         </div>
@@ -2721,21 +2360,21 @@
                     <!-- LEFT COLUMN: Property Data -->
                     <div class="space-y-5">
                         <div
-                            class="flex items-center gap-2 text-plena-blue font-bold uppercase text-xs tracking-wider mb-2">
+                            class="flex items-center gap-2 text-brand-primary font-bold uppercase text-xs tracking-wider mb-2">
                             <i data-lucide="home" class="w-4 h-4"></i> Dados do Imóvel
                         </div>
 
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Apelido do Imóvel</label>
                             <input type="text" id="p-name" required
-                                class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue focus:border-transparent outline-none transition-all"
+                                class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                 placeholder="Ex: Apto Centro 101">
                         </div>
 
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Endereço Completo</label>
                             <input type="text" id="p-address"
-                                class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue focus:border-transparent outline-none transition-all"
+                                class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                 placeholder="Rua, Número, Bairro">
                         </div>
 
@@ -2745,14 +2384,14 @@
                                 <div class="relative mt-1">
                                     <span class="absolute left-3 top-3 text-gray-400 text-sm">R$</span>
                                     <input type="number" step="0.01" id="p-value" required
-                                        class="w-full border border-gray-300 p-3 pl-10 rounded-xl text-sm focus:ring-2 focus:ring-plena-blue focus:border-transparent outline-none transition-all"
+                                        class="w-full border border-gray-300 p-3 pl-10 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                         placeholder="0,00">
                                 </div>
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Dia Vencimento</label>
                                 <input type="number" min="1" max="31" id="p-due" required
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-blue focus:border-transparent outline-none transition-all"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                                     placeholder="Dia 1-31">
                             </div>
                         </div>
@@ -2842,7 +2481,7 @@
                         Excluir Imóvel
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all">
                         Salvar Imóvel
                     </button>
                 </div>
@@ -2883,14 +2522,14 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
                     <input type="number" id="t-amount" step="0.01" min="0.01" required
-                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-purple outline-none"
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-brand-primary outline-none"
                         placeholder="0,00">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
                     <input type="text" id="t-desc" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-purple outline-none"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Ex: Aluguel ou Pagamento de conta">
                 </div>
 
@@ -2918,7 +2557,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
                     Salvar Movimentação
                 </button>
             </form>
@@ -3563,7 +3202,7 @@
                                     </button>
                                 </div>` :
                         `<div class="flex gap-2">
-                                    <button onclick="registerPayment('${p.id}', '${currentMonth}')" class="bg-plena-blue text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-dark transition-colors flex items-center gap-2 shadow-sm shadow-indigo-200">
+                                    <button onclick="registerPayment('${p.id}', '${currentMonth}')" class="bg-brand-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-dark transition-colors flex items-center gap-2 shadow-sm shadow-indigo-200">
                                         <i data-lucide="check" class="w-4 h-4"></i> RECEBER
                                     </button>
                                     <button onclick="sendReminder('${p.id}')" class="bg-orange-100 text-orange-700 px-3 py-2 rounded-lg text-xs font-bold hover:bg-orange-200 transition-colors flex items-center gap-2">
@@ -3601,7 +3240,7 @@
                         <p class="text-xs text-gray-500">${sanitizeHTML(p.tenant)}</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-bold text-plena-blue">${fmtMoney(p.value)}</p>
+                        <p class="text-sm font-bold text-brand-primary">${fmtMoney(p.value)}</p>
                         <p class="text-xs ${p.daysUntilDue <= 3 ? 'text-red-500' : 'text-gray-500'}">
                             Dia ${p.dueDay} (${p.daysUntilDue} dias)
                         </p>
@@ -3699,7 +3338,7 @@
             if (isDestructive) {
                 btnConfirm.className = "flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-200";
             } else {
-                btnConfirm.className = "flex-1 px-4 py-2 bg-plena-blue text-white rounded-xl font-bold hover:bg-brand-dark transition-colors shadow-lg shadow-blue-200";
+                btnConfirm.className = "flex-1 px-4 py-2 bg-brand-primary text-white rounded-xl font-bold hover:bg-brand-dark transition-colors shadow-lg shadow-blue-200";
             }
 
             currentConfirmCallback = onConfirm;
@@ -3902,7 +3541,7 @@
                         <i data-lucide="home" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Nenhum imóvel cadastrado</h3>
                         <p class="text-gray-500 mb-4">Comece cadastrando seu primeiro imóvel</p>
-                        <button onclick="openPropertyModal()" class="bg-plena-purple text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
+                        <button onclick="openPropertyModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
                             Cadastrar Primeiro Imóvel
                         </button>
                     </div>
@@ -3933,7 +3572,7 @@
         <div class="flex justify-between items-end border-t pt-4">
             <div>
                 <p class="text-[10px] uppercase text-gray-400 font-bold">Aluguel</p>
-                <p class="font-bold text-plena-blue">${fmtMoney(p.value || 0)}</p>
+                <p class="font-bold text-brand-primary">${fmtMoney(p.value || 0)}</p>
             </div>
             <div class="text-right">
                 <p class="text-[10px] uppercase text-gray-400 font-bold">Vencimento</p>
@@ -3990,7 +3629,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <div class="font-bold text-plena-blue">${fmtMoney(p.value || 0)}</div>
+                        <div class="font-bold text-brand-primary">${fmtMoney(p.value || 0)}</div>
                         <div class="text-xs text-gray-500">Dia ${p.dueDay || 5}</div>
                     </td>
                     <td class="px-6 py-4">
@@ -5011,6 +4650,94 @@
             document.body.classList.add('in-iframe');
         }
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

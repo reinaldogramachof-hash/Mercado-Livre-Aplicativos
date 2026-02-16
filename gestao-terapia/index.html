@@ -13,361 +13,22 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Gestão Terapia">
 
-    <link rel="manifest"
-        href='data:application/manifest+json,{"name":"Gestão Terapia","short_name":"Gestão Terapia","start_url":".","display":"standalone","background_color":"#F5F3FF","theme_color":"#7C3AED","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdDM0FFRCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyMWE5IDkgMCAxIDAgMC0xOCA5IDkgMCAwIDAgMCAxOHoiLz48cGF0aCBkPSJNOCAxMmg4TTEyIDE2VjguNU0xMiA4LjV2LTNNMTIgMy43VjIiLz48L3N2Zz4=","sizes":"192x192","type":"image/svg+xml"}]}'>
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            purple: '#7C3AED',
-                            indigo: '#6366F1',
-                            violet: '#8B5CF6',
-                            pink: '#EC4899',
-                            blue: '#3B82F6',
-                            teal: '#14B8A6',
-                            dark: '#4C1D95',
-                            lightpurple: '#A78BFA',
-                            amber: '#F59E0B',
-                            green: '#10B981',
-                            red: '#EF4444'
-                        },
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s infinite',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'breathe': 'breathe 4s ease-in-out infinite',
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
 
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-
-    <style>
-        :root {
-            --brand-purple: #7C3AED;
-            --brand-indigo: #6366F1;
-            --brand-violet: #8B5CF6;
-            --brand-pink: #EC4899;
-            --brand-blue: #3B82F6;
-            --brand-teal: #14B8A6;
-            --brand-dark: #4C1D95;
-            --brand-lightpurple: #A78BFA;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #F5F3FF;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes breathe {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        /* Modal Backdrop */
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* Sidebar Mobile */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-                height: 100vh;
-                width: 280px;
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                height: 100vh;
-            }
-
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Status Indicators */
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-
-        .status-agendado {
-            background-color: #3B82F6;
-        }
-
-        .status-confirmado {
-            background-color: #10B981;
-        }
-
-        .status-em-atendimento {
-            background-color: #F59E0B;
-        }
-
-        .status-concluido {
-            background-color: #8B5CF6;
-        }
-
-        .status-cancelado {
-            background-color: #EF4444;
-        }
-
-        .status-falta {
-            background-color: #6B7280;
-        }
-
-        .status-em-crise {
-            background-color: #DC2626;
-            animation: pulse 2s infinite;
-        }
-
-        .status-alerta {
-            background-color: #F59E0B;
-            animation: pulse 3s infinite;
-        }
-
-        /* Progress bar */
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            background: #e5e7eb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #7C3AED, #A78BFA);
-            transition: width 0.5s ease;
-        }
-
-        /* Emotion Indicators */
-        .emotion-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .emotion-positivo {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .emotion-neutro {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .emotion-negativo {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .emotion-alerta {
-            background-color: #FEF3C7;
-            color: #92400E;
-            border: 2px solid #F59E0B;
-        }
-
-        /* Crisis Alert */
-        .crisis-alert {
-            background: linear-gradient(135deg, #FEE2E2, #FECACA);
-            border: 2px solid #DC2626;
-            animation: breathe 2s ease-in-out infinite;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1a1;
-        }
-
-        /* Print Styles */
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-
-            body {
-                background: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                height: 100vh;
-                margin: 0;
-                padding: 0;
-            }
-
-            body>* {
-                display: none !important;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        /* Timeline */
-        .timeline-item {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #7C3AED;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px #7C3AED;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 23px;
-            width: 2px;
-            height: calc(100% + 5px);
-            background-color: #e5e7eb;
-        }
-
-        .timeline-item:last-child::after {
-            display: none;
-        }
-
-        /* Session Notes */
-        .session-note {
-            background: linear-gradient(135deg, #F5F3FF, #EDE9FE);
-            border-left: 4px solid #7C3AED;
-        }
-
-        .prescription-note {
-            background: linear-gradient(135deg, #F0F9FF, #E0F2FE);
-            border-left: 4px solid #0EA5E9;
-        }
-
-        /* Assessment Cards */
-        .assessment-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            border: 2px solid;
-            transition: all 0.3s ease;
-        }
-
-        .assessment-low {
-            border-color: #10B981;
-            background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
-        }
-
-        .assessment-medium {
-            border-color: #F59E0B;
-            background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
-        }
-
-        .assessment-high {
-            border-color: #EF4444;
-            background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
-        }
-    </style>
+    <!-- Premium Assets -->
+    <script src="assets/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="text-gray-800 antialiased">
@@ -410,7 +71,7 @@
     <!-- Sidebar -->
     <aside id="sidebar"
         class="sidebar bg-gradient-to-b from-brand-dark to-gray-900 text-white transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-purple to-plena-indigo">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#6D28D9]/50 to-transparent border-b border-white/5">
             <i data-lucide="brain" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO TERAPIA</h1>
@@ -513,7 +174,7 @@
 
             <div class="flex items-center gap-2 sm:gap-3">
                 <button onclick="openAppointmentModal()"
-                    class="relative flex items-center px-4 py-2.5 bg-gradient-to-r from-plena-purple to-plena-indigo text-white rounded-lg text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-purple-200 active:scale-95">
+                    class="relative flex items-center px-4 py-2.5 bg-gradient-to-r from-brand-primary to-brand-primary text-white rounded-lg text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-purple-200 active:scale-95">
                     <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                     <span class="hidden sm:inline">Nova Sessão</span>
                     <span class="sm:hidden">Nova</span>
@@ -657,12 +318,12 @@
                     <div class="flex items-center gap-3">
                         <div class="relative">
                             <i data-lucide="calendar"
-                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-plena-purple"></i>
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-primary"></i>
                             <input type="date" id="schedule-date" onchange="renderSchedule()"
-                                class="pl-10 pr-4 py-2.5 rounded-lg border-2 border-plena-purple/20 text-sm bg-plena-purple/5 font-bold text-brand-dark focus:border-plena-purple outline-none">
+                                class="pl-10 pr-4 py-2.5 rounded-lg border-2 border-brand-primary/20 text-sm bg-brand-primary/5 font-bold text-brand-dark focus:border-brand-primary outline-none">
                         </div>
                         <button onclick="openAppointmentModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Sessão
                         </button>
@@ -692,10 +353,10 @@
                                 class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="search-patients" onkeyup="renderPatients()"
                                 placeholder="Buscar paciente..."
-                                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-purple outline-none text-sm">
+                                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <button onclick="openPatientModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>
                             Novo Paciente
                         </button>
@@ -717,7 +378,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTreatmentModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Novo Tratamento
                         </button>
@@ -755,7 +416,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openSessionNotesModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Anotação
                         </button>
@@ -779,7 +440,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openAssessmentModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Avaliação
                         </button>
@@ -801,7 +462,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openPrescriptionModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Prescrição
                         </button>
@@ -839,7 +500,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openFinancialModal()"
-                            class="flex items-center gap-2 px-4 py-2.5 bg-plena-purple text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Nova Movimentação
                         </button>
@@ -929,7 +590,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <button onclick="generateReport('monthly')"
                         class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left">
-                        <i data-lucide="file-text" class="w-8 h-8 text-plena-purple mb-3"></i>
+                        <i data-lucide="file-text" class="w-8 h-8 text-brand-primary mb-3"></i>
                         <h3 class="font-bold text-gray-800 mb-2">Relatório Mensal</h3>
                         <p class="text-sm text-gray-600">Faturamento, despesas e resultados do mês</p>
                     </button>
@@ -1116,27 +777,27 @@
                     <!-- Clinic Data -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="home" class="w-5 h-5 mr-2 text-plena-purple"></i>
+                            <i data-lucide="home" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Dados do Consultório
                         </h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Nome do Consultório</label>
                                 <input type="text" id="clinic-name"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                                     placeholder="Ex: Espaço Terapêutico">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Responsável Técnico
                                     (CRP/CRM)</label>
                                 <input type="text" id="therapist-license"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                                     placeholder="CRP-XX/XXXXX ou CRM-XXXXX">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
                                 <input type="text" id="clinic-phone"
-                                    class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"
+                                    class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                                     placeholder="(00) 00000-0000">
                             </div>
                         </div>
@@ -1145,7 +806,7 @@
                     <!-- Session Settings -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i data-lucide="clock" class="w-5 h-5 mr-2 text-plena-purple"></i>
+                            <i data-lucide="clock" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Configurações de Sessão
                         </h3>
                         <div class="space-y-4">
@@ -1153,13 +814,13 @@
                                 <label class="text-xs font-bold text-gray-500 uppercase">Duração Padrão da Sessão
                                     (min)</label>
                                 <input type="number" id="session-duration" value="50"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Lembrete por WhatsApp (horas
                                     antes)</label>
                                 <input type="number" id="reminder-hours" value="24"
-                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                                    class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                             </div>
                         </div>
                     </div>
@@ -1235,7 +896,7 @@
             <section id="view-manual" class="view-section hide fade-in">
                 <!-- Manual Hero -->
                 <div
-                    class="bg-gradient-to-r from-plena-purple to-plena-indigo rounded-3xl p-8 text-white mb-8 relative overflow-hidden shadow-lg shadow-purple-900/20">
+                    class="bg-gradient-to-r from-brand-primary to-brand-primary rounded-3xl p-8 text-white mb-8 relative overflow-hidden shadow-lg shadow-purple-900/20">
                     <div class="relative z-10 grid md:grid-cols-2 gap-8 items-center">
                         <div>
                             <div
@@ -1343,7 +1004,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-purple group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     1</div>
                                 <h3 class="text-lg font-bold text-gray-800">Instalação e Acesso (PWA)</h3>
                             </div>
@@ -1386,7 +1047,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="install" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1400,7 +1061,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-purple group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     2</div>
                                 <h3 class="text-lg font-bold text-gray-800">Gestão de Pacientes</h3>
                             </div>
@@ -1431,7 +1092,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="patients" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1445,7 +1106,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-purple group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     3</div>
                                 <h3 class="text-lg font-bold text-gray-800">Agenda e Registro de Sessões</h3>
                             </div>
@@ -1482,7 +1143,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="agenda" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1540,7 +1201,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="emergency" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1554,7 +1215,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-purple group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     5</div>
                                 <h3 class="text-lg font-bold text-gray-800">Avaliações e Escalas</h3>
                             </div>
@@ -1591,7 +1252,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="assessments" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1636,7 +1297,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="prescriptions" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1650,7 +1311,7 @@
                             onclick="toggleManualSection(this)">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-plena-purple group-hover:text-white transition-colors">
+                                    class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-colors">
                                     7</div>
                                 <h3 class="text-lg font-bold text-gray-800">Sigilo e Backup</h3>
                             </div>
@@ -1686,7 +1347,7 @@
                             <label
                                 class="flex items-center gap-3 mt-6 p-4 bg-green-50 rounded-xl cursor-pointer hover:bg-green-100 transition-colors border border-green-100">
                                 <input type="checkbox"
-                                    class="w-5 h-5 rounded text-plena-purple focus:ring-plena-purple form-checkbox manual-check"
+                                    class="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary form-checkbox manual-check"
                                     data-section="backup" onchange="updateManualProgress()">
                                 <span class="font-bold text-green-800 text-sm">Marcar como lido</span>
                             </label>
@@ -1722,37 +1383,37 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Nome Completo *</label>
                         <input type="text" id="patient-name" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Nascimento</label>
                         <input type="date" id="patient-birth"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">WhatsApp *</label>
                         <input type="text" id="patient-phone" required
-                            class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="mask-phone w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
                         <input type="email" id="patient-email"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Profissão</label>
                         <input type="text" id="patient-occupation"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Queixa Principal</label>
                         <textarea id="patient-complaint" rows="2"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Histórico Psiquiátrico/Familiar</label>
                         <textarea id="patient-history" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Alerta/Risco</label>
@@ -1787,7 +1448,7 @@
                         Excluir Paciente
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Paciente
                     </button>
                 </div>
@@ -1811,14 +1472,14 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="appointment-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Tipo de Sessão *</label>
                         <select id="appointment-type" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione o tipo</option>
                             <option value="avaliacao">Avaliação Inicial</option>
                             <option value="acompanhamento">Acompanhamento</option>
@@ -1831,22 +1492,22 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data *</label>
                         <input type="date" id="appointment-date" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Hora *</label>
                         <input type="time" id="appointment-time" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Duração (min)</label>
                         <input type="number" id="appointment-duration-input" value="50"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                         <textarea id="appointment-notes" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="flex gap-2 pt-4">
@@ -1855,7 +1516,7 @@
                         Cancelar Sessão
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Sessão
                     </button>
                 </div>
@@ -1879,34 +1540,34 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="session-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data da Sessão *</label>
                         <input type="date" id="session-date" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Conteúdo da Sessão *</label>
                         <textarea id="session-content" rows="4" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Intervenções Realizadas</label>
                         <textarea id="session-interventions" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Plano para Próxima Sessão</label>
                         <textarea id="session-next-plan" rows="2"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Humor do Paciente</label>
                         <select id="session-mood"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Não avaliado</option>
                             <option value="positivo">Positivo</option>
                             <option value="estavel">Estável</option>
@@ -1918,7 +1579,7 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Adesão ao Tratamento</label>
                         <select id="session-adherence"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Não avaliado</option>
                             <option value="total">Total</option>
                             <option value="parcial">Parcial</option>
@@ -1933,7 +1594,7 @@
                         Excluir Registro
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Registro
                     </button>
                 </div>
@@ -1957,14 +1618,14 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="assessment-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Escala *</label>
                         <select id="assessment-scale" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione a escala</option>
                             <option value="phq9">PHQ-9 (Depressão)</option>
                             <option value="gad7">GAD-7 (Ansiedade)</option>
@@ -1979,7 +1640,7 @@
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
                         <textarea id="assessment-notes" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="pt-4">
@@ -1999,7 +1660,7 @@
                         Excluir Avaliação
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Avaliação
                     </button>
                 </div>
@@ -2023,14 +1684,14 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="prescription-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Medicamento *</label>
                         <select id="prescription-medication" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione o medicamento</option>
                             <option value="sertralina">Sertralina</option>
                             <option value="fluoxetina">Fluoxetina</option>
@@ -2053,18 +1714,18 @@
                     <div id="custom-medication-container" class="md:col-span-2 hidden">
                         <label class="text-xs font-bold text-gray-500 uppercase">Nome do Medicamento</label>
                         <input type="text" id="custom-medication"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Dosagem *</label>
                         <input type="text" id="prescription-dosage" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                             placeholder="Ex: 50mg">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Frequência *</label>
                         <select id="prescription-frequency" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione a frequência</option>
                             <option value="1x_dia">1x ao dia</option>
                             <option value="2x_dia">2x ao dia</option>
@@ -2079,17 +1740,17 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Início *</label>
                         <input type="date" id="prescription-start" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Término</label>
                         <input type="date" id="prescription-end"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Instruções</label>
                         <textarea id="prescription-instructions" rows="3"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                             placeholder="Ex: Tomar após o café da manhã"></textarea>
                     </div>
                 </div>
@@ -2099,7 +1760,7 @@
                         Excluir Prescrição
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Prescrição
                     </button>
                 </div>
@@ -2137,12 +1798,12 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
                     <input type="text" id="financial-amount" required
-                        class="mask-currency w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-purple outline-none">
+                        class="mask-currency w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-brand-primary outline-none">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
                     <input type="text" id="financial-description" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-purple outline-none">
+                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -2171,7 +1832,7 @@
                         Excluir
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Movimentação
                     </button>
                 </div>
@@ -2195,20 +1856,20 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Paciente *</label>
                         <select id="treatment-patient" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione um paciente</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Diagnóstico Principal</label>
                         <input type="text" id="treatment-diagnosis"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"
                             placeholder="Ex: Transtorno Depressivo Maior">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Abordagem Terapêutica *</label>
                         <select id="treatment-approach" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="">Selecione a abordagem</option>
                             <option value="tcc">TCC - Terapia Cognitivo-Comportamental</option>
                             <option value="psicanalise">Psicanálise</option>
@@ -2225,12 +1886,12 @@
                     <div class="md:col-span-2">
                         <label class="text-xs font-bold text-gray-500 uppercase">Objetivos Terapêuticos</label>
                         <textarea id="treatment-goals" rows="3" required
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none"></textarea>
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none"></textarea>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Frequência das Sessões</label>
                         <select id="treatment-frequency"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none bg-white">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none bg-white">
                             <option value="semanal">Semanal</option>
                             <option value="quinzenal">Quinzenal</option>
                             <option value="mensal">Mensal</option>
@@ -2240,7 +1901,7 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Meta de Sessões</label>
                         <input type="number" id="treatment-sessions-goal" value="12"
-                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-plena-purple outline-none">
+                            class="w-full border border-gray-300 p-3 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-brand-primary outline-none">
                     </div>
                 </div>
                 <div class="flex gap-2 pt-4">
@@ -2249,7 +1910,7 @@
                         Excluir Plano
                     </button>
                     <button type="submit"
-                        class="flex-1 bg-plena-purple text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
+                        class="flex-1 bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-200 hover:bg-brand-dark transition-all">
                         Salvar Plano
                     </button>
                 </div>
@@ -2738,7 +2399,7 @@
                         <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Nenhum paciente cadastrado</h3>
                         <p class="text-gray-500 mb-4">Comece cadastrando seu primeiro paciente</p>
-                        <button onclick="openPatientModal()" class="bg-plena-purple text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
+                        <button onclick="openPatientModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
                             Cadastrar Primeiro Paciente
                         </button>
                     </div>
@@ -2757,8 +2418,8 @@
                 <div class="bg-white p-6 rounded-2xl border ${riskClass} shadow-sm card-hover cursor-pointer" onclick="openPatientModal('${p.id}')">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-plena-purple/10 flex items-center justify-center">
-                                <i data-lucide="user" class="w-6 h-6 text-plena-purple"></i>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="user" class="w-6 h-6 text-brand-primary"></i>
                             </div>
                             <div class="flex-1">
                                 <h3 class="font-bold text-gray-800 truncate">${sanitizeHTML(p.name)}</h3>
@@ -2774,7 +2435,7 @@
                     <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between">
                         <span class="text-xs text-gray-500">Cadastrado em ${fmtDate(p.createdAt)}</span>
                         <button onclick="event.stopPropagation(); openAppointmentModal(null, '${p.id}')" 
-                                class="text-xs bg-plena-purple text-white px-3 py-1 rounded hover:bg-brand-dark">
+                                class="text-xs bg-brand-primary text-white px-3 py-1 rounded hover:bg-brand-dark">
                             Agendar
                         </button>
                     </div>
@@ -3009,7 +2670,7 @@
                         <i data-lucide="notebook" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Nenhum registro de sessão</h3>
                         <p class="text-gray-500 mb-4">Comece registrando sua primeira sessão</p>
-                        <button onclick="openSessionNotesModal()" class="bg-plena-purple text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
+                        <button onclick="openSessionNotesModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
                             Registrar Primeira Sessão
                         </button>
                     </div>
@@ -3061,7 +2722,7 @@
                         <span class="text-xs text-gray-500">Registrado em ${fmtDate(session.createdAt)}</span>
                         <div class="flex gap-2">
                             <button onclick="openSessionNotesModal('${session.id}')" 
-                                    class="text-xs bg-plena-purple text-white px-3 py-1 rounded hover:bg-brand-dark">
+                                    class="text-xs bg-brand-primary text-white px-3 py-1 rounded hover:bg-brand-dark">
                                 Editar
                             </button>
                         </div>
@@ -3377,7 +3038,7 @@
                         <i data-lucide="clipboard-check" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">Nenhuma avaliação</h3>
                         <p class="text-gray-500 mb-4">Comece aplicando sua primeira avaliação</p>
-                        <button onclick="openAssessmentModal()" class="bg-plena-purple text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
+                        <button onclick="openAssessmentModal()" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-dark">
                             Nova Avaliação
                         </button>
                     </div>
@@ -3466,7 +3127,7 @@
                     
                     <div class="flex gap-2">
                         <button onclick="openAssessmentModal('${assessment.id}')" 
-                                class="flex-1 text-center py-2 text-sm font-medium bg-white text-plena-purple rounded-lg hover:bg-purple-50">
+                                class="flex-1 text-center py-2 text-sm font-medium bg-white text-brand-primary rounded-lg hover:bg-purple-50">
                             Ver Detalhes
                         </button>
                     </div>
@@ -4081,6 +3742,94 @@
         // INICIALIZAR APLICATIVO
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function(e) {
+            if(e) e.preventDefault();
+            
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+            
+            if(!keyInput || !emailInput) return;
+            
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+            
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                
+                if(btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+                
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if(btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+                
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if(output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if(output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    </script>
+
 </body>
 
 </html>

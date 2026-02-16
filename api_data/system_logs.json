@@ -113,6 +113,36 @@
             "type": "info",
             "msg": "Sucesso: Chave 3D61-A1AB-92DE ativada no device Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/145.0.0.0 Safari\/537.36 Edg\/145.0.0.0",
             "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-16 14:07:01",
+            "type": "info",
+            "msg": "Geradas 1 chaves para Reinaldo Gramacho",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-16 14:08:01",
+            "type": "info",
+            "msg": "Sucesso: Chave B359-A5C1-C756 ativada no device dev_j8wserwmm",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-16 14:08:04",
+            "type": "info",
+            "msg": "Recibo confirmado para chave B359-A5C1-C756",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-16 14:16:53",
+            "type": "info",
+            "msg": "Sucesso: Chave B359-A5C1-C756 ativada no device dev_j8wserwmm",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-02-16 14:43:59",
+            "type": "info",
+            "msg": "Geradas 1 chaves para Reinaldo Gramacho",
+            "ip": "::1"
         }
     ]
 }

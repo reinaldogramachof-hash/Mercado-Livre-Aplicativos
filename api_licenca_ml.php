@@ -219,6 +219,11 @@ if ($action === 'activate') {
             exit;
         }
 
+        if ($db[$key]['status'] === 'blocked') {
+            echo json_encode(['status' => 'error', 'message' => 'Licença bloqueada ou cancelada.']);
+            exit;
+        }
+
         $db[$key]['status'] = 'active';
         $db[$key]['device_id'] = $device;
         $db[$key]['activated_at'] = date('Y-m-d H:i:s');
@@ -229,6 +234,26 @@ if ($action === 'activate') {
         echo json_encode(['status' => 'success', 'valid' => true, 'client' => $db[$key]['client']]);
     } else {
         addLog("Falha: Tentativa de ativação com chave inválida $key", 'error');
+        echo json_encode(['status' => 'error', 'message' => 'Licença não encontrada']);
+    }
+    exit;
+}
+
+if ($action === 'verify') {
+    $key = $jsonData['license_key'] ?? '';
+    // Device check is optional for simple status verification, but good for security auditing
+    $device = $jsonData['device_id'] ?? '';
+
+    $db = getDB($fileLicenses);
+
+    if (isset($db[$key])) {
+        // Return current status
+        echo json_encode([
+            'status' => 'success',
+            'license_status' => $db[$key]['status'], // active, pending, blocked
+            'client' => $db[$key]['client']
+        ]);
+    } else {
         echo json_encode(['status' => 'error', 'message' => 'Licença não encontrada']);
     }
     exit;
@@ -250,6 +275,29 @@ if ($action === 'confirm_receipt') {
     addLog("Recibo confirmado para chave $key", 'info');
     echo json_encode(['status' => 'success']);
     exit;
+}
+
+if ($action === 'backup') {
+    $secret = $_GET['secret'] ?? '';
+    if ($secret !== $ADMIN_SECRET) {
+        http_response_code(403);
+        die("Acesso Negado");
+    }
+
+    if (file_exists($fileLicenses)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/json');
+        header('Content-Disposition: attachment; filename="backup_licencas_' . date('Y-m-d_H-i') . '.json"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($fileLicenses));
+        readfile($fileLicenses);
+        exit;
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Banco de dados vazio ou inexistente']);
+        exit;
+    }
 }
 
 echo json_encode(['status' => 'error', 'message' => 'Ação não definida ou inválida (V11.2)']);
