@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gestao-motorista-v7-pwa';
+const CACHE_NAME = 'gestao-motorista-v8-pwa';
 const urlsToCache = [
   './',
   './index.html',

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -66,7 +66,7 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside id="sidebar"
@@ -136,9 +136,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -146,7 +149,7 @@
     <main class="main-content min-h-screen flex flex-col">
         <!-- Header -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -452,11 +455,11 @@
                         </div>
                         <div>
                             <input type="date" id="delivery-start" onchange="renderDeliveries()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div>
                             <input type="date" id="delivery-end" onchange="renderDeliveries()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div class="flex gap-2">
                             <select id="delivery-status" onchange="renderDeliveries()"
@@ -507,21 +510,21 @@
 
                 <!-- Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Entregas</p>
-                        <p id="total-deliveries" class="text-lg font-bold text-blue-700">0</p>
+                        <p id="total-deliveries" class="text-lg font-bold text-blue-700 dark:text-blue-400">0</p>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                    <div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Valor Total</p>
-                        <p id="total-delivery-value" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                        <p id="total-delivery-value" class="text-lg font-bold text-green-700 dark:text-green-400">R$ 0,00</p>
                     </div>
-                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                    <div class="bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-xl border border-yellow-100 dark:border-yellow-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">A Receber</p>
-                        <p id="pending-payments" class="text-lg font-bold text-yellow-700">R$ 0,00</p>
+                        <p id="pending-payments" class="text-lg font-bold text-yellow-700 dark:text-yellow-400">R$ 0,00</p>
                     </div>
                     <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Taxa de Sucesso</p>
-                        <p id="success-rate" class="text-lg font-bold text-purple-700">0%</p>
+                        <p id="success-rate" class="text-lg font-bold text-purple-700 dark:text-purple-400">0%</p>
                     </div>
                 </div>
             </section>
@@ -660,23 +663,23 @@
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">Modelo</label>
                                     <input type="text" id="vehicle-model"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1"
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                         placeholder="Ex: Honda CG 160">
                                 </div>
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">Placa</label>
                                     <input type="text" id="vehicle-plate"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="ABC-1234">
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="ABC-1234">
                                 </div>
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">Ano</label>
                                     <input type="number" id="vehicle-year"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="2023">
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="2023">
                                 </div>
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">Cor</label>
                                     <input type="text" id="vehicle-color"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="Vermelho">
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="Vermelho">
                                 </div>
                             </div>
                             <button onclick="saveVehicleInfo()"
@@ -751,11 +754,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
-                            <input type="date" id="report-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <input type="date" id="report-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
-                            <input type="date" id="report-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <input type="date" id="report-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
@@ -775,37 +778,37 @@
                 <div id="report-results" class="hidden space-y-6">
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                        <div class="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl text-center border border-green-100 dark:border-green-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="package-check" class="w-6 h-6 text-green-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Entregas</p>
-                            <p id="report-deliveries" class="text-2xl font-bold text-green-700 mt-2">0</p>
+                            <p id="report-deliveries" class="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">0</p>
                         </div>
-                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                        <div class="bg-blue-50 dark:bg-blue-900/10 p-6 rounded-xl text-center border border-blue-100 dark:border-blue-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="dollar-sign" class="w-6 h-6 text-blue-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Receita</p>
-                            <p id="report-income" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                            <p id="report-income" class="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                        <div class="bg-red-50 dark:bg-red-900/10 p-6 rounded-xl text-center border border-red-100 dark:border-red-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="fuel" class="w-6 h-6 text-red-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Despesas</p>
-                            <p id="report-expenses" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                            <p id="report-expenses" class="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-purple-50 p-6 rounded-xl text-center border border-purple-100">
+                        <div class="bg-purple-50 dark:bg-purple-900/10 p-6 rounded-xl text-center border border-purple-100 dark:border-purple-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="trending-up" class="w-6 h-6 text-purple-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Lucro</p>
-                            <p id="report-profit" class="text-2xl font-bold text-purple-700 mt-2">R$ 0,00</p>
+                            <p id="report-profit" class="text-2xl font-bold text-purple-700 dark:text-purple-400 mt-2">R$ 0,00</p>
                         </div>
                     </div>
 
@@ -854,16 +857,16 @@
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Seu Nome</label>
                                 <input type="text" id="rider-name-input"
-                                    class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="Seu nome completo">
+                                    class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="Seu nome completo">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                                <input type="tel" id="rider-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                <input type="tel" id="rider-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                     placeholder="(11) 99999-9999">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
-                                <input type="email" id="rider-email" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                <input type="email" id="rider-email" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                     placeholder="seu@email.com">
                             </div>
                             <button onclick="saveProfile()"
@@ -906,7 +909,7 @@
                                     <label class="text-xs font-bold text-gray-500 uppercase">Taxa Média por Entrega
                                         (R$)</label>
                                     <input type="number" id="default-fee"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="15.00"
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="15.00"
                                         step="0.01">
                                 </div>
                             </div>
@@ -1363,7 +1366,7 @@
 
     <!-- Delivery Modal -->
     <div id="deliveryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800" id="delivery-modal-title">Nova Entrega</h3>
                 <button onclick="closeModal('deliveryModal')" class="text-gray-400 hover:text-gray-600">
@@ -1395,18 +1398,18 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Nome</label>
-                            <input type="text" id="d-client-name" class="w-full border p-2 rounded-lg text-sm"
+                            <input type="text" id="d-client-name" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                 placeholder="Nome do cliente">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                            <input type="tel" id="d-client-phone" class="w-full border p-2 rounded-lg text-sm"
+                            <input type="tel" id="d-client-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                 placeholder="(11) 99999-9999">
                         </div>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
-                        <input type="text" id="d-client-address" class="w-full border p-2 rounded-lg text-sm"
+                        <input type="text" id="d-client-address" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                             placeholder="Rua, Número, Bairro">
                     </div>
                 </div>
@@ -1442,7 +1445,7 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                    <textarea id="d-notes" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                    <textarea id="d-notes" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Instruções especiais..."></textarea>
                 </div>
 
@@ -1475,7 +1478,7 @@
 
     <!-- Client Modal -->
     <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Novo Cliente</h3>
                 <button onclick="closeModal('clientModal')" class="text-gray-400 hover:text-gray-600">
@@ -1488,19 +1491,19 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Nome</label>
-                    <input type="text" id="c-name" required class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="c-name" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Nome completo">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                        <input type="tel" id="c-phone" class="w-full border p-2 rounded-lg text-sm"
+                        <input type="tel" id="c-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                             placeholder="(11) 99999-9999">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">WhatsApp</label>
-                        <select id="c-whatsapp" class="w-full border p-2 rounded-lg text-sm">
+                        <select id="c-whatsapp" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                             <option value="yes">Sim</option>
                             <option value="no">Não</option>
                         </select>
@@ -1509,19 +1512,19 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
-                    <textarea id="c-address" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                    <textarea id="c-address" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Endereço completo"></textarea>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Referência</label>
-                    <input type="text" id="c-reference" class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="c-reference" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Ponto de referência">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                    <textarea id="c-notes" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                    <textarea id="c-notes" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Informações adicionais"></textarea>
                 </div>
 
@@ -1535,7 +1538,7 @@
 
     <!-- Income Modal -->
     <div id="incomeModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Nova Receita</h3>
                 <button onclick="closeModal('incomeModal')" class="text-gray-400 hover:text-gray-600">
@@ -1546,7 +1549,7 @@
             <form onsubmit="submitIncome(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
-                    <input type="text" id="i-desc" required class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="i-desc" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Ex: Pagamento de entrega">
                 </div>
 
@@ -1559,7 +1562,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
-                        <select id="i-category" class="w-full border p-2 rounded-lg text-sm">
+                        <select id="i-category" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                             <option value="delivery">Entrega</option>
                             <option value="extra">Extra</option>
                             <option value="tip">Gorjeta</option>
@@ -1568,7 +1571,7 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
-                        <input type="date" id="i-date" required class="w-full border p-2 rounded-lg text-sm">
+                        <input type="date" id="i-date" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     </div>
                 </div>
 
@@ -1582,7 +1585,7 @@
 
     <!-- Expense Modal -->
     <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Nova Despesa</h3>
                 <button onclick="closeModal('expenseModal')" class="text-gray-400 hover:text-gray-600">
@@ -1593,7 +1596,7 @@
             <form onsubmit="submitExpense(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
-                    <input type="text" id="e-desc" required class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="e-desc" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Ex: Combustível">
                 </div>
 
@@ -1606,7 +1609,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
-                        <select id="e-category" class="w-full border p-2 rounded-lg text-sm">
+                        <select id="e-category" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                             <option value="fuel">Combustível</option>
                             <option value="maintenance">Manutenção</option>
                             <option value="food">Alimentação</option>
@@ -1615,13 +1618,13 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
-                        <input type="date" id="e-date" required class="w-full border p-2 rounded-lg text-sm">
+                        <input type="date" id="e-date" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     </div>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                    <input type="text" id="e-notes" class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="e-notes" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Detalhes adicionais">
                 </div>
 
@@ -1634,7 +1637,7 @@
 
     <!-- Maintenance Modal -->
     <div id="maintenanceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Nova Manutenção</h3>
                 <button onclick="closeModal('maintenanceModal')" class="text-gray-400 hover:text-gray-600">
@@ -1645,7 +1648,7 @@
             <form onsubmit="submitMaintenance(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Serviço</label>
-                    <input type="text" id="m-service" required class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="m-service" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Ex: Troca de óleo">
                 </div>
 
@@ -1653,28 +1656,28 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
                         <input type="number" id="m-cost" step="0.01" min="0" required
-                            class="w-full border p-2 rounded-lg text-sm" placeholder="0.00">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none" placeholder="0.00">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
-                        <input type="date" id="m-date" required class="w-full border p-2 rounded-lg text-sm">
+                        <input type="date" id="m-date" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     </div>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Oficina</label>
-                    <input type="text" id="m-workshop" class="w-full border p-2 rounded-lg text-sm"
+                    <input type="text" id="m-workshop" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Nome da oficina">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Próxima Manutenção</label>
-                    <input type="date" id="m-next" class="w-full border p-2 rounded-lg text-sm">
+                    <input type="date" id="m-next" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                    <textarea id="m-notes" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                    <textarea id="m-notes" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                         placeholder="Detalhes do serviço"></textarea>
                 </div>
 
@@ -1688,7 +1691,7 @@
 
     <!-- Delivery Details Modal -->
     <div id="deliveryDetailModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-gray-800">Detalhes da Entrega</h3>
@@ -1720,7 +1723,7 @@
 
     <!-- Quick Delivery Modal -->
     <div id="quickDeliveryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Entrega Rápida</h3>
 
             <div class="space-y-4">
@@ -3716,6 +3719,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

@@ -12,19 +12,7 @@
     <meta name="theme-color" content="#10B981">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/manifest+json,{
-        'name': 'Gestão Motoboy',
-        'short_name': 'Gestão Motoboy',
-        'start_url': '.',
-        'display': 'standalone',
-        'background_color': '#F3F4F6',
-        'theme_color': '#10B981',
-        'icons': [{
-            'src': 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/bike.svg',
-            'sizes': '192x192',
-            'type': 'image/svg+xml'
-        }]
-    }">
+    <link rel="manifest" href="./manifest.json">
 
     <!-- Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1292,6 +1280,56 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (MERCADO LIVRE / COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div
+                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <i data-lucide="check-circle-2"
+                                    class="h-6 w-6 text-emerald-600 dark:text-emerald-400"></i>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o
+                                        recebimento do produto digital.
+                                    </p>
+                                    <div
+                                        class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre,
+                                        testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra
+                                            Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
     <script>
         window.activateLicense = async function (e) {
@@ -1319,6 +1357,7 @@
                 localStorage.setItem('plena_license', key);
                 localStorage.setItem('ml_license_email', email);
                 localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
 
                 if (btn) {
                     const originalText = btn.innerText;
@@ -1357,8 +1396,21 @@
                         localStorage.setItem('plena_license', key);
                         localStorage.setItem('ml_license_email', email);
                         localStorage.removeItem('ml_master_mode');
-                        alert('Licença Ativada com Sucesso!');
-                        window.location.reload();
+
+                        // AO INVES DE RECARREGAR, VAMOS MOSTRAR O MODAL DE RECIBO SE PRECISAR
+                        if (!localStorage.getItem('ml_receipt_confirmed')) {
+                            const loginView = document.getElementById('view-login');
+                            if (loginView) {
+                                loginView.classList.add('hide');
+                                loginView.style.display = 'none';
+                            }
+                            const receiptModal = document.getElementById('welcome-receipt-modal');
+                            if (receiptModal) receiptModal.classList.remove('hidden');
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        } else {
+                            alert('Licença Ativada com Sucesso!');
+                            window.location.reload();
+                        }
                     } else {
                         const msg = data.message || 'Chave inválida ou erro no servidor.';
                         if (output) {
@@ -1374,6 +1426,50 @@
                 } finally {
                     btn.innerText = originalText;
                     btn.disabled = false;
+                }
+            }
+        };
+
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Obrigado.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo automaticamente.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento";
                 }
             }
         };

@@ -1,4 +1,5 @@
 tailwind.config = {
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
@@ -13,6 +14,14 @@ tailwind.config = {
                     yellow: '#F59E0B',
                     orange: '#f59e0b',
                     gray: '#64748B'
+                },
+                
+                orcamentos: {
+                    light: '#F8FAFC',
+                    soft: '#E2E8F0',
+                    dark: '#0B0F19',
+                    card: '#151B2C',
+                    border: 'rgba(255, 255, 255, 0.08)'
                 },
                 success: '#10B981',
                 danger: '#EF4444'

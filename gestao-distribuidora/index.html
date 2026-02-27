@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -66,7 +66,7 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar Padronizada -->
     <aside id="sidebar"
@@ -148,9 +148,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -158,7 +161,7 @@
     <main class="main-content min-h-screen flex flex-col">
         <!-- Header Padronizado -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -734,15 +737,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
-                            <input type="date" id="sales-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <input type="date" id="sales-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
-                            <input type="date" id="sales-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <input type="date" id="sales-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Cliente</label>
-                            <select id="sales-customer" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <select id="sales-customer" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                                 <option value="all">Todos clientes</option>
                                 <!-- Customers will be loaded -->
                             </select>
@@ -952,26 +955,26 @@
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Nome da Distribuidora</label>
                                 <input type="text" id="company-name-input"
-                                    class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                     placeholder="Distribuidora de Bebidas">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">CNPJ</label>
                                     <input type="text" id="company-cnpj"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1"
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                         placeholder="00.000.000/0000-00">
                                 </div>
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
                                     <input type="tel" id="company-phone"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="(11) 99999-9999">
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="(11) 99999-9999">
                                 </div>
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
                                 <input type="text" id="company-address"
-                                    class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="Rua, Número, Bairro">
+                                    class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="Rua, Número, Bairro">
                             </div>
                             <button onclick="saveCompanySettings()"
                                 class="w-full bg-brand-primary text-white py-3 rounded-lg font-bold hover:bg-brand-dark">
@@ -1001,13 +1004,13 @@
                                     <label class="text-xs font-bold text-gray-500 uppercase">Estoque Mínimo
                                         Padrão</label>
                                     <input type="number" id="default-min-stock"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="10" min="1">
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="10" min="1">
                                 </div>
                                 <div>
                                     <label class="text-xs font-bold text-gray-500 uppercase">Meta de Vendas Diária
                                         (R$)</label>
                                     <input type="number" id="daily-sales-goal"
-                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="2000.00"
+                                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="2000.00"
                                         step="0.01">
                                 </div>
                             </div>
@@ -1567,13 +1570,13 @@
                     <h3 class="font-bold text-gray-800 mb-6">Dados da Empresa</h3>
                     <div class="space-y-4">
                         <div><label class="text-xs font-bold text-gray-500 uppercase">Nome Empresa</label><input
-                                type="text" id="company-name-input" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                type="text" id="company-name-input" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                 placeholder="Distribuidora de Bebidas"></div>
                         <div><label class="text-xs font-bold text-gray-500 uppercase">CNPJ</label><input type="text"
-                                id="company-cnpj" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                id="company-cnpj" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                 placeholder="00.000.000/0000-00"></div>
                         <div><label class="text-xs font-bold text-gray-500 uppercase">Tel/WhatsApp</label><input
-                                type="text" id="company-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                type="text" id="company-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                 placeholder="(11) 99999-9999"></div><button onclick="saveSettings()"
                             class="w-full bg-brand-primary text-white py-3 rounded-lg font-bold hover:bg-brand-dark">Salvar</button>
                     </div>
@@ -2081,7 +2084,7 @@
 
     <!-- MODAIS (mantidos do original com melhorias) --> <!-- Product Modal -->
     <div id="productModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800" id="product-modal-title">Novo Produto</h3>
                 <button onclick="closeModal('productModal')" class="text-gray-400 hover:text-gray-600">
@@ -2095,12 +2098,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Código do Produto</label>
-                        <input type="text" id="p-code" required class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="text" id="p-code" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="Ex: CER001">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Nome do Produto</label>
-                        <input type="text" id="p-name" required class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="text" id="p-name" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="Ex: Cerveja Heineken 350ml">
                     </div>
                 </div>
@@ -2108,7 +2111,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
-                        <select id="p-category" required class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <select id="p-category" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                             <option value="">Selecione...</option>
                             <option value="cerveja">Cerveja</option>
                             <option value="refri">Refrigerante</option>
@@ -2121,7 +2124,7 @@
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Fornecedor</label>
-                        <select id="p-supplier" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <select id="p-supplier" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                             <option value="">Sem fornecedor</option>
                             <!-- Suppliers will be loaded -->
                         </select>
@@ -2132,12 +2135,12 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Custo (R$)</label>
                         <input type="number" id="p-cost" step="0.01" min="0" required
-                            class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="0.00">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="0.00">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Venda (R$)</label>
                         <input type="number" id="p-price" step="0.01" min="0" required
-                            class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="0.00">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="0.00">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Margem de Lucro</label>
@@ -2150,16 +2153,16 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Estoque Atual</label>
                         <input type="number" id="p-stock" min="0" required
-                            class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="0">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="0">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Estoque Mínimo</label>
                         <input type="number" id="p-min-stock" min="0" required
-                            class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="10">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="10">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Unidade de Medida</label>
-                        <select id="p-unit" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <select id="p-unit" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                             <option value="unidade">Unidade</option>
                             <option value="caixa">Caixa</option>
                             <option value="litro">Litro</option>
@@ -2172,7 +2175,7 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
-                    <textarea id="p-description" rows="3" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <textarea id="p-description" rows="3" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Descrição detalhada do produto..."></textarea>
                 </div>
 
@@ -2192,13 +2195,13 @@
 
     <!-- Quick Sale Modal -->
     <div id="quickSaleModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Venda Rápida</h3>
 
             <div class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Produto</label>
-                    <select id="quick-product" class="w-full border p-2 rounded-lg text-sm mt-1">
+                    <select id="quick-product" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         <option value="">Selecione um produto</option>
                         <!-- Products will be loaded -->
                     </select>
@@ -2207,7 +2210,7 @@
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Quantidade</label>
                     <input type="number" id="quick-quantity" min="1" value="1"
-                        class="w-full border p-2 rounded-lg text-sm mt-1">
+                        class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -2226,7 +2229,7 @@
 
     <!-- Stock Entry Modal -->
     <div id="stockEntryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Entrada no Estoque</h3>
                 <button onclick="closeModal('stockEntryModal')" class="text-gray-400 hover:text-gray-600">
@@ -2237,7 +2240,7 @@
             <form onsubmit="submitStockEntry(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Produto</label>
-                    <select id="se-product" required class="w-full border p-2 rounded-lg text-sm mt-1">
+                    <select id="se-product" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         <option value="">Selecione um produto</option>
                         <!-- Products will be loaded -->
                     </select>
@@ -2247,18 +2250,18 @@
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Quantidade</label>
                         <input type="number" id="se-quantity" min="1" required
-                            class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="0">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="0">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Custo (R$)</label>
                         <input type="number" id="se-cost" step="0.01" min="0"
-                            class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="0.00">
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none" placeholder="0.00">
                     </div>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Fornecedor</label>
-                    <select id="se-supplier" class="w-full border p-2 rounded-lg text-sm mt-1">
+                    <select id="se-supplier" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         <option value="">Sem fornecedor</option>
                         <!-- Suppliers will be loaded -->
                     </select>
@@ -2266,13 +2269,13 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Número da Nota Fiscal</label>
-                    <input type="text" id="se-invoice" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <input type="text" id="se-invoice" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="000000000">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                    <textarea id="se-notes" rows="2" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <textarea id="se-notes" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Observações sobre esta entrada..."></textarea>
                 </div>
 
@@ -2286,7 +2289,7 @@
 
     <!-- Stock Take Modal -->
     <div id="stockTakeModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Contagem de Estoque</h3>
                 <button onclick="closeModal('stockTakeModal')" class="text-gray-400 hover:text-gray-600">
@@ -2313,7 +2316,7 @@
 
     <!-- Client Modal -->
     <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800" id="client-modal-title">Novo Cliente</h3>
                 <button onclick="closeModal('clientModal')" class="text-gray-400 hover:text-gray-600">
@@ -2327,40 +2330,40 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Tipo</label>
-                        <select id="c-type" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <select id="c-type" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                             <option value="PF">Pessoa Física</option>
                             <option value="PJ">Pessoa Jurídica</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase" id="c-doc-label">CPF</label>
-                        <input type="text" id="c-document" class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="text" id="c-document" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="000.000.000-00">
                     </div>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Nome/Razão Social</label>
-                    <input type="text" id="c-name" required class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <input type="text" id="c-name" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Nome completo ou Razão Social">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                        <input type="tel" id="c-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="tel" id="c-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="(11) 99999-9999">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
-                        <input type="email" id="c-email" class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="email" id="c-email" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="cliente@email.com">
                     </div>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
-                    <textarea id="c-address" rows="2" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <textarea id="c-address" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Endereço completo"></textarea>
                 </div>
 
@@ -2374,7 +2377,7 @@
 
     <!-- Supplier Modal -->
     <div id="supplierModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800" id="supplier-modal-title">Novo Fornecedor</h3>
                 <button onclick="closeModal('supplierModal')" class="text-gray-400 hover:text-gray-600">
@@ -2387,38 +2390,38 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Nome/Razão Social</label>
-                    <input type="text" id="s-name" required class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <input type="text" id="s-name" required class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Nome do fornecedor">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">CNPJ</label>
-                        <input type="text" id="s-cnpj" class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="text" id="s-cnpj" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="00.000.000/0000-00">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                        <input type="tel" id="s-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                        <input type="tel" id="s-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="(11) 99999-9999">
                     </div>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
-                    <input type="email" id="s-email" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <input type="email" id="s-email" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="fornecedor@email.com">
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
-                    <textarea id="s-address" rows="2" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <textarea id="s-address" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Endereço completo"></textarea>
                 </div>
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Categoria Principal</label>
-                    <select id="s-category" class="w-full border p-2 rounded-lg text-sm mt-1">
+                    <select id="s-category" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         <option value="">Todas</option>
                         <option value="cerveja">Cerveja</option>
                         <option value="refri">Refrigerante</option>
@@ -2431,7 +2434,7 @@
 
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
-                    <textarea id="s-notes" rows="2" class="w-full border p-2 rounded-lg text-sm mt-1"
+                    <textarea id="s-notes" rows="2" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                         placeholder="Informações adicionais..."></textarea>
                 </div>
 
@@ -2445,7 +2448,7 @@
 
     <!-- Receipt Modal -->
     <div id="receiptModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Comprovante de Venda</h3>
                 <button onclick="closeModal('receiptModal')" class="text-gray-400 hover:text-gray-600">
@@ -2495,7 +2498,7 @@
 
     <!-- Sales Report Modal -->
     <div id="salesReportModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Relatório de Vendas</h3>
                 <button onclick="closeModal('salesReportModal')" class="text-gray-400 hover:text-gray-600">
@@ -2508,15 +2511,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
-                        <input type="date" id="report-sales-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <input type="date" id="report-sales-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
-                        <input type="date" id="report-sales-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <input type="date" id="report-sales-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Forma de Pagamento</label>
-                        <select id="report-payment" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        <select id="report-payment" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                             <option value="all">Todas</option>
                             <option value="dinheiro">Dinheiro</option>
                             <option value="pix">PIX</option>
@@ -2589,7 +2592,7 @@
     <!-- Inventory Report Modal -->
     <div id="inventoryReportModal"
         class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Relatório de Estoque</h3>
                 <button onclick="closeModal('inventoryReportModal')" class="text-gray-400 hover:text-gray-600">
@@ -2606,7 +2609,7 @@
     <!-- Financial Report Modal -->
     <div id="financialReportModal"
         class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Relatório Financeiro</h3>
                 <button onclick="closeModal('financialReportModal')" class="text-gray-400 hover:text-gray-600">
@@ -3413,6 +3416,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

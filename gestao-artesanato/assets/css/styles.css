@@ -14,6 +14,15 @@
     --card-bg: #FFFFFF;
 }
 
+.dark {
+    --body-bg: #0B0F19;
+    --text-main: #F8FAFC;
+    --card-bg: #151B2C;
+    --glass-bg: rgba(21, 27, 44, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+
 /* ── Body with Radial Gradient ── */
 body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -291,6 +300,15 @@ body {
 }
 
 /* ── Print Styles ── */
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
 @media print {
     .sidebar, #overlay, button, .header-buttons, .no-print, header,
     #month-selector, .view-section.hide {

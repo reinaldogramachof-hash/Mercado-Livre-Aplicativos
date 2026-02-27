@@ -14,6 +14,13 @@
     }
 
     async function checkStatus() {
+        // --- MASTER PASSWORD BYPASS ---
+        if (localStorage.getItem('ml_master_mode') === 'true') {
+            unlockSystem();
+            console.log('🔓 Master Mode Enabled - API Check Skipped');
+            return;
+        }
+
         const key = getLocalLicense();
 
         if (!key) {
@@ -29,6 +36,7 @@
             // Verificar na API
             const res = await fetch(API_URL + '?action=verify', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ license_key: key })
             });
             const data = await res.json();
@@ -40,9 +48,18 @@
                     blockSystem("Licença Bloqueada", "Entre em contato com o suporte.");
                 } else {
                     // ATIVO ou TRIAL VÁLIDO
-                    unlockSystem();
-                    if (data.is_trial && data.expiration_date) {
-                        showTrialBanner(data.expiration_date);
+                    if (!localStorage.getItem('ml_receipt_confirmed') && localStorage.getItem('ml_master_mode') !== 'true') {
+                        hideApp();
+                        const login = document.getElementById('view-login');
+                        if (login) login.style.display = 'none';
+
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                    } else {
+                        unlockSystem();
+                        if (data.is_trial && data.expiration_date) {
+                            showTrialBanner(data.expiration_date);
+                        }
                     }
                 }
             } else {

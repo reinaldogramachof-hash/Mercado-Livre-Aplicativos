@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -8,6 +8,7 @@
     <title>Gestão Nutri | Sistema Premium</title>
 
     <!-- PWA Meta Tags Padronizadas -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#10B981">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,34 +23,46 @@
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Premium Assets -->
     <script src="assets/js/tailwind_config.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body class="text-slate-800 antialiased">
+<body class="bg-[var(--body-bg)] text-[var(--text-main)] antialiased transition-colors duration-300">
 
     <!-- TELA DE ATIVAÇÃO (Airlock) -->
-    <section id="view-login" class="hide fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+    <section id="view-login"
+        class="hide fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl mb-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+                <div
+                    class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl mb-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z" />
+                        <path d="M15 3v4a2 2 0 0 0 2 2h4" />
+                        <path d="m9 15 2 2 4-4" />
+                    </svg>
                 </div>
-                <h1 class="text-3xl font-black text-white tracking-tight">Gestão <span class="text-emerald-400">Nutri</span></h1>
+                <h1 class="text-3xl font-black text-white tracking-tight">Gestão <span
+                        class="text-emerald-400">Nutri</span></h1>
                 <p class="text-slate-400 text-sm mt-2">Sistema Premium</p>
             </div>
-            <form id="activation-form" onsubmit="activateLicense(event)" class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl space-y-5">
+            <form id="activation-form" onsubmit="activateLicense(event)"
+                class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl space-y-5">
                 <h3 class="text-lg font-bold text-white text-center mb-2">Ativação de Licença</h3>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Chave de Licença</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Chave de
+                        Licença</label>
                     <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX-XXXX"
                         class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-center tracking-widest font-mono text-lg uppercase">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">E-mail do Comprador</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">E-mail do
+                        Comprador</label>
                     <input type="email" id="license-email" required placeholder="seu@email.com"
                         class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all">
                 </div>
@@ -65,12 +78,13 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar Padronizada -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#15803D]/50 to-transparent border-b border-white/5">
+        class="sidebar glass-dark text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
+        <div
+            class="h-20 flex items-center px-6 bg-gradient-to-r from-[#15803D]/50 to-transparent border-b border-white/5">
             <i data-lucide="apple" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO NUTRI</h1>
@@ -135,9 +149,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -145,12 +162,12 @@
     <main class="main-content min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
         <!-- Header -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100">
+            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100 dark:border-white/5">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-lg text-slate-400 dark:text-slate-300">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <h2 id="page-title" class="text-xl font-bold text-slate-800 hidden sm:block">Agenda</h2>
+                <h2 id="page-title" class="text-xl font-bold text-slate-800 dark:text-white hidden sm:block">Agenda</h2>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3">
@@ -249,9 +266,9 @@
                 </div>
 
                 <!-- Próximos Agendamentos -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-slate-800">Próximas Consultas</h3>
+                        <h3 class="font-bold text-slate-800 dark:text-white">Próximas Consultas</h3>
                         <button onclick="router('dashboard')"
                             class="text-sm text-brand-primary hover:text-brand-dark font-medium">
                             Ver agenda completa →
@@ -267,8 +284,8 @@
             <section id="view-team" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Especialistas</h2>
-                        <p class="text-sm text-slate-600">Gerencie sua equipe de nutrição</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Especialistas</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gerencie sua equipe de nutrição</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTeamModal()"
@@ -287,8 +304,8 @@
             <section id="view-services" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Planos Alimentares</h2>
-                        <p class="text-sm text-slate-600">Gerencie seus planos e protocolos</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Planos Alimentares</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gerencie seus planos e protocolos</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openServiceModal()"
@@ -307,8 +324,8 @@
             <section id="view-finance" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Financeiro</h2>
-                        <p class="text-sm text-slate-600">Controle de caixa e comissões</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Financeiro</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Controle de caixa e comissões</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openExpenseModal()"
@@ -321,17 +338,17 @@
 
                 <!-- Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                    <div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
                         <p class="text-xs text-slate-500 uppercase font-bold mb-1">Faturamento (Mês)</p>
-                        <p id="fin-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                        <p id="fin-income" class="text-lg font-bold text-green-700 dark:text-green-400">R$ 0,00</p>
                     </div>
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                    <div class="bg-red-50 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-500/20">
                         <p class="text-xs text-slate-500 uppercase font-bold mb-1">Despesas (Mês)</p>
-                        <p id="fin-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                        <p id="fin-expense" class="text-lg font-bold text-red-700 dark:text-red-400">R$ 0,00</p>
                     </div>
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
                         <p class="text-xs text-slate-500 uppercase font-bold mb-1">Comissões (Mês)</p>
-                        <p id="fin-commission" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                        <p id="fin-commission" class="text-lg font-bold text-blue-700 dark:text-blue-400">R$ 0,00</p>
                     </div>
                 </div>
 
@@ -345,11 +362,11 @@
                         </div>
                         <div>
                             <input type="date" id="filter-start" onchange="renderFinance()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div>
                             <input type="date" id="filter-end" onchange="renderFinance()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div class="flex gap-2">
                             <select id="filter-type" onchange="renderFinance()"
@@ -368,7 +385,7 @@
                     <!-- Transactions Table -->
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Data</th>
                                     <th class="px-6 py-3">Descrição</th>
@@ -379,7 +396,7 @@
                                     <th class="px-6 py-3 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="trans-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                            <tbody id="trans-list" class="divide-y divide-slate-100 dark:divide-white/5 text-sm dark:text-slate-300"></tbody>
                         </table>
                     </div>
                     <div id="empty-msg" class="hidden p-8 text-center text-slate-400">
@@ -393,8 +410,8 @@
             <section id="view-clients" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Pacientes</h2>
-                        <p class="text-sm text-slate-600">Gerencie sua base de pacientes</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Pacientes</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gerencie sua base de pacientes</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openClientModal()"
@@ -409,7 +426,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Nome</th>
                                     <th class="px-6 py-3">Telefone</th>
@@ -418,7 +435,7 @@
                                     <th class="px-6 py-3 text-center">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="clients-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                            <tbody id="clients-list" class="divide-y divide-slate-100 dark:divide-white/5 text-sm dark:text-slate-300"></tbody>
                         </table>
                     </div>
                 </div>
@@ -428,20 +445,20 @@
             <section id="view-reports" class="view-section hide fade-in">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-800 mb-2">Relatórios</h2>
-                    <p class="text-sm text-slate-600">Análise completa do seu negócio</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Análise completa do seu negócio</p>
                 </div>
 
                 <!-- Report Filters -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                    <h3 class="font-bold text-slate-800 mb-4">Configurar Período</h3>
+                    <h3 class="font-bold text-slate-800 dark:text-white mb-4">Configurar Período</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Inicial</label>
-                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Final</label>
-                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
@@ -461,35 +478,35 @@
                 <div id="report-result" class="hide space-y-6">
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                        <div class="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl text-center border border-green-100 dark:border-green-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Faturamento</p>
-                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                        <div class="bg-red-50 dark:bg-red-900/10 p-6 rounded-xl text-center border border-red-100 dark:border-red-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Despesas</p>
-                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                        <div class="bg-blue-50 dark:bg-blue-900/10 p-6 rounded-xl text-center border border-blue-100 dark:border-blue-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Comissões</p>
-                            <p id="rep-com" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                            <p id="rep-com" class="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">R$ 0,00</p>
                         </div>
                     </div>
 
                     <!-- Top Services -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-slate-800 mb-4">Planos Mais Solicitados</h3>
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4">Planos Mais Solicitados</h3>
                         <div id="top-services" class="space-y-4"></div>
                     </div>
 
@@ -507,34 +524,34 @@
             <section id="view-settings" class="view-section hide fade-in">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-800 mb-2">Configurações</h2>
-                    <p class="text-sm text-slate-600">Personalize o sistema</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Personalize o sistema</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Business Info -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-slate-800 mb-4">Informações do Consultório</h3>
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4">Informações do Consultório</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Nome do Consultório</label>
-                                <input type="text" id="biz-name" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Nome do Consultório</label>
+                                <input type="text" id="biz-name" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="Ex: Nutri Saúde">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Nome do Responsável</label>
-                                <input type="text" id="biz-owner" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Nome do Responsável</label>
+                                <input type="text" id="biz-owner" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="Ex: João Silva">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">CPF / CNPJ do
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">CPF / CNPJ do
                                     Responsável</label>
-                                <input type="text" id="biz-doc" class="w-full border p-2 rounded-lg text-sm"
+                                <input type="text" id="biz-doc" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="000.000.000-00">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Horário de
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Horário de
                                     Atendimento</label>
-                                <input type="text" id="biz-hours" class="w-full border p-2 rounded-lg text-sm"
+                                <input type="text" id="biz-hours" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="Ex: 09:00 às 19:00">
                             </div>
                             <button onclick="saveBusinessInfo()"
@@ -546,7 +563,7 @@
 
                     <!-- Data Management -->
                     <div class="space-y-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                             <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                                 <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
@@ -559,7 +576,7 @@
 
                             <div class="space-y-3">
                                 <button onclick="downloadBackup()"
-                                    class="w-full border border-slate-300 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
+                                    class="w-full border border-slate-300 dark:border-white/10 dark:bg-slate-900/50 dark:text-white py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
                                     <i data-lucide="download" class="w-4 h-4"></i>
                                     Baixar Backup Completo (.json)
                                 </button>
@@ -577,7 +594,7 @@
                         </div>
 
                         <!-- Danger Zone -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                             <h3 class="font-bold text-slate-800 mb-4 flex items-center text-red-600">
                                 <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
                                 Zona de Perigo
@@ -621,7 +638,8 @@
                                 Iniciantes</span>
                             <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
                                 Desktop</span>
-                            <span class="px-3 py-1 bg-blue-100 text-brand-primary rounded-full text-xs font-bold">⚡ Rápido
+                            <span class="px-3 py-1 bg-blue-100 text-brand-primary rounded-full text-xs font-bold">⚡
+                                Rápido
                                 e Prático</span>
                         </div>
                     </div>
@@ -865,7 +883,8 @@
                                     <p class="text-sm text-gray-700">Seu sistema já está pronto para uso!</p>
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
                                         <div class="bg-white p-3 rounded-lg border text-center">
-                                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
+                                            <i data-lucide="calendar"
+                                                class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                             <p class="text-xs font-bold">Ver Agenda</p>
                                         </div>
                                         <div class="bg-white p-3 rounded-lg border text-center">
@@ -873,7 +892,8 @@
                                             <p class="text-xs font-bold">Equipe</p>
                                         </div>
                                         <div class="bg-white p-3 rounded-lg border text-center">
-                                            <i data-lucide="utensils" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
+                                            <i data-lucide="utensils"
+                                                class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
                                             <p class="text-xs font-bold">Planos</p>
                                         </div>
                                     </div>
@@ -948,7 +968,7 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
                                 <h5 class="font-bold text-blue-700 mb-2 flex items-center text-sm">
                                     <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
                                     Dicas para Agenda
@@ -969,7 +989,7 @@
                                 </ul>
                             </div>
 
-                            <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                            <div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
                                 <h5 class="font-bold text-green-700 mb-2 flex items-center text-sm">
                                     <i data-lucide="dollar-sign" class="w-4 h-4 mr-2"></i>
                                     Como Funciona a Comissão
@@ -1489,10 +1509,10 @@
 
     <!-- Appointment Modal -->
     <div id="apptModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Nova Consulta</h3>
-                <button onclick="closeModal('apptModal')" class="text-slate-400 hover:text-slate-600">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Nova Consulta</h3>
+                <button onclick="closeModal('apptModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                     <i data-lucide="x"></i>
                 </button>
             </div>
@@ -1501,7 +1521,7 @@
                 <input type="hidden" id="ap-id">
 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Paciente</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Paciente</label>
                     <input type="text" id="ap-client" required
                         class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Nome do paciente">
@@ -1509,19 +1529,19 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data</label>
                         <input type="date" id="ap-date" required
                             class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase">Horário</label>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Horário</label>
                         <input type="time" id="ap-time" required
                             class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Serviço</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Serviço</label>
                     <select id="ap-service" required class="w-full border p-2 rounded-lg text-sm bg-white outline-none"
                         onchange="updateApptValue()">
                         <!-- Options will be populated by JavaScript -->
@@ -1529,7 +1549,7 @@
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Nutricionista</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Nutricionista</label>
                     <select id="ap-pro" required class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
                         <!-- Options will be populated by JavaScript -->
                     </select>
@@ -1550,9 +1570,9 @@
 
     <!-- Team Modal -->
     <div id="teamModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Nutricionista</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Novo Nutricionista</h3>
                 <button onclick="closeModal('teamModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1573,9 +1593,9 @@
 
     <!-- Service Modal -->
     <div id="serviceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Plano Alimentar</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Novo Plano Alimentar</h3>
                 <button onclick="closeModal('serviceModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1593,9 +1613,9 @@
 
     <!-- Expense Modal -->
     <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Lançar Movimentação</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Lançar Movimentação</h3>
                 <button onclick="closeModal('expenseModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1603,28 +1623,28 @@
             <form onsubmit="submitExpense(event)" class="space-y-4">
                 <input type="hidden" id="exp-id">
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Tipo</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tipo</label>
                     <select id="exp-type" class="w-full border p-2 rounded-lg mt-1 font-bold">
                         <option value="expense">🔴 Saída (Despesa)</option>
                         <option value="income">🟢 Entrada (Receita)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Descrição</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Descrição</label>
                     <input type="text" id="exp-desc" required placeholder="Ex: Conta de Luz / Venda de Produto"
                         class="w-full border p-2 rounded-lg mt-1">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Valor (R$)</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Valor (R$)</label>
                     <input type="number" id="exp-amount" required step="0.01" min="0" placeholder="0,00"
                         class="w-full border p-2 rounded-lg mt-1 text-lg font-bold">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data</label>
                     <input type="date" id="exp-date" required class="w-full border p-2 rounded-lg mt-1">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Categoria</label>
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Categoria</label>
                     <select id="exp-category" class="w-full border p-2 rounded-lg mt-1">
                         <option value="consulta">Consulta / Venda</option>
                         <option value="fornecedor">Fornecedor</option>
@@ -1645,9 +1665,9 @@
 
     <!-- Client Modal -->
     <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Paciente</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Novo Paciente</h3>
                 <button onclick="closeModal('clientModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1668,7 +1688,7 @@
 
     <!-- Closing Modal -->
     <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
             <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Fechamento do Dia</h3>
                 <p id="close-date" class="text-sm text-white/90 mt-1">Hoje</p>
@@ -1698,7 +1718,7 @@
                         <span id="close-com" class="font-bold text-blue-700">R$ 0,00</span>
                     </div>
                     <div class="flex justify-between items-center pt-4 border-t">
-                        <span class="font-bold text-slate-800">Saldo Final</span>
+                        <span class="font-bold text-slate-800 dark:text-white">Saldo Final</span>
                         <span id="close-bal" class="font-bold text-2xl text-slate-900">R$ 0,00</span>
                     </div>
                 </div>
@@ -1728,7 +1748,7 @@
 
     <!-- Commission Modal -->
     <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
             <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Pagamento de Comissão</h3>
                 <p class="text-xs text-white/80 mt-1">Confirmação de Pagamento</p>
@@ -2151,7 +2171,7 @@
                                 Pagar Comissão
                             </button>
                             <button onclick="editTeam('${pro.id}')" 
-                                    class="text-slate-400 hover:text-slate-600">
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -2184,13 +2204,13 @@
                 return `
                     <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center card-hover">
                         <div>
-                            <span class="font-bold text-slate-800">${service.name}</span>
+                            <span class="font-bold text-slate-800 dark:text-white">${service.name}</span>
                             <p class="text-xs text-slate-500 mt-1">${serviceCount} realizados</p>
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="font-bold text-brand-primary">${fmtMoney(service.price)}</span>
                             <button onclick="editService('${service.id}')" 
-                                    class="text-slate-400 hover:text-slate-600">
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -2257,7 +2277,7 @@
                 const isIncome = t.type === 'income';
 
                 return `
-                    <tr class="hover:bg-slate-50 group border-b border-slate-100">
+                    <tr class="hover:bg-slate-50 group border-b border-slate-100 dark:border-white/5">
                         <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${fmtDate(t.date)}</td>
                         <td class="px-6 py-4">
                             <div class="font-medium text-slate-800">${sanitizeHTML(t.description)}</div>
@@ -3256,7 +3276,7 @@
         });
 
         // SECURITY CHECK
-// === MANUAL INTERATIVO PADRONIZADO ===
+        // === MANUAL INTERATIVO PADRONIZADO ===
         function scrollToSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (section) {
@@ -3382,18 +3402,18 @@
 
     <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
     <script>
-        window.activateLicense = async function(e) {
-            if(e) e.preventDefault();
-            
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
             const keyInput = document.getElementById('license-key');
             const emailInput = document.getElementById('license-email');
             const btn = document.getElementById('btn-activate');
-            
-            if(!keyInput || !emailInput) return;
-            
+
+            if (!keyInput || !emailInput) return;
+
             const key = keyInput.value.trim();
             const email = emailInput.value.trim();
-            
+
             if (!key || !email) {
                 alert('Por favor, preencha todos os campos.');
                 return;
@@ -3401,20 +3421,20 @@
 
             // 🔑 SENHA MESTRE PARA TESTES
             const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
-            
+
             if (MASTER_KEYS.includes(key.toUpperCase())) {
                 console.log('🔓 Master Access Granted');
                 localStorage.setItem('plena_license', key);
                 localStorage.setItem('ml_license_email', email);
                 localStorage.setItem('ml_master_mode', 'true');
-                
-                if(btn) {
+
+                if (btn) {
                     const originalText = btn.innerText;
                     btn.innerText = '🔓 Acesso Liberado...';
                     btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
                     btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
                 }
-                
+
                 setTimeout(() => {
                     alert('Modo de Teste/Admin Ativado com Sucesso!');
                     window.location.reload();
@@ -3423,24 +3443,24 @@
             }
 
             // 🌍 FLUXO PADRÃO (API)
-            if(btn) {
+            if (btn) {
                 const originalText = btn.innerText;
                 btn.innerText = 'Verificando...';
                 btn.disabled = true;
-                
+
                 try {
                     // Tenta endpoint relativo padrão dos sistemas Gestão
                     const output = document.getElementById('activation-error');
-                    if(output) output.classList.add('hidden');
+                    if (output) output.classList.add('hidden');
 
                     const response = await fetch('../api_licenca_ml.php?action=activate', {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ license_key: key, email: email })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.status === 'success') {
                         localStorage.setItem('plena_license', key);
                         localStorage.setItem('ml_license_email', email);
@@ -3449,7 +3469,7 @@
                         window.location.reload();
                     } else {
                         const msg = data.message || 'Chave inválida ou erro no servidor.';
-                        if(output) {
+                        if (output) {
                             output.textContent = msg;
                             output.classList.remove('hidden');
                         } else {
@@ -3467,6 +3487,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

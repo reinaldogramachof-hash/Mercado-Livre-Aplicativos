@@ -2,6 +2,7 @@
 <html lang="pt-BR" class="dark">
 
 <head>
+    <script src="lock.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão Beleza | Sistema Premium</title>
@@ -28,6 +29,67 @@
 
 
 <body class="bg-surface text-white overflow-x-hidden antialiased selection:bg-brand selection:text-white">
+
+
+    <!-- ======== AIRLOCK / VIEW-LOGIN ======== -->
+    <div id="view-login" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950
+         bg-[radial-gradient(at_20%_50%,_rgba(225,29,72,0.15)_0px,_transparent_60%)] p-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl text-center">
+                <!-- Icon -->
+                <div class="w-20 h-20 bg-gradient-to-br from-rose-500 to-rose-700 rounded-3xl
+                     flex items-center justify-center mx-auto mb-6 shadow-lg shadow-rose-500/30">
+                    <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
+                </div>
+                <!-- Title -->
+                <h1 class="text-2xl font-black text-white mb-1">Gestão Beleza</h1>
+                <p class="text-sm text-slate-400 mb-8">Insira sua licença para ativar o sistema</p>
+                <!-- Form -->
+                <form id="activation-form" onsubmit="activateLicense(event)" class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">E-mail</label>
+                        <input type="email" id="license-email" required placeholder="seu@email.com"
+                            class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
+                                   focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none transition-all
+                                   placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Chave de Licença</label>
+                        <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX"
+                            class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
+                                   font-mono focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none
+                                   transition-all placeholder-slate-600 uppercase tracking-widest">
+                    </div>
+                    <p id="activation-error" class="hidden text-xs text-red-400 font-medium text-center pb-1"></p>
+                    <button type="submit" id="btn-activate"
+                        class="w-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400
+                               text-white py-4 rounded-xl font-black text-sm shadow-lg shadow-rose-500/30
+                               transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="key" class="w-5 h-5"></i>
+                        Desbloquear Acesso
+                    </button>
+                </form>
+                <!-- Footer -->
+                <p class="text-[10px] text-slate-600 mt-6">Airlock Security • Gestão Beleza PRO • Standalone</p>
+            </div>
+        </div>
+    </div>
+    <!-- ======== /AIRLOCK ======== -->
+
+    <!-- Script de controle do Airlock -->
+    <script>
+        (function checkAirlockOnLoad() {
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email');
+            const loginView = document.getElementById('view-login');
+            if (!loginView) return;
+            if (key && email) {
+                loginView.style.display = 'none';
+            } else {
+                loginView.style.display = 'flex';
+            }
+        })();
+    </script>
 
     <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-[100] space-y-3 flex flex-col items-end pointer-events-none">
@@ -113,6 +175,11 @@
                 <!-- Sistema -->
                 <div class="pt-4 mt-2 border-t border-white/5">
                     <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600">Sistema</p>
+
+                    <button onclick="router('about')" id="nav-about" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        <span>Informacoes Legais</span>
+                    </button>
                     <button onclick="router('settings')" id="nav-settings"
                         class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
                         <i data-lucide="settings" class="w-5 h-5"></i>
@@ -175,14 +242,14 @@
                     <!-- Stats Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div
-                            class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover relative overflow-hidden group">
+                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
                             <div
                                 class="absolute right-0 top-0 w-24 h-24 bg-rose-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
                             </div>
                             <div class="relative z-10">
-                                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Agendamentos
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Agendamentos
                                 </p>
-                                <h3 id="dash-appt-today" class="text-3xl font-black text-white">0</h3>
+                                <h3 id="dash-appt-today" class="text-3xl font-black text-white dark:text-white">0</h3>
                                 <div
                                     class="mt-3 flex items-center text-xs font-bold text-rose-400 bg-rose-500/10 w-max px-2.5 py-1 rounded-lg">
                                     <i data-lucide="calendar" class="w-3 h-3 mr-1.5"></i>
@@ -192,14 +259,14 @@
                         </div>
 
                         <div
-                            class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover relative overflow-hidden group">
+                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
                             <div
                                 class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
                             </div>
                             <div class="relative z-10">
-                                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Faturamento
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Faturamento
                                 </p>
-                                <h3 id="dash-rev-today" class="text-3xl font-black text-white">R$ 0,00</h3>
+                                <h3 id="dash-rev-today" class="text-3xl font-black text-white dark:text-white">R$ 0,00</h3>
                                 <div
                                     class="mt-3 flex items-center text-xs font-bold text-emerald-400 bg-emerald-500/10 w-max px-2.5 py-1 rounded-lg">
                                     <i data-lucide="trending-up" class="w-3 h-3 mr-1.5"></i>
@@ -209,13 +276,13 @@
                         </div>
 
                         <div
-                            class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover relative overflow-hidden group">
+                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
                             <div
                                 class="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
                             </div>
                             <div class="relative z-10">
-                                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Comissões</p>
-                                <h3 id="dash-comm-pending" class="text-3xl font-black text-white">R$ 0,00</h3>
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Comissões</p>
+                                <h3 id="dash-comm-pending" class="text-3xl font-black text-white dark:text-white">R$ 0,00</h3>
                                 <div
                                     class="mt-3 flex items-center text-xs font-bold text-blue-400 bg-blue-500/10 w-max px-2.5 py-1 rounded-lg">
                                     <i data-lucide="hourglass" class="w-3 h-3 mr-1.5"></i>
@@ -273,7 +340,7 @@
                         <div
                             class="bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden flex flex-col">
                             <div class="p-6 border-b border-white/5">
-                                <h3 class="font-bold text-lg text-white">Tendência Semanal</h3>
+                                <h3 class="font-bold text-lg text-white dark:text-white">Tendência Semanal</h3>
                                 <p class="text-xs text-slate-500">Receita nos últimos 7 dias</p>
                             </div>
                             <div class="flex-1 p-6 flex items-end justify-center pb-2 relative min-h-[200px]"
@@ -287,7 +354,7 @@
                 <!-- 2. TEAM MANAGEMENT -->
                 <section id="view-team" class="view-section hide fade-in max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-lg text-white">Profissionais</h3>
+                        <h3 class="font-bold text-lg text-white dark:text-white">Profissionais</h3>
                         <button onclick="openTeamModal()"
                             class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
@@ -299,7 +366,7 @@
                 <!-- 3. SERVICES MANAGEMENT -->
                 <section id="view-services" class="view-section hide fade-in max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-lg text-white">Serviços</h3>
+                        <h3 class="font-bold text-lg text-white dark:text-white">Serviços</h3>
                         <button onclick="openServiceModal()"
                             class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
@@ -326,17 +393,17 @@
 
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 shadow-sm card-hover">
+                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Receita do Mês
                             </p>
                             <h3 id="fin-income" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
                         </div>
-                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 shadow-sm card-hover">
+                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Despesas do Mês
                             </p>
                             <h3 id="fin-expense" class="text-2xl font-black text-rose-400 mt-2">R$ 0,00</h3>
                         </div>
-                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 shadow-sm card-hover">
+                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Comissões do Mês
                             </p>
                             <h3 id="fin-commission" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</h3>
@@ -593,6 +660,17 @@
                 </section>
 
                 <!-- 10. MANUAL DE USO -->
+                
+                    <!-- Tutorial Progress (Padrao Ouro) -->
+                    <div class="mb-6 bg-white/5 p-4 rounded-2xl border border-white/8">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Progresso do Manual</span>
+                            <span id="tutorial-progress-text" class="text-xs font-bold text-rose-400">0 / 5 seções</span>
+                        </div>
+                        <div class="progress-bar w-full">
+                            <div class="progress-fill" id="tutorial-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
                 <section id="view-instructions" class="view-section hide fade-in max-w-4xl mx-auto">
                     <div class="mb-8">
                         <h3 class="font-bold text-2xl text-white flex items-center gap-3 mb-2">
@@ -739,6 +817,39 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                <!-- View: Informacoes Legais -->
+                <section id="view-about" class="view-section hide fade-in max-w-4xl mx-auto">
+                    <div class="mb-8 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-rose-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-white dark:text-white">Informacoes Legais</h2>
+                            <p class="text-sm text-slate-500">Termos de uso, privacidade e suporte.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="glass p-6 rounded-2xl border border-white/5">
+                            <h3 class="font-bold text-white dark:text-white mb-3 flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-5 h-5 text-rose-400"></i> Termos de Uso
+                            </h3>
+                            <p class="text-sm text-slate-400 dark:text-slate-400">Este software e licenciado de forma vitalicia e pessoal. A redistribuicao, revenda ou transferencia nao autorizada e proibida. Todos os dados sao armazenados localmente no seu dispositivo.</p>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-white/5">
+                            <h3 class="font-bold text-white dark:text-white mb-3 flex items-center gap-2">
+                                <i data-lucide="lock" class="w-5 h-5 text-rose-400"></i> Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-slate-400 dark:text-slate-400">Privacy by Design. Seus dados nunca saem do seu dispositivo. Faca backups regulares em Configuracoes.</p>
+                        </div>
+                    </div>
+                    <div class="glass p-5 rounded-2xl border border-rose-500/20">
+                        <p class="text-sm font-bold text-rose-300 dark:text-rose-300 flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            Seus dados sao 100% locais — Faca backup regularmente!
+                        </p>
                     </div>
                 </section>
 
@@ -1167,18 +1278,18 @@
 
     <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
     <script>
-        window.activateLicense = async function(e) {
-            if(e) e.preventDefault();
-            
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
             const keyInput = document.getElementById('license-key');
             const emailInput = document.getElementById('license-email');
             const btn = document.getElementById('btn-activate');
-            
-            if(!keyInput || !emailInput) return;
-            
+
+            if (!keyInput || !emailInput) return;
+
             const key = keyInput.value.trim();
             const email = emailInput.value.trim();
-            
+
             if (!key || !email) {
                 alert('Por favor, preencha todos os campos.');
                 return;
@@ -1186,20 +1297,20 @@
 
             // 🔑 SENHA MESTRE PARA TESTES
             const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
-            
+
             if (MASTER_KEYS.includes(key.toUpperCase())) {
                 console.log('🔓 Master Access Granted');
                 localStorage.setItem('plena_license', key);
                 localStorage.setItem('ml_license_email', email);
                 localStorage.setItem('ml_master_mode', 'true');
-                
-                if(btn) {
+
+                if (btn) {
                     const originalText = btn.innerText;
                     btn.innerText = '🔓 Acesso Liberado...';
                     btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
                     btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
                 }
-                
+
                 setTimeout(() => {
                     alert('Modo de Teste/Admin Ativado com Sucesso!');
                     window.location.reload();
@@ -1208,24 +1319,24 @@
             }
 
             // 🌍 FLUXO PADRÃO (API)
-            if(btn) {
+            if (btn) {
                 const originalText = btn.innerText;
                 btn.innerText = 'Verificando...';
                 btn.disabled = true;
-                
+
                 try {
                     // Tenta endpoint relativo padrão dos sistemas Gestão
                     const output = document.getElementById('activation-error');
-                    if(output) output.classList.add('hidden');
+                    if (output) output.classList.add('hidden');
 
                     const response = await fetch('../api_licenca_ml.php?action=activate', {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ license_key: key, email: email })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.status === 'success') {
                         localStorage.setItem('plena_license', key);
                         localStorage.setItem('ml_license_email', email);
@@ -1234,7 +1345,7 @@
                         window.location.reload();
                     } else {
                         const msg = data.message || 'Chave inválida ou erro no servidor.';
-                        if(output) {
+                        if (output) {
                             output.textContent = msg;
                             output.classList.remove('hidden');
                         } else {
@@ -1250,8 +1361,227 @@
                 }
             }
         };
+    
+        function markSectionComplete(el) {
+            var sec = el.closest('[data-tutorial-section]');
+            if (sec) {
+                sec.classList.toggle('tutorial-section-done');
+                el.textContent = sec.classList.contains('tutorial-section-done') ? 'Concluido' : 'Marcar concluido';
+            }
+            var done = document.querySelectorAll('.tutorial-section-done').length;
+            var total = document.querySelectorAll('[data-tutorial-section]').length || 5;
+            var bar = document.getElementById('tutorial-progress');
+            var txt = document.getElementById('tutorial-progress-text');
+            if (bar) bar.style.width = Math.round((done/total)*100) + '%';
+            if (txt) txt.textContent = done + ' / ' + total + ' secoes';
+        }
+        function scrollToSection(id) {
+            var el = document.getElementById(id);
+            if (el) el.scrollIntoView({behavior: 'smooth'});
+        }
+    </script>
+
+
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
     </script>
 
 </body>
-
-</html>

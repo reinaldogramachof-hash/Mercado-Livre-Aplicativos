@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -66,7 +66,7 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside id="sidebar"
@@ -124,9 +124,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -134,7 +137,7 @@
     <main class="main-content min-h-screen flex flex-col">
         <!-- Header -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -343,11 +346,11 @@
                         </div>
                         <div>
                             <input type="date" id="filter-start" onchange="renderQuotes()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div>
                             <input type="date" id="filter-end" onchange="renderQuotes()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div class="flex gap-2">
                             <select id="filter-status" onchange="renderQuotes()"
@@ -390,17 +393,17 @@
 
                 <!-- Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Orçamentos</p>
-                        <p id="quotes-total" class="text-lg font-bold text-blue-700">0</p>
+                        <p id="quotes-total" class="text-lg font-bold text-blue-700 dark:text-blue-400">0</p>
                     </div>
-                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                    <div class="bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-xl border border-yellow-100 dark:border-yellow-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Valor Pendente</p>
-                        <p id="quotes-pending-value" class="text-lg font-bold text-yellow-700">R$ 0,00</p>
+                        <p id="quotes-pending-value" class="text-lg font-bold text-yellow-700 dark:text-yellow-400">R$ 0,00</p>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                    <div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Valor Aprovado</p>
-                        <p id="quotes-approved-value" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                        <p id="quotes-approved-value" class="text-lg font-bold text-green-700 dark:text-green-400">R$ 0,00</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Taxa de Conversão</p>
@@ -440,11 +443,11 @@
                         </div>
                         <div>
                             <input type="date" id="trans-start" onchange="renderTransactions()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div>
                             <input type="date" id="trans-end" onchange="renderTransactions()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         </div>
                         <div class="flex gap-2">
                             <select id="trans-type" onchange="renderTransactions()"
@@ -484,17 +487,17 @@
 
                 <!-- Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                    <div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Entradas</p>
-                        <p id="trans-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                        <p id="trans-income" class="text-lg font-bold text-green-700 dark:text-green-400">R$ 0,00</p>
                     </div>
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                    <div class="bg-red-50 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Saídas</p>
-                        <p id="trans-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                        <p id="trans-expense" class="text-lg font-bold text-red-700 dark:text-red-400">R$ 0,00</p>
                     </div>
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <div class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
                         <p class="text-xs text-gray-500 uppercase font-bold mb-1">Saldo Filtrado</p>
-                        <p id="trans-balance" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                        <p id="trans-balance" class="text-lg font-bold text-blue-700 dark:text-blue-400">R$ 0,00</p>
                     </div>
                 </div>
             </section>
@@ -512,11 +515,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
-                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <input type="date" id="rep-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
-                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <input type="date" id="rep-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
@@ -536,29 +539,29 @@
                 <div id="report-result" class="hide space-y-6">
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                        <div class="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl text-center border border-green-100 dark:border-green-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Entradas</p>
-                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                        <div class="bg-red-50 dark:bg-red-900/10 p-6 rounded-xl text-center border border-red-100 dark:border-red-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Saídas</p>
-                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                        <div class="bg-blue-50 dark:bg-blue-900/10 p-6 rounded-xl text-center border border-blue-100 dark:border-blue-500/20">
                             <div
                                 class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="wallet" class="w-6 h-6 text-blue-600"></i>
                             </div>
                             <p class="text-xs text-gray-500 uppercase font-bold">Saldo</p>
-                            <p id="rep-bal" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                            <p id="rep-bal" class="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">R$ 0,00</p>
                         </div>
                     </div>
 
@@ -600,17 +603,17 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Nome da Empresa</label>
-                                <input type="text" id="company-name" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                <input type="text" id="company-name" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                     placeholder="Seu nome ou nome da empresa">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Telefone para Contato</label>
-                                <input type="tel" id="company-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                <input type="tel" id="company-phone" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                     placeholder="(11) 99999-9999">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
-                                <input type="email" id="company-email" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                <input type="email" id="company-email" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                     placeholder="seu@email.com">
                             </div>
                             <button onclick="saveCompanySettings()"
@@ -1212,7 +1215,7 @@
 
     <!-- NEW QUOTE MODAL -->
     <div id="quoteModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800" id="modal-title">Novo Orçamento</h3>
                 <button onclick="closeModal('quoteModal')" class="text-gray-400 hover:text-gray-600">
@@ -1268,7 +1271,7 @@
 
     <!-- TRANSACTION MODAL -->
     <div id="transModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Nova Transação</h3>
                 <button onclick="closeModal('transModal')" class="text-gray-400 hover:text-gray-600">
@@ -1439,7 +1442,7 @@
 
     <!-- REPORT MODAL -->
     <div id="reportModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-6">Gerar Relatório Rápido</h3>
             <form onsubmit="generateQuickReport(event)" class="space-y-4">
                 <div>
@@ -1454,11 +1457,11 @@
                 <div id="custom-dates" class="hidden space-y-3">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
-                        <input type="date" id="quick-start" class="w-full border p-2 rounded-lg text-sm">
+                        <input type="date" id="quick-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
-                        <input type="date" id="quick-end" class="w-full border p-2 rounded-lg text-sm">
+                        <input type="date" id="quick-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     </div>
                 </div>
 
@@ -3057,6 +3060,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

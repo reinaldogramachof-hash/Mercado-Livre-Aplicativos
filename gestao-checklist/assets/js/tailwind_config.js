@@ -13,6 +13,13 @@ tailwind.config = {
                     lightgreen: '#34D399',
                     light: '#F0FDF4',
                     soft: '#DCFCE7'
+                },
+                checklist: {
+                    light: '#F8FAFC',
+                    soft: '#E2E8F0',
+                    dark: '#0B0F19',
+                    card: '#151B2C',
+                    border: 'rgba(255, 255, 255, 0.08)'
                 }
             },
             fontFamily: {

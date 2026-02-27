@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body class="text-slate-800 antialiased">
+<body class="bg-[var(--body-bg)] text-[var(--text-main)] antialiased transition-colors duration-300">
 
     <!-- TELA DE ATIVAÇÃO (Airlock) -->
     <section id="view-login" class="hide fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
@@ -68,11 +68,11 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar Padronizada -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
+        class="sidebar glass-dark text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
         <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#B91C1C]/50 to-transparent border-b border-white/5">
             <i data-lucide="pizza" class="w-8 h-8 mr-3"></i>
             <div>
@@ -144,9 +144,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -154,12 +157,12 @@
     <main class="main-content min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
         <!-- Header -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100">
+            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100 dark:border-white/5">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-lg text-slate-400 dark:text-slate-300">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <h2 id="page-title" class="text-xl font-bold text-slate-800 hidden sm:block">Dashboard</h2>
+                <h2 id="page-title" class="text-xl font-bold text-slate-800 dark:text-white hidden sm:block">Dashboard</h2>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3">
@@ -185,7 +188,7 @@
                 </div>
 
                 <!-- Notification Bell -->
-                <button onclick="showNotifications()" class="relative p-2 hover:bg-slate-100 rounded-lg">
+                <button onclick="showNotifications()" class="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
                     <i data-lucide="bell" class="w-6 h-6 text-slate-600"></i>
                     <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
@@ -268,9 +271,9 @@
                     </div>
 
                     <!-- Mais Vendidos -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-slate-800">Pizzas Mais Vendidas</h3>
+                            <h3 class="font-bold text-slate-800 dark:text-white">Pizzas Mais Vendidas</h3>
                             <button onclick="router('menu')"
                                 class="text-sm text-brand-primary hover:text-brand-dark font-medium">
                                 Ver cardápio →
@@ -285,7 +288,7 @@
                 <!-- Mesas e Cozinha -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                     <!-- Status das Mesas -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                             <i data-lucide="table" class="mr-2 w-5 h-5"></i> Status das Mesas
                         </h3>
@@ -295,7 +298,7 @@
                     </div>
 
                     <!-- Alerta de Estoque -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                             <i data-lucide="alert-triangle" class="mr-2 w-5 h-5 text-red-600"></i> Alerta de Estoque
                         </h3>
@@ -310,8 +313,8 @@
             <section id="view-orders" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Pedidos</h2>
-                        <p class="text-sm text-slate-600">Gerencie todos os pedidos de pizzas</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Pedidos</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gerencie todos os pedidos de pizzas</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="relative">
@@ -352,7 +355,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Nº Pedido</th>
                                     <th class="px-6 py-3">Cliente</th>
@@ -364,7 +367,7 @@
                                     <th class="px-6 py-3 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="orders-list" class="divide-y divide-slate-100 text-sm">
+                            <tbody id="orders-list" class="divide-y divide-slate-100 dark:divide-white/5 text-sm dark:text-slate-300">
                                 <!-- Dynamic content -->
                             </tbody>
                         </table>
@@ -376,8 +379,8 @@
             <section id="view-menu" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Cardápio de Pizzas</h2>
-                        <p class="text-sm text-slate-600">Gerencie seu cardápio completo</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Cardápio de Pizzas</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gerencie seu cardápio completo</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="relative">
@@ -421,8 +424,8 @@
             <section id="view-tables" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Mesas</h2>
-                        <p class="text-sm text-slate-600">Controle de mesas e ambientes</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Mesas</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Controle de mesas e ambientes</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTableModal()"
@@ -440,7 +443,7 @@
 
                 <!-- Floor Plan Legend -->
                 <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-slate-800 mb-4">Legenda do Ambiente</h3>
+                    <h3 class="font-bold text-slate-800 dark:text-white mb-4">Legenda do Ambiente</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="flex items-center gap-2">
                             <div class="w-4 h-4 rounded-full bg-green-500"></div>
@@ -466,8 +469,8 @@
             <section id="view-kitchen" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Forno/Cozinha</h2>
-                        <p class="text-sm text-slate-600">Controle de produção de pizzas</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Forno/Cozinha</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Controle de produção de pizzas</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="printKitchenOrders()"
@@ -481,7 +484,7 @@
                 <!-- Kitchen Orders -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Pendentes -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                             <i data-lucide="clock" class="mr-2 w-5 h-5 text-orange-600"></i>
                             Pendentes <span id="pending-count" class="ml-2 bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full">0</span>
@@ -492,7 +495,7 @@
                     </div>
 
                     <!-- Assando -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                             <i data-lucide="flame" class="mr-2 w-5 h-5 text-red-600"></i>
                             Assando <span id="preparing-count" class="ml-2 bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full">0</span>
@@ -503,7 +506,7 @@
                     </div>
 
                     <!-- Prontos -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                             <i data-lucide="check-circle" class="mr-2 w-5 h-5 text-green-600"></i>
                             Prontos <span id="ready-count" class="ml-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">0</span>
@@ -519,8 +522,8 @@
             <section id="view-inventory" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Estoque</h2>
-                        <p class="text-sm text-slate-600">Controle de ingredientes e produtos</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Estoque</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Controle de ingredientes e produtos</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openInventoryModal()"
@@ -533,17 +536,17 @@
 
                 <!-- Inventory Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                    <div class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
                         <p class="text-xs text-slate-500 uppercase font-bold mb-1">Itens em Estoque</p>
-                        <p id="inv-in-stock" class="text-lg font-bold text-green-700">0</p>
+                        <p id="inv-in-stock" class="text-lg font-bold text-green-700 dark:text-green-400">0</p>
                     </div>
-                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                    <div class="bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-xl border border-yellow-100 dark:border-yellow-500/20">
                         <p class="text-xs text-slate-500 uppercase font-bold mb-1">Reposição Necessária</p>
-                        <p id="inv-low-stock" class="text-lg font-bold text-yellow-700">0</p>
+                        <p id="inv-low-stock" class="text-lg font-bold text-yellow-700 dark:text-yellow-400">0</p>
                     </div>
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                    <div class="bg-red-50 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-500/20">
                         <p class="text-xs text-slate-500 uppercase font-bold mb-1">Esgotados</p>
-                        <p id="inv-out-stock" class="text-lg font-bold text-red-700">0</p>
+                        <p id="inv-out-stock" class="text-lg font-bold text-red-700 dark:text-red-400">0</p>
                     </div>
                 </div>
 
@@ -551,7 +554,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Item</th>
                                     <th class="px-6 py-3">Categoria</th>
@@ -562,7 +565,7 @@
                                     <th class="px-6 py-3 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="inventory-list" class="divide-y divide-slate-100 text-sm">
+                            <tbody id="inventory-list" class="divide-y divide-slate-100 dark:divide-white/5 text-sm dark:text-slate-300">
                                 <!-- Dynamic content -->
                             </tbody>
                         </table>
@@ -574,24 +577,24 @@
             <section id="view-reports" class="view-section hide fade-in">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-800 mb-2">Relatórios</h2>
-                    <p class="text-sm text-slate-600">Análise completa do seu negócio</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Análise completa do seu negócio</p>
                 </div>
 
                 <!-- Report Filters -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                    <h3 class="font-bold text-slate-800 mb-4">Configurar Período</h3>
+                    <h3 class="font-bold text-slate-800 dark:text-white mb-4">Configurar Período</h3>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Inicial</label>
-                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Final</label>
-                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Tipo de Relatório</label>
-                            <select id="rep-type" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tipo de Relatório</label>
+                            <select id="rep-type" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                                 <option value="sales">Vendas</option>
                                 <option value="products">Produtos</option>
                                 <option value="inventory">Estoque</option>
@@ -616,39 +619,39 @@
                 <div id="report-result" class="hide space-y-6">
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                        <div class="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl text-center border border-green-100 dark:border-green-500/20">
                             <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="dollar-sign" class="w-6 h-6 text-green-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Faturamento</p>
-                            <p id="rep-revenue" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                            <p id="rep-revenue" class="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                        <div class="bg-blue-50 dark:bg-blue-900/10 p-6 rounded-xl text-center border border-blue-100 dark:border-blue-500/20">
                             <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="receipt" class="w-6 h-6 text-blue-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Pedidos</p>
-                            <p id="rep-orders" class="text-2xl font-bold text-blue-700 mt-2">0</p>
+                            <p id="rep-orders" class="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">0</p>
                         </div>
-                        <div class="bg-purple-50 p-6 rounded-xl text-center border border-purple-100">
+                        <div class="bg-purple-50 dark:bg-purple-900/10 p-6 rounded-xl text-center border border-purple-100 dark:border-purple-500/20">
                             <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="package" class="w-6 h-6 text-purple-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Itens Vendidos</p>
-                            <p id="rep-items" class="text-2xl font-bold text-purple-700 mt-2">0</p>
+                            <p id="rep-items" class="text-2xl font-bold text-purple-700 dark:text-purple-400 mt-2">0</p>
                         </div>
-                        <div class="bg-orange-50 p-6 rounded-xl text-center border border-orange-100">
+                        <div class="bg-orange-50 dark:bg-orange-900/10 p-6 rounded-xl text-center border border-orange-100 dark:border-orange-500/20">
                             <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3">
                                 <i data-lucide="users" class="w-6 h-6 text-orange-600"></i>
                             </div>
                             <p class="text-xs text-slate-500 uppercase font-bold">Ticket Médio</p>
-                            <p id="rep-avg-ticket" class="text-2xl font-bold text-orange-700 mt-2">R$ 0,00</p>
+                            <p id="rep-avg-ticket" class="text-2xl font-bold text-orange-700 dark:text-orange-400 mt-2">R$ 0,00</p>
                         </div>
                     </div>
 
                     <!-- Top Products -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-slate-800 mb-4">Pizzas Mais Vendidas</h3>
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4">Pizzas Mais Vendidas</h3>
                         <div id="top-products-report" class="space-y-4">
                             <!-- Dynamic content -->
                         </div>
@@ -676,32 +679,32 @@
             <section id="view-settings" class="view-section hide fade-in">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-800 mb-2">Configurações</h2>
-                    <p class="text-sm text-slate-600">Personalize o sistema</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Personalize o sistema</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Business Info -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-slate-800 mb-4">Informações da Pizzaria</h3>
+                    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4">Informações da Pizzaria</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Nome da Pizzaria</label>
-                                <input type="text" id="biz-name" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Nome da Pizzaria</label>
+                                <input type="text" id="biz-name" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="Ex: Pizzaria do Zé">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Nome do Responsável</label>
-                                <input type="text" id="biz-owner" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Nome do Responsável</label>
+                                <input type="text" id="biz-owner" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="Ex: João Silva">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">CNPJ</label>
-                                <input type="text" id="biz-cnpj" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">CNPJ</label>
+                                <input type="text" id="biz-cnpj" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="00.000.000/0000-00">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Horário de Funcionamento</label>
-                                <input type="text" id="biz-hours" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Horário de Funcionamento</label>
+                                <input type="text" id="biz-hours" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                     placeholder="Ex: 18:00 às 23:00">
                             </div>
                             <button onclick="saveBusinessInfo()"
@@ -713,8 +716,8 @@
 
                     <!-- System Settings -->
                     <div class="space-y-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <h3 class="font-bold text-slate-800 mb-4">Configurações do Sistema</h3>
+                        <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                            <h3 class="font-bold text-slate-800 dark:text-white mb-4">Configurações do Sistema</h3>
                             <div class="space-y-4">
                                 <div>
                                     <label class="flex items-center">
@@ -729,13 +732,13 @@
                                     </label>
                                 </div>
                                 <div>
-                                    <label class="text-xs font-bold text-slate-500 uppercase">Taxa de Entrega Padrão</label>
-                                    <input type="number" id="delivery-fee" step="0.01" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Taxa de Entrega Padrão</label>
+                                    <input type="number" id="delivery-fee" step="0.01" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                                         placeholder="R$ 0,00">
                                 </div>
                                 <div>
-                                    <label class="text-xs font-bold text-slate-500 uppercase">Tempo Médio de Forno (min)</label>
-                                    <input type="number" id="oven-time" value="15" class="w-full border p-2 rounded-lg text-sm mt-1">
+                                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tempo Médio de Forno (min)</label>
+                                    <input type="number" id="oven-time" value="15" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
                                 </div>
                                 <button onclick="saveSystemSettings()"
                                     class="w-full bg-slate-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black">
@@ -745,20 +748,20 @@
                         </div>
 
                         <!-- Data Management -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
                             <h3 class="font-bold text-slate-800 mb-4 flex items-center">
                                 <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
-                            <div class="bg-red-50 border border-red-200 p-4 rounded-lg text-sm text-red-800 mb-6">
+                            <div class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-500/20 p-4 rounded-lg text-sm text-red-800 dark:text-red-300 mb-6">
                                 <p class="font-bold mb-2">⚠️ Importante</p>
                                 <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
                             </div>
 
                             <div class="space-y-3">
                                 <button onclick="downloadBackup()"
-                                    class="w-full border border-slate-300 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
+                                    class="w-full border border-slate-300 dark:border-white/10 dark:bg-slate-900/50 dark:text-white py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
                                     <i data-lucide="download" class="w-4 h-4"></i>
                                     Baixar Backup Completo (.json)
                                 </button>
@@ -1396,10 +1399,10 @@
 
     <!-- Order Modal -->
     <div id="orderModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div class="flex justify-between items-center p-6 border-b border-slate-100">
-                <h3 class="text-lg font-bold text-slate-800">Novo Pedido de Pizza</h3>
-                <button onclick="closeModal('orderModal')" class="text-slate-400 hover:text-slate-600">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b border-slate-100 dark:border-white/5">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Novo Pedido de Pizza</h3>
+                <button onclick="closeModal('orderModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                     <i data-lucide="x"></i>
                 </button>
             </div>
@@ -1412,19 +1415,19 @@
                         <!-- Cliente e Mesa -->
                         <div class="space-y-4">
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Cliente</label>
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Cliente</label>
                                 <input type="text" id="order-client"
                                     class="w-full border p-3 rounded-lg focus:border-brand-primary outline-none"
                                     placeholder="Nome do cliente (opcional)">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Mesa</label>
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Mesa</label>
                                 <select id="order-table" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
                                     <option value="">Selecionar mesa...</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Tipo de Pedido</label>
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tipo de Pedido</label>
                                 <select id="order-type" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
                                     <option value="dine-in">No local</option>
                                     <option value="takeaway">Retirada</option>
@@ -1435,9 +1438,9 @@
 
                         <!-- Observações -->
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Observações</label>
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Observações</label>
                             <textarea id="order-notes" rows="4"
-                                class="w-full border p-2 rounded-lg text-sm"
+                                class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                                 placeholder="Observações do pedido (borda recheada, sem cebola, etc.)..."></textarea>
                         </div>
                     </div>
@@ -1445,7 +1448,7 @@
                     <!-- Itens do Pedido -->
                     <div>
                         <div class="flex justify-between items-center mb-4">
-                            <label class="text-xs font-bold text-slate-500 uppercase">Itens do Pedido</label>
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Itens do Pedido</label>
                             <button type="button" onclick="addOrderItem()" class="text-sm text-brand-primary hover:text-brand-dark flex items-center gap-1">
                                 <i data-lucide="plus-circle" class="w-4 h-4"></i> Adicionar Pizza
                             </button>
@@ -1459,7 +1462,7 @@
 
             <div class="p-6 border-t border-slate-100 bg-slate-50">
                 <div class="flex justify-between items-center mb-4">
-                    <div class="text-lg font-bold text-slate-800">Total: <span id="order-total">R$ 0,00</span></div>
+                    <div class="text-lg font-bold text-slate-800 dark:text-white">Total: <span id="order-total">R$ 0,00</span></div>
                     <div class="flex gap-3">
                         <button type="button" onclick="closeModal('orderModal')"
                             class="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg font-bold hover:bg-slate-100">
@@ -1477,24 +1480,24 @@
 
     <!-- Quick Order Modal -->
     <div id="quickOrderModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Venda Rápida</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Venda Rápida</h3>
                 <button onclick="closeModal('quickOrderModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
             </div>
             <div class="space-y-4">
-                <select id="quick-product" class="w-full border p-2 rounded-lg text-sm">
+                <select id="quick-product" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     <option value="">Selecione uma pizza...</option>
                 </select>
-                <select id="quick-size" class="w-full border p-2 rounded-lg text-sm">
+                <select id="quick-size" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                     <option value="small">Pequena</option>
                     <option value="medium">Média</option>
                     <option value="large">Grande</option>
                     <option value="family">Família</option>
                 </select>
-                <input type="number" id="quick-quantity" value="1" min="1" class="w-full border p-2 rounded-lg text-sm">
+                <input type="number" id="quick-quantity" value="1" min="1" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                 <button onclick="processQuickOrder()"
                     class="w-full bg-brand-primary text-white py-3 rounded-lg font-bold hover:bg-brand-dark">
                     Adicionar ao Pedido
@@ -1505,9 +1508,9 @@
 
     <!-- Product Modal -->
     <div id="productModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Nova Pizza/Item</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Nova Pizza/Item</h3>
                 <button onclick="closeModal('productModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1569,9 +1572,9 @@
 
     <!-- Table Modal -->
     <div id="tableModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Nova Mesa</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Nova Mesa</h3>
                 <button onclick="closeModal('tableModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1597,9 +1600,9 @@
 
     <!-- Inventory Modal -->
     <div id="inventoryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Item no Estoque</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Novo Item no Estoque</h3>
                 <button onclick="closeModal('inventoryModal')" class="text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
@@ -1640,9 +1643,9 @@
 
     <!-- Kitchen Ticket Modal -->
     <div id="kitchenTicketModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 kitchen-ticket">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6 kitchen-ticket">
             <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-slate-800">COMANDA #<span id="ticket-number">0000</span></h3>
+                <h3 class="text-xl font-bold text-slate-800 dark:text-white">COMANDA #<span id="ticket-number">0000</span></h3>
                 <p class="text-sm text-slate-500">Mesa: <span id="ticket-table">-</span> • Hora: <span id="ticket-time">--:--</span></p>
             </div>
             <div id="ticket-items" class="space-y-2 mb-4">
@@ -2857,7 +2860,7 @@
                             </div>
                             <div class="mb-2">
                                 <p class="font-bold text-lg">${table.number}</p>
-                                <p class="text-sm text-slate-600">${table.capacity} lugares</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">${table.capacity} lugares</p>
                             </div>
                             <span class="text-xs font-bold px-2 py-1 rounded">
                                 ${statusTexts[table.status]}
@@ -3666,6 +3669,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

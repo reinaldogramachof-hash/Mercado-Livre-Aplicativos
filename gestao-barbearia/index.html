@@ -43,25 +43,26 @@
             <h2 class="text-3xl font-extrabold text-white mb-2 uppercase tracking-tight">Ativar Sistema</h2>
             <p class="text-slate-400 text-sm mb-8 italic">Sistema de Gestão Profissional - Licença Vitalícia</p>
 
-            <div class="space-y-4">
+            <form onsubmit="activateSystem(); return false;" class="space-y-4">
                 <div class="text-left">
                     <label class="text-xs font-bold text-slate-500 uppercase ml-1">E-mail da Compra</label>
-                    <input type="email" id="activation-email"
+                    <input type="email" id="activation-email" required
                         class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 outline-none focus:border-blue-500 transition-all mt-1"
                         placeholder="seu@email.com">
                 </div>
                 <div class="text-left">
                     <label class="text-xs font-bold text-slate-500 uppercase ml-1">Chave de Licença</label>
-                    <input type="text" id="activation-key"
+                    <input type="text" id="activation-key" required
                         class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 outline-none focus:border-blue-500 font-mono tracking-widest transition-all mt-1"
                         placeholder="XXXX-XXXX-XXXX">
                 </div>
-                <button onclick="activateLicense()" id="btn-activate"
+                <p id="activation-error" class="hidden text-xs text-red-400 font-medium text-center"></p>
+                <button type="submit" id="btn-activate"
                     class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 mt-4">
                     <span>Desbloquear Acesso</span>
                     <i data-lucide="unlock" class="w-5 h-5"></i>
                 </button>
-            </div>
+            </form>
 
             <p class="mt-8 text-[10px] text-slate-600 uppercase tracking-widest italic">Airlock Security • Standalone
                 PRO V7</p>
@@ -70,6 +71,13 @@
 
     <!-- Overlay para sidebar mobile -->
     <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Script de controle do Airlock no carregamento -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof init === 'function') init();
+        });
+    </script>
 
     <div id="app-main-content" style="display: none;">
         <!-- Sidebar Padronizada -->
@@ -2521,91 +2529,67 @@
             </div>
         </div>
 
-        <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+        <!-- 🔒 MASTER PASSWORD & ACTIVATION PATCH -->
         <script>
-            window.activateLicense = async function (e) {
-                if (e) e.preventDefault();
+            // Override executado APOS app_core.js carregar (window load event)
+            window.addEventListener('load', function () {
+                window.activateSystem = async function () {
+                    var emailEl = document.getElementById('activation-email');
+                    var keyEl = document.getElementById('activation-key');
+                    var btn = document.getElementById('btn-activate');
 
-                const keyInput = document.getElementById('license-key');
-                const emailInput = document.getElementById('license-email');
-                const btn = document.getElementById('btn-activate');
+                    if (!emailEl || !keyEl) { console.error('Airlock: campos nao encontrados'); return; }
 
-                if (!keyInput || !emailInput) return;
+                    var email = emailEl.value.trim();
+                    var key = keyEl.value.trim().toUpperCase();
 
-                const key = keyInput.value.trim();
-                const email = emailInput.value.trim();
+                    if (!email || !key) { alert('Preencha o e-mail e a chave de licenca.'); return; }
 
-                if (!key || !email) {
-                    alert('Por favor, preencha todos os campos.');
-                    return;
-                }
-
-                // 🔑 SENHA MESTRE PARA TESTES
-                const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
-
-                if (MASTER_KEYS.includes(key.toUpperCase())) {
-                    console.log('🔓 Master Access Granted');
-                    localStorage.setItem('plena_license', key);
-                    localStorage.setItem('ml_license_email', email);
-                    localStorage.setItem('ml_master_mode', 'true');
-
-                    if (btn) {
-                        const originalText = btn.innerText;
-                        btn.innerText = '🔓 Acesso Liberado...';
-                        btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
-                        btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                    // MASTER KEYS - bypass total, sem necessidade de API ou receipt
+                    var MASTERS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+                    if (MASTERS.indexOf(key) !== -1) {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.setItem('ml_receipt_confirmed', 'true');
+                        localStorage.setItem('ml_master_mode', 'true');
+                        if (btn) btn.textContent = 'Acesso Liberado...';
+                        setTimeout(function () { window.location.reload(); }, 400);
+                        return;
                     }
 
-                    setTimeout(() => {
-                        alert('Modo de Teste/Admin Ativado com Sucesso!');
-                        window.location.reload();
-                    }, 500);
-                    return;
-                }
-
-                // 🌍 FLUXO PADRÃO (API)
-                if (btn) {
-                    const originalText = btn.innerText;
-                    btn.innerText = 'Verificando...';
-                    btn.disabled = true;
-
-                    try {
-                        // Tenta endpoint relativo padrão dos sistemas Gestão
-                        const output = document.getElementById('activation-error');
-                        if (output) output.classList.add('hidden');
-
-                        const response = await fetch('../api_licenca_ml.php?action=activate', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ license_key: key, email: email })
-                        });
-
-                        const data = await response.json();
-
-                        if (data.status === 'success') {
+                    // Fluxo API normal para licencas reais
+                    if (btn) { btn.disabled = true; btn.textContent = 'Verificando...'; }
+                    var deviceId = localStorage.getItem('device_id');
+                    if (!deviceId) {
+                        deviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
+                        localStorage.setItem('device_id', deviceId);
+                    }
+                    fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ license_key: key, email: email, device_id: deviceId })
+                    }).then(function (resp) {
+                        return resp.json();
+                    }).then(function (data) {
+                        if (data.status === 'success' && data.valid === true) {
                             localStorage.setItem('plena_license', key);
                             localStorage.setItem('ml_license_email', email);
-                            localStorage.removeItem('ml_master_mode');
-                            alert('Licença Ativada com Sucesso!');
+                            alert('Sistema Liberado! Bem-vindo(a) ' + (data.client || ''));
                             window.location.reload();
                         } else {
-                            const msg = data.message || 'Chave inválida ou erro no servidor.';
-                            if (output) {
-                                output.textContent = msg;
-                                output.classList.remove('hidden');
-                            } else {
-                                alert('Erro: ' + msg);
-                            }
+                            var errEl = document.getElementById('activation-error');
+                            var msg = data.message || 'Chave invalida.';
+                            if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+                            else alert('Erro: ' + msg);
+                            if (btn) { btn.disabled = false; btn.textContent = 'Desbloquear Acesso'; }
                         }
-                    } catch (err) {
-                        console.error(err);
-                        alert('Erro de conexão com o servidor de validação.');
-                    } finally {
-                        btn.innerText = originalText;
-                        btn.disabled = false;
-                    }
-                }
-            };
+                    }).catch(function (e) {
+                        console.error('Falha:', e);
+                        alert('Erro de conexao. Tente novamente.');
+                        if (btn) { btn.disabled = false; btn.textContent = 'Desbloquear Acesso'; }
+                    });
+                };
+            });
         </script>
 
 </body>

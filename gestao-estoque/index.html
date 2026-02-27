@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -66,7 +66,7 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside id="sidebar"
@@ -124,9 +124,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -134,9 +137,9 @@
     <main class="main-content min-h-screen flex flex-col">
         <!-- Header -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600 dark:text-slate-300">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
                 <h2 id="page-title" class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
@@ -253,8 +256,8 @@
             <section id="view-shopping" class="view-section hide fade-in">
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                     <div>
-                        <h3 class="text-xl font-bold text-gray-800">Sugestão de Compra</h3>
-                        <p class="text-sm text-gray-500">Itens com quantidade abaixo do estoque mínimo.</p>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Sugestão de Compra</h3>
+                        <p class="text-sm text-gray-500 dark:text-slate-400">Itens com quantidade abaixo do estoque mínimo.</p>
                     </div>
                     <button onclick="copyShoppingList()"
                         class="w-full sm:w-auto bg-green-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-green-700 flex items-center justify-center transition-colors shadow-sm">
@@ -271,7 +274,7 @@
             <section id="view-history" class="view-section hide fade-in">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 border-b border-gray-100 bg-gray-50">
-                        <h3 class="font-bold text-gray-800">Histórico Completo</h3>
+                        <h3 class="font-bold text-gray-800 dark:text-white">Histórico Completo</h3>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
@@ -295,7 +298,7 @@
             <section id="view-settings" class="view-section hide fade-in">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações do Sistema</h2>
-                    <p class="text-sm text-gray-600">Personalize e gerencie suas preferências</p>
+                    <p class="text-sm text-gray-600 dark:text-slate-300">Personalize e gerencie suas preferências</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -427,7 +430,7 @@
                             <div class="flex items-center">
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">1
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Instalação no Celular</h3>
+                                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Instalação no Celular</h3>
                             </div>
                             <button onclick="markSectionComplete('instalacao')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -485,7 +488,7 @@
                                 class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
                                     class="w-4 h-4"></i></button>
                         </div>
-                        <p class="text-gray-600">Familiarize-se com a interface: Dashboard (visão geral), Meu Estoque
+                        <p class="text-gray-600 dark:text-slate-300">Familiarize-se com a interface: Dashboard (visão geral), Meu Estoque
                             (produtos), Lista de Compras (sugestões automáticas).</p>
                     </div>
 
@@ -500,7 +503,7 @@
                                 class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
                                     class="w-4 h-4"></i></button>
                         </div>
-                        <p class="text-gray-600">Registre produtos com: Nome, Categoria, Quantidade Atual, Estoque
+                        <p class="text-gray-600 dark:text-slate-300">Registre produtos com: Nome, Categoria, Quantidade Atual, Estoque
                             Mínimo e Validade (opcional).</p>
                     </div>
 
@@ -515,7 +518,7 @@
                                 class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
                                     class="w-4 h-4"></i></button>
                         </div>
-                        <p class="text-gray-600">Sistema avisa automaticamente produtos perto do vencimento (30 dias) em
+                        <p class="text-gray-600 dark:text-slate-300">Sistema avisa automaticamente produtos perto do vencimento (30 dias) em
                             amarelo e vencidos em vermelho.</p>
                     </div>
 
@@ -555,17 +558,17 @@
                         </div>
                         <details class="mb-3 border p-4 rounded-lg">
                             <summary class="font-bold cursor-pointer">Como funciona o alerta de estoque baixo?</summary>
-                            <p class="mt-2 text-sm text-gray-600">Quando um produto atinge o Estoque Mínimo configurado,
+                            <p class="mt-2 text-sm text-gray-600 dark:text-slate-300">Quando um produto atinge o Estoque Mínimo configurado,
                                 aparece em vermelho no Dashboard e na Lista de Compras.</p>
                         </details>
                         <details class="mb-3 border p-4 rounded-lg">
                             <summary class="font-bold cursor-pointer">Perdi meu celular. Como recupero?</summary>
-                            <p class="mt-2 text-sm text-gray-600">Apenas se você tiver feito backup. Restaure o arquivo
+                            <p class="mt-2 text-sm text-gray-600 dark:text-slate-300">Apenas se você tiver feito backup. Restaure o arquivo
                                 .json em outro dispositivo.</p>
                         </details>
                         <details class="border p-4 rounded-lg">
                             <summary class="font-bold cursor-pointer">Posso usar em vários dispositivos?</summary>
-                            <p class="mt-2 text-sm text-gray-600">Sim! Faça backup em um, restaure no outro via
+                            <p class="mt-2 text-sm text-gray-600 dark:text-slate-300">Sim! Faça backup em um, restaure no outro via
                                 Configurações.</p>
                         </details>
                     </div>
@@ -866,7 +869,7 @@
 
                     <!-- 6. Rodapé Legal -->
                     <div class="text-center border-t border-gray-200 pt-8">
-                        <p class="text-sm font-bold text-gray-800">Software Premium</p>
+                        <p class="text-sm font-bold text-gray-800 dark:text-white">Software Premium</p>
                         <p class="text-xs text-gray-500 mt-1"></p>
                         <p class="text-[10px] text-gray-400 mt-4">
                             Versão 4.1 Pro • Build 2026.01.07
@@ -890,13 +893,13 @@
                     <!-- Progress Bar -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
                         <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-gray-800">Seu Progresso no Aprendizado</h3>
+                            <h3 class="font-bold text-gray-800 dark:text-white">Seu Progresso no Aprendizado</h3>
                             <span id="tutorial-percent" class="text-brand-primary font-bold">0%</span>
                         </div>
                         <div class="progress-bar mb-2">
                             <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <p class="text-xs text-gray-500">Complete a leitura de todos os tópicos para dominar o sistema.</p>
+                        <p class="text-xs text-gray-500 dark:text-slate-400">Complete a leitura de todos os tópicos para dominar o sistema.</p>
                     </div>
 
                     <!-- Manual Navigation Cards -->
@@ -908,7 +911,7 @@
                                 </div>
                                 <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Instalação</h4>
                             </div>
-                            <p class="text-sm text-gray-500">Como instalar no seu celular.</p>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Como instalar no seu celular.</p>
                         </div>
 
                         <div onclick="scrollToSection('config')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
@@ -918,7 +921,7 @@
                                 </div>
                                 <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Ajustes</h4>
                             </div>
-                            <p class="text-sm text-gray-500">Configurações iniciais.</p>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Configurações iniciais.</p>
                         </div>
 
                         <div onclick="scrollToSection('cadastros')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
@@ -928,7 +931,7 @@
                                 </div>
                                 <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Cadastros</h4>
                             </div>
-                            <p class="text-sm text-gray-500">Produtos e categorias.</p>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Produtos e categorias.</p>
                         </div>
 
                         <div onclick="scrollToSection('operacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
@@ -938,7 +941,7 @@
                                 </div>
                                 <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Operação</h4>
                             </div>
-                            <p class="text-sm text-gray-500">Entradas e saídas.</p>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Entradas e saídas.</p>
                         </div>
 
                         <div onclick="scrollToSection('relatorios')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
@@ -948,7 +951,7 @@
                                 </div>
                                 <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Gestão</h4>
                             </div>
-                            <p class="text-sm text-gray-500">Histórico e lista de compras.</p>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Histórico e lista de compras.</p>
                         </div>
 
                         <div onclick="scrollToSection('seguranca')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
@@ -958,7 +961,7 @@
                                 </div>
                                 <h4 class="font-bold text-gray-800 group-hover:text-brand-primary">Segurança</h4>
                             </div>
-                            <p class="text-sm text-gray-500">Backup e proteção de dados.</p>
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Backup e proteção de dados.</p>
                         </div>
 
                         <div onclick="scrollToSection('suporte')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-brand-primary cursor-pointer transition-all group">
@@ -990,7 +993,7 @@
                                 <div class="absolute top-0 right-0 w-2 h-full bg-blue-500"></div>
                                 <div class="flex items-center gap-4 mb-6">
                                     <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-xl">1</div>
-                                    <h3 class="text-xl font-bold text-gray-800">Instalação do Aplicativo</h3>
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">Instalação do Aplicativo</h3>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="bg-gray-50 p-5 rounded-xl">
@@ -1026,7 +1029,7 @@
                                 <div class="absolute top-0 right-0 w-2 h-full bg-orange-500"></div>
                                 <div class="flex items-center gap-4 mb-6">
                                     <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 font-bold text-xl">2</div>
-                                    <h3 class="text-xl font-bold text-gray-800">Ajustes Iniciais</h3>
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">Ajustes Iniciais</h3>
                                 </div>
                                 <p class="text-gray-600 mb-4">Personalize o sistema com suas preferências:</p>
                                 <ul class="space-y-3 text-sm text-gray-600 mb-6">
@@ -1051,7 +1054,7 @@
                                 <div class="absolute top-0 right-0 w-2 h-full bg-green-500"></div>
                                 <div class="flex items-center gap-4 mb-6">
                                     <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 font-bold text-xl">3</div>
-                                    <h3 class="text-xl font-bold text-gray-800">Cadastro de Produtos</h3>
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">Cadastro de Produtos</h3>
                                 </div>
                                 <div class="space-y-4 text-sm text-gray-600 mb-6">
                                     <div class="p-4 bg-green-50 rounded-xl">
@@ -1280,7 +1283,7 @@
                         </div>
 
                         <!-- Contact -->
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 dark:border-white/10">
                             <h3 class="font-bold text-gray-800 mb-4">Fale Conosco</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -1305,7 +1308,7 @@
 
     <!-- Product Modal -->
     <div id="productModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform transition-all p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all p-6">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800" id="prod-modal-title">Novo Item</h3>
                 <button onclick="closeModal('productModal')" class="text-gray-400 hover:text-gray-600">
@@ -1366,7 +1369,7 @@
 
     <!-- Movement Modal -->
     <div id="moveModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 transform transition-all">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 transform transition-all">
             <div class="text-center mb-6">
                 <h3 class="text-lg font-bold text-gray-800 mb-1" id="mv-title">Registrar Movimentação</h3>
                 <p class="text-sm text-gray-500" id="mv-subtitle">Produto...</p>
@@ -1708,7 +1711,7 @@
                     <h3 class="font-bold text-lg text-gray-800 leading-tight mb-4 truncate" title="${p.name}">${p.name}</h3>
                     
                     <div class="flex justify-between items-end mb-4 bg-gray-50 p-3 rounded-lg">
-                        <div class="text-center w-1/2 border-r border-gray-200">
+                        <div class="text-center w-1/2 border-r border-gray-200 dark:border-white/10">
                             <p class="text-[10px] text-gray-400 uppercase font-bold">Atual</p>
                             <p class="text-2xl font-bold ${isLow ? 'text-red-500' : 'text-gray-900'}">${p.qty}</p>
                         </div>
@@ -2115,6 +2118,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

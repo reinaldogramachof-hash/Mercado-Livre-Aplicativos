@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="antialiased">
+<html lang="pt-BR" class="dark antialiased">
 
 <head>
     <meta charset="UTF-8">
@@ -33,75 +33,47 @@
 
     <!-- TELA DE ATIVAÇÃO (Airlock) -->
     <section id="view-login"
-        class="hide fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center p-6 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center">
-        <!-- Overlay Dark -->
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        class="min-h-screen flex items-center justify-center bg-slate-900 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-900/20 via-slate-900 to-black p-4 z-[100]">
 
-        <div class="relative w-full max-w-md">
-            <div class="text-center mb-10">
-                <div
-                    class="inline-flex items-center justify-center p-5 bg-gradient-to-br from-emerald-500 to-green-600 rounded-3xl mb-6 shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)] transform hover:scale-105 transition-all duration-500">
-                    <i data-lucide="check-square" class="w-10 h-10 text-white stroke-[2.5]"></i>
-                </div>
-                <h1 class="text-4xl font-black text-white tracking-tight mb-2">Gestão <span
-                        class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-green-200">Checklist</span>
-                </h1>
-                <p class="text-slate-400 text-sm font-medium tracking-wide">SISTEMA PREMIUM VITALÍCIO</p>
+        <div
+            class="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl text-center relative overflow-hidden group">
+
+            <div
+                class="w-20 h-20 bg-gradient-to-br from-emerald-600 to-green-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/20">
+                <i data-lucide="check-square" class="w-10 h-10 text-white"></i>
             </div>
 
-            <form id="activation-form" onsubmit="activateLicense(event)"
-                class="glass-dark rounded-3xl p-8 shadow-2xl space-y-6 border border-white/10 relative overflow-hidden group">
-                <!-- Glow Effect -->
-                <div
-                    class="absolute -top-20 -right-20 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl group-hover:bg-emerald-500/30 transition-all duration-700">
+            <h2 class="text-3xl font-extrabold text-white mb-2 uppercase tracking-tight">Ativar Sistema</h2>
+            <p class="text-slate-400 text-sm mb-8 italic">Gestão Checklist Profissional - Licença Vitalícia</p>
+
+            <form id="activation-form" onsubmit="activateLicense(event)" class="space-y-4">
+                <div class="text-left">
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">E-mail da Compra</label>
+                    <input type="email" id="license-email" required
+                        class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 outline-none focus:border-emerald-500 transition-all mt-1"
+                        placeholder="seu@email.com">
                 </div>
 
-                <div class="space-y-4">
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-emerald-500 uppercase tracking-widest mb-2 pl-1">Chave
-                            de Acesso</label>
-                        <div class="relative group/input">
-                            <i data-lucide="key"
-                                class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within/input:text-emerald-400 transition-colors"></i>
-                            <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX-XXXX"
-                                class="w-full bg-slate-900/50 border border-slate-700 p-4 pl-12 rounded-xl text-white placeholder-slate-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all font-mono text-center tracking-widest text-lg uppercase shadow-inner">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-emerald-500 uppercase tracking-widest mb-2 pl-1">E-mail
-                            Registrado</label>
-                        <div class="relative group/input">
-                            <i data-lucide="mail"
-                                class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within/input:text-emerald-400 transition-colors"></i>
-                            <input type="email" id="license-email" required placeholder="seu@email.com"
-                                class="w-full bg-slate-900/50 border border-slate-700 p-4 pl-12 rounded-xl text-white placeholder-slate-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all shadow-inner">
-                        </div>
-                    </div>
+                <div class="text-left">
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">Chave de Acesso</label>
+                    <input type="text" id="license-key" required
+                        class="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 outline-none focus:border-emerald-500 font-mono tracking-widest text-center transition-all mt-1 uppercase"
+                        placeholder="XXXX-XXXX-XXXX-XXXX">
                 </div>
 
                 <button type="submit" id="btn-activate"
-                    class="w-full bg-gradient-to-r from-emerald-600 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white py-4 rounded-xl font-bold text-lg shadow-[0_10px_30px_-10px_rgba(16,185,129,0.5)] transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 group/btn">
-                    <span>Desbloquear Sistema</span>
-                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                    class="w-full bg-gradient-to-r from-emerald-600 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white py-4 rounded-xl font-bold transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 mt-4 group/btn">
+                    <span>Desbloquear Acesso</span>
+                    <i data-lucide="unlock" class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
                 </button>
+
                 <p id="activation-error"
-                    class="text-red-400 text-sm text-center font-medium bg-red-900/20 py-2 rounded-lg hidden border border-red-500/20">
+                    class="text-red-400 text-sm text-center font-medium bg-red-900/20 py-2 rounded-lg hidden border border-red-500/20 mt-4">
                 </p>
             </form>
 
-            <div class="mt-8 flex items-center justify-center gap-6 opacity-60">
-                <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span class="text-xs text-slate-300 font-medium">Uso Offline</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
-                    <span class="text-xs text-slate-300 font-medium">100% Seguro</span>
-                </div>
-            </div>
+            <p class="mt-8 text-[10px] text-slate-600 uppercase tracking-widest italic">Airlock Security • Standalone
+                PRO V7</p>
         </div>
     </section>
 
@@ -132,98 +104,89 @@
             </div>
         </div>
 
-        <nav class="p-4 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar">
+        <nav class="p-4 space-y-1 flex-1 overflow-y-auto custom-scrollbar">
+
+            <!-- OPERACIONAL -->
+            <div class="px-4 mb-2 mt-2">
+                <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Operacional</span>
+            </div>
 
             <button onclick="router('dashboard')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group active-nav"
                 id="nav-dashboard">
-
                 <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Dashboard
-
             </button>
 
             <button onclick="router('my-checklists')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-my-checklists">
-
                 <i data-lucide="list-checks" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Meus Checklists
-
             </button>
 
             <button onclick="router('templates')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-templates">
-
                 <i data-lucide="library" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Templates
-
             </button>
 
             <button onclick="router('categories')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-categories">
-
                 <i data-lucide="folder" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Categorias
-
             </button>
+
+            <!-- GESTÃO -->
+            <div class="px-4 mb-2 mt-4">
+                <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Gestão</span>
+            </div>
 
             <button onclick="router('reports')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-reports">
-
                 <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Relatórios
-
             </button>
 
+            <!-- SISTEMA -->
+            <div class="px-4 mb-2 mt-4">
+                <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Sistema</span>
+            </div>
+
             <button onclick="router('settings')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-settings">
-
                 <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Configurações
-
             </button>
 
             <button onclick="router('instructions')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-instructions">
-
                 <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
                 Manual de Uso
-
             </button>
 
             <button onclick="router('about')"
-                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group"
                 id="nav-about">
-
                 <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
-
-                Informaes Legais
-
+                Informações Legais
             </button>
 
         </nav>
 
 
 
-        <div class="p-6 border-t border-white/10 text-center">
-
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
-
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
 
     </aside>
@@ -237,17 +200,17 @@
         <!-- Header -->
 
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100">
+            class="bg-slate-950/50 backdrop-blur-md h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-white/10">
 
             <div class="flex items-center gap-4">
 
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-white/10 rounded-lg text-slate-400">
 
                     <i data-lucide="menu" class="w-6 h-6"></i>
 
                 </button>
 
-                <h2 id="page-title" class="text-xl font-bold text-slate-800 hidden sm:block">Dashboard</h2>
+                <h2 id="page-title" class="text-xl font-bold text-white hidden sm:block">Dashboard</h2>
 
             </div>
 
@@ -315,27 +278,33 @@
 
                 <!-- Stats Cards -->
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
 
-                    <div class="glass p-6 rounded-2xl card-hover">
+                    <div
+                        class="glass-dark p-5 rounded-2xl card-hover border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500">
+                        </div>
 
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between relative z-10">
 
                             <div>
 
-                                <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">Checklists
+                                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                    Checklists
                                     Ativos</p>
 
-                                <h3 id="dash-active" class="text-3xl font-black text-slate-800">0</h3>
+                                <h3 id="dash-active" class="text-2xl font-black text-white">0</h3>
 
-                                <p class="text-xs text-slate-500 mt-1 font-medium">Em andamento</p>
+                                <p class="text-[10px] text-slate-500 mt-1 font-medium">Em andamento</p>
 
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-emerald-100/50 flex items-center justify-center shadow-inner">
+                                class="w-10 h-10 rounded-xl bg-emerald-100/50 flex items-center justify-center shadow-inner">
 
-                                <i data-lucide="list-checks" class="w-6 h-6 text-emerald-600"></i>
+                                <i data-lucide="list-checks" class="w-5 h-5 text-emerald-600"></i>
 
                             </div>
 
@@ -343,25 +312,31 @@
 
                     </div>
 
-                    <div class="glass p-6 rounded-2xl card-hover">
+                    <div
+                        class="glass-dark p-5 rounded-2xl card-hover border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500">
+                        </div>
 
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between relative z-10">
 
                             <div>
 
-                                <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">Concluídos
+                                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                    Concluídos
                                     (Hoje)</p>
 
-                                <h3 id="dash-completed-today" class="text-3xl font-black text-emerald-600">0</h3>
+                                <h3 id="dash-completed-today" class="text-2xl font-black text-white">0</h3>
 
-                                <p class="text-xs text-slate-500 mt-1 font-medium">Tarefas finalizadas</p>
+                                <p class="text-[10px] text-slate-500 mt-1 font-medium">Tarefas finalizadas</p>
 
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-emerald-100/50 flex items-center justify-center shadow-inner">
+                                class="w-10 h-10 rounded-xl bg-emerald-100/50 flex items-center justify-center shadow-inner">
 
-                                <i data-lucide="check-circle" class="w-6 h-6 text-emerald-600"></i>
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
 
                             </div>
 
@@ -369,26 +344,31 @@
 
                     </div>
 
-                    <div class="glass p-6 rounded-2xl card-hover">
+                    <div
+                        class="glass-dark p-5 rounded-2xl card-hover border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500">
+                        </div>
 
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between relative z-10">
 
                             <div>
 
-                                <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
                                     Produtividade
                                 </p>
 
-                                <h3 id="dash-productivity" class="text-3xl font-black text-brand-green">0%</h3>
+                                <h3 id="dash-productivity" class="text-2xl font-black text-white">0%</h3>
 
-                                <p class="text-xs text-slate-500 mt-1 font-medium">Taxa de conclusão</p>
+                                <p class="text-[10px] text-slate-500 mt-1 font-medium">Taxa de conclusão</p>
 
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-emerald-100/50 flex items-center justify-center shadow-inner">
+                                class="w-10 h-10 rounded-xl bg-emerald-100/50 flex items-center justify-center shadow-inner">
 
-                                <i data-lucide="trending-up" class="w-6 h-6 text-brand-green"></i>
+                                <i data-lucide="trending-up" class="w-5 h-5 text-brand-green"></i>
 
                             </div>
 
@@ -396,25 +376,30 @@
 
                     </div>
 
-                    <div class="glass p-6 rounded-2xl card-hover">
+                    <div
+                        class="glass-dark p-5 rounded-2xl card-hover border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all duration-500">
+                        </div>
 
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between relative z-10">
 
                             <div>
 
-                                <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">Templates
+                                <p class="text-[10px] font-bold text-purple-400 uppercase tracking-wider mb-1">Templates
                                 </p>
 
-                                <h3 id="dash-templates" class="text-3xl font-black text-purple-600">0</h3>
+                                <h3 id="dash-templates" class="text-2xl font-black text-white">0</h3>
 
-                                <p class="text-xs text-slate-500 mt-1 font-medium">Modelos disponíveis</p>
+                                <p class="text-[10px] text-slate-500 mt-1 font-medium">Modelos disponíveis</p>
 
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-purple-100/50 flex items-center justify-center shadow-inner">
+                                class="w-10 h-10 rounded-xl bg-purple-100/50 flex items-center justify-center shadow-inner">
 
-                                <i data-lucide="library" class="w-6 h-6 text-purple-600"></i>
+                                <i data-lucide="library" class="w-5 h-5 text-purple-600"></i>
 
                             </div>
 
@@ -430,20 +415,25 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    <div class="glass p-6 rounded-2xl">
+                    <div class="glass-dark p-6 rounded-2xl border border-white/5 relative overflow-hidden">
 
-                        <div class="flex justify-between items-center mb-6">
+                        <!-- Header Background Layer -->
+                        <div
+                            class="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-emerald-900/10 to-transparent">
+                        </div>
 
-                            <h3 class="font-bold text-slate-800 flex items-center">
+                        <div class="flex justify-between items-center mb-6 relative z-10">
 
-                                <i data-lucide="clock" class="mr-2 w-5 h-5 text-emerald-600"></i> Checklists Recentes
+                            <h3 class="font-bold text-white flex items-center">
+
+                                <i data-lucide="clock" class="mr-2 w-5 h-5 text-emerald-400"></i> Checklists Recentes
 
                             </h3>
 
                             <button onclick="router('my-checklists')"
-                                class="text-sm text-brand-green hover:text-brand-dark font-medium hover:underline">
+                                class="text-xs bg-white/5 hover:bg-white/10 text-white px-3 py-1.5 rounded-lg border border-white/10 font-medium transition-all">
 
-                                Ver todos →
+                                Ver todos
 
                             </button>
 
@@ -461,19 +451,24 @@
 
                     <!-- Próximos Vencimentos -->
 
-                    <div class="glass p-6 rounded-2xl">
+                    <div class="glass-dark p-6 rounded-2xl border border-white/5 relative overflow-hidden">
 
-                        <div class="flex justify-between items-center mb-6">
+                        <!-- Header Background Layer -->
+                        <div
+                            class="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-emerald-900/10 to-transparent">
+                        </div>
 
-                            <h3 class="font-bold text-slate-800 flex items-center">
-                                <i data-lucide="calendar" class="mr-2 w-5 h-5 text-emerald-600"></i>
+                        <div class="flex justify-between items-center mb-6 relative z-10">
+
+                            <h3 class="font-bold text-white flex items-center">
+                                <i data-lucide="calendar" class="mr-2 w-5 h-5 text-emerald-400"></i>
                                 Próximos Vencimentos
                             </h3>
 
                             <button onclick="router('calendar')"
-                                class="text-sm text-brand-green hover:text-brand-dark font-medium hover:underline">
+                                class="text-xs bg-white/5 hover:bg-white/10 text-white px-3 py-1.5 rounded-lg border border-white/10 font-medium transition-all">
 
-                                Ver agenda →
+                                Ver agenda
 
                             </button>
 
@@ -517,9 +512,9 @@
 
                     <div>
 
-                        <h2 class="text-xl font-bold text-slate-800">Meus Checklists</h2>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Meus Checklists</h2>
 
-                        <p class="text-sm text-slate-600">Gerencie seus checklists ativos</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gerencie seus checklists ativos</p>
 
                     </div>
 
@@ -531,7 +526,7 @@
 
                             <input type="text" id="search-checklists" onkeyup="filterChecklists()"
                                 placeholder="Buscar checklists..."
-                                class="w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-green outline-none text-sm">
+                                class="w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg border border-white/10 bg-white/5 focus:ring-2 focus:ring-brand-green outline-none text-sm text-white placeholder-slate-400">
 
                         </div>
 
@@ -555,19 +550,19 @@
                 <div class="mb-6 flex flex-wrap gap-2">
 
                     <button onclick="filterChecklists('all')" id="filter-all"
-                        class="px-4 py-2 bg-brand-green text-white rounded-lg text-sm font-bold">Todos</button>
+                        class="px-3 py-1.5 bg-brand-green text-white rounded-lg text-xs font-bold transition-colors">Todos</button>
 
                     <button onclick="filterChecklists('active')" id="filter-active"
-                        class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-200">Ativos</button>
+                        class="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-300 rounded-lg text-xs font-medium hover:bg-white/10 transition-colors">Ativos</button>
 
                     <button onclick="filterChecklists('completed')" id="filter-completed"
-                        class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-200">Concluídos</button>
+                        class="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-300 rounded-lg text-xs font-medium hover:bg-white/10 transition-colors">Concluídos</button>
 
                     <button onclick="filterChecklists('favorite')" id="filter-favorite"
-                        class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-200">Favoritos</button>
+                        class="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-300 rounded-lg text-xs font-medium hover:bg-white/10 transition-colors">Favoritos</button>
 
                     <select id="filter-category" onchange="filterChecklists()"
-                        class="px-4 py-2 border rounded-lg text-sm bg-white">
+                        class="px-3 py-1.5 border border-white/10 rounded-lg text-xs font-medium bg-slate-900 text-slate-300 outline-none focus:border-brand-green">
 
                         <option value="">Todas Categorias</option>
 
@@ -597,9 +592,9 @@
 
                     <div>
 
-                        <h2 class="text-xl font-bold text-slate-800">Templates</h2>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Templates</h2>
 
-                        <p class="text-sm text-slate-600">Modelos pré-definidos para diversos cenários</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Modelos pré-definidos para diversos cenários</p>
 
                     </div>
 
@@ -624,27 +619,27 @@
 
                 <div class="mb-6">
 
-                    <h3 class="font-bold text-slate-800 mb-4">Categorias de Templates</h3>
+                    <h3 class="font-bold text-slate-800 dark:text-white mb-4">Categorias de Templates</h3>
 
                     <div class="flex flex-wrap gap-2">
 
                         <button onclick="filterTemplates('all')"
-                            class="px-4 py-2 bg-brand-green text-white rounded-lg text-sm font-bold">Todos</button>
+                            class="px-3 py-1.5 bg-brand-green text-white rounded-lg text-xs font-bold transition-colors">Todos</button>
 
                         <button onclick="filterTemplates('work')"
-                            class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200">Trabalho</button>
+                            class="px-3 py-1.5 bg-blue-100/50 text-blue-700 dark:text-blue-400 border border-blue-200/50 dark:border-blue-900/50 rounded-lg text-xs hover:bg-blue-100 transition-colors">Trabalho</button>
 
                         <button onclick="filterTemplates('personal')"
-                            class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm hover:bg-purple-200">Pessoal</button>
+                            class="px-3 py-1.5 bg-purple-100/50 text-purple-700 dark:text-purple-400 border border-purple-200/50 dark:border-purple-900/50 rounded-lg text-xs hover:bg-purple-100 transition-colors">Pessoal</button>
 
                         <button onclick="filterTemplates('health')"
-                            class="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm hover:bg-red-200">Saúde</button>
+                            class="px-3 py-1.5 bg-red-100/50 text-red-700 dark:text-red-400 border border-red-200/50 dark:border-red-900/50 rounded-lg text-xs hover:bg-red-100 transition-colors">Saúde</button>
 
                         <button onclick="filterTemplates('home')"
-                            class="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-lg text-sm hover:bg-yellow-200">Casa</button>
+                            class="px-3 py-1.5 bg-yellow-100/50 text-yellow-700 dark:text-yellow-400 border border-yellow-200/50 dark:border-yellow-900/50 rounded-lg text-xs hover:bg-yellow-100 transition-colors">Casa</button>
 
                         <button onclick="filterTemplates('travel')"
-                            class="px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm hover:bg-green-200">Viagem</button>
+                            class="px-3 py-1.5 bg-green-100/50 text-green-700 dark:text-green-400 border border-green-200/50 dark:border-green-900/50 rounded-lg text-xs hover:bg-green-100 transition-colors">Viagem</button>
 
                     </div>
 
@@ -672,9 +667,9 @@
 
                     <div>
 
-                        <h2 class="text-xl font-bold text-slate-800">Categorias</h2>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Categorias</h2>
 
-                        <p class="text-sm text-slate-600">Organize seus checklists por categoria</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Organize seus checklists por categoria</p>
 
                     </div>
 
@@ -715,7 +710,7 @@
 
                     <h2 class="text-xl font-bold text-slate-800 mb-2">Relatórios e Estatísticas</h2>
 
-                    <p class="text-sm text-slate-600">Análise de produtividade e desempenho</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Análise de produtividade e desempenho</p>
 
                 </div>
 
@@ -723,184 +718,177 @@
 
                 <!-- Report Filters -->
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-
-                    <h3 class="font-bold text-slate-800 mb-4">Configurar Período</h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-
-                        <div>
-
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Inicial</label>
-
-                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
-
-                        </div>
-
-                        <div>
-
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Final</label>
-
-                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
-
-                        </div>
-
-                        <div>
-
-                            <label class="text-xs font-bold text-slate-500 uppercase">Categoria</label>
-
-                            <select id="rep-category" class="w-full border p-2 rounded-lg text-sm mt-1">
-
-                                <option value="all">Todas</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="flex gap-2">
-
-                            <button onclick="generateReport()"
-                                class="flex-1 bg-brand-green text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
-
-                                Gerar Relatório
-
-                            </button>
-
-                            <button onclick="generateMonthReport()"
-                                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm transition-colors"
-                                title="Relatório do Mês">
-
-                                <i data-lucide="calendar" class="w-4 h-4"></i>
-
-                            </button>
-
-                        </div>
-
+                <div
+                    class="glass-dark border border-white/5 p-6 rounded-2xl shadow-sm mb-6 group relative overflow-hidden">
+                    <!-- Glow Effect -->
+                    <div
+                        class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all duration-500">
                     </div>
 
-                </div>
+                    <div class="relative z-10">
+                        <h3 class="font-bold text-white mb-4">Configurar Período</h3>
 
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
 
-
-                <!-- Report Results -->
-
-                <div id="report-result" class="hide space-y-6">
-
-                    <!-- Summary Cards -->
-
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
-
-                            <div
-                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
-
-                                <i data-lucide="list-checks" class="w-6 h-6 text-blue-600"></i>
-
+                            <div>
+                                <label class="text-xs font-bold text-slate-400 uppercase">Data Inicial</label>
+                                <input type="date" id="rep-start"
+                                    class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg text-sm mt-1 focus:border-brand-green outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-400 uppercase">Data Final</label>
+                                <input type="date" id="rep-end"
+                                    class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg text-sm mt-1 focus:border-brand-green outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-400 uppercase">Categoria</label>
+                                <select id="rep-category"
+                                    class="w-full border border-white/10 bg-slate-900 text-slate-300 p-2 rounded-lg text-sm mt-1 focus:border-brand-green outline-none">
+                                    <option value="all">Todas</option>
+                                </select>
                             </div>
 
-                            <p class="text-xs text-slate-500 uppercase font-bold">Total Checklists</p>
+                            <div class="flex gap-2">
 
-                            <p id="rep-total" class="text-2xl font-bold text-blue-700 mt-2">0</p>
+                                <button onclick="generateReport()"
+                                    class="flex-1 bg-brand-green text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
 
-                        </div>
+                                    Gerar Relatório
 
-                        <div
-                            class="bg-green-500/10 backdrop-blur-md p-6 rounded-xl text-center border border-green-500/20">
+                                </button>
 
-                            <div
-                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
-
-                                <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
-
+                                <button onclick="generateMonthReport()"
+                                    class="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 rounded-lg text-sm transition-colors"
+                                    title="Relatório do Mês">
+                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                </button>
                             </div>
-
-                            <p class="text-xs text-slate-500 uppercase font-bold">Concluídos</p>
-
-                            <p id="rep-completed" class="text-2xl font-bold text-green-700 mt-2">0</p>
-
                         </div>
-
-                        <div
-                            class="bg-yellow-500/10 backdrop-blur-md p-6 rounded-xl text-center border border-yellow-500/20">
-
-                            <div
-                                class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-3">
-
-                                <i data-lucide="trending-up" class="w-6 h-6 text-yellow-600"></i>
-
-                            </div>
-
-                            <p class="text-xs text-slate-500 uppercase font-bold">Taxa Conclusão</p>
-
-                            <p id="rep-completion-rate" class="text-2xl font-bold text-yellow-700 mt-2">0%</p>
-
-                        </div>
-
-                        <div
-                            class="bg-purple-500/10 backdrop-blur-md p-6 rounded-xl text-center border border-purple-500/20">
-
-                            <div
-                                class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
-
-                                <i data-lucide="clock" class="w-6 h-6 text-purple-600"></i>
-
-                            </div>
-
-                            <p class="text-xs text-slate-500 uppercase font-bold">Tempo Médio</p>
-
-                            <p id="rep-avg-time" class="text-2xl font-bold text-purple-700 mt-2">0 min</p>
-
-                        </div>
-
                     </div>
 
 
 
-                    <!-- Category Distribution -->
+                    <!-- Report Results -->
 
-                    <div class="glass p-6 rounded-2xl shadow-sm">
+                    <div id="report-result" class="hide space-y-6">
 
-                        <h3 class="font-bold text-slate-800 mb-4">Distribuição por Categoria</h3>
+                        <!-- Summary Cards -->
 
-                        <div id="category-distribution" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-                            <!-- Dynamic content -->
+                            <div class="bg-blue-50 dark:bg-blue-900/10 p-6 rounded-xl text-center border border-blue-100 dark:border-blue-500/20">
+
+                                <div
+                                    class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+
+                                    <i data-lucide="list-checks" class="w-6 h-6 text-blue-600"></i>
+
+                                </div>
+
+                                <p class="text-xs text-slate-500 uppercase font-bold">Total Checklists</p>
+
+                                <p id="rep-total" class="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">0</p>
+
+                            </div>
+
+                            <div
+                                class="bg-green-500/10 backdrop-blur-md p-6 rounded-xl text-center border border-green-500/20">
+
+                                <div
+                                    class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+
+                                    <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+
+                                </div>
+
+                                <p class="text-xs text-slate-500 uppercase font-bold">Concluídos</p>
+
+                                <p id="rep-completed" class="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">0</p>
+
+                            </div>
+
+                            <div
+                                class="bg-yellow-500/10 backdrop-blur-md p-6 rounded-xl text-center border border-yellow-500/20">
+
+                                <div
+                                    class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-3">
+
+                                    <i data-lucide="trending-up" class="w-6 h-6 text-yellow-600"></i>
+
+                                </div>
+
+                                <p class="text-xs text-slate-500 uppercase font-bold">Taxa Conclusão</p>
+
+                                <p id="rep-completion-rate" class="text-2xl font-bold text-yellow-700 mt-2">0%</p>
+
+                            </div>
+
+                            <div
+                                class="bg-purple-500/10 backdrop-blur-md p-6 rounded-xl text-center border border-purple-500/20">
+
+                                <div
+                                    class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
+
+                                    <i data-lucide="clock" class="w-6 h-6 text-purple-600"></i>
+
+                                </div>
+
+                                <p class="text-xs text-slate-500 uppercase font-bold">Tempo Médio</p>
+
+                                <p id="rep-avg-time" class="text-2xl font-bold text-purple-700 dark:text-purple-400 mt-2">0 min</p>
+
+                            </div>
 
                         </div>
 
-                    </div>
+
+
+                        <!-- Category Distribution -->
+
+                        <div class="glass-dark p-6 rounded-2xl border border-white/5 relative overflow-hidden group">
+                            <div
+                                class="absolute -top-10 -right-10 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-500">
+                            </div>
+
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-white mb-4">Distribuição por Categoria</h3>
+
+                                <div id="category-distribution" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                                    <!-- Dynamic content -->
+                                </div>
+                            </div>
 
 
 
-                    <!-- Export Options -->
+                            <!-- Export Options -->
 
-                    <div class="flex justify-center gap-4">
+                            <div class="flex justify-center gap-4">
 
-                        <button onclick="exportReportPDF()"
-                            class="bg-red-600 text-white py-3 px-6 rounded-xl font-bold hover:bg-red-700 flex items-center gap-2">
+                                <button onclick="exportReportPDF()"
+                                    class="bg-red-600 text-white py-3 px-6 rounded-xl font-bold hover:bg-red-700 flex items-center gap-2">
 
-                            <i data-lucide="file-text" class="w-4 h-4"></i> Exportar PDF
+                                    <i data-lucide="file-text" class="w-4 h-4"></i> Exportar PDF
 
-                        </button>
+                                </button>
 
-                        <button onclick="exportReportExcel()"
-                            class="bg-green-600 text-white py-3 px-6 rounded-xl font-bold hover:bg-green-700 flex items-center gap-2">
+                                <button onclick="exportReportExcel()"
+                                    class="bg-green-600 text-white py-3 px-6 rounded-xl font-bold hover:bg-green-700 flex items-center gap-2">
 
-                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Exportar Excel
+                                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Exportar Excel
 
-                        </button>
+                                </button>
 
-                        <button onclick="shareReport()"
-                            class="bg-[#25D366] text-white py-3 px-6 rounded-xl font-bold hover:bg-[#128C7E] flex items-center gap-2">
+                                <button onclick="shareReport()"
+                                    class="bg-[#25D366] text-white py-3 px-6 rounded-xl font-bold hover:bg-[#128C7E] flex items-center gap-2">
 
-                            <i data-lucide="share-2" class="w-4 h-4"></i> Compartilhar
+                                    <i data-lucide="share-2" class="w-4 h-4"></i> Compartilhar
 
-                        </button>
+                                </button>
 
-                    </div>
+                            </div>
 
-                </div>
+                        </div>
 
             </section>
 
@@ -912,9 +900,8 @@
 
                 <div class="mb-6">
 
-                    <h2 class="text-xl font-bold text-slate-800 mb-2">Configurações</h2>
-
-                    <p class="text-sm text-slate-600">Personalize o sistema</p>
+                    <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Configurações</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Personalize o sistema</p>
 
                 </div>
 
@@ -924,63 +911,62 @@
 
                     <!-- User Preferences -->
 
-                    <div class="glass p-6 rounded-2xl shadow-sm">
+                    <div class="glass-dark border border-white/5 p-6 rounded-2xl relative overflow-hidden group">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all duration-500">
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-white mb-4">Preferências do Usuário</h3>
 
-                        <h3 class="font-bold text-slate-800 mb-4">Preferências do Usuário</h3>
+                            <div class="space-y-4">
 
-                        <div class="space-y-4">
+                                <div>
 
-                            <div>
+                                    <label class="flex items-center">
 
-                                <label class="flex items-center">
+                                        <input type="checkbox" id="notifications" class="mr-2">
 
-                                    <input type="checkbox" id="notifications" class="mr-2">
+                                        <span class="text-sm">Notificações por e-mail</span>
 
-                                    <span class="text-sm">Notificações por e-mail</span>
+                                    </label>
 
-                                </label>
+                                </div>
+
+                                <div>
+
+                                    <label class="flex items-center">
+
+                                        <input type="checkbox" id="dark-mode" class="mr-2">
+
+                                        <span class="text-sm">Modo escuro automático</span>
+
+                                    </label>
+
+                                </div>
+
+                                <div>
+
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Lembretes Padrão</label>
+                                    <select id="default-reminder"
+                                        class="w-full border border-white/10 bg-slate-900 text-slate-300 p-2 rounded-lg text-sm mt-1 focus:border-brand-green outline-none">
+                                        <option value="none">Sem lembrete</option>
+                                        <option value="15min">15 minutos antes</option>
+                                        <option value="1h">1 hora antes</option>
+                                        <option value="1d">1 dia antes</option>
+                                    </select>
+
+                                </div>
+
+                                <button onclick="savePreferences()"
+                                    class="w-full bg-brand-green text-white py-2.5 rounded-lg text-sm font-bold hover:bg-brand-dark">
+
+                                    Salvar Preferências
+
+                                </button>
 
                             </div>
-
-                            <div>
-
-                                <label class="flex items-center">
-
-                                    <input type="checkbox" id="dark-mode" class="mr-2">
-
-                                    <span class="text-sm">Modo escuro automático</span>
-
-                                </label>
-
-                            </div>
-
-                            <div>
-
-                                <label class="text-xs font-bold text-slate-500 uppercase">Lembretes Padrão</label>
-
-                                <select id="default-reminder" class="w-full border p-2 rounded-lg text-sm mt-1">
-
-                                    <option value="none">Sem lembrete</option>
-
-                                    <option value="15min">15 minutos antes</option>
-
-                                    <option value="1h">1 hora antes</option>
-
-                                    <option value="1d">1 dia antes</option>
-
-                                </select>
-
-                            </div>
-
-                            <button onclick="savePreferences()"
-                                class="w-full bg-brand-green text-white py-2.5 rounded-lg text-sm font-bold hover:bg-brand-dark">
-
-                                Salvar Preferências
-
-                            </button>
 
                         </div>
-
                     </div>
 
 
@@ -989,105 +975,103 @@
 
                     <div class="space-y-6">
 
-                        <div class="glass p-6 rounded-2xl shadow-sm">
-
-                            <h3 class="font-bold text-slate-800 mb-4 flex items-center">
-
-                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-green"></i>
-
-                                Segurança de Dados
-
-                            </h3>
-
-
-
-                            <div class="bg-green-50 border border-green-200 p-4 rounded-lg text-sm text-green-800 mb-6">
-
-                                <p class="font-bold mb-2">⚠️ Importante</p>
-
-                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
-
+                        <div class="glass-dark border border-white/5 p-6 rounded-2xl relative overflow-hidden group">
+                            <div
+                                class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all duration-500">
                             </div>
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-green"></i>
+                                    Segurança de Dados
+                                </h3>
 
 
 
-                            <div class="space-y-3">
-
-                                <button onclick="downloadBackup()"
-                                    class="w-full border border-slate-300 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
-
-                                    <i data-lucide="download" class="w-4 h-4"></i>
-
-                                    Baixar Backup Completo (.json)
-
-                                </button>
+                                <div
+                                    class="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-lg text-sm text-emerald-400 mb-6">
+                                    <p class="font-bold mb-2 flex items-center"><i data-lucide="alert-triangle"
+                                            class="w-4 h-4 mr-2"></i> Importante</p>
+                                    <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
+                                </div>
 
 
 
-                                <div class="relative">
+                                <div class="space-y-3">
 
-                                    <button
-                                        class="w-full bg-slate-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                    <button onclick="downloadBackup()"
+                                        class="w-full border border-white/10 text-white py-3 rounded-lg text-sm font-medium hover:bg-white/5 flex justify-center items-center gap-2">
 
-                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        <i data-lucide="download" class="w-4 h-4"></i>
 
-                                        Restaurar Backup
+                                        Baixar Backup Completo (.json)
 
                                     </button>
 
-                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
-                                        class="absolute inset-0 opacity-0 cursor-pointer">
+
+
+                                    <div class="relative">
+
+                                        <button
+                                            class="w-full bg-slate-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+
+                                            <i data-lucide="upload" class="w-4 h-4"></i>
+
+                                            Restaurar Backup
+
+                                        </button>
+
+                                        <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                            class="absolute inset-0 opacity-0 cursor-pointer">
+
+                                    </div>
 
                                 </div>
 
                             </div>
-
                         </div>
 
 
 
                         <!-- Danger Zone -->
 
-                        <div class="glass p-6 rounded-2xl shadow-sm">
+                        <div class="glass-dark border border-red-500/20 p-6 rounded-2xl relative overflow-hidden group">
+                            <div
+                                class="absolute -top-10 -right-10 w-24 h-24 bg-red-500/10 rounded-full blur-2xl group-hover:bg-red-500/20 transition-all duration-500">
+                            </div>
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-white mb-4 flex items-center text-red-400">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                    Zona de Perigo
+                                </h3>
 
-                            <h3 class="font-bold text-slate-800 mb-4 flex items-center text-red-600">
-
-                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
-
-                                Zona de Perigo
-
-                            </h3>
 
 
+                                <div class="bg-red-500/10 p-4 rounded-lg border border-red-500/20 mb-4">
+                                    <p class="text-sm text-red-400"><strong>Atenção:</strong> Estas ações são
+                                        irreversíveis.</p>
+                                </div>
 
-                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
 
-                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
 
-                                </p>
+                                <div class="grid grid-cols-2 gap-3">
+
+                                    <button onclick="clearAllData()"
+                                        class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+
+                                        Limpar Todos os Dados
+
+                                    </button>
+
+                                    <button onclick="factoryReset()"
+                                        class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+
+                                        Resetar Sistema
+
+                                    </button>
+
+                                </div>
 
                             </div>
-
-
-
-                            <div class="grid grid-cols-2 gap-3">
-
-                                <button onclick="clearAllData()"
-                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
-
-                                    Limpar Todos os Dados
-
-                                </button>
-
-                                <button onclick="factoryReset()"
-                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
-
-                                    Resetar Sistema
-
-                                </button>
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -1116,23 +1100,28 @@
 
                         </div>
 
-                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <h1 class="text-3xl font-bold text-white mb-2">Manual Completo de Uso</h1>
 
-                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia completo para gestão de checklists em
+                        <p class="text-slate-400 text-lg max-w-2xl mx-auto">Guia completo para gestão de checklists em
 
                             múltiplos cenários</p>
 
                         <div class="mt-4 flex flex-wrap justify-center gap-2">
 
-                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para
+                            <span
+                                class="px-3 py-1 bg-green-500/20 text-green-400 border border-green-500/20 rounded-full text-xs font-bold">✓
+                                Para
 
                                 Iniciantes</span>
 
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
+                            <span
+                                class="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded-full text-xs font-bold">📱
+                                Mobile e
 
                                 Desktop</span>
 
-                            <span class="px-3 py-1 bg-green-100 text-brand-green rounded-full text-xs font-bold">⚡
+                            <span
+                                class="px-3 py-1 bg-green-500/20 text-brand-green border border-green-500/20 rounded-full text-xs font-bold">⚡
 
                                 Rápido e Prático</span>
 
@@ -1144,9 +1133,9 @@
 
                     <!-- Barra de Progresso do Tutorial -->
 
-                    <div class="glass rounded-2xl p-6 shadow-sm border-white/10 mb-8">
+                    <div class="glass-dark rounded-2xl p-6 shadow-sm border border-white/10 mb-8">
 
-                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                        <h3 class="font-bold text-white mb-4 flex items-center">
 
                             <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand-green"></i>
 
@@ -1162,7 +1151,7 @@
 
                             </div>
 
-                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                            <div class="flex justify-between text-xs text-slate-400 mt-2">
 
                                 <span>0% Concluído</span>
 
@@ -1175,49 +1164,49 @@
                         <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
 
                             <button onclick="scrollToSection('instalacao')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 1. Instalação
 
                             </button>
 
                             <button onclick="scrollToSection('primeiro-uso')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 2. Primeiro Uso
 
                             </button>
 
                             <button onclick="scrollToSection('criacao')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 3. Criação
 
                             </button>
 
                             <button onclick="scrollToSection('templates')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 4. Templates
 
                             </button>
 
                             <button onclick="scrollToSection('organizacao')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 5. Organização
 
                             </button>
 
                             <button onclick="scrollToSection('relatorios')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 6. Relatórios
 
                             </button>
 
                             <button onclick="scrollToSection('produtividade')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-slate-300 hover:text-white transition-colors text-xs">
 
                                 7. Produtividade
 
@@ -1231,7 +1220,8 @@
 
                     <!-- Seção 1: Instalação -->
 
-                    <div id="instalacao" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="instalacao"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1241,12 +1231,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Instalação do Sistema</h3>
+                                <h3 class="text-xl font-bold text-white">Instalação do Sistema</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('instalacao')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400 transition-colors">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1256,17 +1246,17 @@
 
 
 
-                        <div class="bg-gray-900 rounded-2xl p-6 text-white shadow-lg mb-6">
+                        <div class="glass border border-white/5 rounded-2xl p-6 text-white shadow-lg mb-6">
 
                             <h4 class="font-bold text-lg mb-4 flex items-center">
 
-                                <i data-lucide="download" class="w-5 h-5 mr-2 text-green-400"></i>
+                                <i data-lucide="download" class="w-5 h-5 mr-2 text-brand-green"></i>
 
                                 Torne o App Disponível OFFLINE
 
                             </h4>
 
-                            <p class="text-gray-300 mb-4">Instale no celular para usar sem internet, igual um app
+                            <p class="text-slate-300 mb-4">Instale no celular para usar sem internet, igual um app
 
                                 normal:</p>
 
@@ -1384,7 +1374,8 @@
 
                     <!-- Seção 2: Primeiro Uso -->
 
-                    <div id="primeiro-uso" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="primeiro-uso"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1394,12 +1385,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Primeiro Uso (5 Minutos)</h3>
+                                <h3 class="text-xl font-bold text-white">Primeiro Uso (5 Minutos)</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('primeiro-uso')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400 transition-colors">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1413,9 +1404,9 @@
 
                             <div class="space-y-4">
 
-                                <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                                <div class="bg-green-500/10 p-5 rounded-xl border border-green-500/20 text-white">
 
-                                    <h4 class="font-bold text-green-700 mb-3 flex items-center">
+                                    <h4 class="font-bold text-green-400 mb-3 flex items-center">
 
                                         <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
 
@@ -1428,7 +1419,7 @@
                                         <li class="flex items-start">
 
                                             <div
-                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mr-2 text-xs font-bold">
 
                                                 A</div>
 
@@ -1436,7 +1427,7 @@
 
                                                 <strong>Clique em "Checklist Rápido"</strong>
 
-                                                <p class="text-gray-600 text-xs">Botão cinza no cabeçalho</p>
+                                                <p class="text-slate-400 text-xs">Botão cinza no cabeçalho</p>
 
                                             </div>
 
@@ -1445,7 +1436,7 @@
                                         <li class="flex items-start">
 
                                             <div
-                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mr-2 text-xs font-bold">
 
                                                 B</div>
 
@@ -1453,7 +1444,7 @@
 
                                                 <strong>Adicione 3-5 tarefas simples</strong>
 
-                                                <p class="text-gray-600 text-xs">Ex: "Enviar e-mail"</p>
+                                                <p class="text-slate-400 text-xs">Ex: "Enviar e-mail"</p>
 
                                             </div>
 
@@ -1462,7 +1453,7 @@
                                         <li class="flex items-start">
 
                                             <div
-                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mr-2 text-xs font-bold">
 
                                                 C</div>
 
@@ -1470,7 +1461,7 @@
 
                                                 <strong>Marque como concluído</strong>
 
-                                                <p class="text-gray-600 text-xs">Clique nas checkboxes</p>
+                                                <p class="text-slate-400 text-xs">Clique nas checkboxes</p>
 
                                             </div>
 
@@ -1486,9 +1477,9 @@
 
                             <div class="space-y-4">
 
-                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                <div class="bg-blue-500/10 p-5 rounded-xl border border-blue-500/20 text-white">
 
-                                    <h4 class="font-bold text-blue-700 mb-3 flex items-center">
+                                    <h4 class="font-bold text-blue-400 mb-3 flex items-center">
 
                                         <i data-lucide="target" class="w-5 h-5 mr-2"></i>
 
@@ -1500,25 +1491,28 @@
 
                                         <div class="flex items-start">
 
-                                            <i data-lucide="check" class="w-4 h-4 text-blue-500 mt-0.5 mr-2"></i>
+                                            <i data-lucide="check" class="w-4 h-4 text-blue-400 mt-0.5 mr-2"></i>
 
-                                            <span><strong>Acesse a aba "Templates"</strong></span>
-
-                                        </div>
-
-                                        <div class="flex items-start">
-
-                                            <i data-lucide="check" class="w-4 h-4 text-blue-500 mt-0.5 mr-2"></i>
-
-                                            <span><strong>Escolha um template pronto</strong></span>
+                                            <span class="text-slate-200"><strong>Acesse a aba
+                                                    "Templates"</strong></span>
 
                                         </div>
 
                                         <div class="flex items-start">
 
-                                            <i data-lucide="check" class="w-4 h-4 text-blue-500 mt-0.5 mr-2"></i>
+                                            <i data-lucide="check" class="w-4 h-4 text-blue-400 mt-0.5 mr-2"></i>
 
-                                            <span><strong>Clique em "Usar Template"</strong></span>
+                                            <span class="text-slate-200"><strong>Escolha um template
+                                                    pronto</strong></span>
+
+                                        </div>
+
+                                        <div class="flex items-start">
+
+                                            <i data-lucide="check" class="w-4 h-4 text-blue-400 mt-0.5 mr-2"></i>
+
+                                            <span class="text-slate-200"><strong>Clique em "Usar
+                                                    Template"</strong></span>
 
                                         </div>
 
@@ -1536,7 +1530,8 @@
 
                     <!-- Seção 3: Criação Avançada -->
 
-                    <div id="criacao" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="criacao"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1546,12 +1541,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Criação de Checklists Avançados</h3>
+                                <h3 class="text-xl font-bold text-white">Criação de Checklists Avançados</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('criacao')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1564,21 +1559,22 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                             <div
-                                class="bg-gradient-to-br from-green-50 to-white p-5 rounded-xl border border-green-100 shadow-sm">
+                                class="bg-gradient-to-br from-green-900/40 to-slate-900 p-5 rounded-xl border border-green-500/20 shadow-sm text-white">
 
-                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center mb-3">
 
-                                    <i data-lucide="list-plus" class="w-5 h-5 text-green-600"></i>
+                                    <i data-lucide="list-plus" class="w-5 h-5 text-green-400"></i>
 
                                 </div>
 
-                                <h4 class="font-bold text-gray-800 mb-2">Estrutura de Tarefas</h4>
+                                <h4 class="font-bold text-white mb-2">Estrutura de Tarefas</h4>
 
-                                <ul class="space-y-2 text-sm text-gray-600">
+                                <ul class="space-y-2 text-sm text-slate-300">
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Tarefas principais e subtarefas</span>
 
@@ -1586,7 +1582,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Descrições detalhadas</span>
 
@@ -1594,7 +1590,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Data de vencimento</span>
 
@@ -1602,7 +1598,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Prioridades (Alta, Média, Baixa)</span>
 
@@ -1615,21 +1611,22 @@
 
 
                             <div
-                                class="bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl border border-blue-100 shadow-sm">
+                                class="bg-gradient-to-br from-blue-900/40 to-slate-900 p-5 rounded-xl border border-blue-500/20 shadow-sm text-white">
 
-                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-3">
 
-                                    <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
+                                    <i data-lucide="users" class="w-5 h-5 text-blue-400"></i>
 
                                 </div>
 
-                                <h4 class="font-bold text-gray-800 mb-2">Checklists Compartilhados</h4>
+                                <h4 class="font-bold text-white mb-2">Checklists Compartilhados</h4>
 
-                                <ul class="space-y-2 text-sm text-gray-600">
+                                <ul class="space-y-2 text-sm text-slate-300">
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 mr-2 mt-0.5"></i>
 
                                         <span>Compartilhe com equipes</span>
 
@@ -1637,7 +1634,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 mr-2 mt-0.5"></i>
 
                                         <span>Atribuição de responsáveis</span>
 
@@ -1645,7 +1642,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 mr-2 mt-0.5"></i>
 
                                         <span>Acompanhamento em tempo real</span>
 
@@ -1663,7 +1660,8 @@
 
                     <!-- Seção 4: Templates -->
 
-                    <div id="templates" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="templates"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1673,12 +1671,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Templates para Diversos Cenários</h3>
+                                <h3 class="text-xl font-bold text-white">Templates para Diversos Cenários</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('templates')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1690,53 +1688,56 @@
 
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-                            <div class="bg-blue-50 p-4 rounded-xl text-center">
+                            <div class="bg-blue-500/10 p-4 rounded-xl text-center border border-blue-500/20 text-white">
 
-                                <i data-lucide="briefcase" class="w-8 h-8 text-blue-600 mx-auto mb-2"></i>
+                                <i data-lucide="briefcase" class="w-8 h-8 text-blue-400 mx-auto mb-2"></i>
 
-                                <p class="text-sm font-bold">Trabalho</p>
+                                <p class="text-sm font-bold text-blue-400">Trabalho</p>
 
-                                <p class="text-xs text-gray-600">Reuniões, projetos</p>
-
-                            </div>
-
-                            <div class="bg-purple-50 p-4 rounded-xl text-center">
-
-                                <i data-lucide="home" class="w-8 h-8 text-purple-600 mx-auto mb-2"></i>
-
-                                <p class="text-sm font-bold">Casa</p>
-
-                                <p class="text-xs text-gray-600">Limpeza, manutenção</p>
+                                <p class="text-xs text-slate-400">Reuniões, projetos</p>
 
                             </div>
 
-                            <div class="bg-green-50 p-4 rounded-xl text-center">
+                            <div
+                                class="bg-purple-500/10 p-4 rounded-xl text-center border border-purple-500/20 text-white">
 
-                                <i data-lucide="heart" class="w-8 h-8 text-green-600 mx-auto mb-2"></i>
+                                <i data-lucide="home" class="w-8 h-8 text-purple-400 mx-auto mb-2"></i>
 
-                                <p class="text-sm font-bold">Saúde</p>
+                                <p class="text-sm font-bold text-purple-400">Casa</p>
 
-                                <p class="text-xs text-gray-600">Exercícios, medicamentos</p>
-
-                            </div>
-
-                            <div class="bg-yellow-50 p-4 rounded-xl text-center">
-
-                                <i data-lucide="plane" class="w-8 h-8 text-yellow-600 mx-auto mb-2"></i>
-
-                                <p class="text-sm font-bold">Viagem</p>
-
-                                <p class="text-xs text-gray-600">Malas, documentos</p>
+                                <p class="text-xs text-slate-400">Limpeza, manutenção</p>
 
                             </div>
 
-                            <div class="bg-red-50 p-4 rounded-xl text-center">
+                            <div
+                                class="bg-green-500/10 p-4 rounded-xl text-center border border-green-500/20 text-white">
 
-                                <i data-lucide="shopping-cart" class="w-8 h-8 text-red-600 mx-auto mb-2"></i>
+                                <i data-lucide="heart" class="w-8 h-8 text-green-400 mx-auto mb-2"></i>
 
-                                <p class="text-sm font-bold">Compras</p>
+                                <p class="text-sm font-bold text-green-400">Saúde</p>
 
-                                <p class="text-xs text-gray-600">Supermercado, lojas</p>
+                                <p class="text-xs text-slate-400">Exercícios, medicamentos</p>
+
+                            </div>
+
+                            <div
+                                class="bg-yellow-500/10 p-4 rounded-xl text-center border border-yellow-500/20 text-white">
+
+                                <i data-lucide="plane" class="w-8 h-8 text-yellow-400 mx-auto mb-2"></i>
+
+                                <p class="text-sm font-bold text-yellow-400">Viagem</p>
+
+                                <p class="text-xs text-slate-400">Malas, documentos</p>
+
+                            </div>
+
+                            <div class="bg-red-500/10 p-4 rounded-xl text-center border border-red-500/20 text-white">
+
+                                <i data-lucide="shopping-cart" class="w-8 h-8 text-red-400 mx-auto mb-2"></i>
+
+                                <p class="text-sm font-bold text-red-400">Compras</p>
+
+                                <p class="text-xs text-slate-400">Supermercado, lojas</p>
 
                             </div>
 
@@ -1748,7 +1749,8 @@
 
                     <!-- Seção 5: Organização -->
 
-                    <div id="organizacao" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="organizacao"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1758,12 +1760,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Organização e Categorias</h3>
+                                <h3 class="text-xl font-bold text-white">Organização e Categorias</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('organizacao')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1774,9 +1776,9 @@
 
 
                         <div
-                            class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border border-green-200 mb-6">
+                            class="bg-gradient-to-r from-green-900/40 to-blue-900/40 p-6 rounded-xl border border-green-500/20 mb-6 text-white">
 
-                            <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <h4 class="font-bold text-white mb-3 flex items-center">
 
                                 <i data-lucide="folder-tree" class="w-5 h-5 mr-2 text-brand-green"></i>
 
@@ -1786,63 +1788,63 @@
 
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
 
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <div class="bg-slate-800/80 border border-white/5 p-3 rounded-lg text-center shadow-sm">
 
                                     <div
-                                        class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                        class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
 
-                                        <span class="font-bold text-blue-700">1</span>
+                                        <span class="font-bold text-blue-400">1</span>
 
                                     </div>
 
-                                    <p class="font-bold text-gray-800">Crie Categorias</p>
+                                    <p class="font-bold text-white">Crie Categorias</p>
 
-                                    <p class="text-gray-600">Organize por temas</p>
+                                    <p class="text-slate-400">Organize por temas</p>
 
                                 </div>
 
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <div class="bg-slate-800/80 border border-white/5 p-3 rounded-lg text-center shadow-sm">
 
                                     <div
-                                        class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                        class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-2">
 
-                                        <span class="font-bold text-green-700">2</span>
+                                        <span class="font-bold text-green-400">2</span>
 
                                     </div>
 
-                                    <p class="font-bold text-gray-800">Atribua Tags</p>
+                                    <p class="font-bold text-white">Atribua Tags</p>
 
-                                    <p class="text-gray-600">Marcadores visuais</p>
+                                    <p class="text-slate-400">Marcadores visuais</p>
 
                                 </div>
 
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <div class="bg-slate-800/80 border border-white/5 p-3 rounded-lg text-center shadow-sm">
 
                                     <div
-                                        class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                                        class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-2">
 
-                                        <span class="font-bold text-yellow-700">3</span>
+                                        <span class="font-bold text-yellow-400">3</span>
 
                                     </div>
 
-                                    <p class="font-bold text-gray-800">Filtre</p>
+                                    <p class="font-bold text-white">Filtre</p>
 
-                                    <p class="text-gray-600">Encontre rapidamente</p>
+                                    <p class="text-slate-400">Encontre rapidamente</p>
 
                                 </div>
 
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <div class="bg-slate-800/80 border border-white/5 p-3 rounded-lg text-center shadow-sm">
 
                                     <div
-                                        class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                                        class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
 
-                                        <span class="font-bold text-purple-700">4</span>
+                                        <span class="font-bold text-purple-400">4</span>
 
                                     </div>
 
-                                    <p class="font-bold text-gray-800">Priorize</p>
+                                    <p class="font-bold text-white">Priorize</p>
 
-                                    <p class="text-gray-600">Foque no importante</p>
+                                    <p class="text-slate-400">Foque no importante</p>
 
                                 </div>
 
@@ -1856,7 +1858,8 @@
 
                     <!-- Seção 6: Relatórios -->
 
-                    <div id="relatorios" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="relatorios"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1866,12 +1869,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Relatórios e Análise</h3>
+                                <h3 class="text-xl font-bold text-white">Relatórios e Análise</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('relatorios')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1884,51 +1887,54 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                             <div
-                                class="bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl border border-blue-100 shadow-sm">
+                                class="bg-gradient-to-br from-blue-900/40 to-slate-900 p-5 rounded-xl border border-blue-500/20 shadow-sm text-white">
 
-                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-3">
 
-                                    <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
+                                    <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
 
                                 </div>
 
-                                <h4 class="font-bold text-gray-800 mb-2">Produtividade</h4>
+                                <h4 class="font-bold text-white mb-2">Produtividade</h4>
 
-                                <p class="text-xs text-gray-600">Taxa de conclusão, tempo médio por tarefa</p>
+                                <p class="text-xs text-slate-400">Taxa de conclusão, tempo médio por tarefa</p>
 
                             </div>
 
 
 
                             <div
-                                class="bg-gradient-to-br from-green-50 to-white p-5 rounded-xl border border-green-100 shadow-sm">
+                                class="bg-gradient-to-br from-green-900/40 to-slate-900 p-5 rounded-xl border border-green-500/20 shadow-sm text-white">
 
-                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center mb-3">
 
-                                    <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
+                                    <i data-lucide="trending-up" class="w-5 h-5 text-green-400"></i>
 
                                 </div>
 
-                                <h4 class="font-bold text-gray-800 mb-2">Evolução</h4>
+                                <h4 class="font-bold text-white mb-2">Evolução</h4>
 
-                                <p class="text-xs text-gray-600">Progresso semanal e mensal</p>
+                                <p class="text-xs text-slate-400">Progresso semanal e mensal</p>
 
                             </div>
 
 
 
                             <div
-                                class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100 shadow-sm">
+                                class="bg-gradient-to-br from-purple-900/40 to-slate-900 p-5 rounded-xl border border-purple-500/20 shadow-sm text-white">
 
-                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-3">
 
-                                    <i data-lucide="pie-chart" class="w-5 h-5 text-purple-600"></i>
+                                    <i data-lucide="pie-chart" class="w-5 h-5 text-purple-400"></i>
 
                                 </div>
 
-                                <h4 class="font-bold text-gray-800 mb-2">Distribuição</h4>
+                                <h4 class="font-bold text-white mb-2">Distribuição</h4>
 
-                                <p class="text-xs text-gray-600">Por categoria e prioridade</p>
+                                <p class="text-xs text-slate-400">Por categoria e prioridade</p>
 
                             </div>
 
@@ -1940,7 +1946,8 @@
 
                     <!-- Seção 7: Produtividade -->
 
-                    <div id="produtividade" class="glass border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                    <div id="produtividade"
+                        class="glass-dark border border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
 
                         <div class="flex items-center justify-between mb-6">
 
@@ -1950,12 +1957,12 @@
 
                                 </div>
 
-                                <h3 class="text-xl font-bold text-gray-800">Dicas de Produtividade</h3>
+                                <h3 class="text-xl font-bold text-white">Dicas de Produtividade</h3>
 
                             </div>
 
                             <button onclick="markSectionComplete('produtividade')"
-                                class="text-xs text-gray-500 hover:text-green-600">
+                                class="text-xs text-slate-400 hover:text-green-400">
 
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
 
@@ -1967,9 +1974,9 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                            <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                            <div class="bg-green-500/10 p-5 rounded-xl border border-green-500/20 text-white">
 
-                                <h5 class="font-bold text-green-700 mb-4 flex items-center text-sm">
+                                <h5 class="font-bold text-green-400 mb-4 flex items-center text-sm">
 
                                     <i data-lucide="lightbulb" class="w-4 h-4 mr-2"></i>
 
@@ -1977,11 +1984,11 @@
 
                                 </h5>
 
-                                <ul class="space-y-2 text-sm text-gray-700">
+                                <ul class="space-y-2 text-sm text-slate-300">
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check" class="w-3 h-3 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Comece com templates prontos</span>
 
@@ -1989,7 +1996,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check" class="w-3 h-3 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Defina prioridades claras</span>
 
@@ -1997,7 +2004,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check" class="w-3 h-3 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Use categorias para organização</span>
 
@@ -2005,7 +2012,7 @@
 
                                     <li class="flex items-start">
 
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <i data-lucide="check" class="w-3 h-3 text-green-400 mr-2 mt-0.5"></i>
 
                                         <span>Revise checklists completados</span>
 
@@ -2017,9 +2024,9 @@
 
 
 
-                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                            <div class="bg-blue-500/10 p-5 rounded-xl border border-blue-500/20 text-white">
 
-                                <h5 class="font-bold text-blue-700 mb-4 flex items-center text-sm">
+                                <h5 class="font-bold text-blue-400 mb-4 flex items-center text-sm">
 
                                     <i data-lucide="zap" class="w-4 h-4 mr-2"></i>
 
@@ -2027,11 +2034,12 @@
 
                                 </h5>
 
-                                <ul class="space-y-2 text-sm text-gray-700">
+                                <ul class="space-y-2 text-sm text-slate-300">
 
                                     <li class="flex items-start">
 
-                                        <kbd class="bg-white px-2 py-1 rounded text-xs font-mono mr-2">Ctrl + N</kbd>
+                                        <kbd class="bg-slate-800 px-2 py-1 rounded text-xs font-mono mr-2">Ctrl +
+                                            N</kbd>
 
                                         <span>Novo checklist</span>
 
@@ -2039,7 +2047,8 @@
 
                                     <li class="flex items-start">
 
-                                        <kbd class="bg-white px-2 py-1 rounded text-xs font-mono mr-2">Ctrl + F</kbd>
+                                        <kbd class="bg-slate-800 px-2 py-1 rounded text-xs font-mono mr-2">Ctrl +
+                                            F</kbd>
 
                                         <span>Buscar checklists</span>
 
@@ -2047,7 +2056,7 @@
 
                                     <li class="flex items-start">
 
-                                        <kbd class="bg-white px-2 py-1 rounded text-xs font-mono mr-2">Ctrl +
+                                        <kbd class="bg-slate-800 px-2 py-1 rounded text-xs font-mono mr-2">Ctrl +
 
                                             Enter</kbd>
 
@@ -2057,7 +2066,7 @@
 
                                     <li class="flex items-start">
 
-                                        <kbd class="bg-white px-2 py-1 rounded text-xs font-mono mr-2">Espaço</kbd>
+                                        <kbd class="bg-slate-800 px-2 py-1 rounded text-xs font-mono mr-2">Espaço</kbd>
 
                                         <span>Marcar/desmarcar tarefa</span>
 
@@ -2075,11 +2084,11 @@
 
                     <!-- Rodapé do Manual -->
 
-                    <div class="mt-10 bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
+                    <div class="mt-10 glass-dark border border-white/10 rounded-2xl p-8 text-center shadow-sm">
 
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">Dúvidas Técnicas?</h3>
+                        <h3 class="text-lg font-bold text-white mb-2">Dúvidas Técnicas?</h3>
 
-                        <p class="text-gray-500 text-sm mb-6">
+                        <p class="text-slate-400 text-sm mb-6">
 
                             Nossa equipe de suporte responde em até 24h úteis.
 
@@ -2100,7 +2109,7 @@
 
                     <div class="text-center mt-8">
 
-                        <p class="text-[10px] text-gray-400">Versão 1.0 Pro • Software Premium</p>
+                        <p class="text-[10px] text-slate-500">Versão 1.0 Pro • Software Premium</p>
 
                     </div>
 
@@ -2437,19 +2446,14 @@
     <!-- Checklist Modal -->
 
     <div id="checklistModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-
-        <div class="glass-modal rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-
-            <div class="flex justify-between items-center p-6 border-b border-slate-100">
-
-                <h3 class="text-lg font-bold text-slate-800">Novo Checklist</h3>
-
-                <button onclick="closeModal('checklistModal')" class="text-slate-400 hover:text-slate-600">
-
+        <div
+            class="glass-dark border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b border-white/10 bg-white/5">
+                <h3 class="text-lg font-bold text-white">Novo Checklist</h3>
+                <button onclick="closeModal('checklistModal')"
+                    class="text-slate-400 hover:text-white transition-colors">
                     <i data-lucide="x"></i>
-
                 </button>
-
             </div>
 
 
@@ -2463,13 +2467,10 @@
 
 
                     <div>
-
-                        <label class="text-xs font-bold text-slate-500 uppercase">Título do Checklist</label>
-
+                        <label class="text-xs font-bold text-slate-400 uppercase">Título do Checklist</label>
                         <input type="text" id="cl-title" required
-                            class="w-full border p-3 rounded-lg text-lg focus:border-brand-green outline-none"
+                            class="w-full border border-white/10 bg-white/5 text-white p-3 rounded-lg text-lg focus:border-brand-green outline-none placeholder-slate-500 mt-1"
                             placeholder="Ex: Checklist de Viagem para Paris">
-
                     </div>
 
 
@@ -2477,32 +2478,22 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <div>
-
-                            <label class="text-xs font-bold text-slate-500 uppercase">Categoria</label>
-
-                            <select id="cl-category" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
-
+                            <label class="text-xs font-bold text-slate-400 uppercase">Categoria</label>
+                            <select id="cl-category"
+                                class="w-full border border-white/10 bg-slate-900 text-slate-300 p-2 rounded-lg text-sm outline-none mt-1">
                                 <option value="work">Trabalho</option>
-
                                 <option value="personal">Pessoal</option>
-
                                 <option value="health">Saúde</option>
-
                                 <option value="home">Casa</option>
-
                                 <option value="travel">Viagem</option>
-
                                 <option value="finance">Finanças</option>
-
                                 <option value="other">Outros</option>
-
                             </select>
-
                         </div>
 
                         <div>
 
-                            <label class="text-xs font-bold text-slate-500 uppercase">Prioridade</label>
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Prioridade</label>
 
                             <select id="cl-priority" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
 
@@ -2522,9 +2513,9 @@
 
                     <div>
 
-                        <label class="text-xs font-bold text-slate-500 uppercase">Descrição (Opcional)</label>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Descrição (Opcional)</label>
 
-                        <textarea id="cl-description" rows="3" class="w-full border p-2 rounded-lg text-sm"
+                        <textarea id="cl-description" rows="3" class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none"
                             placeholder="Descreva o propósito deste checklist..."></textarea>
 
                     </div>
@@ -2533,7 +2524,7 @@
 
                     <div>
 
-                        <label class="text-xs font-bold text-slate-500 uppercase">Data de Vencimento (Opcional)</label>
+                        <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Data de Vencimento (Opcional)</label>
 
                         <input type="date" id="cl-deadline"
                             class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
@@ -2548,7 +2539,7 @@
 
                         <div class="flex justify-between items-center mb-4">
 
-                            <label class="text-xs font-bold text-slate-500 uppercase">Tarefas</label>
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tarefas</label>
 
                             <button type="button" onclick="addTask()"
                                 class="text-sm text-brand-green hover:text-brand-dark flex items-center gap-1">
@@ -2594,11 +2585,11 @@
 
     <div id="quickChecklistModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
 
-        <div class="glass-modal rounded-2xl w-full max-w-md p-6">
+        <div class="glass-dark border border-white/10 shadow-2xl rounded-2xl w-full max-w-md p-6">
 
             <div class="flex justify-between items-center mb-6">
 
-                <h3 class="text-lg font-bold text-slate-800">Checklist Rápido</h3>
+                <h3 class="text-lg font-bold text-white">Checklist Rápido</h3>
 
                 <button onclick="closeModal('quickChecklistModal')" class="text-slate-400">
 
@@ -2611,13 +2602,17 @@
             <form onsubmit="submitQuickChecklist(event)" class="space-y-4">
 
                 <input type="text" id="quick-title" required placeholder="Título rápido..."
-                    class="w-full border p-2 rounded-lg">
+                    class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg outline-none focus:border-brand-green">
 
                 <div id="quick-tasks" class="space-y-2">
 
-                    <input type="text" class="w-full border p-2 rounded-lg text-sm" placeholder="Tarefa 1">
+                    <input type="text"
+                        class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg text-sm outline-none focus:border-brand-green"
+                        placeholder="Tarefa 1">
 
-                    <input type="text" class="w-full border p-2 rounded-lg text-sm" placeholder="Tarefa 2">
+                    <input type="text"
+                        class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg text-sm outline-none focus:border-brand-green"
+                        placeholder="Tarefa 2">
 
                 </div>
 
@@ -2627,7 +2622,8 @@
 
                 </button>
 
-                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">
+                <button type="submit"
+                    class="w-full bg-brand-green hover:bg-brand-dark text-white py-3 rounded-lg font-bold transition-colors">
 
                     Criar Checklist
 
@@ -2645,11 +2641,11 @@
 
     <div id="templateModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
 
-        <div class="glass-modal rounded-2xl w-full max-w-md p-6">
+        <div class="glass-dark border border-white/10 shadow-2xl rounded-2xl w-full max-w-md p-6">
 
             <div class="flex justify-between items-center mb-6">
 
-                <h3 class="text-lg font-bold text-slate-800">Novo Template</h3>
+                <h3 class="text-lg font-bold text-white">Novo Template</h3>
 
                 <button onclick="closeModal('templateModal')" class="text-slate-400">
 
@@ -2664,9 +2660,10 @@
                 <input type="hidden" id="tpl-id">
 
                 <input type="text" id="tpl-name" required placeholder="Nome do Template"
-                    class="w-full border p-2 rounded-lg">
+                    class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg outline-none focus:border-brand-green">
 
-                <select id="tpl-category" class="w-full border p-2 rounded-lg">
+                <select id="tpl-category"
+                    class="w-full border border-white/10 bg-slate-900 text-slate-300 p-2 rounded-lg outline-none focus:border-brand-green">
 
                     <option value="work">Trabalho</option>
 
@@ -2681,7 +2678,7 @@
                 </select>
 
                 <textarea id="tpl-description" rows="3" placeholder="Descrição do template..."
-                    class="w-full border p-2 rounded-lg"></textarea>
+                    class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg outline-none focus:border-brand-green"></textarea>
 
                 <button type="submit" class="w-full bg-brand-green text-white py-3 rounded-lg font-bold">
 
@@ -2701,11 +2698,11 @@
 
     <div id="categoryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
 
-        <div class="glass-modal rounded-2xl w-full max-w-sm p-6">
+        <div class="glass-dark border border-white/10 shadow-2xl rounded-2xl w-full max-w-sm p-6">
 
             <div class="flex justify-between items-center mb-6">
 
-                <h3 class="text-lg font-bold text-slate-800">Nova Categoria</h3>
+                <h3 class="text-lg font-bold text-white">Nova Categoria</h3>
 
                 <button onclick="closeModal('categoryModal')" class="text-slate-400">
 
@@ -2720,9 +2717,10 @@
                 <input type="hidden" id="cat-id">
 
                 <input type="text" id="cat-name" required placeholder="Nome da Categoria"
-                    class="w-full border p-2 rounded-lg">
+                    class="w-full border border-white/10 bg-white/5 text-white p-2 rounded-lg outline-none focus:border-brand-green">
 
-                <select id="cat-color" class="w-full border p-2 rounded-lg">
+                <select id="cat-color"
+                    class="w-full border border-white/10 bg-slate-900 text-slate-300 p-2 rounded-lg outline-none focus:border-brand-green">
 
                     <option value="blue">Azul (Trabalho)</option>
 
@@ -3126,7 +3124,7 @@
 
                 instructions: 'Manual de Uso',
 
-                about: 'Informaes Legais'
+                about: 'Informações Legais'
 
             };
 
@@ -3252,9 +3250,12 @@
 
                 return `
 
-                    <div class="glass p-6 rounded-xl card-hover">
-
-                        <div class="flex items-center justify-between mb-4">
+                    <div class="glass-dark p-6 rounded-xl card-hover border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-${cat.color}-500/10 rounded-full blur-2xl group-hover:bg-${cat.color}-500/20 transition-all duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-4">
 
                             <div class="w-10 h-10 rounded-full bg-${cat.color}-100 flex items-center justify-center">
 
@@ -3270,7 +3271,7 @@
 
                         </div>
 
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">${sanitizeHTML(cat.name)}</h3>
+                        <h3 class="font-bold text-lg text-white mb-2">${sanitizeHTML(cat.name)}</h3>
 
                         <button onclick="filterByCategory('${cat.id}')"
 
@@ -3279,6 +3280,7 @@
                             Ver checklists →
 
                         </button>
+                    </div>
 
                     </div>
 
@@ -3609,9 +3611,12 @@
                 const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
                 return `
-                    <div class="glass p-4 rounded-xl flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors" onclick="editChecklist('${c.id}')">
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm">${sanitizeHTML(c.title)}</h4>
+                    <div class="glass-dark p-4 rounded-xl flex items-center justify-between cursor-pointer hover:bg-white/5 border border-white/5 transition-colors group relative overflow-hidden" onclick="editChecklist('${c.id}')">
+                        <!-- Glow Effect -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <h4 class="font-bold text-white text-sm group-hover:text-emerald-400 transition-colors">${sanitizeHTML(c.title)}</h4>
                             <p class="text-xs text-slate-500 mt-1">${pct}% concluído</p>
                         </div>
                         <div class="w-8 h-8 rounded-full bg-emerald-100/50 flex items-center justify-center">
@@ -3715,9 +3720,12 @@
 
                 return `
 
-                    <div class="glass p-6 rounded-xl card-hover" >
+                    <div class="glass-dark p-6 rounded-xl card-hover border border-white/5 relative overflow-hidden group" >
+                        <!-- Glow Effect -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-${category.color}-500/10 rounded-full blur-2xl group-hover:bg-${category.color}-500/20 transition-all duration-500"></div>
 
-                        <div class="flex justify-between items-start mb-4">
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
 
                             <div class="flex items-center gap-3">
 
@@ -3733,7 +3741,7 @@
 
                                     <div class="flex items-center gap-2">
 
-                                        <h3 class="font-bold text-slate-900">${sanitizeHTML(checklist.title)}</h3>
+                                        <h3 class="font-bold text-white text-base leading-tight">${sanitizeHTML(checklist.title)}</h3>
 
                                         ${checklist.favorite ? '<i data-lucide="star" class="w-4 h-4 text-yellow-500 fill-yellow-500"></i>' : ''}
 
@@ -3782,6 +3790,8 @@
                                 <div class="progress-fill" style="width: ${progress}%"></div>
 
                             </div>
+                            <!-- Ensure z-index closure -->
+                        </div> 
 
                         </div>
 
@@ -3907,9 +3917,12 @@
 
                 return `
 
-                    < div class="glass p-6 rounded-xl card-hover" >
-
-                        <div class="flex justify-between items-start mb-4">
+                    <div class="glass-dark p-6 rounded-xl card-hover border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-${category.color}-500/10 rounded-full blur-2xl group-hover:bg-${category.color}-500/20 transition-all duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
 
                             <div class="w-10 h-10 rounded-full bg-${category.color}-100 flex items-center justify-center">
 
@@ -3925,7 +3938,7 @@
 
                         </div>
 
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">${sanitizeHTML(template.name)}</h3>
+                        <h3 class="font-bold text-lg text-white mb-2">${sanitizeHTML(template.name)}</h3>
 
                         <p class="text-sm text-slate-600 mb-4">${sanitizeHTML(template.description || '')}</p>
 
@@ -3937,7 +3950,8 @@
 
                         </button>
 
-                    </div >
+                        </div>
+                    </div>
 
                     `;
 
@@ -4343,13 +4357,15 @@
 
             container.innerHTML = Object.entries(distribution).map(([name, count]) => `
 
-                    <div class="text-center p-4 glass rounded-xl">
+                    <div class="text-center p-4 glass-dark rounded-xl border border-white/5 relative overflow-hidden group">
+                        <!-- Glow Effect -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
 
-                    <p class="text-xs text-slate-500 uppercase font-bold">${name}</p>
-
-                    <p class="text-2xl font-bold text-slate-800 mt-2">${count}</p>
-
-                </div>
+                        <div class="relative z-10">
+                            <p class="text-xs text-slate-500 uppercase font-bold">${name}</p>
+                            <p class="text-2xl font-bold text-white mt-2">${count}</p>
+                        </div>
+                    </div>
 
                     `).join('');
 
@@ -4728,20 +4744,70 @@
     </script>
 
 
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (MERCADO LIVRE / COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div
+                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <i data-lucide="check-circle-2"
+                                    class="h-6 w-6 text-emerald-600 dark:text-emerald-400"></i>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o
+                                        recebimento do produto digital.
+                                    </p>
+                                    <div
+                                        class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre,
+                                        testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra
+                                            Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
     <script>
-        window.activateLicense = async function(e) {
-            if(e) e.preventDefault();
-            
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
             const keyInput = document.getElementById('license-key');
             const emailInput = document.getElementById('license-email');
             const btn = document.getElementById('btn-activate');
-            
-            if(!keyInput || !emailInput) return;
-            
+
+            if (!keyInput || !emailInput) return;
+
             const key = keyInput.value.trim();
             const email = emailInput.value.trim();
-            
+
             if (!key || !email) {
                 alert('Por favor, preencha todos os campos.');
                 return;
@@ -4749,20 +4815,21 @@
 
             // 🔑 SENHA MESTRE PARA TESTES
             const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
-            
+
             if (MASTER_KEYS.includes(key.toUpperCase())) {
                 console.log('🔓 Master Access Granted');
                 localStorage.setItem('plena_license', key);
                 localStorage.setItem('ml_license_email', email);
                 localStorage.setItem('ml_master_mode', 'true');
-                
-                if(btn) {
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) {
                     const originalText = btn.innerText;
                     btn.innerText = '🔓 Acesso Liberado...';
                     btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
                     btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
                 }
-                
+
                 setTimeout(() => {
                     alert('Modo de Teste/Admin Ativado com Sucesso!');
                     window.location.reload();
@@ -4771,33 +4838,45 @@
             }
 
             // 🌍 FLUXO PADRÃO (API)
-            if(btn) {
+            if (btn) {
                 const originalText = btn.innerText;
                 btn.innerText = 'Verificando...';
                 btn.disabled = true;
-                
+
                 try {
                     // Tenta endpoint relativo padrão dos sistemas Gestão
                     const output = document.getElementById('activation-error');
-                    if(output) output.classList.add('hidden');
+                    if (output) output.classList.add('hidden');
 
                     const response = await fetch('../api_licenca_ml.php?action=activate', {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ license_key: key, email: email })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.status === 'success') {
                         localStorage.setItem('plena_license', key);
                         localStorage.setItem('ml_license_email', email);
                         localStorage.removeItem('ml_master_mode');
-                        alert('Licença Ativada com Sucesso!');
-                        window.location.reload();
+
+                        if (!localStorage.getItem('ml_receipt_confirmed')) {
+                            const loginView = document.getElementById('view-login');
+                            if (loginView) {
+                                loginView.classList.add('hide');
+                                loginView.style.display = 'none';
+                            }
+                            const receiptModal = document.getElementById('welcome-receipt-modal');
+                            if (receiptModal) receiptModal.classList.remove('hidden');
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        } else {
+                            alert('Licença Ativada com Sucesso!');
+                            window.location.reload();
+                        }
                     } else {
                         const msg = data.message || 'Chave inválida ou erro no servidor.';
-                        if(output) {
+                        if (output) {
                             output.textContent = msg;
                             output.classList.remove('hidden');
                         } else {
@@ -4810,6 +4889,50 @@
                 } finally {
                     btn.innerText = originalText;
                     btn.disabled = false;
+                }
+            }
+        };
+
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Obrigado.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo automaticamente.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento";
                 }
             }
         };

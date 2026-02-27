@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
     <script src="lock.js"></script>
@@ -8,6 +8,7 @@
     <title>Gestão Fit | Sistema Premium</title>
 
     <!-- PWA Meta Tags Padronizadas -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#2563EB">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,34 +23,46 @@
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Premium Assets -->
     <script src="assets/js/tailwind_config.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<body class="text-slate-800 antialiased">
+<body class="bg-body-bg text-text-main antialiased transition-colors duration-300">
 
     <!-- TELA DE ATIVAÇÃO (Airlock) -->
-    <section id="view-login" class="hide fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+    <section id="view-login"
+        class="hide fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl mb-4 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+                <div
+                    class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl mb-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z" />
+                        <path d="M15 3v4a2 2 0 0 0 2 2h4" />
+                        <path d="m9 15 2 2 4-4" />
+                    </svg>
                 </div>
-                <h1 class="text-3xl font-black text-white tracking-tight">Gestão <span class="text-emerald-400">Fit</span></h1>
+                <h1 class="text-3xl font-black text-white tracking-tight">Gestão <span
+                        class="text-emerald-400">Fit</span></h1>
                 <p class="text-slate-400 text-sm mt-2">Sistema Premium</p>
             </div>
-            <form id="activation-form" onsubmit="activateLicense(event)" class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl space-y-5">
+            <form id="activation-form" onsubmit="activateLicense(event)"
+                class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl space-y-5">
                 <h3 class="text-lg font-bold text-white text-center mb-2">Ativação de Licença</h3>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Chave de Licença</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Chave de
+                        Licença</label>
                     <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX-XXXX"
                         class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-center tracking-widest font-mono text-lg uppercase">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">E-mail do Comprador</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">E-mail do
+                        Comprador</label>
                     <input type="email" id="license-email" required placeholder="seu@email.com"
                         class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all">
                 </div>
@@ -65,12 +78,14 @@
 
 
     <!-- Overlay para sidebar mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 modal-backdrop hidden z-40 transition-opacity" onclick="toggleSidebar()">
+    </div>
 
     <!-- Sidebar Padronizada -->
     <aside id="sidebar"
-        class="sidebar bg-brand-black text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
-        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-[#0369A1]/50 to-transparent border-b border-white/5">
+        class="sidebar glass-dark text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl border-r border-white/10">
+        <div
+            class="h-20 flex items-center px-6 bg-gradient-to-r from-[#0369A1]/50 to-transparent border-b border-white/5">
             <i data-lucide="dumbbell" class="w-8 h-8 mr-3"></i>
             <div>
                 <h1 class="text-xl font-bold tracking-tight">GESTÃO FIT</h1>
@@ -135,9 +150,12 @@
             </button>
         </nav>
 
-        <div class="p-6 border-t border-white/10 text-center">
-            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
-            <span class="text-xs text-gray-500">Licença Vitalícia</span>
+        <div class="p-4 border-t border-white/10 text-center">
+            <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                <span class="text-[11px] font-bold text-amber-400">LICENÇA VITALÍCIA</span>
+            </div>
+            <p class="text-[10px] text-slate-500">Todos os Direitos Reservados © 2026</p>
         </div>
     </aside>
 
@@ -145,12 +163,14 @@
     <main class="main-content min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
         <!-- Header -->
         <header
-            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100">
+            class="glass sticky top-0 z-30 h-20 flex items-center justify-between px-4 lg:px-8 border-b border-white/10 shadow-sm transition-colors">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+                <button onclick="toggleSidebar()"
+                    class="lg:hidden p-2 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <h2 id="page-title" class="text-xl font-bold text-slate-800 hidden sm:block">Check-in Diário</h2>
+                <h2 id="page-title" class="text-xl font-bold dark:text-white text-slate-800 hidden sm:block">Check-in
+                    Diário</h2>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3">
@@ -159,7 +179,7 @@
                         class="absolute -inset-1 bg-green-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
                     </div>
                     <button onclick="openClosingModal()"
-                        class="relative flex items-center px-4 py-2.5 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        class="relative flex items-center px-4 py-2.5 glass-dark border border-white/10 hover:bg-white/10 text-white rounded-lg text-sm font-medium transition-all shadow-sm active:scale-95">
                         <i data-lucide="check-circle-2" class="w-4 h-4 sm:mr-2"></i>
                         <span class="hidden sm:inline">Fechar Caixa</span>
                         <span class="sm:hidden">Fechar</span>
@@ -171,7 +191,7 @@
                         class="absolute -inset-1 bg-brand-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
                     </div>
                     <button onclick="openApptModal()"
-                        class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                        class="relative flex items-center px-4 py-2.5 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg active:scale-95">
                         <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                         <span class="hidden sm:inline">Check-in / Avaliação</span>
                         <span class="sm:hidden">Novo</span>
@@ -187,12 +207,14 @@
             <section id="view-dashboard" class="view-section fade-in">
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                    <div
+                        class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 card-hover">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Check-ins
                                     (Hoje)</p>
-                                <h3 id="dash-appt-today" class="text-3xl font-bold text-slate-900">0</h3>
+                                <h3 id="dash-appt-today" class="text-3xl font-bold dark:text-white text-slate-900">0
+                                </h3>
                                 <p class="text-xs text-slate-500 mt-1">Alunos presentes</p>
                             </div>
                             <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
@@ -200,7 +222,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                    <div
+                        class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 card-hover">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Faturamento
@@ -215,7 +238,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                    <div
+                        class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 card-hover">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Comissões a
@@ -231,14 +255,15 @@
                 </div>
 
                 <!-- Check-ins do Dia -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                <div
+                    class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 mb-8">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-slate-800 flex items-center">
+                        <h3 class="font-bold dark:text-white text-slate-800 flex items-center">
                             <i data-lucide="calendar" class="mr-2 w-5 h-5"></i> Check-ins do Dia
                         </h3>
                         <div class="flex items-center gap-3">
                             <input type="date" id="agenda-date" onchange="renderDashboard()"
-                                class="border rounded-lg p-2 text-sm bg-white">
+                                class="border dark:border-white/10 dark:bg-slate-900/50 dark:text-white rounded-lg p-2 text-sm bg-white focus:outline-none focus:border-brand-primary">
                             <button onclick="openApptModal()"
                                 class="flex items-center gap-2 px-3 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold">
                                 <i data-lucide="plus" class="w-4 h-4"></i> Novo Check-in
@@ -249,9 +274,10 @@
                 </div>
 
                 <!-- Próximas Avaliações -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div
+                    class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-slate-800">Próximas Avaliações</h3>
+                        <h3 class="font-bold dark:text-white text-slate-800">Próximas Avaliações</h3>
                         <button onclick="router('dashboard')"
                             class="text-sm text-brand-primary hover:text-brand-dark font-medium">
                             Ver agenda completa →
@@ -267,8 +293,8 @@
             <section id="view-team" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Instrutores</h2>
-                        <p class="text-sm text-slate-600">Gerencie sua equipe de professores</p>
+                        <h2 class="text-xl font-bold dark:text-white text-slate-800">Instrutores</h2>
+                        <p class="text-sm dark:text-slate-400 text-slate-600">Gerencie sua equipe de professores</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openTeamModal()"
@@ -287,8 +313,8 @@
             <section id="view-services" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Treinos e Planos</h2>
-                        <p class="text-sm text-slate-600">Gerencie modalidades e mensalidades</p>
+                        <h2 class="text-xl font-bold dark:text-white text-slate-800">Treinos e Planos</h2>
+                        <p class="text-sm dark:text-slate-400 text-slate-600">Gerencie modalidades e mensalidades</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openServiceModal()"
@@ -307,8 +333,8 @@
             <section id="view-finance" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Financeiro</h2>
-                        <p class="text-sm text-slate-600">Controle de caixa e comissões</p>
+                        <h2 class="text-xl font-bold dark:text-white text-slate-800">Financeiro</h2>
+                        <p class="text-sm dark:text-slate-400 text-slate-600">Controle de caixa e comissões</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openExpenseModal()"
@@ -321,45 +347,53 @@
 
                 <!-- Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
-                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Faturamento (Mês)</p>
-                        <p id="fin-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    <div
+                        class="glass dark:bg-green-900/10 bg-green-50 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
+                        <p class="text-xs dark:text-slate-400 text-slate-500 uppercase font-bold mb-1">Faturamento (Mês)
+                        </p>
+                        <p id="fin-income" class="text-lg font-bold dark:text-green-400 text-green-700">R$ 0,00</p>
                     </div>
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
-                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Despesas (Mês)</p>
-                        <p id="fin-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    <div
+                        class="glass dark:bg-red-900/10 bg-red-50 p-4 rounded-xl border border-red-100 dark:border-red-500/20">
+                        <p class="text-xs dark:text-slate-400 text-slate-500 uppercase font-bold mb-1">Despesas (Mês)
+                        </p>
+                        <p id="fin-expense" class="text-lg font-bold dark:text-red-400 text-red-700">R$ 0,00</p>
                     </div>
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Comissões (Mês)</p>
-                        <p id="fin-commission" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    <div
+                        class="glass dark:bg-blue-900/10 bg-blue-50 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                        <p class="text-xs dark:text-slate-400 text-slate-500 uppercase font-bold mb-1">Comissões (Mês)
+                        </p>
+                        <p id="fin-commission" class="text-lg font-bold dark:text-blue-400 text-blue-700">R$ 0,00</p>
                     </div>
                 </div>
 
                 <!-- Filters -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
-                    <div class="p-4 bg-slate-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-slate-200">
+                <div
+                    class="glass dark:bg-slate-800/50 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden mb-6">
+                    <div
+                        class="p-4 bg-slate-50 dark:bg-white/5 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-slate-200 dark:border-white/10">
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
                             <input type="text" id="search-term" onkeyup="renderFinance()" placeholder="Buscar..."
-                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-primary outline-none text-sm">
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 dark:border-white/10 dark:bg-slate-900/50 dark:text-white focus:ring-2 focus:ring-brand-primary outline-none text-sm">
                         </div>
                         <div>
                             <input type="date" id="filter-start" onchange="renderFinance()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border p-2 rounded-lg text-sm bg-white dark:border-white/10 dark:bg-slate-900/50 dark:text-white focus:outline-none focus:border-brand-primary">
                         </div>
                         <div>
                             <input type="date" id="filter-end" onchange="renderFinance()"
-                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                                class="w-full border p-2 rounded-lg text-sm bg-white dark:border-white/10 dark:bg-slate-900/50 dark:text-white focus:outline-none focus:border-brand-primary">
                         </div>
                         <div class="flex gap-2">
                             <select id="filter-type" onchange="renderFinance()"
-                                class="flex-1 px-4 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none">
+                                class="flex-1 px-4 py-2 rounded-lg border border-slate-300 dark:border-white/10 dark:bg-slate-900/50 dark:text-white text-sm bg-white outline-none">
                                 <option value="all">Todos</option>
                                 <option value="income">Entradas</option>
                                 <option value="expense">Saídas</option>
                             </select>
                             <button onclick="clearFinanceFilters()"
-                                class="px-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors">
+                                class="px-3 py-2 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 dark:text-white rounded-lg text-sm transition-colors">
                                 <i data-lucide="x" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -368,7 +402,7 @@
                     <!-- Transactions Table -->
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Data</th>
                                     <th class="px-6 py-3">Descrição</th>
@@ -379,10 +413,12 @@
                                     <th class="px-6 py-3 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="trans-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                            <tbody id="trans-list"
+                                class="divide-y divide-slate-100 dark:divide-white/5 text-sm dark:text-slate-300">
+                            </tbody>
                         </table>
                     </div>
-                    <div id="empty-msg" class="hidden p-8 text-center text-slate-400">
+                    <div id="empty-msg" class="hidden p-8 text-center text-slate-400 dark:text-slate-500">
                         <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
                         <p>Nenhuma transação encontrada.</p>
                     </div>
@@ -393,8 +429,8 @@
             <section id="view-clients" class="view-section hide fade-in">
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">Alunos</h2>
-                        <p class="text-sm text-slate-600">Gerencie sua base de alunos</p>
+                        <h2 class="text-xl font-bold dark:text-white text-slate-800">Alunos</h2>
+                        <p class="text-sm dark:text-slate-400 text-slate-600">Gerencie sua base de alunos</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <button onclick="openClientModal()"
@@ -406,10 +442,12 @@
                 </div>
 
                 <!-- Clients Table -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div
+                    class="glass dark:bg-slate-800/50 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                            <thead
+                                class="bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 text-xs uppercase">
                                 <tr>
                                     <th class="px-6 py-3">Nome</th>
                                     <th class="px-6 py-3">Telefone</th>
@@ -418,7 +456,9 @@
                                     <th class="px-6 py-3 text-center">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="clients-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                            <tbody id="clients-list"
+                                class="divide-y divide-slate-100 dark:divide-white/5 text-sm dark:text-slate-300">
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -427,21 +467,26 @@
             <!-- Reports View -->
             <section id="view-reports" class="view-section hide fade-in">
                 <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-800 mb-2">Relatórios</h2>
-                    <p class="text-sm text-slate-600">Análise completa do seu negócio</p>
+                    <h2 class="text-xl font-bold dark:text-white text-slate-800 mb-2">Relatórios</h2>
+                    <p class="text-sm dark:text-slate-400 text-slate-600">Análise completa do seu negócio</p>
                 </div>
 
                 <!-- Report Filters -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                    <h3 class="font-bold text-slate-800 mb-4">Configurar Período</h3>
+                <div
+                    class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 mb-6">
+                    <h3 class="font-bold dark:text-white text-slate-800 mb-4">Configurar Período</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Inicial</label>
-                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Data
+                                Inicial</label>
+                            <input type="date" id="rep-start"
+                                class="w-full border dark:border-white/10 dark:bg-slate-900/50 dark:text-white p-2 rounded-lg text-sm mt-1 focus:outline-none focus:border-brand-primary">
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-500 uppercase">Data Final</label>
-                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                            <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Data
+                                Final</label>
+                            <input type="date" id="rep-end"
+                                class="w-full border dark:border-white/10 dark:bg-slate-900/50 dark:text-white p-2 rounded-lg text-sm mt-1 focus:outline-none focus:border-brand-primary">
                         </div>
                         <div class="flex gap-2">
                             <button onclick="generateReport()"
@@ -449,7 +494,7 @@
                                 Gerar Relatório
                             </button>
                             <button onclick="generateMonthReport()"
-                                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm transition-colors"
+                                class="px-4 py-2 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 dark:text-white rounded-lg text-sm transition-colors"
                                 title="Relatório do Mês">
                                 <i data-lucide="calendar" class="w-4 h-4"></i>
                             </button>
@@ -461,35 +506,40 @@
                 <div id="report-result" class="hide space-y-6">
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                        <div
+                            class="glass dark:bg-green-900/10 bg-green-50 p-6 rounded-xl text-center border border-green-100 dark:border-green-500/20">
                             <div
-                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
-                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                                class="w-12 h-12 rounded-full dark:bg-green-500/20 bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 dark:text-green-400 text-green-600"></i>
                             </div>
-                            <p class="text-xs text-slate-500 uppercase font-bold">Faturamento</p>
-                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                            <p class="text-xs dark:text-slate-400 text-slate-500 uppercase font-bold">Faturamento</p>
+                            <p id="rep-inc" class="text-2xl font-bold dark:text-green-400 text-green-700 mt-2">R$ 0,00
+                            </p>
                         </div>
-                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                        <div
+                            class="glass dark:bg-red-900/10 bg-red-50 p-6 rounded-xl text-center border border-red-100 dark:border-red-500/20">
                             <div
-                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
-                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                                class="w-12 h-12 rounded-full dark:bg-red-500/20 bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-down" class="w-6 h-6 dark:text-red-400 text-red-600"></i>
                             </div>
-                            <p class="text-xs text-slate-500 uppercase font-bold">Despesas</p>
-                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                            <p class="text-xs dark:text-slate-400 text-slate-500 uppercase font-bold">Despesas</p>
+                            <p id="rep-exp" class="text-2xl font-bold dark:text-red-400 text-red-700 mt-2">R$ 0,00</p>
                         </div>
-                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                        <div
+                            class="glass dark:bg-blue-900/10 bg-blue-50 p-6 rounded-xl text-center border border-blue-100 dark:border-blue-500/20">
                             <div
-                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
-                                <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
+                                class="w-12 h-12 rounded-full dark:bg-blue-500/20 bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="users" class="w-6 h-6 dark:text-blue-400 text-blue-600"></i>
                             </div>
-                            <p class="text-xs text-slate-500 uppercase font-bold">Comissões</p>
-                            <p id="rep-com" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                            <p class="text-xs dark:text-slate-400 text-slate-500 uppercase font-bold">Comissões</p>
+                            <p id="rep-com" class="text-2xl font-bold dark:text-blue-400 text-blue-700 mt-2">R$ 0,00</p>
                         </div>
                     </div>
 
                     <!-- Top Services -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-slate-800 mb-4">Planos Mais Vendidos</h3>
+                    <div
+                        class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
+                        <h3 class="font-bold dark:text-white text-slate-800 mb-4">Planos Mais Vendidos</h3>
                         <div id="top-services" class="space-y-4"></div>
                     </div>
 
@@ -506,35 +556,43 @@
             <!-- Settings View -->
             <section id="view-settings" class="view-section hide fade-in">
                 <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-800 mb-2">Configurações</h2>
-                    <p class="text-sm text-slate-600">Personalize o sistema</p>
+                    <h2 class="text-xl font-bold dark:text-white text-slate-800 mb-2">Configurações</h2>
+                    <p class="text-sm dark:text-slate-400 text-slate-600">Personalize o sistema</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Business Info -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-slate-800 mb-4">Informações da Academia</h3>
+                    <div
+                        class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
+                        <h3 class="font-bold dark:text-white text-slate-800 mb-4">Informações da Academia</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Nome da Academia</label>
-                                <input type="text" id="biz-name" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Nome da
+                                    Academia</label>
+                                <input type="text" id="biz-name"
+                                    class="w-full border dark:border-white/10 dark:bg-slate-900/50 dark:text-white p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                                     placeholder="Ex: Academia Fit Center">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Nome do Responsável</label>
-                                <input type="text" id="biz-owner" class="w-full border p-2 rounded-lg text-sm"
+                                <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Nome do
+                                    Responsável</label>
+                                <input type="text" id="biz-owner"
+                                    class="w-full border dark:border-white/10 dark:bg-slate-900/50 dark:text-white p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                                     placeholder="Ex: João Silva">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">CPF / CNPJ do
+                                <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">CPF / CNPJ
+                                    do
                                     Responsável</label>
-                                <input type="text" id="biz-doc" class="w-full border p-2 rounded-lg text-sm"
+                                <input type="text" id="biz-doc"
+                                    class="w-full border dark:border-white/10 dark:bg-slate-900/50 dark:text-white p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                                     placeholder="000.000.000-00">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-slate-500 uppercase">Horário de
+                                <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Horário de
                                     Funcionamento</label>
-                                <input type="text" id="biz-hours" class="w-full border p-2 rounded-lg text-sm"
+                                <input type="text" id="biz-hours"
+                                    class="w-full border dark:border-white/10 dark:bg-slate-900/50 dark:text-white p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                                     placeholder="Ex: 06:00 às 22:00">
                             </div>
                             <button onclick="saveBusinessInfo()"
@@ -546,20 +604,22 @@
 
                     <!-- Data Management -->
                     <div class="space-y-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                        <div
+                            class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
+                            <h3 class="font-bold dark:text-white text-slate-800 mb-4 flex items-center">
                                 <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-brand-primary"></i>
                                 Segurança de Dados
                             </h3>
 
-                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                            <div
+                                class="glass dark:bg-blue-900/10 bg-blue-50 border border-blue-200 dark:border-blue-500/20 p-4 rounded-lg text-sm dark:text-blue-300 text-blue-800 mb-6">
                                 <p class="font-bold mb-2">⚠️ Importante</p>
                                 <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
                             </div>
 
                             <div class="space-y-3">
                                 <button onclick="downloadBackup()"
-                                    class="w-full border border-slate-300 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
+                                    class="w-full border border-slate-300 dark:border-white/10 dark:bg-slate-900/50 dark:text-white dark:border-white/10 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/5 dark:text-white flex justify-center items-center gap-2 transition-colors">
                                     <i data-lucide="download" class="w-4 h-4"></i>
                                     Baixar Backup Completo (.json)
                                 </button>
@@ -577,14 +637,18 @@
                         </div>
 
                         <!-- Danger Zone -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <h3 class="font-bold text-slate-800 mb-4 flex items-center text-red-600">
+                        <div
+                            class="glass dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10">
+                            <h3
+                                class="font-bold text-slate-800 dark:text-white mb-4 flex items-center text-red-600 dark:text-red-400">
                                 <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
                                 Zona de Perigo
                             </h3>
 
-                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
-                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                            <div
+                                class="glass dark:bg-red-900/10 bg-red-50 p-4 rounded-lg border border-red-100 dark:border-red-500/20 mb-4">
+                                <p class="text-sm text-red-600 dark:text-red-400"><strong>Atenção:</strong> Estas ações
+                                    são irreversíveis.
                                 </p>
                             </div>
 
@@ -613,61 +677,69 @@
                             <i data-lucide="dumbbell" class="w-12 h-12 text-white"
                                 aria-label="Ícone de Halter - Manual de Uso"></i>
                         </div>
-                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
-                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para proprietários e
+                        <h1 class="text-3xl font-bold dark:text-white text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="dark:text-slate-400 text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para
+                            proprietários e
                             gestores de academias</p>
                         <div class="mt-4 flex flex-wrap justify-center gap-2">
-                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para
+                            <span
+                                class="px-3 py-1 glass dark:bg-green-900/20 dark:text-green-400 dark:border-green-500/20 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓
+                                Para
                                 Iniciantes</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
+                            <span
+                                class="px-3 py-1 glass dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-500/20 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱
+                                Mobile e
                                 Desktop</span>
-                            <span class="px-3 py-1 bg-blue-100 text-brand-primary rounded-full text-xs font-bold">⚡ Rápido
+                            <span
+                                class="px-3 py-1 glass dark:bg-blue-900/20 dark:text-brand-primary dark:border-brand-primary/20 bg-blue-100 text-brand-primary rounded-full text-xs font-bold">⚡
+                                Rápido
                                 e Prático</span>
                         </div>
                     </div>
 
                     <!-- Barra de Progresso do Tutorial -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
-                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                    <div
+                        class="glass dark:bg-slate-800/50 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-white/10 mb-8">
+                        <h3 class="font-bold dark:text-white text-gray-800 mb-4 flex items-center">
                             <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand-primary"></i>
                             Seu Progresso no Aprendizado
                         </h3>
                         <div class="mb-4">
-                            <div class="progress-bar">
+                            <div class="progress-bar dark:bg-white/10">
                                 <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
                             </div>
-                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                            <div class="flex justify-between text-xs dark:text-slate-400 text-gray-500 mt-2">
                                 <span>0% Concluído</span>
                                 <span id="completed-steps">0/7 etapas</span>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
                             <button onclick="scrollToSection('instalacao')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 1. Instalação
                             </button>
                             <button onclick="scrollToSection('primeiro-cadastro')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 2. Configuração
                             </button>
                             <button onclick="scrollToSection('agendamentos')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 3. Check-ins
                             </button>
                             <button onclick="scrollToSection('relatorios')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 4. Relatórios
                             </button>
                             <button onclick="scrollToSection('backup')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 5. Backup
                             </button>
                             <button onclick="scrollToSection('duvidas')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 6. Dúvidas
                             </button>
                             <button onclick="scrollToSection('checklist')"
-                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                class="tutorial-step glass dark:bg-white/5 text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 dark:text-slate-300 text-xs">
                                 7. Checklist
                             </button>
                         </div>
@@ -675,12 +747,12 @@
 
                     <!-- Seção 1: Instalação -->
                     <div id="instalacao"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">1
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Instalação do Sistema</h3>
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Instalação do Sistema</h3>
                             </div>
                             <button onclick="markSectionComplete('instalacao')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -754,12 +826,13 @@
 
                     <!-- Seção 2: Configuração Inicial -->
                     <div id="primeiro-cadastro"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">2
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Configuração Inicial (10 Minutos)</h3>
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Configuração Inicial (10
+                                    Minutos)</h3>
                             </div>
                             <button onclick="markSectionComplete('primeiro-cadastro')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -769,51 +842,56 @@
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div class="space-y-4">
-                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
-                                    <h4 class="font-bold text-blue-700 mb-3 flex items-center">
+                                <div
+                                    class="glass dark:bg-blue-900/10 bg-blue-50 p-5 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                                    <h4 class="font-bold text-blue-700 dark:text-blue-400 mb-3 flex items-center">
                                         <i data-lucide="building" class="w-5 h-5 mr-2"></i>
                                         PASSO 1: Dados da Academia
                                     </h4>
-                                    <ol class="space-y-3 text-sm">
+                                    <ol class="space-y-3 text-sm dark:text-slate-300">
                                         <li class="flex items-start">
                                             <div
-                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full glass dark:bg-blue-500/20 bg-blue-100 text-blue-700 dark:text-blue-400 flex items-center justify-center mr-2 text-xs font-bold">
                                                 A</div>
                                             <div>
                                                 <strong>Clique em "Configurações"</strong>
-                                                <p class="text-gray-600 text-xs">Ícone da engrenagem</p>
+                                                <p class="text-gray-600 dark:text-slate-400 text-xs">Ícone da engrenagem
+                                                </p>
                                             </div>
                                         </li>
                                         <li class="flex items-start">
                                             <div
-                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full glass dark:bg-blue-500/20 bg-blue-100 text-blue-700 dark:text-blue-400 flex items-center justify-center mr-2 text-xs font-bold">
                                                 B</div>
                                             <div>
                                                 <strong>Nome da Academia</strong>
-                                                <p class="text-gray-600 text-xs">Ex: "Academia Fit Center"</p>
+                                                <p class="text-gray-600 dark:text-slate-400 text-xs">Ex: "Academia Fit
+                                                    Center"</p>
                                             </div>
                                         </li>
                                         <li class="flex items-start">
                                             <div
-                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full glass dark:bg-blue-500/20 bg-blue-100 text-blue-700 dark:text-blue-400 flex items-center justify-center mr-2 text-xs font-bold">
                                                 C</div>
                                             <div>
                                                 <strong>Horário de Funcionamento</strong>
-                                                <p class="text-gray-600 text-xs">Para exibir na agenda</p>
+                                                <p class="text-gray-600 dark:text-slate-400 text-xs">Para exibir na
+                                                    agenda</p>
                                             </div>
                                         </li>
                                     </ol>
                                 </div>
 
-                                <div class="bg-green-50 p-5 rounded-xl border border-green-100">
-                                    <h4 class="font-bold text-green-700 mb-3 flex items-center">
+                                <div
+                                    class="glass dark:bg-green-900/10 bg-green-50 p-5 rounded-xl border border-green-100 dark:border-green-500/20">
+                                    <h4 class="font-bold text-green-700 dark:text-green-400 mb-3 flex items-center">
                                         <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
                                         PASSO 2: Primeiro Check-in
                                     </h4>
-                                    <ol class="space-y-3 text-sm">
+                                    <ol class="space-y-3 text-sm dark:text-slate-300">
                                         <li class="flex items-start">
                                             <div
-                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full glass dark:bg-green-500/20 bg-green-100 text-green-700 dark:text-green-400 flex items-center justify-center mr-2 text-xs font-bold">
                                                 A</div>
                                             <div>
                                                 <strong>Volte ao Dashboard</strong>
@@ -821,11 +899,12 @@
                                         </li>
                                         <li class="flex items-start">
                                             <div
-                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                class="w-6 h-6 rounded-full glass dark:bg-green-500/20 bg-green-100 text-green-700 dark:text-green-400 flex items-center justify-center mr-2 text-xs font-bold">
                                                 B</div>
                                             <div>
                                                 <strong>Clique em "Novo Check-in"</strong>
-                                                <p class="text-gray-600 text-xs">Botão azul no topo</p>
+                                                <p class="text-gray-600 dark:text-slate-400 text-xs">Botão azul no topo
+                                                </p>
                                             </div>
                                         </li>
                                     </ol>
@@ -833,7 +912,8 @@
                             </div>
 
                             <div class="space-y-4">
-                                <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
+                                <div
+                                    class="glass dark:bg-purple-900/10 bg-purple-50 p-5 rounded-xl border border-purple-100 dark:border-purple-500/20">
                                     <h4 class="font-bold text-brand-primary mb-3 flex items-center">
                                         <i data-lucide="users" class="w-5 h-5 mr-2"></i>
                                         PASSO 3: Cadastrar Instrutor
@@ -857,149 +937,290 @@
                                 </div>
 
                                 <div
-                                    class="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 p-5 rounded-xl">
-                                    <h4 class="font-bold text-gray-800 mb-2 flex items-center">
-                                        <i data-lucide="zap" class="w-5 h-5 mr-2 text-green-600"></i>
+                                    class="glass dark:bg-green-900/10 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 dark:border-green-500/20 p-5 rounded-xl">
+
+                                    <h4 class="font-bold dark:text-white text-gray-800 mb-2 flex items-center">
+
+                                        <i data-lucide="zap"
+                                            class="w-5 h-5 mr-2 text-green-600 dark:text-green-400"></i>
+
                                         Configuração Concluída!
+
                                     </h4>
-                                    <p class="text-sm text-gray-700">Seu sistema já está pronto para uso!</p>
+
+                                    <p class="text-sm dark:text-slate-300 text-gray-700">Seu sistema já está pronto para
+                                        uso!</p>
+
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
-                                        <div class="bg-white p-3 rounded-lg border text-center">
-                                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
-                                            <p class="text-xs font-bold">Ver Check-ins</p>
+
+                                        <div
+                                            class="glass dark:bg-white/5 bg-white p-3 rounded-lg border dark:border-white/10 text-center">
+
+                                            <i data-lucide="calendar"
+                                                class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
+
+                                            <p class="text-xs font-bold dark:text-white">Ver Check-ins</p>
+
                                         </div>
-                                        <div class="bg-white p-3 rounded-lg border text-center">
+
+                                        <div
+                                            class="glass dark:bg-white/5 bg-white p-3 rounded-lg border dark:border-white/10 text-center">
+
                                             <i data-lucide="users" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
-                                            <p class="text-xs font-bold">Instrutores</p>
+
+                                            <p class="text-xs font-bold dark:text-white">Instrutores</p>
+
                                         </div>
-                                        <div class="bg-white p-3 rounded-lg border text-center">
-                                            <i data-lucide="activity" class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
-                                            <p class="text-xs font-bold">Planos</p>
+
+                                        <div
+                                            class="glass dark:bg-white/5 bg-white p-3 rounded-lg border dark:border-white/10 text-center">
+
+                                            <i data-lucide="activity"
+                                                class="w-6 h-6 text-brand-primary mx-auto mb-1"></i>
+
+                                            <p class="text-xs font-bold dark:text-white">Planos</p>
+
                                         </div>
+
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Seção 3: Gestão de Check-ins -->
+
                     <div id="agendamentos"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+
                         <div class="flex items-center justify-between mb-6">
+
                             <div class="flex items-center">
+
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">3
+
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Gestão de Check-ins e Comissões</h3>
+
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Gestão de Check-ins e
+                                    Comissões</h3>
+
                             </div>
+
                             <button onclick="markSectionComplete('agendamentos')"
                                 class="text-xs text-gray-500 hover:text-green-600">
+
                                 <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+
                             </button>
+
                         </div>
 
+
+
                         <div
-                            class="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border border-blue-200 mb-6">
-                            <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            class="glass dark:bg-blue-900/10 bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border border-blue-200 dark:border-blue-500/20 mb-6">
+
+                            <h4 class="font-bold dark:text-white text-gray-800 mb-3 flex items-center">
+
                                 <i data-lucide="calendar-check" class="w-5 h-5 mr-2 text-brand-primary"></i>
+
                                 Fluxo do Check-in
+
                             </h4>
                             <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+
+                                <div
+                                    class="glass dark:bg-white/5 bg-white p-3 rounded-lg text-center shadow-sm dark:border-white/10 dark:border">
+
                                     <div
-                                        class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-blue-700">1</span>
+                                        class="w-8 h-8 rounded-full glass dark:bg-blue-500/20 bg-blue-100 flex items-center justify-center mx-auto mb-2">
+
+                                        <span class="font-bold text-blue-700 dark:text-blue-400">1</span>
+
                                     </div>
-                                    <p class="font-bold text-gray-800">Check-in</p>
-                                    <p class="text-gray-600">Aluno chegou</p>
+
+                                    <p class="font-bold dark:text-white text-gray-800">Check-in</p>
+
+                                    <p class="dark:text-slate-400 text-gray-600">Aluno chegou</p>
+
                                 </div>
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+
+                                <div
+                                    class="glass dark:bg-white/5 bg-white p-3 rounded-lg text-center shadow-sm dark:border-white/10 dark:border">
+
                                     <div
-                                        class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-green-700">2</span>
+                                        class="w-8 h-8 rounded-full glass dark:bg-green-500/20 bg-green-100 flex items-center justify-center mx-auto mb-2">
+
+                                        <span class="font-bold text-green-700 dark:text-green-400">2</span>
+
                                     </div>
-                                    <p class="font-bold text-gray-800">Avaliação</p>
-                                    <p class="text-gray-600">Medidas/testes</p>
+
+                                    <p class="font-bold dark:text-white text-gray-800">Avaliação</p>
+
+                                    <p class="dark:text-slate-400 text-gray-600">Medidas/testes</p>
+
                                 </div>
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+
+                                <div
+                                    class="glass dark:bg-white/5 bg-white p-3 rounded-lg text-center shadow-sm dark:border-white/10 dark:border">
+
                                     <div
-                                        class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-yellow-700">3</span>
+                                        class="w-8 h-8 rounded-full glass dark:bg-yellow-500/20 bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+
+                                        <span class="font-bold text-yellow-700 dark:text-yellow-400">3</span>
+
                                     </div>
-                                    <p class="font-bold text-gray-800">Treino</p>
-                                    <p class="text-gray-600">Em andamento</p>
+
+                                    <p class="font-bold dark:text-white text-gray-800">Treino</p>
+
+                                    <p class="dark:text-slate-400 text-gray-600">Em andamento</p>
+
                                 </div>
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+
+                                <div
+                                    class="glass dark:bg-white/5 bg-white p-3 rounded-lg text-center shadow-sm dark:border-white/10 dark:border">
+
                                     <div
-                                        class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-purple-700">4</span>
+                                        class="w-8 h-8 rounded-full glass dark:bg-purple-500/20 bg-purple-100 flex items-center justify-center mx-auto mb-2">
+
+                                        <span class="font-bold text-purple-700 dark:text-purple-400">4</span>
+
                                     </div>
-                                    <p class="font-bold text-gray-800">Finalizado</p>
-                                    <p class="text-gray-600">Treino completo</p>
+
+                                    <p class="font-bold dark:text-white text-gray-800">Finalizado</p>
+
+                                    <p class="dark:text-slate-400 text-gray-600">Treino completo</p>
+
                                 </div>
-                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+
+                                <div
+                                    class="glass dark:bg-white/5 bg-white p-3 rounded-lg text-center shadow-sm dark:border-white/10 dark:border">
+
                                     <div
-                                        class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-green-700">✓</span>
+                                        class="w-8 h-8 rounded-full glass dark:bg-green-500/20 bg-green-100 flex items-center justify-center mx-auto mb-2">
+
+                                        <span class="font-bold text-green-700 dark:text-green-400">✓</span>
+
                                     </div>
-                                    <p class="font-bold text-gray-800">Registrado</p>
-                                    <p class="text-gray-600">Sistema + Comissão</p>
+
+                                    <p class="font-bold dark:text-white text-gray-800">Registrado</p>
+
+                                    <p class="dark:text-slate-400 text-gray-600">Sistema + Comissão</p>
+
                                 </div>
+
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                                <h5 class="font-bold text-blue-700 mb-2 flex items-center text-sm">
+
+                            <div
+                                class="glass dark:bg-blue-900/10 bg-blue-50 p-4 rounded-xl border border-blue-100 dark:border-blue-500/20">
+
+                                <h5 class="font-bold text-blue-700 dark:text-blue-400 mb-2 flex items-center text-sm">
+
                                     <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
+
                                     Dicas para Check-ins
+
                                 </h5>
-                                <ul class="space-y-1 text-xs text-gray-700">
+
+                                <ul class="space-y-1 text-xs dark:text-slate-300 text-gray-700">
+
                                     <li class="flex items-start">
+
                                         <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+
                                         <span>Registre frequência dos alunos</span>
+
                                     </li>
+
                                     <li class="flex items-start">
+
                                         <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+
                                         <span>Monitore planos vencidos</span>
+
                                     </li>
+
                                     <li class="flex items-start">
+
                                         <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+
                                         <span>Agende avaliações periódicas</span>
+
                                     </li>
+
                                 </ul>
+
                             </div>
 
-                            <div class="bg-green-50 p-4 rounded-xl border border-green-100">
-                                <h5 class="font-bold text-green-700 mb-2 flex items-center text-sm">
+
+
+                            <div
+                                class="glass dark:bg-green-900/10 bg-green-50 p-4 rounded-xl border border-green-100 dark:border-green-500/20">
+
+                                <h5 class="font-bold text-green-700 dark:text-green-400 mb-2 flex items-center text-sm">
+
                                     <i data-lucide="dollar-sign" class="w-4 h-4 mr-2"></i>
+
                                     Como Funciona a Comissão
-                                </h5>
-                                <ul class="space-y-1 text-xs text-gray-700">
-                                    <li class="flex items-start">
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
-                                        <span>Calculada automaticamente nas aulas personalizadas</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
-                                        <span>Baseada no % definido no cadastro do instrutor</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
-                                        <span>Relatório detalhado disponível na aba Financeiro</span>
-                                    </li>
-                                </ul>
+
+                                    </h4>
+
+                                    <ul class="space-y-1 text-xs dark:text-slate-300 text-gray-700">
+
+                                        <li class="flex items-start">
+
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+
+                                            <span>Calculada automaticamente nas aulas personalizadas</span>
+
+                                        </li>
+
+                                        <li class="flex items-start">
+
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+
+                                            <span>Baseada no % definido no cadastro do instrutor</span>
+
+                                        </li>
+
+                                        <li class="flex items-start">
+
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+
+                                            <span>Relatório detalhado disponível na aba Financeiro</span>
+
+                                        </li>
+
+                                    </ul>
+
                             </div>
+
                         </div>
+
                     </div>
 
+
+
                     <!-- Seção 4: Relatórios -->
+
                     <div id="relatorios"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+
                         <div class="flex items-center justify-between mb-6">
+
                             <div class="flex items-center">
+
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4
+
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Relatórios e Análise de Performance</h3>
+
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Relatórios e Análise de
+                                    Performance</h3>
+
                             </div>
                             <button onclick="markSectionComplete('relatorios')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -1008,46 +1229,91 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
                             <div
-                                class="bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl border border-blue-100 shadow-sm">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-3">
-                                    <i data-lucide="calendar" class="w-5 h-5 text-blue-600"></i>
+                                class="glass dark:bg-blue-900/10 bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl border border-blue-100 dark:border-blue-500/20 shadow-sm">
+
+                                <div
+                                    class="w-10 h-10 rounded-full glass dark:bg-blue-500/20 bg-blue-100 flex items-center justify-center mb-3">
+
+                                    <i data-lucide="calendar" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+
                                 </div>
-                                <h4 class="font-bold text-gray-800 mb-2">Resumo Mensal</h4>
-                                <p class="text-xs text-gray-600">Visão geral de check-ins, faturamento bruto e
+
+                                <h4 class="font-bold dark:text-white text-gray-800 mb-2">Resumo Mensal</h4>
+
+                                <p class="text-xs dark:text-slate-400 text-gray-600">Visão geral de check-ins,
+                                    faturamento bruto e
+
                                     líquido do mês</p>
+
                             </div>
 
+
+
                             <div
-                                class="bg-gradient-to-br from-green-50 to-white p-5 rounded-xl border border-green-100 shadow-sm">
-                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-3">
-                                    <i data-lucide="users" class="w-5 h-5 text-green-600"></i>
+                                class="glass dark:bg-green-900/10 bg-gradient-to-br from-green-50 to-white p-5 rounded-xl border border-green-100 dark:border-green-500/20 shadow-sm">
+
+                                <div
+                                    class="w-10 h-10 rounded-full glass dark:bg-green-500/20 bg-green-100 flex items-center justify-center mb-3">
+
+                                    <i data-lucide="users" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+
                                 </div>
-                                <h4 class="font-bold text-gray-800 mb-2">Performance da Equipe</h4>
-                                <p class="text-xs text-gray-600">Ranking de instrutores e total de aulas por
+
+                                <h4 class="font-bold dark:text-white text-gray-800 mb-2">Performance da Equipe</h4>
+
+                                <p class="text-xs dark:text-slate-400 text-gray-600">Ranking de instrutores e total de
+                                    aulas por
+
                                     profissional</p>
+
                             </div>
 
+
+
                             <div
-                                class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100 shadow-sm">
-                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-3">
-                                    <i data-lucide="dollar-sign" class="w-5 h-5 text-purple-600"></i>
+                                class="glass dark:bg-purple-900/10 bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100 dark:border-purple-500/20 shadow-sm">
+
+                                <div
+                                    class="w-10 h-10 rounded-full glass dark:bg-purple-500/20 bg-purple-100 flex items-center justify-center mb-3">
+
+                                    <i data-lucide="dollar-sign"
+                                        class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
+
                                 </div>
-                                <h4 class="font-bold text-gray-800 mb-2">Controle de Comissões</h4>
-                                <p class="text-xs text-gray-600">Acompanhamento de valores pagos e pendentes para a
+
+                                <h4 class="font-bold dark:text-white text-gray-800 mb-2">Controle de Comissões</h4>
+
+                                <p class="text-xs dark:text-slate-400 text-gray-600">Acompanhamento de valores pagos e
+                                    pendentes para a
+
                                     equipe</p>
+
                             </div>
+
                         </div>
+
                     </div>
 
+
+
                     <!-- Seção 5: Backup e Segurança -->
+
                     <div id="backup"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+
                         <div class="flex items-center justify-between mb-6">
+
                             <div class="flex items-center">
+
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">5
+
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
+
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Backup e Segurança dos Dados
+                                </h3>
+
                             </div>
                             <button onclick="markSectionComplete('backup')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -1055,59 +1321,112 @@
                             </button>
                         </div>
 
-                        <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl mb-6 shadow-sm">
-                            <h4 class="font-bold text-red-800 mb-3 flex items-center">
+                        <div
+                            class="glass dark:bg-red-900/10 bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl mb-6 shadow-sm">
+
+                            <h4 class="font-bold text-red-800 dark:text-red-400 mb-3 flex items-center">
+
                                 <i data-lucide="alert-octagon" class="w-5 h-5 mr-2"></i>
+
                                 ATENÇÃO: Seus dados são locais!
+
                             </h4>
-                            <div class="text-sm text-red-800 space-y-2">
+
+                            <div class="text-sm dark:text-slate-300 text-red-800 space-y-2">
+
                                 <p>📱 <strong>Os dados ficam APENAS no seu dispositivo atual.</strong></p>
+
                                 <p>🔄 <strong>Se você perder o celular ou formatar o computador, perderá TUDO.</strong>
+
                                 </p>
+
                                 <p>💾 <strong>O backup é SUA única garantia.</strong> Faça toda semana!</p>
+
                             </div>
+
                         </div>
 
+
+
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="bg-green-50 p-5 rounded-xl border border-green-200">
-                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
-                                    <i data-lucide="download" class="w-5 h-5 mr-2 text-green-600"></i>
+
+                            <div
+                                class="glass dark:bg-green-900/10 bg-green-50 p-5 rounded-xl border border-green-200 dark:border-green-500/20">
+
+                                <h4 class="font-bold dark:text-white text-gray-800 mb-4 flex items-center">
+
+                                    <i data-lucide="download"
+                                        class="w-5 h-5 mr-2 text-green-600 dark:text-green-400"></i>
+
                                     Como Fazer Backup
+
                                 </h4>
-                                <ol class="space-y-3 text-sm">
+
+                                <ol class="space-y-3 text-sm dark:text-slate-300">
+
                                     <li class="flex items-start">
+
                                         <div
-                                            class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            class="w-6 h-6 rounded-full glass dark:bg-green-500/20 bg-green-100 text-green-700 dark:text-green-400 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+
                                             1</div>
+
                                         <div>
+
                                             <strong>Vá em Configurações</strong>
-                                            <p class="text-gray-600 text-xs">Menu lateral → Engrenagem</p>
+
+                                            <p class="dark:text-slate-400 text-gray-600 text-xs">Menu lateral →
+                                                Engrenagem</p>
+
                                         </div>
+
                                     </li>
+
                                     <li class="flex items-start">
+
                                         <div
-                                            class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            class="w-6 h-6 rounded-full glass dark:bg-green-500/20 bg-green-100 text-green-700 dark:text-green-400 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+
                                             2</div>
+
                                         <div>
+
                                             <strong>Clique em "Baixar Backup"</strong>
-                                            <p class="text-gray-600 text-xs">Isso gerará um arquivo .json</p>
+
+                                            <p class="dark:text-slate-400 text-gray-600 text-xs">Isso gerará um arquivo
+                                                .json</p>
+
                                         </div>
+
                                     </li>
+
                                     <li class="flex items-start">
+
                                         <div
-                                            class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            class="w-6 h-6 rounded-full glass dark:bg-green-500/20 bg-green-100 text-green-700 dark:text-green-400 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+
                                             3</div>
+
                                         <div>
+
                                             <strong>Guarde em local seguro</strong>
-                                            <p class="text-gray-600 text-xs">Envie para seu e-mail ou WhatsApp</p>
+
+                                            <p class="dark:text-slate-400 text-gray-600 text-xs">Envie para seu e-mail
+                                                ou WhatsApp</p>
+
                                         </div>
+
                                     </li>
+
                                 </ol>
+
                             </div>
 
-                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
-                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
-                                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 text-blue-600"></i>
+                            <div
+                                class="glass dark:bg-blue-900/10 bg-blue-50 p-5 rounded-xl border border-blue-200 dark:border-blue-500/20">
+                                <h4 class="font-bold dark:text-white text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="refresh-cw"
+                                        class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400"></i>
                                     Restaurar Backup
                                 </h4>
                                 <ol class="space-y-3 text-sm">
@@ -1143,12 +1462,13 @@
 
                     <!-- Seção 6: Dúvidas Frequentes -->
                     <div id="duvidas"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">6
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Dúvidas Frequentes (FAQ)</h3>
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Dúvidas Frequentes (FAQ)
+                                </h3>
                             </div>
                             <button onclick="markSectionComplete('duvidas')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -1158,54 +1478,59 @@
 
                         <div class="space-y-4">
                             <details
-                                class="group bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                class="group glass dark:bg-slate-900/50 bg-gray-50 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm">
                                 <summary
-                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
-                                    <div class="flex items-center gap-3 font-bold text-gray-700">
-                                        <i data-lucide="help-circle" class="w-5 h-5 text-blue-600"></i>
+                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 transition-colors select-none">
+                                    <div class="flex items-center gap-3 font-bold dark:text-white text-gray-700">
+                                        <i data-lucide="help-circle"
+                                            class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
                                         Como faço para trocar de dispositivo?
                                     </div>
                                     <i data-lucide="chevron-down"
                                         class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
                                 </summary>
-                                <div class="p-4 pt-0 border-t border-gray-100">
-                                    <p class="text-sm text-gray-600 mt-3">Para usar em outro aparelho, basta fazer o
+                                <div class="p-4 pt-0 border-t border-gray-100 dark:border-white/10">
+                                    <p class="text-sm dark:text-slate-300 text-gray-600 mt-3">Para usar em outro
+                                        aparelho, basta fazer o
                                         backup no dispositivo antigo, enviar o arquivo para o novo e usar a função
                                         "Restaurar Backup" nas configurações.</p>
                                 </div>
                             </details>
 
                             <details
-                                class="group bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                class="group glass dark:bg-slate-900/50 bg-gray-50 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm">
                                 <summary
-                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
-                                    <div class="flex items-center gap-3 font-bold text-gray-700">
-                                        <i data-lucide="smartphone" class="w-5 h-5 text-green-600"></i>
+                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 transition-colors select-none">
+                                    <div class="flex items-center gap-3 font-bold dark:text-white text-gray-700">
+                                        <i data-lucide="smartphone"
+                                            class="w-5 h-5 text-green-600 dark:text-green-400"></i>
                                         Funciona sem internet?
                                     </div>
                                     <i data-lucide="chevron-down"
                                         class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
                                 </summary>
-                                <div class="p-4 pt-0 border-t border-gray-100">
-                                    <p class="text-sm text-gray-600 mt-3">Sim! O Gestão Fit foi projetado para
+                                <div class="p-4 pt-0 border-t border-gray-100 dark:border-white/10">
+                                    <p class="text-sm dark:text-slate-300 text-gray-600 mt-3">Sim! O Gestão Fit foi
+                                        projetado para
                                         funcionar 100% offline após a instalação. Você só precisa de internet para fazer
                                         backup na nuvem ou enviar mensagens via WhatsApp.</p>
                                 </div>
                             </details>
 
                             <details
-                                class="group bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                class="group glass dark:bg-slate-900/50 bg-gray-50 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm">
                                 <summary
-                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
-                                    <div class="flex items-center gap-3 font-bold text-gray-700">
-                                        <i data-lucide="users" class="w-5 h-5 text-purple-600"></i>
+                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 transition-colors select-none">
+                                    <div class="flex items-center gap-3 font-bold dark:text-white text-gray-700">
+                                        <i data-lucide="users" class="w-5 h-5 text-purple-600 dark:text-purple-400"></i>
                                         Como cadastrar novos instrutores?
                                     </div>
                                     <i data-lucide="chevron-down"
                                         class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
                                 </summary>
-                                <div class="p-4 pt-0 border-t border-gray-100">
-                                    <p class="text-sm text-gray-600 mt-3">Acesse a aba "Instrutores", clique no botão
+                                <div class="p-4 pt-0 border-t border-gray-100 dark:border-white/10">
+                                    <p class="text-sm dark:text-slate-300 text-gray-600 mt-3">Acesse a aba
+                                        "Instrutores", clique no botão
                                         "Novo
                                         Instrutor" e preencha o nome e a porcentagem de comissão dele.</p>
                                 </div>
@@ -1215,12 +1540,13 @@
 
                     <!-- Seção 7: Checklist Interativo -->
                     <div id="checklist"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        class="glass dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">7
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Checklist de Rotina da Academia</h3>
+                                <h3 class="text-xl font-bold dark:text-white text-gray-800">Checklist de Rotina da
+                                    Academia</h3>
                             </div>
                             <button onclick="markSectionComplete('checklist')"
                                 class="text-xs text-gray-500 hover:text-green-600">
@@ -1247,59 +1573,68 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
-                                <h5 class="font-bold text-blue-700 mb-4 flex items-center">
+                            <div
+                                class="glass dark:bg-blue-900/10 bg-blue-50 p-5 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                                <h5 class="font-bold text-blue-700 dark:text-blue-400 mb-4 flex items-center">
                                     <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
                                     Rotina Diária
                                 </h5>
                                 <div class="space-y-3">
                                     <div class="checklist-item flex items-center gap-3">
                                         <input type="checkbox" id="c1" onchange="updateChecklist()"
-                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                        <span class="text-sm text-gray-700">Verificar check-ins do dia</span>
+                                            class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-900/50 text-blue-600 focus:ring-blue-500">
+                                        <span class="text-sm dark:text-slate-300 text-gray-700">Verificar check-ins do
+                                            dia</span>
                                     </div>
                                     <div class="checklist-item flex items-center gap-3">
                                         <input type="checkbox" id="c2" onchange="updateChecklist()"
-                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                        <span class="text-sm text-gray-700">Registrar mensalidades pagas</span>
+                                            class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-900/50 text-blue-600 focus:ring-blue-500">
+                                        <span class="text-sm dark:text-slate-300 text-gray-700">Registrar mensalidades
+                                            pagas</span>
                                     </div>
                                     <div class="checklist-item flex items-center gap-3">
                                         <input type="checkbox" id="c3" onchange="updateChecklist()"
-                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                        <span class="text-sm text-gray-700">Verificar equipamentos</span>
+                                            class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-900/50 text-blue-600 focus:ring-blue-500">
+                                        <span class="text-sm dark:text-slate-300 text-gray-700">Verificar
+                                            equipamentos</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="bg-green-50 p-5 rounded-xl border border-green-100">
-                                <h5 class="font-bold text-green-700 mb-4 flex items-center">
+                            <div
+                                class="glass dark:bg-green-900/10 bg-green-50 p-5 rounded-xl border border-green-100 dark:border-green-500/20">
+                                <h5 class="font-bold text-green-700 dark:text-green-400 mb-4 flex items-center">
                                     <i data-lucide="shield-check" class="w-4 h-4 mr-2"></i>
                                     Rotina Semanal
-                                </h5>
-                                <div class="space-y-3">
-                                    <div class="checklist-item flex items-center gap-3">
-                                        <input type="checkbox" id="c4" onchange="updateChecklist()"
-                                            class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
-                                        <span class="text-sm text-gray-700">Realizar Backup dos dados (.json)</span>
+                                    </h4>
+                                    <div class="space-y-3">
+                                        <div class="checklist-item flex items-center gap-3">
+                                            <input type="checkbox" id="c4" onchange="updateChecklist()"
+                                                class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-900/50 text-green-600 focus:ring-green-500">
+                                            <span class="text-sm dark:text-slate-300 text-gray-700">Realizar Backup dos
+                                                dados (.json)</span>
+                                        </div>
+                                        <div class="checklist-item flex items-center gap-3">
+                                            <input type="checkbox" id="c5" onchange="updateChecklist()"
+                                                class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-900/50 text-green-600 focus:ring-green-500">
+                                            <span class="text-sm dark:text-slate-300 text-gray-700">Conferir comissões
+                                                da equipe</span>
+                                        </div>
+                                        <div class="checklist-item flex items-center gap-3">
+                                            <input type="checkbox" id="c6" onchange="updateChecklist()"
+                                                class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-900/50 text-green-600 focus:ring-green-500">
+                                            <span class="text-sm dark:text-slate-300 text-gray-700">Gerar relatório de
+                                                faturamento</span>
+                                        </div>
                                     </div>
-                                    <div class="checklist-item flex items-center gap-3">
-                                        <input type="checkbox" id="c5" onchange="updateChecklist()"
-                                            class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
-                                        <span class="text-sm text-gray-700">Conferir comissões da equipe</span>
-                                    </div>
-                                    <div class="checklist-item flex items-center gap-3">
-                                        <input type="checkbox" id="c6" onchange="updateChecklist()"
-                                            class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
-                                        <span class="text-sm text-gray-700">Gerar relatório de faturamento</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                     <!-- Rodapé do Manual -->
-                    <div class="mt-10 bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">Dúvidas Técnicas?</h3>
-                        <p class="text-gray-500 text-sm mb-6">
+                    <div
+                        class="mt-10 glass dark:bg-slate-800/50 bg-white border border-gray-200 dark:border-white/10 rounded-2xl p-8 text-center shadow-sm">
+                        <h3 class="text-lg font-bold dark:text-white text-gray-800 mb-2">Dúvidas Técnicas?</h3>
+                        <p class="dark:text-slate-400 text-gray-500 text-sm mb-6">
                             Nossa equipe de suporte responde em até 24h úteis.
                         </p>
                         <a href="mailto:suporte@gestao.app"
@@ -1321,26 +1656,30 @@
                 <div class="max-w-4xl mx-auto pb-12">
 
                     <!-- 1. Header Institucional -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 text-center">
+                    <div
+                        class="glass dark:bg-slate-800/50 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 mb-8 text-center">
                         <div
-                            class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-brand-primary to-brand-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200 dark:shadow-blue-900/20">
                             <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
                         </div>
-                        <h2 class="text-3xl font-bold text-slate-800 mb-1">Central de Segurança e Legalidade</h2>
-                        <p class="text-slate-500 font-medium">Software Premium • Transparência Total</p>
+                        <h2 class="text-3xl font-bold dark:text-white text-slate-800 mb-1">Central de Segurança e
+                            Legalidade</h2>
+                        <p class="dark:text-slate-400 text-slate-500 font-medium">Software Premium • Transparência Total
+                        </p>
                     </div>
 
                     <!-- 2. Grid de Políticas -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <!-- Termos de Uso -->
-                        <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
-                            <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
-                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                        <div
+                            class="glass dark:bg-slate-800/50 bg-white p-6 rounded-xl border border-slate-200 dark:border-white/10 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold dark:text-white text-slate-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 glass dark:bg-blue-900/20 bg-blue-50 rounded-lg mr-3">
                                     <i data-lucide="file-text" class="w-5 h-5 text-brand-primary"></i>
                                 </div>
                                 Termos de Uso
                             </h3>
-                            <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                            <p class="text-sm dark:text-slate-300 text-slate-600 leading-relaxed text-justify">
                                 A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O
                                 software é
                                 fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda,
@@ -1351,14 +1690,15 @@
                         </div>
 
                         <!-- Privacidade e LGPD -->
-                        <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
-                            <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
-                                <div class="p-2 bg-green-50 rounded-lg mr-3">
-                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                        <div
+                            class="glass dark:bg-slate-800/50 bg-white p-6 rounded-xl border border-slate-200 dark:border-white/10 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold dark:text-white text-slate-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 glass dark:bg-green-900/20 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
                                 </div>
                                 Privacidade (LGPD)
                             </h3>
-                            <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                            <p class="text-sm dark:text-slate-300 text-slate-600 leading-relaxed text-justify">
                                 Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
                                 financeiros e de alunos ficam salvos <strong>exclusivamente no seu
                                     dispositivo</strong>.
@@ -1370,16 +1710,18 @@
                     </div>
 
                     <!-- 3. Responsabilidade do Usuário (Crítico) -->
-                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                    <div
+                        class="glass dark:bg-red-900/10 bg-red-50 border border-red-100 dark:border-red-500/20 p-8 rounded-2xl mb-8 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-10">
-                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900 dark:text-red-500"></i>
                         </div>
                         <div class="relative z-10">
-                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                            <h3 class="font-bold text-red-800 dark:text-red-400 mb-4 flex items-center text-lg">
                                 <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
                                 IMPORTANTE: Sua Responsabilidade sobre os Dados
                             </h3>
-                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                            <div
+                                class="space-y-4 text-sm text-red-900/80 dark:text-red-200/80 text-justify font-medium">
                                 <p>
                                     <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
                                     <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
@@ -1443,18 +1785,19 @@
 
                     <!-- 5. Confirmação e Aceite (Travamento) -->
                     <div class="mt-8 mb-12" id="terms-action-container">
-                        <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                        <div class="glass dark:bg-slate-800/50 bg-slate-50 border border-slate-200 dark:border-white/10 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
                             id="terms-box">
                             <i data-lucide="check-circle-2" class="w-12 h-12 text-slate-300 mb-3" id="terms-icon"></i>
-                            <h3 class="font-bold text-slate-800 text-lg mb-2" id="terms-title">Confirmação de Leitura
+                            <h3 class="font-bold dark:text-white text-slate-800 text-lg mb-2" id="terms-title">
+                                Confirmação de Leitura
                             </h3>
-                            <p class="text-sm text-slate-500 mb-6 max-w-lg" id="terms-desc">
+                            <p class="text-sm dark:text-slate-400 text-slate-500 mb-6 max-w-lg" id="terms-desc">
                                 Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
                                 Política de Privacidade e sua responsabilidade sobre os backups.
                             </p>
 
                             <button onclick="confirmTerms()" id="btn-confirm-terms"
-                                class="bg-brand-primary hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                class="bg-brand-primary hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200 dark:shadow-blue-900/20 transform hover:scale-105 transition-all flex items-center gap-2 group">
                                 <span>Li, Compreendi e Concordo</span>
                                 <i data-lucide="arrow-right"
                                     class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
@@ -1463,7 +1806,7 @@
                             <div id="terms-accepted-badge"
                                 class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
                                 <span
-                                    class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                    class="glass dark:bg-green-900/20 bg-green-100 text-green-700 dark:text-green-400 font-bold px-6 py-2 rounded-full text-sm border border-green-200 dark:border-green-500/20 flex items-center gap-2 mb-2">
                                     <i data-lucide="lock" class="w-4 h-4"></i>
                                     Termos Aceitos e Registrados
                                 </span>
@@ -1473,8 +1816,8 @@
                     </div>
 
                     <!-- 6. Rodapé Legal -->
-                    <div class="text-center border-t border-slate-200 pt-8">
-                        <p class="text-sm font-bold text-slate-800">Software Premium</p>
+                    <div class="text-center border-t border-slate-200 dark:border-white/10 pt-8">
+                        <p class="text-sm font-bold dark:text-slate-300 text-slate-800">Software Premium</p>
                         <p class="text-xs text-slate-500 mt-1">
                         </p>
                         <p class="text-[10px] text-slate-400 mt-4">
@@ -1489,11 +1832,11 @@
     </main>
 
     <!-- Appointment Modal -->
-    <div id="apptModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+    <div id="apptModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6 border dark:border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Check-in / Avaliação</h3>
-                <button onclick="closeModal('apptModal')" class="text-slate-400 hover:text-slate-600">
+                <h3 class="text-lg font-bold dark:text-white text-slate-800">Novo Check-in / Avaliação</h3>
+                <button onclick="closeModal('apptModal')" class="dark:text-slate-400 dark:hover:text-white text-slate-400 hover:text-slate-600">
                     <i data-lucide="x"></i>
                 </button>
             </div>
@@ -1502,47 +1845,47 @@
                 <input type="hidden" id="ap-id">
 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Aluno</label>
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Aluno</label>
                     <input type="text" id="ap-client" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                        class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                         placeholder="Nome do aluno">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                        <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Data</label>
                         <input type="date" id="ap-date" required
-                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                            class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase">Horário</label>
+                        <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Horário</label>
                         <input type="time" id="ap-time" required
-                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                            class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Plano / Serviço</label>
-                    <select id="ap-service" required class="w-full border p-2 rounded-lg text-sm bg-white outline-none"
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Plano / Serviço</label>
+                    <select id="ap-service" required class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none"
                         onchange="updateApptValue()">
                         <!-- Options will be populated by JavaScript -->
                     </select>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Instrutor</label>
-                    <select id="ap-pro" required class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Instrutor</label>
+                    <select id="ap-pro" required class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm bg-white outline-none">
                         <!-- Options will be populated by JavaScript -->
                     </select>
                 </div>
 
-                <div class="bg-slate-50 p-4 rounded-lg flex justify-between items-center font-bold">
-                    <span class="text-slate-500">Valor Total:</span>
-                    <span id="ap-display-val" class="text-xl text-slate-800">R$ 0,00</span>
+                <div class="glass dark:bg-slate-800/50 bg-slate-50 p-4 rounded-lg flex justify-between items-center font-bold">
+                    <span class="dark:text-slate-400 text-slate-500">Valor Total:</span>
+                    <span id="ap-display-val" class="text-xl dark:text-white text-slate-800">R$ 0,00</span>
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
+                    class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 dark:shadow-blue-900/20 hover:bg-brand-dark transition-all mt-2">
                     Confirmar Check-in
                 </button>
             </form>
@@ -1550,83 +1893,83 @@
     </div>
 
     <!-- Team Modal -->
-    <div id="teamModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+    <div id="teamModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 border dark:border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Instrutor</h3>
-                <button onclick="closeModal('teamModal')" class="text-slate-400">
+                <h3 class="text-lg font-bold dark:text-white text-slate-800">Novo Instrutor</h3>
+                <button onclick="closeModal('teamModal')" class="dark:text-slate-400 dark:hover:text-white text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
             </div>
             <form onsubmit="submitTeam(event)" class="space-y-4">
                 <input type="hidden" id="tm-id">
                 <input type="text" id="tm-name" required placeholder="Nome do Instrutor"
-                    class="w-full border p-2 rounded-lg">
-                <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-                    <label class="text-xs font-bold text-blue-800 uppercase mb-1 block">Comissão Padrão (%)</label>
-                    <input type="number" id="tm-comm" required class="w-full border p-2 rounded-lg" placeholder="Ex: 30"
+                    class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg">
+                <div class="glass dark:bg-blue-900/20 bg-blue-50 border border-blue-200 dark:border-blue-500/20 p-3 rounded-lg">
+                    <label class="text-xs font-bold text-blue-800 dark:text-blue-400 uppercase mb-1 block">Comissão Padrão (%)</label>
+                    <input type="number" id="tm-comm" required class="w-full border dark:border-blue-500/20 dark:bg-slate-800 dark:text-white p-2 rounded-lg" placeholder="Ex: 30"
                         min="0" max="100" step="1">
                 </div>
-                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Salvar</button>
+                <button type="submit" class="w-full bg-slate-900 dark:bg-brand-primary text-white py-3 rounded-lg font-bold">Salvar</button>
             </form>
         </div>
     </div>
 
     <!-- Service Modal -->
-    <div id="serviceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+    <div id="serviceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 border dark:border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Plano</h3>
-                <button onclick="closeModal('serviceModal')" class="text-slate-400">
+                <h3 class="text-lg font-bold dark:text-white text-slate-800">Novo Plano</h3>
+                <button onclick="closeModal('serviceModal')" class="dark:text-slate-400 dark:hover:text-white text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
             </div>
             <form onsubmit="submitService(event)" class="space-y-4">
                 <input type="hidden" id="svc-id">
                 <input type="text" id="svc-name" required placeholder="Nome (Ex: Mensalidade Musculação)"
-                    class="w-full border p-2 rounded-lg">
+                    class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg">
                 <input type="number" step="0.01" id="svc-price" required placeholder="Preço R$"
-                    class="w-full border p-2 rounded-lg" min="0">
-                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Salvar</button>
+                    class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg" min="0">
+                <button type="submit" class="w-full bg-slate-900 dark:bg-brand-primary text-white py-3 rounded-lg font-bold">Salvar</button>
             </form>
         </div>
     </div>
 
     <!-- Expense Modal -->
-    <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+    <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 border dark:border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Lançar Movimentação</h3>
-                <button onclick="closeModal('expenseModal')" class="text-slate-400">
+                <h3 class="text-lg font-bold dark:text-white text-slate-800">Lançar Movimentação</h3>
+                <button onclick="closeModal('expenseModal')" class="dark:text-slate-400 dark:hover:text-white text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
             </div>
             <form onsubmit="submitExpense(event)" class="space-y-4">
                 <input type="hidden" id="exp-id">
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Tipo</label>
-                    <select id="exp-type" class="w-full border p-2 rounded-lg mt-1 font-bold">
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Tipo</label>
+                    <select id="exp-type" class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg mt-1 font-bold">
                         <option value="expense">🔴 Saída (Despesa)</option>
                         <option value="income">🟢 Entrada (Receita)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Descrição</label>
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Descrição</label>
                     <input type="text" id="exp-desc" required placeholder="Ex: Conta de Luz / Mensalidade"
-                        class="w-full border p-2 rounded-lg mt-1">
+                        class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg mt-1">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Valor (R$)</label>
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Valor (R$)</label>
                     <input type="number" id="exp-amount" required step="0.01" min="0" placeholder="0,00"
-                        class="w-full border p-2 rounded-lg mt-1 text-lg font-bold">
+                        class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg mt-1 text-lg font-bold">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
-                    <input type="date" id="exp-date" required class="w-full border p-2 rounded-lg mt-1">
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Data</label>
+                    <input type="date" id="exp-date" required class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg mt-1">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-slate-500 uppercase">Categoria</label>
-                    <select id="exp-category" class="w-full border p-2 rounded-lg mt-1">
+                    <label class="text-xs font-bold dark:text-slate-400 text-slate-500 uppercase">Categoria</label>
+                    <select id="exp-category" class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg mt-1">
                         <option value="mensalidade">Mensalidade</option>
                         <option value="personal">Personal Trainer</option>
                         <option value="avaliacao">Avaliação Física</option>
@@ -1638,7 +1981,7 @@
                         <option value="outros">Outros</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">
+                <button type="submit" class="w-full bg-slate-900 dark:bg-brand-primary text-white py-3 rounded-lg font-bold">
                     Salvar Lançamento
                 </button>
             </form>
@@ -1646,22 +1989,22 @@
     </div>
 
     <!-- Client Modal -->
-    <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+    <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 border dark:border-white/10">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-slate-800">Novo Aluno</h3>
-                <button onclick="closeModal('clientModal')" class="text-slate-400">
+                <h3 class="text-lg font-bold dark:text-white text-slate-800">Novo Aluno</h3>
+                <button onclick="closeModal('clientModal')" class="dark:text-slate-400 dark:hover:text-white text-slate-400">
                     <i data-lucide="x"></i>
                 </button>
             </div>
             <form onsubmit="submitClient(event)" class="space-y-4">
                 <input type="hidden" id="cli-id">
                 <input type="text" id="cli-name" required placeholder="Nome completo"
-                    class="w-full border p-2 rounded-lg">
-                <input type="tel" id="cli-phone" placeholder="Telefone (WhatsApp)" class="w-full border p-2 rounded-lg">
-                <input type="email" id="cli-email" placeholder="E-mail" class="w-full border p-2 rounded-lg">
+                    class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg">
+                <input type="tel" id="cli-phone" placeholder="Telefone (WhatsApp)" class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg">
+                <input type="email" id="cli-email" placeholder="E-mail" class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg">
                 <textarea id="cli-notes" placeholder="Observações (Plano, Restrições, etc.)"
-                    class="w-full border p-2 rounded-lg" rows="3"></textarea>
+                    class="w-full border dark:border-slate-700 dark:bg-slate-800 dark:text-white p-2 rounded-lg" rows="3"></textarea>
                 <button type="submit" class="w-full bg-brand-primary text-white py-3 rounded-lg font-bold">Salvar
                     Aluno</button>
             </form>
@@ -1669,8 +2012,8 @@
     </div>
 
     <!-- Closing Modal -->
-    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden border dark:border-white/10">
             <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Fechamento do Dia</h3>
                 <p id="close-date" class="text-sm text-white/90 mt-1">Hoje</p>
@@ -1678,30 +2021,30 @@
             </div>
             <div class="p-6">
                 <div class="space-y-4 mb-6">
-                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                    <div class="flex justify-between items-center p-3 glass dark:bg-green-900/20 bg-green-50 rounded-lg border border-green-100 dark:border-green-500/20">
                         <div class="flex items-center">
-                            <i data-lucide="trending-up" class="w-4 h-4 text-green-600 mr-2"></i>
-                            <span class="text-sm">Faturamento</span>
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-600 dark:text-green-400 mr-2"></i>
+                            <span class="text-sm dark:text-slate-200">Faturamento</span>
                         </div>
-                        <span id="close-inc" class="font-bold text-green-700">R$ 0,00</span>
+                        <span id="close-inc" class="font-bold text-green-700 dark:text-green-400">R$ 0,00</span>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+                    <div class="flex justify-between items-center p-3 glass dark:bg-red-900/20 bg-red-50 rounded-lg border border-red-100 dark:border-red-500/20">
                         <div class="flex items-center">
-                            <i data-lucide="trending-down" class="w-4 h-4 text-red-600 mr-2"></i>
-                            <span class="text-sm">Despesas</span>
+                            <i data-lucide="trending-down" class="w-4 h-4 text-red-600 dark:text-red-400 mr-2"></i>
+                            <span class="text-sm dark:text-slate-200">Despesas</span>
                         </div>
-                        <span id="close-exp" class="font-bold text-red-700">R$ 0,00</span>
+                        <span id="close-exp" class="font-bold text-red-700 dark:text-red-400">R$ 0,00</span>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg border border-blue-100">
+                    <div class="flex justify-between items-center p-3 glass dark:bg-blue-900/20 bg-blue-50 rounded-lg border border-blue-100 dark:border-blue-500/20">
                         <div class="flex items-center">
-                            <i data-lucide="users" class="w-4 h-4 text-blue-600 mr-2"></i>
-                            <span class="text-sm">Comissões</span>
+                            <i data-lucide="users" class="w-4 h-4 text-blue-600 dark:text-blue-400 mr-2"></i>
+                            <span class="text-sm dark:text-slate-200">Comissões</span>
                         </div>
-                        <span id="close-com" class="font-bold text-blue-700">R$ 0,00</span>
+                        <span id="close-com" class="font-bold text-blue-700 dark:text-blue-400">R$ 0,00</span>
                     </div>
-                    <div class="flex justify-between items-center pt-4 border-t">
-                        <span class="font-bold text-slate-800">Saldo Final</span>
-                        <span id="close-bal" class="font-bold text-2xl text-slate-900">R$ 0,00</span>
+                    <div class="flex justify-between items-center pt-4 border-t dark:border-white/10">
+                        <span class="font-bold dark:text-slate-300 text-slate-800">Saldo Final</span>
+                        <span id="close-bal" class="font-bold text-2xl dark:text-white text-slate-900">R$ 0,00</span>
                     </div>
                 </div>
 
@@ -1717,29 +2060,29 @@
                 </div>
 
                 <button onclick="closeModal('closingModal')"
-                    class="w-full bg-slate-100 text-slate-700 py-3 rounded-lg font-bold text-sm hover:bg-slate-200 transition-colors flex justify-center items-center gap-2">
+                    class="w-full dark:bg-slate-800 dark:text-slate-200 bg-slate-100 text-slate-700 py-3 rounded-lg font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex justify-center items-center gap-2">
                     Concluir Fechamento
                 </button>
 
-                <div class="mt-4 pt-4 border-t border-slate-100 text-center">
-                    <span class="text-xs text-gray-500">Licença Vitalícia</span>
+                <div class="mt-4 pt-4 border-t border-slate-100 dark:border-white/10 text-center">
+                    <span class="text-xs dark:text-slate-500 text-gray-500">Licença Vitalícia</span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Commission Modal -->
-    <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+    <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="glass dark:bg-slate-900 bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden border dark:border-white/10">
             <div class="bg-gradient-to-r from-brand-primary to-brand-dark p-6 text-center text-white">
                 <h3 class="font-bold text-lg">Pagamento de Comissão</h3>
                 <p class="text-xs text-white/80 mt-1">Confirmação de Pagamento</p>
             </div>
             <div class="p-6">
                 <div class="text-center mb-6">
-                    <p class="text-sm text-slate-500">Valor a pagar para</p>
-                    <h3 id="comm-pro-name" class="font-bold text-xl text-slate-800 my-2">--</h3>
-                    <div class="bg-green-50 text-green-700 font-bold text-2xl py-3 rounded-xl border border-green-100">
+                    <p class="text-sm dark:text-slate-400 text-slate-500">Valor a pagar para</p>
+                    <h3 id="comm-pro-name" class="font-bold text-xl dark:text-white text-slate-800 my-2">--</h3>
+                    <div class="glass dark:bg-green-900/20 bg-green-50 text-green-700 dark:text-green-400 font-bold text-2xl py-3 rounded-xl border border-green-100 dark:border-green-500/20">
                         <span id="comm-value">R$ 0,00</span>
                     </div>
                 </div>
@@ -1756,13 +2099,13 @@
                 </div>
 
                 <button onclick="confirmCommissionPayment()"
-                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold text-sm hover:bg-black transition-colors flex justify-center items-center gap-2">
+                    class="w-full bg-slate-900 dark:bg-brand-primary text-white py-3 rounded-lg font-bold text-sm hover:bg-black transition-colors flex justify-center items-center gap-2">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                     Confirmar Pagamento
                 </button>
 
                 <button onclick="closeModal('commissionModal')"
-                    class="w-full mt-3 text-slate-500 text-xs font-bold hover:text-red-500">
+                    class="w-full mt-3 dark:text-slate-400 text-slate-500 text-xs font-bold hover:text-red-500">
                     Cancelar
                 </button>
             </div>
@@ -2174,7 +2517,7 @@
                                 Pagar Comissão
                             </button>
                             <button onclick="editTeam('${pro.id}')" 
-                                    class="text-slate-400 hover:text-slate-600">
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -2207,13 +2550,13 @@
                 return `
                     <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center card-hover">
                         <div>
-                            <span class="font-bold text-slate-800">${service.name}</span>
+                            <span class="font-bold text-slate-800 dark:text-white">${service.name}</span>
                             <p class="text-xs text-slate-500 mt-1">${serviceCount} vendidos</p>
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="font-bold text-brand-primary">${fmtMoney(service.price)}</span>
                             <button onclick="editService('${service.id}')" 
-                                    class="text-slate-400 hover:text-slate-600">
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -2284,7 +2627,7 @@
                 const isIncome = t.type === 'income';
 
                 return `
-                    <tr class="hover:bg-slate-50 group border-b border-slate-100">
+                    <tr class="hover:bg-slate-50 group border-b border-slate-100 dark:border-white/5">
                         <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${fmtDate(t.date)}</td>
                         <td class="px-6 py-4">
                             <div class="font-medium text-slate-800">${sanitizeHTML(t.description)}</div>
@@ -3314,7 +3657,7 @@
         });
 
         // SECURITY CHECK
-// === MANUAL INTERATIVO PADRONIZADO ===
+        // === MANUAL INTERATIVO PADRONIZADO ===
         function scrollToSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (section) {
@@ -3443,18 +3786,18 @@
 
     <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
     <script>
-        window.activateLicense = async function(e) {
-            if(e) e.preventDefault();
-            
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
             const keyInput = document.getElementById('license-key');
             const emailInput = document.getElementById('license-email');
             const btn = document.getElementById('btn-activate');
-            
-            if(!keyInput || !emailInput) return;
-            
+
+            if (!keyInput || !emailInput) return;
+
             const key = keyInput.value.trim();
             const email = emailInput.value.trim();
-            
+
             if (!key || !email) {
                 alert('Por favor, preencha todos os campos.');
                 return;
@@ -3462,20 +3805,20 @@
 
             // 🔑 SENHA MESTRE PARA TESTES
             const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
-            
+
             if (MASTER_KEYS.includes(key.toUpperCase())) {
                 console.log('🔓 Master Access Granted');
                 localStorage.setItem('plena_license', key);
                 localStorage.setItem('ml_license_email', email);
                 localStorage.setItem('ml_master_mode', 'true');
-                
-                if(btn) {
+
+                if (btn) {
                     const originalText = btn.innerText;
                     btn.innerText = '🔓 Acesso Liberado...';
                     btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
                     btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
                 }
-                
+
                 setTimeout(() => {
                     alert('Modo de Teste/Admin Ativado com Sucesso!');
                     window.location.reload();
@@ -3484,24 +3827,24 @@
             }
 
             // 🌍 FLUXO PADRÃO (API)
-            if(btn) {
+            if (btn) {
                 const originalText = btn.innerText;
                 btn.innerText = 'Verificando...';
                 btn.disabled = true;
-                
+
                 try {
                     // Tenta endpoint relativo padrão dos sistemas Gestão
                     const output = document.getElementById('activation-error');
-                    if(output) output.classList.add('hidden');
+                    if (output) output.classList.add('hidden');
 
                     const response = await fetch('../api_licenca_ml.php?action=activate', {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ license_key: key, email: email })
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.status === 'success') {
                         localStorage.setItem('plena_license', key);
                         localStorage.setItem('ml_license_email', email);
@@ -3510,7 +3853,7 @@
                         window.location.reload();
                     } else {
                         const msg = data.message || 'Chave inválida ou erro no servidor.';
-                        if(output) {
+                        if (output) {
                             output.textContent = msg;
                             output.classList.remove('hidden');
                         } else {
@@ -3528,6 +3871,207 @@
         };
     </script>
 
-</body>
 
-</html>
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>
