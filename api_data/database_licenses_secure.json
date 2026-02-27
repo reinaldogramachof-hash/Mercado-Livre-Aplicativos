@@ -55,5 +55,20 @@
         "status": "pending",
         "created_at": "2026-02-16 14:43:59",
         "type": "venda_ml"
+    },
+    "3F9E-1274-DCAF": {
+        "client": "Reinaldo Gramacho",
+        "product": "Gestão Motorista",
+        "price": 97,
+        "status": "active",
+        "created_at": "2026-02-17 01:31:04",
+        "type": "trial",
+        "is_trial": true,
+        "trial_duration_days": 3,
+        "expiration_date": "2026-01-20 01:33:39",
+        "device_id": "legacy_1771292019",
+        "activated_at": "2026-02-17 01:33:39",
+        "last_ip": "::1",
+        "email_activation": "reinaldogramachof@gmail.com"
     }
 }

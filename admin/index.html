@@ -297,6 +297,16 @@
                     <input type="number" id="gen-price" value="97.00" step="0.01"
                         class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
+
+                <div class="flex items-center gap-2 bg-orange-50 p-3 rounded-lg border border-orange-100">
+                    <input type="checkbox" id="gen-trial" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
+                    <div>
+                        <label for="gen-trial" class="block text-sm font-bold text-slate-700">Licença de Teste
+                            (Trial)</label>
+                        <p class="text-xs text-slate-500">Expira automaticamente em 72 horas após ativação.</p>
+                    </div>
+                </div>
+
                 <div class="pt-2">
                     <button onclick="confirmGenerate()"
                         class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-green-200 transition-all">
@@ -337,14 +347,13 @@
     </div>
 
     <script>
-        const ADMIN_PASS = "Rein@ldo1912";
+        const AUTH_API = "../api_admin_auth.php";
         const API_URL = "../api_licenca_ml.php";
         let AUTH_SECRET = "";
 
         // --- CONFIGURAÇÃO DE DOMÍNIO ---
         const BASE_URL = "https://sistemasdegestao.tech/";
 
-        // Mapeamento dos Produtos (Garante o link limpo)
         // Mapeamento dos Produtos (Garante o link limpo)
         const PRODUCT_SLUGS = {
             'Gestão Barbearia': 'gestao-barbearia',
@@ -381,26 +390,70 @@
         // INIT
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            const savedSecret = sessionStorage.getItem('admin_secret');
-            if (savedSecret) {
-                AUTH_SECRET = savedSecret;
-                doLogin(); // Tenta logar automaticamente se tiver a senha
+            const savedToken = sessionStorage.getItem('admin_token');
+            if (savedToken) {
+                AUTH_SECRET = savedToken;
+                validateAndLogin();
             }
+
+            // Auto-Refresh Global (10s)
+            setInterval(() => {
+                if (!document.getElementById('admin-panel').classList.contains('hidden')) {
+                    loadDashboard();
+                    loadLicenses();
+                    loadReceipts();
+                    loadLogs();
+                }
+            }, 10000);
         });
+
+        // Valida token salvo e entra direto
+        async function validateAndLogin() {
+            try {
+                const res = await fetch(AUTH_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'validate', token: AUTH_SECRET })
+                });
+                const data = await res.json();
+                if (data.valid) {
+                    document.getElementById('login-modal').classList.add('hidden');
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    testConnection();
+                } else {
+                    sessionStorage.removeItem('admin_token');
+                    AUTH_SECRET = '';
+                }
+            } catch (e) {
+                sessionStorage.removeItem('admin_token');
+                AUTH_SECRET = '';
+            }
+        }
 
         async function doLogin(e) {
             if (e) e.preventDefault();
-            const pass = document.getElementById('admin-pass')?.value || AUTH_SECRET;
+            const pass = document.getElementById('admin-pass')?.value;
+            if (!pass) return;
 
-            if (pass === ADMIN_PASS) {
-                AUTH_SECRET = pass;
-                sessionStorage.setItem('admin_secret', pass);
-                document.getElementById('login-modal').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                testConnection(); // TESTE IMEDIATO AO LOGAR
-            } else if (pass) {
-                alert("Senha Administrativa Incorreta");
-                sessionStorage.removeItem('admin_secret');
+            try {
+                const res = await fetch(AUTH_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'login', password: pass })
+                });
+                const data = await res.json();
+
+                if (data.status === 'success' && data.token) {
+                    AUTH_SECRET = data.token;
+                    sessionStorage.setItem('admin_token', data.token);
+                    document.getElementById('login-modal').classList.add('hidden');
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    testConnection();
+                } else {
+                    document.getElementById('login-msg').innerText = 'Senha incorreta.';
+                }
+            } catch (err) {
+                document.getElementById('login-msg').innerText = 'Erro de conexão com servidor.';
             }
         }
 
@@ -428,13 +481,27 @@
         }
 
         function logout() {
-            sessionStorage.removeItem('admin_secret');
+            sessionStorage.removeItem('admin_token');
+            AUTH_SECRET = '';
             location.reload();
         }
 
         async function downloadBackup() {
-            const url = `${API_URL}?action=backup&secret=${AUTH_SECRET}`;
-            window.open(url, '_blank');
+            try {
+                const res = await fetch(API_URL + '?action=backup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ secret: AUTH_SECRET, action: 'backup' })
+                });
+                if (!res.ok) { alert('Erro ao baixar backup'); return; }
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup_licencas_${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch (e) { alert('Erro ao baixar backup'); }
         }
 
         // Função genérica para chamar a API
@@ -491,11 +558,13 @@
             const licenses = await apiCall('list');
             const pending = licenses ? licenses.filter(l => l.status === 'pending').length : 0;
             const active = licenses ? licenses.filter(l => l.status === 'active').length : 0;
-            const revenue = licenses ? licenses.reduce((sum, l) => sum + (l.price || 0), 0) : 0;
+            const trial = licenses ? licenses.filter(l => l.type === 'trial' || l.is_trial).length : 0;
+
+            const revenue = licenses ? licenses.filter(l => l.type !== 'trial').reduce((sum, l) => sum + (l.price || 0), 0) : 0;
 
             document.getElementById('stat-revenue').innerText = fmtMoney(revenue);
             document.getElementById('stat-active').innerText = active;
-            document.getElementById('stat-pending').innerText = pending;
+            document.getElementById('stat-pending').innerText = pending + trial; // Pendentes + Trial contam
 
             const topProd = document.getElementById('top-products-list');
             topProd.innerHTML = Object.entries(data.top_products || {}).map(([name, count]) => `
@@ -519,18 +588,55 @@
             );
 
             const tbody = document.getElementById('licenses-table');
-            tbody.innerHTML = filtered.map((l, index) => `
+            tbody.innerHTML = filtered.map((l, index) => {
+                let badgeClass = '';
+                let statusText = '';
+                let isExpired = false;
+
+                // Logic for Badge
+                if (l.status === 'active') {
+                    // Check if trial active
+                    if (l.is_trial || l.type === 'trial') {
+                        statusText = 'TESTE (ATIVO)';
+                        badgeClass = 'bg-blue-100 text-blue-700 border border-blue-200';
+
+                        if (l.expiration_date) {
+                            const exp = new Date(l.expiration_date);
+                            if (new Date() > exp) {
+                                statusText = 'TESTE (EXPIRADO)';
+                                badgeClass = 'bg-slate-200 text-slate-500 border border-slate-300';
+                                isExpired = true;
+                            }
+                        }
+                    } else {
+                        statusText = 'ATIVO';
+                        badgeClass = 'bg-green-100 text-green-700 border border-green-200';
+                    }
+                } else if (l.status === 'blocked') {
+                    statusText = 'BLOQUEADO';
+                    badgeClass = 'bg-red-100 text-red-700 border border-red-200';
+                } else {
+                    statusText = 'PENDENTE';
+                    badgeClass = 'bg-amber-100 text-amber-700 border border-amber-200';
+                    if (l.is_trial || l.type === 'trial') statusText = 'TESTE (PENDENTE)';
+                }
+
+                return `
                 <tr class="transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-blue-50/30">
-                    <td class="px-6 py-4 font-mono text-[11px] text-slate-400">${l.created_at?.substring(0, 16).replace('T', ' ')}</td>
+                    <td class="px-6 py-4 font-mono text-[11px] text-slate-400">
+                        ${l.created_at?.substring(0, 16).replace('T', ' ')}
+                        ${l.expiration_date ? `<div class="text-[9px] text-red-400 font-bold mt-1">Exp: ${l.expiration_date.substring(0, 16)}</div>` : ''}
+                    </td>
                     <td class="px-6 py-4">
                         <div class="font-bold text-slate-800">${l.client || 'Mercado Livre'}</div>
-                        <div class="text-[10px] text-slate-400 uppercase tracking-tighter">${l.type || 'venda'}</div>
+                        <div class="text-[10px] text-slate-400 uppercase tracking-tighter">${l.type || 'venda'} ${l.is_trial ? '⚡' : ''}</div>
+                        ${l.email_activation ? `<div class="text-[10px] text-blue-600 font-bold mt-1" title="Email de Ativação">📧 ${l.email_activation}</div>` : ''}
                     </td>
                     <td class="px-6 py-4 text-slate-600 font-medium">${l.product || 'N/A'}</td>
                     <td class="px-6 py-4 font-mono text-[11px] text-blue-600 bg-blue-50/50 rounded-md py-1 px-2 border border-blue-100/50">${l.key.substring(0, 18)}...</td>
                     <td class="px-6 py-4">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${l.status === 'active' ? 'bg-green-100 text-green-700 border border-green-200' : (l.status === 'blocked' ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-amber-100 text-amber-700 border border-amber-200')}">
-                            ${l.status === 'active' ? 'Ativo' : (l.status === 'blocked' ? 'Bloqueado' : 'Pendente')}
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${badgeClass}">
+                            ${statusText}
                         </span>
                     </td>
                     <td class="px-6 py-4 font-mono text-[10px] text-slate-400">
@@ -542,20 +648,20 @@
                                 <i data-lucide="copy" class="w-4 h-4"></i>
                             </button>
                             ${l.status !== 'blocked' ?
-                    `<button onclick="blockLicense('${l.key}')" class="p-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-all shadow-sm" title="Bloquear Acesso">
+                        `<button onclick="blockLicense('${l.key}')" class="p-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-all shadow-sm" title="Bloquear Acesso">
                                 <i data-lucide="ban" class="w-4 h-4"></i>
                             </button>` :
-                    `<button onclick="unblockLicense('${l.key}')" class="p-2 bg-green-50 text-green-600 hover:bg-green-600 hover:text-white rounded-lg transition-all shadow-sm" title="Desbloquear Acesso">
+                        `<button onclick="unblockLicense('${l.key}')" class="p-2 bg-green-50 text-green-600 hover:bg-green-600 hover:text-white rounded-lg transition-all shadow-sm" title="Desbloquear Acesso">
                                 <i data-lucide="check" class="w-4 h-4"></i>
                             </button>`
-                }
+                    }
                             ${l.device_id ? `<button onclick="resetDevice('${l.key}')" class="p-2 bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded-lg transition-all shadow-sm" title="Resetar Dispositivo">
                                 <i data-lucide="smartphone-off" class="w-4 h-4"></i>
                             </button>` : ''}
                         </div>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
             lucide.createIcons();
         }
 
@@ -640,6 +746,7 @@
             const product = document.getElementById('gen-product').value;
             const client = document.getElementById('gen-client').value || 'Cliente';
             const price = document.getElementById('gen-price').value;
+            const isTrial = document.getElementById('gen-trial').checked;
 
             if (!product) return alert('Selecione um produto.');
 
@@ -647,7 +754,9 @@
                 product: product,
                 client: client,
                 price: price,
-                quantity: 1
+                quantity: 1,
+                trial: isTrial,
+                trial_days: 3 // Hardcoded to 3 days for now
             });
 
             if (res && res.status === 'success' && res.keys && res.keys.length > 0) {
@@ -660,7 +769,29 @@
                 // O link final será: https://sistemasdegestao.tech/gestao-barbearia/
                 const appLink = BASE_URL + productSlug + '/';
 
-                const message = `Olá, ${client}! 🚀
+                let message = '';
+
+                if (isTrial) {
+                    message = `Olá, ${client}! 🧪
+Esta é sua *Licença de Teste Gratuito (3 Dias)* para o sistema:
+
+📱 *Acesso ao Sistema:*
+${appLink}
+
+🔑 *Sua Chave de Teste:*
+${key}
+
+*Instruções:*
+1. Acesse o link.
+2. Insira a chave acima.
+3. Aproveite todas as funcionalidades por 72h!
+
+O sistema irá travar automaticamente após o período. Para liberar a versão vitalícia sem perder seus dados, basta me chamar!
+
+Qualquer dúvida, estou à disposição!`;
+
+                } else {
+                    message = `Olá, ${client}! 🚀
 Obrigado pela sua compra. Aqui está o acesso vitalício ao seu sistema:
 
 📱 *Acesso ao Sistema:*
@@ -687,6 +818,7 @@ Os dados ficam salvos no seu dispositivo. Crie imediatamente uma pasta "Backup S
 Seg a Sex: 08h às 18h | Sáb: 09h às 14h
 
 Qualquer dúvida, estamos à disposição!`;
+                }
 
                 document.getElementById('delivery-text').value = message;
                 document.getElementById('delivery-modal').classList.remove('hidden');

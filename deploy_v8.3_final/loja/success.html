@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Aprovado!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col items-center justify-center p-6 text-center">
+
+    <div class="bg-white rounded-3xl p-8 shadow-2xl max-w-md w-full border border-slate-100">
+        <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i data-lucide="check-circle" class="w-10 h-10"></i>
+        </div>
+
+        <h1 class="text-3xl font-black text-slate-900 mb-2">Sucesso!</h1>
+        <p class="text-slate-500 mb-8">Seu pagamento foi aprovado e sua licença foi gerada.</p>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Sua Chave de Ativação</p>
+            <div class="relative">
+                <input type="text" id="license-key" value="Aguarde..." readonly
+                    class="w-full bg-white border border-slate-200 rounded-lg p-3 text-center font-mono font-bold text-lg text-slate-800 focus:outline-none">
+                <button onclick="copyKey()"
+                    class="absolute right-2 top-2 p-1.5 text-slate-400 hover:text-emerald-500 bg-white rounded-md shadow-sm border border-slate-100">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-2">Copie e cole no aplicativo para liberar o acesso.</p>
+        </div>
+
+        <a href="../gestao-motorista/index.html"
+            class="block w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
+            Voltar para o App
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Simulação: Em produção, o ideal é o user logar ou a gente pegar o ID da transação da URL e consultar a API
+        // Como o MP redireciona, podemos tentar pegar o payment_id da URL
+        // ?collection_id=123...&collection_status=approved...
+
+        async function fetchLicense() {
+            const params = new URLSearchParams(window.location.search);
+            const paymentId = params.get('collection_id') || params.get('payment_id');
+            const status = params.get('collection_status') || params.get('status');
+
+            if (status !== 'approved') {
+                document.querySelector('h1').innerText = 'Aguardando...';
+                document.querySelector('p').innerText = 'Seu pagamento está sendo processado.';
+                return;
+            }
+
+            if (paymentId) {
+                // Tenta buscar a licença pelo ID do pagamento (Precisaria de uma rota nova na API, vamos simular ou orientar o user a ver o email)
+                document.getElementById('license-key').value = "Verifique seu E-mail";
+                // Idealmente: call API -> get license by payment_id
+            } else {
+                document.getElementById('license-key').value = "Verifique seu E-mail (tecnologia@plenaaplicativos.com.br)";
+            }
+        }
+
+        function copyKey() {
+            const key = document.getElementById('license-key');
+            key.select();
+            document.execCommand('copy');
+            alert('Chave copiada!');
+        }
+
+        fetchLicense();
+    </script>
+</body>
+
+</html>

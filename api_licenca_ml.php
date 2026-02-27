@@ -1,11 +1,33 @@
 <?php
-// API V11.2 - PROFESSIONAL FULL (ML SYNC)
+// API V11.8 - PROFESSIONAL FULL (SECURE ENV + CORS DYNAMIC)
+require_once __DIR__ . '/env_loader.php';
+
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-header("Access-Control-Allow-Origin: *");
+// --- CORS DINÂMICO (V11.8) ---
+// Aceita o domínio de produção (qualquer variação) + localhost para dev
+$ALLOWED_ORIGIN_ENV = env('ALLOWED_ORIGIN', '*');
+$requestOrigin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$baseDomain = parse_url($ALLOWED_ORIGIN_ENV, PHP_URL_HOST) ?? 'sistemasdegestao.tech';
+
+if (
+    $ALLOWED_ORIGIN_ENV === '*' ||
+    empty($requestOrigin) ||
+    str_contains($requestOrigin, $baseDomain) ||
+    str_contains($requestOrigin, 'localhost') ||
+    str_contains($requestOrigin, '127.0.0.1')
+) {
+    $corsOrigin = empty($requestOrigin) ? '*' : $requestOrigin;
+} else {
+    $corsOrigin = $ALLOWED_ORIGIN_ENV;
+}
+
+header("Access-Control-Allow-Origin: $corsOrigin");
+header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -13,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // 1. CONFIG
-$ADMIN_SECRET = "Rein@ldo1912";
+$ADMIN_SECRET = env('ADMIN_SECRET');
 $fileLicenses = __DIR__ . '/api_data/database_licenses_secure.json';
 $fileLogs = __DIR__ . '/api_data/system_logs.json';
 $fileReceipts = __DIR__ . '/api_data/receipts_log.json';
@@ -53,7 +75,11 @@ function saveDB($file, $data)
 
 function validateSecret($data, $secret)
 {
-    return (isset($data['secret']) && $data['secret'] === $secret);
+    if (!isset($data['secret']))
+        return false;
+    // Aceita a senha direta OU o token diário (hash da senha + data)
+    $token = hash('sha256', $secret . date('Y-m-d'));
+    return ($data['secret'] === $secret || $data['secret'] === $token);
 }
 
 function addLog($msg, $type = 'info', $file = '')
@@ -107,13 +133,17 @@ if ($action === 'dashboard_stats') {
         'total' => count($db),
         'active' => 0,
         'pending' => 0,
+        'trial' => 0,
         'top_products' => []
     ];
     foreach ($db as $l) {
         if (($l['status'] ?? '') === 'active')
             $stats['active']++;
-        else
+        elseif (($l['status'] ?? '') === 'pending')
             $stats['pending']++;
+
+        if (!empty($l['is_trial']))
+            $stats['trial']++;
 
         $pName = $l['product'] ?? 'Desconhecido';
         if (!isset($stats['top_products'][$pName]))
@@ -131,24 +161,39 @@ if ($action === 'generate') {
     }
     $db = getDB($fileLicenses);
     $qty = (int) ($jsonData['quantity'] ?? 1);
+    $isTrial = !empty($jsonData['trial']);
+    $trialDays = (int) ($jsonData['trial_days'] ?? 3);
+
     $keys = [];
 
     for ($i = 0; $i < $qty; $i++) {
         // Formato XXXX-XXXX-XXXX
         $k = strtoupper(substr(md5(uniqid()), 0, 4) . '-' . substr(md5(uniqid()), 4, 4) . '-' . substr(md5(uniqid()), 8, 4));
-        $db[$k] = [
+
+        $licenseData = [
             'client' => $jsonData['client'] ?? 'Mercado Livre',
             'product' => $jsonData['product'] ?? 'Sistema',
             'price' => (float) ($jsonData['price'] ?? 0),
             'status' => 'pending',
             'created_at' => date('Y-m-d H:i:s'),
-            'type' => 'venda_ml'
+            'type' => $isTrial ? 'trial' : 'venda_ml'
         ];
+
+        if ($isTrial) {
+            $licenseData['is_trial'] = true;
+            // Expira em X dias a partir da criação (ou ativação? Vamos por criação p/ simplificar, ou ativação é melhor?)
+            // Melhor: Define a duração do trial, e a expiração é calculada na ATIVAÇÃO.
+            // Mas para simplificar a gestão visual, vamos definir expiração na ativação.
+            // Aqui guardamos apenas a flag.
+            $licenseData['trial_duration_days'] = $trialDays;
+        }
+
+        $db[$k] = $licenseData;
         $keys[] = $k;
     }
 
     saveDB($fileLicenses, $db);
-    addLog("Geradas $qty chaves para " . ($jsonData['client'] ?? 'Cliente'), 'info');
+    addLog("Geradas $qty chaves " . ($isTrial ? "(TRIAL)" : "") . " para " . ($jsonData['client'] ?? 'Cliente'), 'info');
     echo json_encode(['status' => 'success', 'keys' => $keys]);
     exit;
 }
@@ -210,28 +255,65 @@ if ($action === 'activate') {
     $db = getDB($fileLicenses);
 
     if (isset($db[$key])) {
+        // --- EXPIRATION CHECK (V11.7) ---
+        if (!empty($db[$key]['expiration_date'])) {
+            $exp = strtotime($db[$key]['expiration_date']);
+            if (time() > $exp) {
+                echo json_encode(['status' => 'expired', 'message' => 'Período de teste expirado. Adquira a versão vitalícia.']);
+                exit;
+            }
+        }
+
         if (
             $db[$key]['status'] === 'active' &&
             !empty($db[$key]['device_id']) &&
             $db[$key]['device_id'] !== $device
         ) {
-            echo json_encode(['status' => 'error', 'message' => 'Licença já usada em outro aparelho.']);
-            exit;
+            // Smart Rebind Logic (V11.5 - iOS PWA Persistence)
+            // Se o IP for o mesmo, permite a troca de "Navegador" para "App Instalado"
+            if (isset($db[$key]['last_ip']) && $db[$key]['last_ip'] === $_SERVER['REMOTE_ADDR']) {
+                addLog("Smart Rebind: Chave $key atualizada para novo device no mesmo IP: " . $_SERVER['REMOTE_ADDR'], 'warning');
+                // Permite prosseguir e atualizar o device_id abaixo
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Licença já usada em outro aparelho.']);
+                exit;
+            }
         }
+
 
         if ($db[$key]['status'] === 'blocked') {
             echo json_encode(['status' => 'error', 'message' => 'Licença bloqueada ou cancelada.']);
             exit;
         }
 
+        // ATIVAÇÃO INICIAL
+        if ($db[$key]['status'] !== 'active') {
+            // Se for TRIAL e ainda não tiver data de expiração, seta agora
+            if (!empty($db[$key]['is_trial']) && empty($db[$key]['expiration_date'])) {
+                $days = $db[$key]['trial_duration_days'] ?? 3;
+                $db[$key]['expiration_date'] = date('Y-m-d H:i:s', strtotime("+$days days"));
+            }
+        }
+
         $db[$key]['status'] = 'active';
         $db[$key]['device_id'] = $device;
         $db[$key]['activated_at'] = date('Y-m-d H:i:s');
         $db[$key]['last_ip'] = $_SERVER['REMOTE_ADDR'];
+        // V11.6 - Capture Email provided by App
+        if (!empty($jsonData['email'])) {
+            $db[$key]['email_activation'] = $jsonData['email'];
+        }
 
         saveDB($fileLicenses, $db);
+
+        $response = ['status' => 'success', 'valid' => true, 'client' => $db[$key]['client']];
+        if (!empty($db[$key]['expiration_date'])) {
+            $response['expiration_date'] = $db[$key]['expiration_date'];
+            $response['is_trial'] = true;
+        }
+
         addLog("Sucesso: Chave $key ativada no device $device", 'info');
-        echo json_encode(['status' => 'success', 'valid' => true, 'client' => $db[$key]['client']]);
+        echo json_encode($response);
     } else {
         addLog("Falha: Tentativa de ativação com chave inválida $key", 'error');
         echo json_encode(['status' => 'error', 'message' => 'Licença não encontrada']);
@@ -247,11 +329,23 @@ if ($action === 'verify') {
     $db = getDB($fileLicenses);
 
     if (isset($db[$key])) {
+        // --- EXPIRATION CHECK (V11.7) ---
+        $status = $db[$key]['status'];
+        if (!empty($db[$key]['expiration_date'])) {
+            $exp = strtotime($db[$key]['expiration_date']);
+            if (time() > $exp) {
+                // Auto-expire silently or explicitly
+                $status = 'expired';
+            }
+        }
+
         // Return current status
         echo json_encode([
             'status' => 'success',
-            'license_status' => $db[$key]['status'], // active, pending, blocked
-            'client' => $db[$key]['client']
+            'license_status' => $status, // active, pending, blocked, expired
+            'client' => $db[$key]['client'],
+            'is_trial' => !empty($db[$key]['is_trial']),
+            'expiration_date' => $db[$key]['expiration_date'] ?? null
         ]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Licença não encontrada']);
@@ -261,27 +355,55 @@ if ($action === 'verify') {
 
 if ($action === 'confirm_receipt') {
     $key = $jsonData['license_key'] ?? '';
+    $emailFromApp = trim($jsonData['email'] ?? '');
     $data = getDB($fileLicenses);
 
+    // V12.1: Gravar email no banco de licencas se ainda nao tiver (captacao de lead garantida)
+    if (!empty($emailFromApp) && isset($data[$key])) {
+        if (empty($data[$key]['email_activation'])) {
+            $data[$key]['email_activation'] = $emailFromApp;
+            saveDB($fileLicenses, $data);
+        }
+    }
+
+    // Determinar email: prioridade DB > enviado pelo app > fallback
+    $clientEmail = $data[$key]['email_activation'] ?? ($emailFromApp ?: ($data[$key]['client'] ?? 'N/A'));
     $receipts = getDB($fileReceipts);
-    $receipts[] = [
-        'timestamp' => date('Y-m-d H:i:s'),
-        'ip' => $_SERVER['REMOTE_ADDR'],
-        'license_key' => $key,
-        'client_email' => $data[$key]['client'] ?? 'N/A',
-        'confirmation_text' => 'Confirmo o recebimento do produto digital e o funcionamento do mesmo.'
-    ];
-    saveDB($fileReceipts, $receipts);
-    addLog("Recibo confirmado para chave $key", 'info');
+
+    // Protecao contra recibos duplicados (mesma chave)
+    $isDuplicate = false;
+    foreach (array_slice($receipts, -200) as $r) {
+        if (($r['license_key'] ?? '') === $key) {
+            $isDuplicate = true;
+            break;
+        }
+    }
+
+    if (!$isDuplicate) {
+        $receipts[] = [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'ip' => $_SERVER['REMOTE_ADDR'],
+            'license_key' => $key,
+            'client_email' => $clientEmail,
+            'product' => $data[$key]['product'] ?? 'N/A',
+            'confirmation_text' => 'Confirmo o recebimento do produto digital e o funcionamento do mesmo.'
+        ];
+        saveDB($fileReceipts, $receipts);
+        addLog("Recibo confirmado: chave=$key email=$clientEmail", 'info');
+    } else {
+        addLog("Recibo ja registrado para chave $key", 'info');
+    }
+
     echo json_encode(['status' => 'success']);
     exit;
 }
 
 if ($action === 'backup') {
-    $secret = $_GET['secret'] ?? '';
+    // Aceita POST (seguro) ou GET (legado)
+    $secret = $jsonData['secret'] ?? ($_GET['secret'] ?? '');
     if ($secret !== $ADMIN_SECRET) {
         http_response_code(403);
-        die("Acesso Negado");
+        die(json_encode(['status' => 'error', 'message' => 'Acesso Negado']));
     }
 
     if (file_exists($fileLicenses)) {

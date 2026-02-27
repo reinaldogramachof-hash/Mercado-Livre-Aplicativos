@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Seguro | Plena Informática</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- HEADER INSTITUCIONAL -->
+    <header class="bg-white border-b border-slate-200 py-4 px-6 md:px-12">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-900 text-white p-2 rounded-lg">
+                    <i data-lucide="monitor" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-900 text-lg leading-tight">Plena Informática</h1>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest">Tecnologia Corporativa</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-4 text-sm text-slate-500">
+                <span class="flex items-center gap-1"><i data-lucide="lock" class="w-4 h-4"></i> Ambiente Seguro</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-4">
+        <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+            <!-- LEFT COLUMN: SUMMARY -->
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Finalizar Contratação</h2>
+                    <p class="text-slate-600">Você está adquirindo uma licença vitalícia de software empresarial.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Resumo do Pedido</h3>
+
+                    <div class="flex items-center gap-4 mb-6">
+                        <div id="prod-icon"
+                            class="w-14 h-14 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center">
+                            <i data-lucide="box" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-900" id="prod-name">Carregando...</h4>
+                            <p class="text-sm text-slate-500">Versão Vitalícia • Licença Única</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-sm text-slate-600">
+                        <div class="flex justify-between">
+                            <span>Valor do Software</span>
+                            <span class="line-through text-slate-400">R$ 97,00</span>
+                        </div>
+                        <div class="flex justify-between font-medium text-slate-800">
+                            <span>Preço Promocional</span>
+                            <span>R$ 47,90</span>
+                        </div>
+                        <div class="h-px bg-slate-100 my-2"></div>
+                        <div class="flex justify-between items-center text-lg font-bold text-blue-900">
+                            <span>Total a Pagar</span>
+                            <span id="final-price">R$ 47,90</span>
+                        </div>
+                        <div id="discount-badge" class="hidden text-right">
+                            <span class="text-xs bg-green-100 text-green-700 font-bold px-2 py-1 rounded">Desconto
+                                Aplicado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUPOM -->
+                <div class="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Código do Consultor /
+                        Parceiro</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="coupon-code" placeholder="Insira o código aqui"
+                            class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm uppercase font-mono outline-none focus:border-blue-500 transition-colors">
+                        <button onclick="validateCoupon()"
+                            class="bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition-colors">Aplicar</button>
+                    </div>
+                    <p id="coupon-msg" class="text-xs mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: PAYMENT -->
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
+                <div class="text-center mb-8">
+                    <div
+                        class="inline-flex items-center justify-center w-12 h-12 bg-blue-50 text-blue-600 rounded-full mb-4">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">Pagamento Seguro</h3>
+                    <p class="text-sm text-slate-500 mt-1">Processado pelo Mercado Pago</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50 opacity-75">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-slate-400"></i>
+                        <span class="text-sm text-slate-600">Pagamento via Pix (Liberação Imediata)</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50 opacity-75">
+                        <i data-lucide="credit-card" class="w-5 h-5 text-slate-400"></i>
+                        <span class="text-sm text-slate-600">Cartão de Crédito (até 12x)</span>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <button onclick="finishOrder()"
+                        class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl text-lg shadow-lg hover:shadow-blue-900/20 transition-all flex items-center justify-center gap-2 group">
+                        <span>Ir para Pagamento</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <p class="text-center text-xs text-slate-400 mt-4">
+                        Ao continuar, você concorda com os Termos de Uso.<br>
+                        A licença será enviada após a confirmação.
+                    </p>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-100 text-center">
+                    <p class="text-xs font-bold text-slate-500 mb-2">Precisa de Ajuda?</p>
+                    <a href="https://wa.me/5512992191018" target="_blank"
+                        class="inline-flex items-center gap-2 text-green-600 font-bold text-sm hover:underline">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Falar com Suporte WhatsApp
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 text-center">
+        <p class="text-xs text-slate-400 max-w-2xl mx-auto">
+            &copy; 2026 Plena Informática. CNPJ: 58.647.930/0001-83<br>
+            Desenvolvimento de Softwares Corporativos e Soluções em Gestão.
+        </p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- LOGIC ---
+        const PRODUCTS = {
+            'motorista': { name: 'Gestão Motorista Pro', price: 0.10, icon: 'car-taxi-front' },
+            'motoboy': { name: 'Gestão Motoboy Pro', price: 0.10, icon: 'bike' }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const prodKey = params.get('product') || 'motorista';
+        const product = PRODUCTS[prodKey] || PRODUCTS['motorista'];
+
+        // Render
+        document.getElementById('prod-name').innerText = product.name;
+        document.querySelector('#prod-icon i').setAttribute('data-lucide', product.icon);
+        lucide.createIcons();
+
+        let activeCoupon = null;
+        let finalPrice = product.price;
+
+        async function validateCoupon() {
+            const code = document.getElementById('coupon-code').value.toUpperCase();
+            if (!code) return;
+
+            const btn = document.querySelector('button[onclick="validateCoupon()"]');
+            const originalTxt = btn.innerText;
+            btn.innerText = '...';
+
+            try {
+                const res = await fetch('../api_vendas.php?action=validate_coupon', {
+                    method: 'POST', body: JSON.stringify({ code })
+                });
+                const data = await res.json();
+
+                const msgEl = document.getElementById('coupon-msg');
+
+                if (data.valid) {
+                    activeCoupon = { code: code, discount: data.discount_percent };
+                    finalPrice = product.price * (1 - (data.discount_percent / 100));
+                    document.getElementById('final-price').innerText = finalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    document.getElementById('discount-badge').classList.remove('hidden');
+                    msgEl.innerText = `Desconto de ${data.discount_percent}% aplicado. Parceiro: ${data.partner}`;
+                    msgEl.classList.remove('hidden', 'text-red-500');
+                    msgEl.classList.add('text-green-600');
+                    // Disable input
+                    document.getElementById('coupon-code').disabled = true;
+                    btn.disabled = true;
+                    btn.innerText = 'OK';
+                } else {
+                    msgEl.innerText = 'Código inválido ou expirado.';
+                    msgEl.classList.remove('hidden', 'text-green-600');
+                    msgEl.classList.add('text-red-500');
+                    btn.innerText = originalTxt;
+                }
+            } catch (e) {
+                console.error(e);
+                btn.innerText = originalTxt;
+            }
+        }
+
+        async function finishOrder() {
+            const btn = document.querySelector('button[onclick="finishOrder()"]');
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerText = 'Processando...';
+
+            try {
+                const payload = {
+                    action: 'create_preference',
+                    product: prodKey,
+                    price: finalPrice,
+                    coupon_code: activeCoupon ? activeCoupon.code : ''
+                };
+
+                const res = await fetch('../api_vendas.php', {
+                    method: 'POST', body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.init_point;
+                } else {
+                    alert('Erro ao iniciar pagamento. Tente novamente.');
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btn.innerText = 'Ir para Pagamento';
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Erro de conexão.');
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerText = 'Ir para Pagamento';
+            }
+        }
+    </script>
+</body>
+
+</html>
