@@ -77,22 +77,44 @@ const fmtDate = (d) => {
     return date.toLocaleDateString('pt-BR');
 };
 const fmtDateInput = (d) => {
-    return new Date(d).toISOString().split('T')[0];
+    return getLocalIsoDate(new Date(d));
 };
 const getID = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+};
+
+// Utils: Local Timezone Helpers
+const getLocalIsoString = (dateObj = new Date()) => {
+    const offset = dateObj.getTimezoneOffset() * 60000;
+    return (new Date(dateObj.getTime() - offset)).toISOString().slice(0, -1);
+};
+const getLocalIsoDate = (dateObj = new Date()) => {
+    return getLocalIsoString(dateObj).split('T')[0];
 };
 const calculatePercentage = (current, previous) => {
     if (previous === 0) return current > 0 ? 100 : 0;
     return ((current - previous) / previous * 100).toFixed(1);
 };
+function updateDateDisplay() {
+    const update = () => {
+        const now = new Date();
+        const optsDate = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('pt-BR', optsDate);
+        const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const el = document.getElementById('current-date');
+        if (el) el.textContent = `${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)} • ${timeStr}`;
+    };
+    update(); // Initial call
+    setInterval(update, 1000); // Update every second
+}
 // INICIALIZAÇÃO
 async function init() {
     try {
         lucide.createIcons();
+        updateDateDisplay();
 
         // Configurar datas padrão
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalIsoDate();
         const firstDay = new Date();
         firstDay.setDate(1);
         const firstDayStr = firstDay.toISOString().split('T')[0];
@@ -141,105 +163,39 @@ async function init() {
 // ==========================================
 async function checkAirlock() {
     const key = localStorage.getItem('plena_license');
-    const receiptConfirmed = localStorage.getItem('ml_receipt_confirmed');
 
+    const viewLogin = document.getElementById('view-login');
+    const appMain = document.getElementById('app-main-content');
+
+    // 1. Sem licença -> Vai pra Login
     if (!key) {
-        document.getElementById('view-login').style.display = 'flex';
-        document.getElementById('app-main-content').style.display = 'none';
+        if (viewLogin) viewLogin.classList.remove('hidden');
+        if (appMain) appMain.classList.add('hidden');
         if (typeof lucide !== 'undefined') lucide.createIcons();
         return;
     }
 
-    if (!receiptConfirmed) {
-        document.getElementById('view-login').style.display = 'none';
-        document.getElementById('app-main-content').style.display = 'none';
-        const modal = document.getElementById('welcome-receipt-modal');
-        if (modal) modal.classList.remove('hidden');
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-        return;
+    // 2. Com licença -> Desbloqueia direto
+    // Auto-confirma recibo para garantir consistência
+    if (!localStorage.getItem('ml_receipt_confirmed')) {
+        localStorage.setItem('ml_receipt_confirmed', 'true');
     }
-
     unlockSystem();
 }
 
 function unlockSystem() {
-    document.getElementById('view-login').style.display = 'none';
-    document.getElementById('app-main-content').style.display = 'block';
+    const viewLogin = document.getElementById('view-login');
+    const appMain = document.getElementById('app-main-content');
+
+    if (viewLogin) viewLogin.classList.add('hidden');
+    if (appMain) appMain.classList.remove('hidden');
+
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
-async function activateSystem() {
-    const email = document.getElementById('activation-email').value.trim();
-    const key = document.getElementById('activation-key').value.trim();
-    const btn = document.getElementById('btn-activate');
+// A Função activateSystem foi transferida para o index.html para evitar conflitos no load
+// e gerenciar o bypass mestre da tela preta. (Ver window.activateSystem no index.html)
 
-    if (!email || !key) {
-        alert('Por favor, preencha todos os campos.');
-        return;
-    }
-
-    // Gera um ID único para este navegador se não existir
-    let deviceId = localStorage.getItem('device_id');
-    if (!deviceId) {
-        deviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('device_id', deviceId);
-    }
-
-    btn.disabled = true;
-    btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Verificando...';
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-
-    try {
-        // V11 - Roteamento Explícito por URL
-        const response = await fetch('../api_licenca_ml.php?action=activate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                license_key: key,
-                email: email,
-                device_id: deviceId
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.status === 'success' && data.valid === true) {
-            // 1. Salva credenciais
-            localStorage.setItem('plena_license', key);
-            localStorage.setItem('ml_license_email', email);
-
-            // 2. Destrava a UI (FIM DA TELA AZUL)
-            document.getElementById('view-login').style.display = 'none';
-            const appContent = document.getElementById('app-main-content');
-            if (appContent) {
-                appContent.style.display = 'block';
-                appContent.classList.remove('hidden');
-            }
-
-            // 3. Verifica Recibo (Sem travar o app)
-            if (!localStorage.getItem('ml_receipt_confirmed')) {
-                setTimeout(() => {
-                    // Mostra o modal de recibo 1 segundo DEPOIS do app abrir
-                    const receiptModal = document.getElementById('welcome-receipt-modal');
-                    if (receiptModal) receiptModal.classList.remove('hidden');
-                }, 1000);
-            }
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            alert('Sistema Liberado! Bem-vindo(a) ' + (data.client || ''));
-
-        } else {
-            alert('Erro: ' + (data.message || 'Falha na validação.'));
-        }
-    } catch (e) {
-        console.error('Falha na ativação:', e);
-        alert('Erro de conexão. Tente novamente.');
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<span>Desbloquear Acesso</span><i data-lucide="unlock" class="w-5 h-5"></i>';
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-}
 
 async function confirmReceipt() {
     const btn = document.getElementById('btn-confirm-receipt');
@@ -424,7 +380,8 @@ function router(view) {
     }
     // Atualizar título da página
     const titles = {
-        dashboard: 'Agenda',
+        dashboard: 'Visão Geral',
+        agenda: 'Agenda Diária',
         team: 'Barbeiros',
         services: 'Serviços',
         inventory: 'Estoque',
@@ -443,6 +400,8 @@ function router(view) {
     // Renderizar dados específicos da view
     if (view === 'dashboard') {
         renderDashboard();
+    } else if (view === 'agenda') {
+        renderAgenda();
     } else if (view === 'team') {
         renderTeam();
     } else if (view === 'services') {
@@ -460,9 +419,21 @@ function toggleSidebar() {
     const overlay = document.getElementById('overlay');
     sidebar.classList.toggle('open');
     overlay.classList.toggle('hidden');
-    // Bloquear scroll do body quando sidebar aberta
     document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
 }
+
+// ── Weekly Chart ────────────────────────────
+function renderWeeklyChart(data) {
+    const container = document.getElementById('mini-chart-container');
+    if (!container) return;
+    if (data.length < 2 || data.every(v => v === 0)) { container.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-slate-500"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50 text-slate-400"></i><span class="text-xs">Sem dados suficientes</span></div>'; lucide.createIcons(); return; }
+    const maxVal = Math.max(...data) || 100;
+    const points = data.map((val, i) => { const x = (i / (data.length - 1)) * 100; const y = 100 - ((val / maxVal) * 80); return `${x},${y}`; }).join(' ');
+    // Trocado de rosa (#e11d48) para azul (#3b82f6)
+    const svg = `<svg viewBox="0 0 100 100" class="w-full h-full overflow-visible" preserveAspectRatio="none"><defs><linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" /><stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" /></linearGradient></defs><path d="M0,100 ${points.split(' ').map((p, i) => 'L' + p).join(' ')} L100,100 Z" fill="url(#gradient)" stroke="none" /><polyline points="${points}" fill="none" stroke="#3b82f6" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>${data.map((val, i) => `<circle cx="${(i / (data.length - 1)) * 100}" cy="${100 - ((val / maxVal) * 80)}" r="1.5" fill="#3b82f6" />`).join('')}</svg>`;
+    container.innerHTML = svg;
+}
+
 // DASHBOARD
 function renderDashboard() {
     const date = document.getElementById('agenda-date').value;
@@ -470,7 +441,7 @@ function renderDashboard() {
         .filter(a => a.date === date)
         .sort((a, b) => a.time.localeCompare(b.time));
     // Calcular estatísticas
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getLocalIsoDate();
     const todayTrans = db.transactions.filter(t => t.date === todayStr);
     const incomeToday = todayTrans
         .filter(t => t.type === 'income')
@@ -493,69 +464,109 @@ function renderDashboard() {
         .reduce((sum, t) => sum + t.amount, 0);
     const growth = calculatePercentage(incomeToday, yesterdayIncome);
     document.getElementById('rev-growth').innerText = `${growth}%`;
-    // Renderizar agenda
-    const agendaList = document.getElementById('agenda-list');
-    if (todayAppts.length === 0) {
-        agendaList.innerHTML = `
-                    <div class="text-center py-8">
-                        <i data-lucide="calendar-x" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
-                        <p class="text-slate-400">Nenhum agendamento para esta data</p>
+
+    // Próximos Agendamentos
+    const upcoming = db.appointments.filter(a => a.date >= todayStr && a.status === 'pending').sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time)).slice(0, 5);
+    const listEl = document.getElementById('upcoming-appts');
+    if (listEl) {
+        listEl.innerHTML = upcoming.length === 0
+            ? `<div class="text-center py-8 text-slate-500 flex flex-col items-center"><i data-lucide="coffee" class="w-8 h-8 mb-2 opacity-50 text-slate-400"></i><span class="text-xs">Tudo tranquilo por enquanto</span></div>`
+            : upcoming.map(appt => `
+            <div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl border border-transparent hover:border-slate-100 dark:hover:border-white/5 transition-colors group">
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 p-2.5 rounded-lg text-center min-w-[55px] group-hover:bg-blue-500/10 group-hover:text-brand-blue transition-colors">
+                        <span class="block font-bold text-sm text-center">${appt.time}</span>
                     </div>
-                `;
-    } else {
-        agendaList.innerHTML = todayAppts.map(appt => `
-                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-white/5 flex justify-between items-center ${appt.status === 'canceled' ? 'opacity-60' : ''}">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-white dark:bg-slate-800 px-3 py-2 rounded-lg border dark:border-white/10 text-center min-w-[70px]">
-                                <span class="block font-bold text-lg text-slate-800 dark:text-white">${appt.time}</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 dark:text-white">${sanitizeHTML(appt.client)}</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">
-                                    ${sanitizeHTML(appt.serviceName)} com <strong>${sanitizeHTML(appt.proName)}</strong>
-                                </p>
-                                <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full ${appt.status === 'pending' ? 'badge-pending' : appt.status === 'done' ? 'badge-done' : 'badge-canceled'}">
-                                    ${appt.status === 'pending' ? 'Pendente' : appt.status === 'done' ? 'Concluído' : 'Cancelado'}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            ${appt.status === 'pending' ? `
-                                <button onclick="cancelAppt('${appt.id}')" class="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Cancelar">
-                                    <i data-lucide="x" class="w-5 h-5"></i>
-                                </button>
-                                <button onclick="finishAppt('${appt.id}')" class="p-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors" title="Finalizar">
-                                    <i data-lucide="check" class="w-5 h-5"></i>
-                                </button>
-                            ` : ''}
-                            ${appt.status === 'done' ? `
-                                <span class="text-green-600 text-sm font-bold">${fmtMoney(appt.price)}</span>
-                            ` : ''}
-                        </div>
+                    <div>
+                        <p class="text-sm font-bold text-slate-800 dark:text-white">${sanitizeHTML(appt.client)}</p>
+                        <p class="text-xs text-slate-500">${fmtDate(appt.date)} • ${sanitizeHTML(appt.serviceName)}</p>
                     </div>
-                `).join('');
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="finishAppt('${appt.id}')" class="p-2 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg transition-colors" title="Concluir">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                    </button>
+                    <div class="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1"></div>
+                    <button onclick="cancelAppt('${appt.id}')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors" title="Cancelar">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>`).join('');
     }
-    // Renderizar próximos agendamentos
-    const upcoming = db.appointments
-        .filter(a => a.status === 'pending' && a.date >= todayStr)
-        .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time))
-        .slice(0, 3);
-    const upcomingList = document.getElementById('upcoming-appts');
-    if (upcoming.length === 0) {
-        upcomingList.innerHTML = '<p class="text-center text-slate-400 py-4">Nenhum agendamento futuro</p>';
-    } else {
-        upcomingList.innerHTML = upcoming.map(appt => `
-                    <div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-white/5 transition-colors">
-                        <div>
-                            <p class="text-sm font-medium text-slate-800 dark:text-white">${sanitizeHTML(appt.client)}</p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">${fmtDate(appt.date)} às ${appt.time}</p>
-                        </div>
-                        <span class="text-sm text-brand-blue font-bold">${sanitizeHTML(appt.serviceName)}</span>
-                    </div>
-                `).join('');
+
+    // Gráfico de Tendência Semanal
+    const chartData = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const isoDate = d.toISOString().split('T')[0];
+        const rev = db.transactions.filter(t => t.date === isoDate && t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+        chartData.push(rev);
     }
+    renderWeeklyChart(chartData);
+
     lucide.createIcons();
 }
+
+// LÓGICA DA NOVA AGENDA MATRICIAL
+function renderAgenda() {
+    const date = document.getElementById('agenda-date').value;
+    const headerEl = document.getElementById('agenda-header');
+    const bodyEl = document.getElementById('agenda-body');
+
+    if (!headerEl || !bodyEl) return;
+
+    headerEl.style.gridTemplateColumns = `100px repeat(${db.team.length}, 1fr)`;
+    headerEl.innerHTML = `<div class="p-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center flex items-center justify-center bg-slate-50 dark:bg-slate-800/80">Horário</div>` + db.team.map(t => `<div class="p-4 text-sm font-bold text-slate-800 dark:text-white text-center truncate border-l border-slate-100 dark:border-white/5">${t.name}</div>`).join('');
+
+    let html = '';
+    for (let h = 8; h <= 20; h++) {
+        const time = `${h.toString().padStart(2, '0')}:00`;
+        html += `<div class="grid divide-x divide-slate-100 dark:divide-white/5 border-b border-slate-100 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors" style="grid-template-columns: 100px repeat(${db.team.length}, 1fr)">`;
+        html += `<div class="p-3 text-xs font-bold text-slate-500 text-center flex items-center justify-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-brand-blue opacity-50"></i>${time}</div>`;
+        db.team.forEach(pro => {
+            const appt = db.appointments.find(a => a.date === date && a.time === time && a.proId === pro.id && a.status !== 'canceled');
+            if (appt) {
+                const isDone = appt.status === 'done' || appt.status === 'concluido';
+                const statusColor = isDone ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400' : 'bg-blue-500/10 border-blue-500 text-brand-blue dark:text-brand-lightblue';
+                const textColor = isDone ? 'text-emerald-700 dark:text-emerald-300' : 'text-blue-700 dark:text-blue-300';
+
+                html += `<div class="p-1 relative group cursor-pointer">
+                    <div class="h-full w-full ${statusColor} border-l-4 rounded p-2 text-xs hover:opacity-80 transition-colors flex flex-col justify-between">
+                        <div>
+                            <p class="font-bold ${textColor} truncate">${sanitizeHTML(appt.client)}</p>
+                            <p class="${textColor}/70 truncate">${sanitizeHTML(appt.serviceName)}</p>
+                        </div>
+                        <div class="flex justify-end gap-1 mt-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                            ${!isDone ? `<button onclick="finishAppt('${appt.id}')" class="p-1 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 rounded" title="Concluir"><i data-lucide="check" class="w-3 h-3"></i></button>` : '<i data-lucide="check-circle" class="w-3 h-3 text-emerald-500"></i>'}
+                            <button onclick="cancelAppt('${appt.id}')" class="p-1 text-red-600 dark:text-rose-400 hover:bg-red-500/20 rounded" title="Cancelar"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            } else {
+                html += `<div class="p-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group relative" onclick="openApptModalWithContext('${date}', '${time}', '${pro.id}')"><i data-lucide="plus" class="w-4 h-4 text-brand-blue opacity-0 group-hover:opacity-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity"></i></div>`;
+            }
+        });
+        html += `</div>`;
+    }
+    bodyEl.innerHTML = html;
+    lucide.createIcons();
+}
+
+function openApptModalWithContext(date, time, proId) {
+    document.getElementById('ap-date').value = date;
+    document.getElementById('ap-time').value = time;
+    document.getElementById('ap-pro').value = proId;
+    openApptModal();
+}
+
+function changeAgendaDate(days) {
+    const input = document.getElementById('agenda-date');
+    const bDate = new Date(input.value + 'T12:00:00');
+    bDate.setDate(bDate.getDate() + days);
+    input.value = bDate.toISOString().split('T')[0];
+    renderAgenda();
+}
+
 // TEAM MANAGEMENT
 function renderTeam() {
     const list = document.getElementById('team-list');
@@ -945,7 +956,7 @@ function openServiceModal(service = null) {
 function openExpenseModal() {
     document.querySelector('#expenseModal form').reset();
     document.getElementById('exp-id').value = '';
-    document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('exp-date').value = getLocalIsoDate();
     document.querySelector('#expenseModal h3').textContent = 'Lançar Movimentação';
     document.querySelector('#expenseModal button[type="submit"]').textContent = 'Salvar Lançamento';
     document.getElementById('expenseModal').classList.remove('hidden');
@@ -978,7 +989,7 @@ function openClientModal(client = null) {
     document.getElementById('clientModal').classList.remove('hidden');
 }
 function openClosingModal() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalIsoDate();
     const todayTrans = db.transactions.filter(t => t.date === today);
     const incomeToday = todayTrans
         .filter(t => t.type === 'income')
@@ -1054,6 +1065,9 @@ function submitAppt(e) {
     save();
     closeModal('apptModal');
     renderDashboard();
+    if (document.getElementById('view-agenda') && !document.getElementById('view-agenda').classList.contains('hide')) {
+        renderAgenda();
+    }
     showNotification('Agendamento salvo com sucesso!', 'success');
 }
 function submitTeam(e) {
@@ -1173,7 +1187,7 @@ function submitClient(e) {
     }
 
     // Preserve original creation date if editing
-    let originalCreatedAt = new Date().toISOString();
+    let originalCreatedAt = getLocalIsoString();
     if (id) {
         const existing = db.clients.find(c => c.id === id);
         if (existing && existing.createdAt) {
@@ -1226,6 +1240,9 @@ function finishAppt(id) {
     db.transactions.push(incomeTransaction);
     save();
     renderDashboard();
+    if (document.getElementById('view-agenda') && !document.getElementById('view-agenda').classList.contains('hide')) {
+        renderAgenda();
+    }
     showNotification('Corte finalizado e lançado no caixa!', 'success');
 }
 function cancelAppt(id) {
@@ -1235,6 +1252,9 @@ function cancelAppt(id) {
             db.appointments[index].status = 'canceled';
             save();
             renderDashboard();
+            if (document.getElementById('view-agenda') && !document.getElementById('view-agenda').classList.contains('hide')) {
+                renderAgenda();
+            }
             showNotification('Agendamento cancelado!', 'success');
         }
     }
@@ -1395,7 +1415,7 @@ function findOrCreateClient(name) {
         client = {
             id: getID(),
             name,
-            createdAt: new Date().toISOString()
+            createdAt: getLocalIsoString()
         };
         db.clients.push(client);
     }
@@ -1418,7 +1438,7 @@ function payCommission(proId) {
         proId: proId,
         proName: professional.name,
         amount: totalCommission,
-        date: new Date().toISOString().split('T')[0]
+        date: getLocalIsoDate()
     };
     // Fill Modal
     document.getElementById('comm-pro-name').innerText = professional.name;
@@ -1774,7 +1794,7 @@ function clearFinanceFilters() {
     const firstDay = new Date();
     firstDay.setDate(1);
     const firstDayStr = firstDay.toISOString().split('T')[0];
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalIsoDate();
     document.getElementById('search-term').value = '';
     document.getElementById('filter-type').value = 'all';
     document.getElementById('filter-start').value = firstDayStr;
@@ -2210,7 +2230,7 @@ function submitInventoryProduct(e) {
                     type: diff > 0 ? 'in' : 'out',
                     quantity: Math.abs(diff),
                     reason: 'ajuste',
-                    date: new Date().toISOString().split('T')[0],
+                    date: getLocalIsoDate(),
                     notes: 'Ajuste via edição do produto'
                 });
             }
@@ -2226,7 +2246,7 @@ function submitInventoryProduct(e) {
             minQuantity,
             supplier,
             notes,
-            createdAt: new Date().toISOString()
+            createdAt: getLocalIsoString()
         };
         db.inventory.push(newProduct);
         if (quantity > 0) {
@@ -2237,7 +2257,7 @@ function submitInventoryProduct(e) {
                 type: 'in',
                 quantity,
                 reason: 'ajuste',
-                date: new Date().toISOString().split('T')[0],
+                date: getLocalIsoDate(),
                 notes: 'Estoque inicial'
             });
         }
@@ -2330,7 +2350,7 @@ function submitStockMovement(e) {
         product.quantity -= quantity;
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalIsoDate();
     const movementId = getID();
 
     // Registrar movimentação de estoque

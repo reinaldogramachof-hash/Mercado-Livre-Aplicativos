@@ -47,16 +47,16 @@
                 <!-- Form -->
                 <form id="activation-form" onsubmit="activateLicense(event)" class="space-y-4 text-left">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">E-mail</label>
-                        <input type="email" id="license-email" required placeholder="seu@email.com"
-                            class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
+                        <label
+                            class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">E-mail</label>
+                        <input type="email" id="license-email" required placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
                                    focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none transition-all
                                    placeholder-slate-600">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Chave de Licença</label>
-                        <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX"
-                            class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Chave de
+                            Licença</label>
+                        <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX" class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
                                    font-mono focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none
                                    transition-all placeholder-slate-600 uppercase tracking-widest">
                     </div>
@@ -176,10 +176,6 @@
                 <div class="pt-4 mt-2 border-t border-white/5">
                     <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600">Sistema</p>
 
-                    <button onclick="router('about')" id="nav-about" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
-                        <i data-lucide="shield-check" class="w-5 h-5"></i>
-                        <span>Informacoes Legais</span>
-                    </button>
                     <button onclick="router('settings')" id="nav-settings"
                         class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
                         <i data-lucide="settings" class="w-5 h-5"></i>
@@ -247,7 +243,9 @@
                                 class="absolute right-0 top-0 w-24 h-24 bg-rose-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
                             </div>
                             <div class="relative z-10">
-                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Agendamentos
+                                <p
+                                    class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+                                    Agendamentos
                                 </p>
                                 <h3 id="dash-appt-today" class="text-3xl font-black text-white dark:text-white">0</h3>
                                 <div
@@ -264,9 +262,12 @@
                                 class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
                             </div>
                             <div class="relative z-10">
-                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Faturamento
+                                <p
+                                    class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+                                    Faturamento
                                 </p>
-                                <h3 id="dash-rev-today" class="text-3xl font-black text-white dark:text-white">R$ 0,00</h3>
+                                <h3 id="dash-rev-today" class="text-3xl font-black text-white dark:text-white">R$ 0,00
+                                </h3>
                                 <div
                                     class="mt-3 flex items-center text-xs font-bold text-emerald-400 bg-emerald-500/10 w-max px-2.5 py-1 rounded-lg">
                                     <i data-lucide="trending-up" class="w-3 h-3 mr-1.5"></i>
@@ -281,8 +282,11 @@
                                 class="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
                             </div>
                             <div class="relative z-10">
-                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Comissões</p>
-                                <h3 id="dash-comm-pending" class="text-3xl font-black text-white dark:text-white">R$ 0,00</h3>
+                                <p
+                                    class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+                                    Comissões</p>
+                                <h3 id="dash-comm-pending" class="text-3xl font-black text-white dark:text-white">R$
+                                    0,00</h3>
                                 <div
                                     class="mt-3 flex items-center text-xs font-bold text-blue-400 bg-blue-500/10 w-max px-2.5 py-1 rounded-lg">
                                     <i data-lucide="hourglass" class="w-3 h-3 mr-1.5"></i>
@@ -393,17 +397,20 @@
 
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
+                        <div
+                            class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Receita do Mês
                             </p>
                             <h3 id="fin-income" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
                         </div>
-                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
+                        <div
+                            class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Despesas do Mês
                             </p>
                             <h3 id="fin-expense" class="text-2xl font-black text-rose-400 mt-2">R$ 0,00</h3>
                         </div>
-                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
+                        <div
+                            class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Comissões do Mês
                             </p>
                             <h3 id="fin-commission" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</h3>
@@ -524,49 +531,7 @@
                     <div id="clients-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </section>
 
-                <!-- 7. SETTINGS -->
-                <section id="view-settings" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <h3 class="font-bold text-lg text-white mb-6">Configurações do Sistema</h3>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-surface-card p-8 rounded-2xl shadow-sm border border-white/5">
-                            <h4 class="font-bold text-slate-200 mb-6 flex items-center gap-2">
-                                <i data-lucide="store" class="w-5 h-5 text-rose-400"></i> Informações
-                            </h4>
-                            <form onsubmit="saveSettings(event)" class="space-y-5">
-                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1.5 ml-1">Nome do
-                                        Negócio</label><input type="text" id="set-name"
-                                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all">
-                                </div>
-                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1.5 ml-1">Horário
-                                        de Funcionamento</label><input type="text" id="set-hours"
-                                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all">
-                                </div>
-                                <button type="submit"
-                                    class="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-xl font-bold text-sm shadow-glow transition-all w-full md:w-auto">Salvar
-                                    Alterações</button>
-                            </form>
-                        </div>
-                        <div class="bg-surface-card p-8 rounded-2xl shadow-sm border border-white/5">
-                            <h4 class="font-bold text-slate-200 mb-6 flex items-center gap-2">
-                                <i data-lucide="database" class="w-5 h-5 text-rose-400"></i> Dados e Segurança
-                            </h4>
-                            <div class="space-y-4">
-                                <button onclick="downloadBackup()"
-                                    class="w-full border border-white/10 hover:bg-white/5 text-slate-300 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"><i
-                                        data-lucide="download"></i> Fazer Backup (Download)</button>
-                                <div class="relative">
-                                    <input type="file" id="restore-file" onchange="restoreBackup(this)" class="hidden">
-                                    <label for="restore-file"
-                                        class="w-full bg-white/10 hover:bg-white/15 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-lg"><i
-                                            data-lucide="upload"></i> Restaurar Backup</label>
-                                </div>
-                                <button onclick="resetSystem()"
-                                    class="w-full border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"><i
-                                        data-lucide="trash-2"></i> Resetar Fábrica</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+
 
                 <!-- AGENDA VIEW -->
                 <section id="view-agenda" class="view-section hide fade-in max-w-7xl mx-auto">
@@ -660,196 +625,817 @@
                 </section>
 
                 <!-- 10. MANUAL DE USO -->
-                
-                    <!-- Tutorial Progress (Padrao Ouro) -->
-                    <div class="mb-6 bg-white/5 p-4 rounded-2xl border border-white/8">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Progresso do Manual</span>
-                            <span id="tutorial-progress-text" class="text-xs font-bold text-rose-400">0 / 5 seções</span>
-                        </div>
-                        <div class="progress-bar w-full">
-                            <div class="progress-fill" id="tutorial-progress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                <section id="view-instructions" class="view-section hide fade-in max-w-4xl mx-auto">
-                    <div class="mb-8">
-                        <h3 class="font-bold text-2xl text-white flex items-center gap-3 mb-2">
-                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                                <i data-lucide="book-open" class="w-5 h-5 text-rose-400"></i>
-                            </div>
-                            Manual de Uso
-                        </h3>
-                        <p class="text-sm text-slate-500">Guia completo para operar o Gestão Beleza</p>
-                    </div>
 
-                    <div class="space-y-4">
-                        <!-- Section 1 -->
-                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
-                            <button
-                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">1</span>
-                                    <span class="font-bold text-white">Primeiros Passos</span>
+
+                <section id="view-instructions" class="view-section hide fade-in">
+                    <div class="max-w-6xl mx-auto pb-12">
+                        <!-- Cabeçalho Hero -->
+                        <div class="text-center mb-10 pt-4">
+                            <div
+                                class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-brand to-brand-dark rounded-2xl mb-4 shadow-lg shadow-brand/20">
+                                <i data-lucide="sparkles" class="w-12 h-12 text-white"
+                                    aria-label="Ícone de Brilho - Manual de Uso"></i>
+                            </div>
+                            <h1 class="text-3xl font-bold text-white mb-2">Manual Completo de Uso
+                            </h1>
+                            <p class="text-slate-400 text-lg max-w-2xl mx-auto">Guia passo a passo para
+                                administradores do salão/clínica</p>
+                            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                <span
+                                    class="px-3 py-1 bg-emerald-950/30 text-emerald-400 rounded-full text-xs font-bold">✓
+                                    Para Iniciantes</span>
+                                <span class="px-3 py-1 bg-brand/20 text-brand rounded-full text-xs font-bold">📱
+                                    Mobile e Desktop</span>
+                                <span class="px-3 py-1 bg-brand/20 text-brand rounded-full text-xs font-bold">⚡
+                                    Rápido e Prático</span>
+                            </div>
+                        </div>
+                        <!-- Barra de Progresso do Tutorial -->
+                        <div class="bg-surface-card rounded-2xl p-6 shadow-sm border border-white/5 mb-8">
+                            <h3 class="font-bold text-white mb-4 flex items-center">
+                                <i data-lucide="compass" class="w-5 h-5 mr-2 text-brand"></i>
+                                Seu Progresso no Aprendizado
+                            </h3>
+                            <div class="mb-4">
+                                <div class="progress-bar bg-white/5 rounded-full h-2 overflow-hidden">
+                                    <div id="tutorial-progress" class="bg-brand h-full transition-all duration-500"
+                                        style="width: 0%"></div>
                                 </div>
-                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
-                            </button>
-                            <div class="manual-content">
-                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
-                                    <p>Bem-vinda ao <strong class="text-white">Gestão Beleza</strong>! Seu sistema
-                                        completo para gerenciar o salão de beleza.</p>
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Acesse <strong class="text-rose-400">Configurações</strong> e defina o nome
-                                            do seu salão e horário de funcionamento.</li>
-                                        <li>Cadastre sua equipe em <strong class="text-rose-400">Profissionais</strong>
-                                            com nome e comissão.</li>
-                                        <li>Registre seus serviços em <strong class="text-rose-400">Serviços</strong>
-                                            com nome e preço.</li>
-                                        <li>Faça um backup inicial em Configurações → Dados e Segurança.</li>
+                                <div class="flex justify-between text-xs text-slate-500 mt-2">
+                                    <span>0% Concluído</span>
+                                    <span id="completed-steps">0/7 etapas</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                                <button onclick="scrollToSection('instalacao')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    1. Instalação
+                                </button>
+                                <button onclick="scrollToSection('primeiro-cadastro')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    2. Configuração
+                                </button>
+                                <button onclick="scrollToSection('agendamentos')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    3. Agendas
+                                </button>
+                                <button onclick="scrollToSection('relatorios')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    4. Relatórios
+                                </button>
+                                <button onclick="scrollToSection('backup')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    5. Backup
+                                </button>
+                                <button onclick="scrollToSection('duvidas')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    6. Dúvidas
+                                </button>
+                                <button onclick="scrollToSection('checklist')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-white/10 hover:bg-white/5 text-xs text-slate-400 font-bold transition-colors">
+                                    7. Checklist
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Seção 1: Instalação -->
+                        <div id="instalacao" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        1
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Instalação do Sistema</h3>
+                                </div>
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div class="bg-black/20 rounded-2xl p-6 text-white border border-white/5 mb-6">
+                                <h4 class="font-bold text-lg mb-4 flex items-center">
+                                    <i data-lucide="download" class="w-5 h-5 mr-2 text-emerald-400"></i>
+                                    Torne o App Disponível OFFLINE
+                                </h4>
+                                <p class="text-slate-300 mb-4">Instale no celular para usar sem internet, igual um
+                                    app normal:</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                        <div class="font-bold text-white mb-3 flex items-center">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center mr-2">
+                                                <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                            </div>
+                                            Android (Chrome)
+                                        </div>
+                                        <ol class="list-decimal pl-5 space-y-3 text-slate-300">
+                                            <li class="pl-2"><strong>Abra esta página no Chrome</strong></li>
+                                            <li class="pl-2"><strong>Toque nos 3 pontinhos ☰</strong></li>
+                                            <li class="pl-2"><strong>Toque em "Instalar app"</strong></li>
+                                        </ol>
+                                    </div>
+                                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                        <div class="font-bold text-white mb-3 flex items-center">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-800/20 text-blue-400 flex items-center justify-center mr-2">
+                                                <i data-lucide="monitor" class="w-4 h-4"></i>
+                                            </div>
+                                            Windows (Chrome)
+                                        </div>
+                                        <ol class="list-decimal pl-5 space-y-3 text-slate-300">
+                                            <li class="pl-2"><strong>Clique no ícone (+) na barra de
+                                                    endereço</strong></li>
+                                            <li class="pl-2"><strong>Clique em "Instalar"</strong></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Seção 2: Configuração Inicial -->
+                        <div id="primeiro-cadastro" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        2
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Configuração Inicial (10 Minutos)
+                                    </h3>
+                                </div>
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="space-y-4">
+                                    <div class="bg-blue-900/10 p-5 rounded-xl border border-blue-800/30">
+                                        <h4 class="font-bold text-blue-400 mb-3 flex items-center">
+                                            <i data-lucide="building" class="w-5 h-5 mr-2"></i>
+                                            PASSO A: Dados do Negócio
+                                        </h4>
+                                        <ol class="space-y-3 text-sm">
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-6 h-6 rounded-full bg-blue-900/50 text-blue-300 border-2 border-blue-800/50 flex items-center justify-center mr-2 text-xs font-bold shrink-0">
+                                                    A</div>
+                                                <div>
+                                                    <strong class="text-white">Clique em "Configurações"</strong>
+                                                    <p class="text-slate-400 text-xs">Ícone da engrenagem no menu
+                                                    </p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-6 h-6 rounded-full bg-blue-900/50 text-blue-300 border-2 border-blue-800/50 flex items-center justify-center mr-2 text-xs font-bold shrink-0">
+                                                    B</div>
+                                                <div>
+                                                    <strong class="text-white">Nome do Local</strong>
+                                                    <p class="text-slate-400 text-xs">Ex: "Studio Maria"</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-6 h-6 rounded-full bg-blue-900/50 text-blue-300 border-2 border-blue-800/50 flex items-center justify-center mr-2 text-xs font-bold shrink-0">
+                                                    C</div>
+                                                <div>
+                                                    <strong class="text-white">Horário de Funcionamento</strong>
+                                                    <p class="text-slate-400 text-xs">Para exibir na agenda e
+                                                        relatórios</p>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="bg-emerald-900/10 p-5 rounded-xl border border-emerald-800/30">
+                                        <h4 class="font-bold text-emerald-400 mb-3 flex items-center">
+                                            <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                                            PASSO B: Primeiro Agendamento
+                                        </h4>
+                                        <ol class="space-y-3 text-sm">
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-6 h-6 rounded-full bg-emerald-900/50 text-emerald-300 border-2 border-emerald-800/50 shadow-sm flex items-center justify-center mr-2 text-xs font-bold shrink-0">
+                                                    A</div>
+                                                <div>
+                                                    <strong class="text-white">Volte ao Dashboard</strong>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-6 h-6 rounded-full bg-emerald-900/50 text-emerald-300 border-2 border-emerald-800/50 shadow-sm flex items-center justify-center mr-2 text-xs font-bold shrink-0">
+                                                    B</div>
+                                                <div>
+                                                    <strong class="text-white">Clique em "Novo Agendamento"</strong>
+                                                    <p class="text-slate-400 text-xs">Botão no topo à direita</p>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="bg-brand/10 p-5 rounded-xl border border-brand/20">
+                                        <h4 class="font-bold text-brand mb-3 flex items-center">
+                                            <i data-lucide="users" class="w-5 h-5 mr-2"></i>
+                                            PASSO C: Cadastrar Profissional
+                                        </h4>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex items-start">
+                                                <i data-lucide="check" class="w-4 h-4 text-emerald-500 mt-0.5 mr-2"></i>
+                                                <span class="text-slate-300"><strong class="text-white">Nome
+                                                        completo</strong></span>
+                                            </div>
+                                            <div class="flex items-start">
+                                                <i data-lucide="check" class="w-4 h-4 text-emerald-500 mt-0.5 mr-2"></i>
+                                                <span class="text-slate-300"><strong class="text-white">Porcentagem
+                                                        de comissão</strong> (ex: 50%)</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4 p-3 bg-amber-900/20 border border-amber-900/30 rounded-lg">
+                                            <p class="text-xs text-amber-400">
+                                                <strong>💡 Dica:</strong> A comissão é calculada automaticamente ao
+                                                finalizar cada atendimento!
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-gradient-to-r from-emerald-900/20 to-blue-900/20 border border-emerald-800/30 p-5 rounded-xl">
+                                        <h4 class="font-bold text-white mb-2 flex items-center">
+                                            <i data-lucide="zap" class="w-5 h-5 mr-2 text-emerald-400"></i>
+                                            Configuração Concluída!
+                                        </h4>
+                                        <p class="text-sm text-slate-400">Seu sistema já está pronto para uso!</p>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+                                            <div class="bg-black/20 p-3 rounded-lg border border-white/5 text-center">
+                                                <i data-lucide="calendar" class="w-6 h-6 text-brand mx-auto mb-1"></i>
+                                                <p class="text-xs font-bold text-white">Ver Agenda</p>
+                                            </div>
+                                            <div class="bg-black/20 p-3 rounded-lg border border-white/5 text-center">
+                                                <i data-lucide="users" class="w-6 h-6 text-brand mx-auto mb-1"></i>
+                                                <p class="text-xs font-bold text-white">Equipe</p>
+                                            </div>
+                                            <div class="bg-black/20 p-3 rounded-lg border border-white/5 text-center">
+                                                <i data-lucide="sparkles" class="w-6 h-6 text-brand mx-auto mb-1"></i>
+                                                <p class="text-xs font-bold text-white">Serviços</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Seção 3: Gestão de Agendamentos -->
+                        <div id="agendamentos" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        3
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Gestão de Agendamentos e Comissões
+                                    </h3>
+                                </div>
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div
+                                class="bg-gradient-to-r from-blue-900/10 to-purple-900/10 p-5 rounded-xl border border-blue-800/20 mb-6">
+                                <h4 class="font-bold text-white mb-3 flex items-center">
+                                    <i data-lucide="calendar-check" class="w-5 h-5 mr-2 text-brand"></i>
+                                    Fluxo do Agendamento
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+                                    <div class="bg-black/20 p-3 rounded-lg text-center shadow-sm border border-white/5">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-900/30 flex items-center justify-center mx-auto mb-2 text-blue-400 font-bold">
+                                            1</div>
+                                        <p class="font-bold text-white">Agendado</p>
+                                        <p class="text-slate-400">Cliente marcou</p>
+                                    </div>
+                                    <div class="bg-black/20 p-3 rounded-lg text-center shadow-sm border border-white/5">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-emerald-900/30 flex items-center justify-center mx-auto mb-2 text-emerald-400 font-bold">
+                                            2</div>
+                                        <p class="font-bold text-white">Confirmado</p>
+                                        <p class="text-slate-400">Via WhatsApp</p>
+                                    </div>
+                                    <div class="bg-black/20 p-3 rounded-lg text-center shadow-sm border border-white/5">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-amber-900/30 flex items-center justify-center mx-auto mb-2 text-amber-400 font-bold">
+                                            3</div>
+                                        <p class="font-bold text-white">Atendimento</p>
+                                        <p class="text-slate-400">Em andamento</p>
+                                    </div>
+                                    <div class="bg-black/20 p-3 rounded-lg text-center shadow-sm border border-white/5">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-purple-900/30 flex items-center justify-center mx-auto mb-2 text-purple-400 font-bold">
+                                            4</div>
+                                        <p class="font-bold text-white">Finalizado</p>
+                                        <p class="text-slate-400">Concluído</p>
+                                    </div>
+                                    <div class="bg-black/20 p-3 rounded-lg text-center shadow-sm border border-white/5">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-emerald-900/30 flex items-center justify-center mx-auto mb-2 text-emerald-400 font-bold">
+                                            ✓</div>
+                                        <p class="font-bold text-white">Pago</p>
+                                        <p class="text-slate-400">Caixa + Comissão</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-blue-900/10 p-4 rounded-xl border border-blue-800/20">
+                                    <h5 class="font-bold text-blue-400 mb-2 flex items-center text-sm">
+                                        <i data-lucide="calendar" class="w-4 h-4 mr-2"></i> Dicas para Agenda
+                                    </h5>
+                                    <ul class="space-y-1 text-xs text-slate-400">
+                                        <li class="flex items-start"><i data-lucide="check"
+                                                class="w-3 h-3 text-emerald-500 mr-2 mt-0.5"></i> <span>Confirme
+                                                horários por WhatsApp</span></li>
+                                        <li class="flex items-start"><i data-lucide="check"
+                                                class="w-3 h-3 text-emerald-500 mr-2 mt-0.5"></i> <span>Evite
+                                                agendamentos muito próximos</span></li>
+                                        <li class="flex items-start"><i data-lucide="check"
+                                                class="w-3 h-3 text-emerald-500 mr-2 mt-0.5"></i> <span>Deixe
+                                                intervalo para descanso</span></li>
+                                    </ul>
+                                </div>
+                                <div class="bg-emerald-900/10 p-4 rounded-xl border border-emerald-800/20">
+                                    <h5 class="font-bold text-emerald-400 mb-2 flex items-center text-sm">
+                                        <i data-lucide="dollar-sign" class="w-4 h-4 mr-2"></i> Como Funciona a
+                                        Comissão
+                                    </h5>
+                                    <ul class="space-y-1 text-xs text-slate-400">
+                                        <li class="flex items-start"><i data-lucide="check"
+                                                class="w-3 h-3 text-emerald-500 mr-2 mt-0.5"></i> <span>Calculada
+                                                automaticamente ao finalizar o serviço</span></li>
+                                        <li class="flex items-start"><i data-lucide="check"
+                                                class="w-3 h-3 text-emerald-500 mr-2 mt-0.5"></i> <span>Baseada no %
+                                                definido no cadastro do profissional</span></li>
+                                        <li class="flex items-start"><i data-lucide="check"
+                                                class="w-3 h-3 text-emerald-500 mr-2 mt-0.5"></i> <span>Relatório
+                                                detalhado disponível na aba Financeiro</span></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Section 2 -->
-                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
-                            <button
-                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">2</span>
-                                    <span class="font-bold text-white">Agenda e Agendamentos</span>
+                        <!-- Seção 4: Relatórios -->
+                        <div id="relatorios" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        4
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Relatórios e Análise de
+                                        Performance</h3>
                                 </div>
-                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
-                            </button>
-                            <div class="manual-content">
-                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
-                                    <p>A Agenda mostra a grade diária com os horários de cada profissional.</p>
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Clique em um horário livre na grade para abrir o formulário de agendamento.
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-blue-900/10 p-5 rounded-xl border border-blue-800/20 shadow-sm">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-blue-900/30 flex items-center justify-center mb-3">
+                                        <i data-lucide="calendar" class="w-5 h-5 text-blue-400"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white mb-2">Resumo Mensal</h4>
+                                    <p class="text-xs text-slate-400">Visão geral de atendimentos, faturamento bruto
+                                        e líquido do mês.</p>
+                                </div>
+                                <div class="bg-emerald-900/10 p-5 rounded-xl border border-emerald-800/20 shadow-sm">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-900/30 flex items-center justify-center mb-3">
+                                        <i data-lucide="users" class="w-5 h-5 text-emerald-400"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white mb-2">Performance da Equipe</h4>
+                                    <p class="text-xs text-slate-400">Ranking de profissionais e total de serviços
+                                        por colaborador.</p>
+                                </div>
+                                <div class="bg-brand/10 p-5 rounded-xl border border-brand/20 shadow-sm">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-brand/30 flex items-center justify-center mb-3">
+                                        <i data-lucide="dollar-sign" class="w-5 h-5 text-brand"></i>
+                                    </div>
+                                    <h4 class="font-bold text-white mb-2">Controle de Comissões</h4>
+                                    <p class="text-xs text-slate-400">Acompanhamento de valores pagos e pendentes
+                                        para a equipe.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Seção 5: Backup e Segurança -->
+                        <div id="backup" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        5
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Backup e Segurança dos Dados</h3>
+                                </div>
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div class="bg-red-950/20 border-l-4 border-red-500 p-6 rounded-r-xl mb-6 shadow-sm">
+                                <h4 class="font-bold text-red-400 mb-3 flex items-center">
+                                    <i data-lucide="alert-octagon" class="w-5 h-5 mr-2"></i>
+                                    ATENÇÃO: Seus dados são locais!
+                                </h4>
+                                <div class="text-sm text-red-300 space-y-2">
+                                    <p class="flex items-start"><span class="mr-2">📱</span> <strong>Os dados ficam
+                                            APENAS no seu dispositivo atual.</strong></p>
+                                    <p class="flex items-start"><span class="mr-2">💥</span> <strong>Se você perder
+                                            o celular ou formatar o computador, perderá TUDO.</strong></p>
+                                    <p class="flex items-start"><span class="mr-2">🛡️</span> <strong>O backup é SUA
+                                            única garantia.</strong> Faça toda semana!</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="bg-emerald-900/20 p-5 rounded-xl border border-emerald-800/30">
+                                    <h4 class="font-bold text-white mb-4 flex items-center">
+                                        <i data-lucide="download" class="w-5 h-5 mr-2 text-emerald-400"></i>
+                                        Como Fazer Backup
+                                    </h4>
+                                    <ol class="space-y-3 text-sm">
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-emerald-900/30 text-emerald-400 shadow-sm flex items-center justify-center mr-2 text-xs font-bold mt-0.5 shrink-0">
+                                                1</div>
+                                            <div>
+                                                <strong class="text-white">Vá em Configurações</strong>
+                                            </div>
                                         </li>
-                                        <li>Ou use o botão <strong class="text-rose-400">Novo Agendamento</strong> no
-                                            topo da tela.</li>
-                                        <li>Agendamentos geram automaticamente uma entrada financeira.</li>
-                                        <li>Cancelamentos estornam o valor automaticamente.</li>
-                                        <li>Navegue entre dias com as setas ou selecionando a data.</li>
-                                    </ul>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-emerald-900/30 text-emerald-400 shadow-sm flex items-center justify-center mr-2 text-xs font-bold mt-0.5 shrink-0">
+                                                2</div>
+                                            <div>
+                                                <strong class="text-white">Clique em "Baixar Backup"</strong>
+                                                <p class="text-slate-400 text-xs">Isso gerará um arquivo .json
+                                                    seguro com seus dados</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-emerald-900/30 text-emerald-400 shadow-sm flex items-center justify-center mr-2 text-xs font-bold mt-0.5 shrink-0">
+                                                3</div>
+                                            <div>
+                                                <strong class="text-white">Guarde em local seguro</strong>
+                                                <p class="text-slate-400 text-xs">Envie para o seu WhatsApp, e-mail
+                                                    ou nuvem pessoal</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="bg-blue-900/20 p-5 rounded-xl border border-blue-800/30">
+                                    <h4 class="font-bold text-white mb-4 flex items-center">
+                                        <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 text-blue-400"></i>
+                                        Restaurar Backup
+                                    </h4>
+                                    <ol class="space-y-3 text-sm">
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-900/30 text-blue-400 shadow-sm flex items-center justify-center mr-2 text-xs font-bold mt-0.5 shrink-0">
+                                                1</div> <strong class="text-white">Tenha o arquivo .json no
+                                                aparelho</strong>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-900/30 text-blue-400 shadow-sm flex items-center justify-center mr-2 text-xs font-bold mt-0.5 shrink-0">
+                                                2</div> <strong class="text-white">Acesse Configurações</strong>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-900/30 text-blue-400 shadow-sm flex items-center justify-center mr-2 text-xs font-bold mt-0.5 shrink-0">
+                                                3</div>
+                                            <div>
+                                                <strong class="text-white">Clique em Restaurar Dados</strong>
+                                                <p class="text-slate-400 text-xs">Selecione o arquivo baixado e
+                                                    aguarde processar</p>
+                                            </div>
+                                        </li>
+                                    </ol>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Section 3 -->
-                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
-                            <button
-                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">3</span>
-                                    <span class="font-bold text-white">Financeiro e Relatórios</span>
+                        <!-- Seção 6: Dúvidas Frequentes -->
+                        <div id="duvidas" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        6
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Dúvidas Frequentes (FAQ)</h3>
                                 </div>
-                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
-                            </button>
-                            <div class="manual-content">
-                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
-                                    <p>Controle entradas e saídas do seu salão de forma automática.</p>
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li><strong class="text-emerald-400">Entradas</strong> são geradas
-                                            automaticamente ao confirmar agendamentos.</li>
-                                        <li><strong class="text-rose-400">Despesas</strong> podem ser lançadas
-                                            manualmente (aluguel, produtos, etc).</li>
-                                        <li>Compras de estoque também geram despesas automaticamente.</li>
-                                        <li>Use <strong class="text-rose-400">Relatórios</strong> para filtrar por
-                                            período e ver receita, despesas e lucro líquido.</li>
-                                    </ul>
-                                </div>
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                <details
+                                    class="group bg-black/20 border border-white/5 rounded-xl overflow-hidden shadow-sm">
+                                    <summary
+                                        class="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none">
+                                        <div class="flex items-center gap-3 font-bold text-white">
+                                            <i data-lucide="help-circle" class="w-5 h-5 text-blue-400"></i> Como
+                                            faço para trocar de dispositivo?
+                                        </div>
+                                        <i data-lucide="chevron-down"
+                                            class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="p-4 pt-0 border-t border-white/5">
+                                        <p class="text-sm text-slate-400 mt-3">Para usar em outro aparelho, basta
+                                            fazer o backup no dispositivo antigo (Configurações > Fazer Backup),
+                                            enviar o arquivo para o novo e usar a função "Restaurar Dados" nas
+                                            configurações.</p>
+                                    </div>
+                                </details>
+                                <details
+                                    class="group bg-black/20 border border-white/5 rounded-xl overflow-hidden shadow-sm">
+                                    <summary
+                                        class="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none">
+                                        <div class="flex items-center gap-3 font-bold text-white">
+                                            <i data-lucide="smartphone" class="w-5 h-5 text-emerald-400"></i>
+                                            Funciona sem internet?
+                                        </div>
+                                        <i data-lucide="chevron-down"
+                                            class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="p-4 pt-0 border-t border-white/5">
+                                        <p class="text-sm text-slate-400 mt-3">Sim! O Sistema foi projetado para
+                                            funcionar offline após instalado ("Instalar App"). Você só precisa de
+                                            internet para disparar mensagens por WhatsApp para seus clientes.</p>
+                                    </div>
+                                </details>
+                                <details
+                                    class="group bg-black/20 border border-white/5 rounded-xl overflow-hidden shadow-sm">
+                                    <summary
+                                        class="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none">
+                                        <div class="flex items-center gap-3 font-bold text-white">
+                                            <i data-lucide="sparkles" class="w-5 h-5 text-brand"></i> Como cadastrar
+                                            novos profissionais/serviços?
+                                        </div>
+                                        <i data-lucide="chevron-down"
+                                            class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="p-4 pt-0 border-t border-white/5">
+                                        <p class="text-sm text-slate-400 mt-3">No menu principal, acesse a aba
+                                            "Profissionais" ou "Serviços". Clique no botão com o sinal de mais (+) e
+                                            preencha as informações necessárias. No caso dos profissionais, defina a
+                                            % de comissão de cada um para automação.</p>
+                                    </div>
+                                </details>
                             </div>
                         </div>
-
-                        <!-- Section 4 -->
-                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
-                            <button
-                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">4</span>
-                                    <span class="font-bold text-white">Estoque e Produtos</span>
+                        <!-- Seção 7: Checklist Interativo -->
+                        <div id="checklist" data-tutorial-section
+                            class="bg-surface-card border border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-glow bg-gradient-to-r from-brand to-brand-dark text-white font-bold">
+                                        7
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white ml-3">Checklist de Rotina Diária</h3>
                                 </div>
-                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
-                            </button>
-                            <div class="manual-content">
-                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
-                                    <p>Gerencie seus produtos de beleza (shampoos, tinturas, cremes, etc).</p>
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>Cadastre produtos com nome, categoria, preço e estoque mínimo.</li>
-                                        <li>Use <strong class="text-rose-400">Movimentar</strong> para registrar
-                                            entradas e saídas.</li>
-                                        <li>Compras e vendas criam transações financeiras automaticamente.</li>
-                                        <li>O sistema alerta quando o estoque estiver baixo ou esgotado.</li>
-                                        <li>Cards mudam de cor: 🟢 Normal, 🟡 Baixo, 🔴 Esgotado.</li>
-                                    </ul>
+                                <button onclick="markSectionComplete(this)"
+                                    class="text-xs text-slate-500 hover:text-emerald-400 transition-colors font-bold uppercase tracking-wider">
+                                    <i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5"></i> Marcar
+                                    concluído
+                                </button>
+                            </div>
+                            <div class="bg-black/30 rounded-2xl p-6 border border-white/5 text-white mb-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-bold text-lg">Progresso</h4>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-brand" id="checklist-percent">0%</div>
+                                        <div class="text-xs text-slate-400"><span
+                                                id="checklist-completed">0</span>/<span id="checklist-total">6</span>
+                                            tarefas</div>
+                                    </div>
+                                </div>
+                                <div class="progress-bar mb-4 bg-white/10 rounded-full h-2 overflow-hidden">
+                                    <div id="checklist-progress" class="bg-brand h-full transition-all"
+                                        style="width: 0%"></div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Section 5 -->
-                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
-                            <button
-                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">5</span>
-                                    <span class="font-bold text-white">Backup e Segurança</span>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-blue-900/10 p-5 rounded-xl border border-blue-800/30">
+                                    <h5 class="font-bold text-blue-400 mb-4 flex items-center">
+                                        <i data-lucide="calendar" class="w-4 h-4 mr-2"></i> Rotina Diária
+                                    </h5>
+                                    <div class="space-y-4">
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" onchange="updateChecklist()"
+                                                class="checklist-item w-5 h-5 rounded border-white/20 bg-black/40 text-brand focus:ring-brand focus:ring-offset-0">
+                                            <span
+                                                class="text-sm text-slate-300 group-hover:text-white transition-colors">Verificar
+                                                agendamentos do dia</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" onchange="updateChecklist()"
+                                                class="checklist-item w-5 h-5 rounded border-white/20 bg-black/40 text-brand focus:ring-brand focus:ring-offset-0">
+                                            <span
+                                                class="text-sm text-slate-300 group-hover:text-white transition-colors">Confirmar
+                                                horários via WhatsApp</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" onchange="updateChecklist()"
+                                                class="checklist-item w-5 h-5 rounded border-white/20 bg-black/40 text-brand focus:ring-brand focus:ring-offset-0">
+                                            <span
+                                                class="text-sm text-slate-300 group-hover:text-white transition-colors">Dar
+                                                baixa/Registrar pagamentos da dia</span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
-                            </button>
-                            <div class="manual-content">
-                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
-                                    <p>Proteja seus dados com backups regulares.</p>
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li><strong class="text-white">Fazer Backup</strong>: Baixa um arquivo JSON com
-                                            todos os dados.</li>
-                                        <li><strong class="text-white">Restaurar Backup</strong>: Carrega um backup
-                                            salvo anteriormente.</li>
-                                        <li><strong class="text-rose-400">Resetar Fábrica</strong>: Apaga TODOS os
-                                            dados. Use com cuidado!</li>
-                                        <li>Recomendamos fazer backup ao menos uma vez por semana.</li>
-                                    </ul>
+                                <div class="bg-emerald-900/10 p-5 rounded-xl border border-emerald-800/30">
+                                    <h5 class="font-bold text-emerald-400 mb-4 flex items-center">
+                                        <i data-lucide="shield-check" class="w-4 h-4 mr-2"></i> Rotina Semanal
+                                    </h5>
+                                    <div class="space-y-4">
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" onchange="updateChecklist()"
+                                                class="checklist-item w-5 h-5 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0">
+                                            <span
+                                                class="text-sm text-slate-300 group-hover:text-white transition-colors">Realizar
+                                                Backup (.json) 🚨</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" onchange="updateChecklist()"
+                                                class="checklist-item w-5 h-5 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0">
+                                            <span
+                                                class="text-sm text-slate-300 group-hover:text-white transition-colors">Conferir
+                                                relatórios de lucro da semana</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" onchange="updateChecklist()"
+                                                class="checklist-item w-5 h-5 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0">
+                                            <span
+                                                class="text-sm text-slate-300 group-hover:text-white transition-colors">Aferir
+                                                o pagamento e comissão da equipe</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- View: Informacoes Legais -->
-                <section id="view-about" class="view-section hide fade-in max-w-4xl mx-auto">
-                    <div class="mb-8 flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                            <i data-lucide="shield-check" class="w-5 h-5 text-rose-400"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-black text-white dark:text-white">Informacoes Legais</h2>
-                            <p class="text-sm text-slate-500">Termos de uso, privacidade e suporte.</p>
-                        </div>
+                <!-- View: Configurações -->
+                <section id="view-settings" class="view-section hide fade-in max-w-6xl mx-auto">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">Configurações</h2>
+                        <p class="text-sm text-slate-400">Personalize o sistema</p>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="glass p-6 rounded-2xl border border-white/5">
-                            <h3 class="font-bold text-white dark:text-white mb-3 flex items-center gap-2">
-                                <i data-lucide="file-text" class="w-5 h-5 text-rose-400"></i> Termos de Uso
-                            </h3>
-                            <p class="text-sm text-slate-400 dark:text-slate-400">Este software e licenciado de forma vitalicia e pessoal. A redistribuicao, revenda ou transferencia nao autorizada e proibida. Todos os dados sao armazenados localmente no seu dispositivo.</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Business Info -->
+                        <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5">
+                            <h3 class="font-bold text-white mb-4">Informações do Negócio</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Nome do
+                                        Negócio</label>
+                                    <input type="text" id="biz-name"
+                                        class="w-full border border-white/10 p-2 rounded-lg text-sm bg-white/5 text-white outline-none focus:border-brand"
+                                        placeholder="Ex: Studio de Beleza Maria">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Nome do
+                                        Responsável</label>
+                                    <input type="text" id="biz-owner"
+                                        class="w-full border border-white/10 p-2 rounded-lg text-sm bg-white/5 text-white outline-none focus:border-brand"
+                                        placeholder="Ex: Maria Silva">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">CPF / CNPJ do
+                                        Responsável</label>
+                                    <input type="text" id="biz-doc"
+                                        class="w-full border border-white/10 p-2 rounded-lg text-sm bg-white/5 text-white outline-none focus:border-brand"
+                                        placeholder="000.000.000-00">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Horário de
+                                        Funcionamento</label>
+                                    <input type="text" id="biz-hours"
+                                        class="w-full border border-white/10 p-2 rounded-lg text-sm bg-white/5 text-white outline-none focus:border-brand"
+                                        placeholder="Ex: 09:00 às 19:00">
+                                </div>
+                                <button onclick="saveBusinessInfo()"
+                                    class="w-full bg-brand text-white py-2.5 rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-glow">
+                                    Salvar Informações
+                                </button>
+                            </div>
                         </div>
-                        <div class="glass p-6 rounded-2xl border border-white/5">
-                            <h3 class="font-bold text-white dark:text-white mb-3 flex items-center gap-2">
-                                <i data-lucide="lock" class="w-5 h-5 text-rose-400"></i> Privacidade (LGPD)
-                            </h3>
-                            <p class="text-sm text-slate-400 dark:text-slate-400">Privacy by Design. Seus dados nunca saem do seu dispositivo. Faca backups regulares em Configuracoes.</p>
+
+                        <!-- Data Management -->
+                        <div class="space-y-6">
+                            <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5">
+                                <h3 class="font-bold text-white mb-4 flex items-center">
+                                    <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-brand"></i>
+                                    Central de Backup e Segurança
+                                </h3>
+
+                                <!-- Alerta de Dados Locais -->
+                                <div class="bg-amber-900/20 border-l-4 border-amber-500 p-4 rounded-r-lg mb-6">
+                                    <h4 class="font-bold text-amber-400 flex items-center mb-1">
+                                        <i data-lucide="database" class="w-4 h-4 mr-2"></i>
+                                        Seus dados são 100% Locais
+                                    </h4>
+                                    <p class="text-sm text-slate-300">
+                                        Isso significa que eles ficam salvos <strong>apenas neste
+                                            navegador</strong>. Se
+                                        você limpar o cache ou formatar o dispositivo sem fazer backup,
+                                        <strong>perderá
+                                            tudo</strong>.
+                                    </p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Botão de Baixar Backup -->
+                                    <div
+                                        class="border border-white/10 rounded-xl p-4 hover:border-brand transition-colors group">
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div
+                                                class="p-2 bg-brand/20 text-brand rounded-lg group-hover:bg-brand group-hover:text-white transition-colors">
+                                                <i data-lucide="download-cloud" class="w-6 h-6"></i>
+                                            </div>
+                                            <span class="text-xs font-bold text-slate-500 uppercase">Recomendado</span>
+                                        </div>
+                                        <h5 class="font-bold text-white mb-1">Fazer Backup</h5>
+                                        <p class="text-xs text-slate-400 mb-4">Baixa um arquivo <code>.json</code>
+                                            com
+                                            todos os seus dados seguros.</p>
+                                        <button onclick="downloadBackup()"
+                                            class="w-full py-2 bg-brand text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors shadow-glow">
+                                            Baixar Dados
+                                        </button>
+                                    </div>
+
+                                    <!-- Botão de Restaurar Backup -->
+                                    <div
+                                        class="border border-white/10 rounded-xl p-4 hover:border-emerald-500 transition-colors group">
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div
+                                                class="p-2 bg-emerald-900/40 text-emerald-400 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                                <i data-lucide="refresh-ccw" class="w-6 h-6"></i>
+                                            </div>
+                                        </div>
+                                        <h5 class="font-bold text-white mb-1">Restaurar Dados</h5>
+                                        <p class="text-xs text-slate-400 mb-4">Recupere seus dados usando um arquivo
+                                            de
+                                            backup anterior.</p>
+                                        <label class="block cursor-pointer">
+                                            <span
+                                                class="block w-full py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold hover:bg-emerald-700 transition-colors text-center">
+                                                Selecionar Arquivo
+                                            </span>
+                                            <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                                class="hidden">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Danger Zone -->
+                            <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5">
+                                <h3 class="font-bold text-red-500 mb-4 flex items-center">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                    Zona de Perigo
+                                </h3>
+                                <div class="bg-red-900/20 p-4 rounded-lg border border-red-900/30 mb-4">
+                                    <p class="text-sm text-red-400"><strong>Atenção:</strong> Estas ações são
+                                        irreversíveis.</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="clearAllData()"
+                                        class="py-2.5 border border-red-900/50 text-red-400 rounded-lg text-sm hover:bg-red-900/30 transition-colors">
+                                        Limpar Todos os Dados
+                                    </button>
+                                    <button onclick="factoryReset()"
+                                        class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                        Resetar Sistema
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="glass p-5 rounded-2xl border border-rose-500/20">
-                        <p class="text-sm font-bold text-rose-300 dark:text-rose-300 flex items-center gap-2">
-                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-                            Seus dados sao 100% locais — Faca backup regularmente!
-                        </p>
                     </div>
                 </section>
 
@@ -1361,7 +1947,7 @@
                 }
             }
         };
-    
+
         function markSectionComplete(el) {
             var sec = el.closest('[data-tutorial-section]');
             if (sec) {
@@ -1372,28 +1958,36 @@
             var total = document.querySelectorAll('[data-tutorial-section]').length || 5;
             var bar = document.getElementById('tutorial-progress');
             var txt = document.getElementById('tutorial-progress-text');
-            if (bar) bar.style.width = Math.round((done/total)*100) + '%';
+            if (bar) bar.style.width = Math.round((done / total) * 100) + '%';
             if (txt) txt.textContent = done + ' / ' + total + ' secoes';
         }
         function scrollToSection(id) {
             var el = document.getElementById(id);
-            if (el) el.scrollIntoView({behavior: 'smooth'});
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 
 
     <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
-    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
         <!-- Modal Panel -->
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
                     <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div
+                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                             </div>
                             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                 <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
@@ -1401,13 +1995,17 @@
                                 </h3>
                                 <div class="mt-2">
                                     <p class="text-sm text-slate-500 dark:text-slate-300">
-                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o
+                                        recebimento do produto digital.
                                     </p>
-                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
-                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    <div
+                                        class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre,
+                                        testei seu funcionamento inicial e confirmo a entrega do produto digital."
                                     </div>
                                     <p class="mt-4 text-xs text-slate-400">
-                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra
+                                            Garantida</strong>.
                                     </p>
                                 </div>
                             </div>

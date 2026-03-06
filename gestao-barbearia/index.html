@@ -72,14 +72,16 @@
     <!-- Overlay para sidebar mobile -->
     <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
-    <!-- Script de controle do Airlock no carregamento -->
+    <!-- Script de controle do Airlock no carregamento e renderização rápida de UX Icons -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
             if (typeof init === 'function') init();
         });
     </script>
 
-    <div id="app-main-content" style="display: none;">
+    <!-- App Content Wrapper -->
+    <div id="app-main-content" class="hidden">
         <!-- Sidebar Padronizada -->
         <aside id="sidebar"
             class="sidebar glass-dark text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
@@ -95,13 +97,16 @@
                 </div>
             </div>
             <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
-                <!-- OPERACIONAL -->
-                <div class="px-4 mb-2 mt-2">
+                <button onclick="router('dashboard')" id="nav-dashboard"
+                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group active-nav mb-1">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
+                    <span class="font-medium">Visão Geral</span>
+                </button>
+                <div class="px-4 mb-2 mt-4">
                     <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Operacional</span>
                 </div>
-                <button onclick="router('dashboard')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group active-nav mb-1"
-                    id="nav-dashboard">
+                <button onclick="router('agenda')" id="nav-agenda"
+                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1">
                     <i data-lucide="calendar" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium">Agenda</span>
                 </button>
@@ -181,8 +186,11 @@
                         class="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
-                    <h2 id="page-title" class="text-xl font-bold text-slate-800 dark:text-white hidden sm:block">Agenda
-                    </h2>
+                    <div>
+                        <h2 id="page-title" class="text-xl font-bold text-slate-800 dark:text-white hidden sm:block">
+                            Agenda</h2>
+                        <p id="current-date" class="text-xs text-slate-500 font-medium hidden sm:block">...</p>
+                    </div>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3">
                     <button id="install-btn" onclick="installApp()"
@@ -201,11 +209,8 @@
                         </button>
                     </div>
                     <div class="relative group">
-                        <div
-                            class="absolute -inset-1 bg-brand-blue/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
-                        </div>
                         <button onclick="openApptModal()"
-                            class="relative flex items-center px-4 py-2.5 bg-brand-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                            class="relative flex items-center px-4 py-2.5 bg-brand-blue text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-all shadow-lg active:scale-95">
                             <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
                             <span class="hidden sm:inline">Novo Agendamento</span>
                             <span class="sm:hidden">Novo</span>
@@ -275,36 +280,70 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Agenda do Dia -->
-                    <div
-                        class="bg-white dark:bg-barber-card p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 mb-8">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-slate-800 dark:text-white flex items-center">
-                                <i data-lucide="calendar" class="mr-2 w-5 h-5 text-brand-blue"></i> Agenda do Dia
-                            </h3>
-                            <div class="flex items-center gap-3">
-                                <input type="date" id="agenda-date" onchange="renderDashboard()"
-                                    class="border dark:border-white/10 rounded-lg p-2 text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
-                                <button onclick="openApptModal()"
-                                    class="flex items-center gap-2 px-3 py-2 bg-brand-blue text-white rounded-lg text-sm font-bold">
-                                    <i data-lucide="plus" class="w-4 h-4"></i> Novo
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Upcoming List -->
+                        <div
+                            class="col-span-2 bg-white/40 dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 overflow-hidden">
+                            <div
+                                class="p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30">
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
+                                    <i data-lucide="clock" class="w-5 h-5 text-brand-blue"></i>
+                                    Próximos Agendamentos
+                                </h3>
+                                <button onclick="router('agenda')"
+                                    class="text-xs font-bold text-brand-blue hover:text-brand-dark bg-blue-500/10 px-3 py-1.5 rounded-lg transition-colors">
+                                    Ver todos
                                 </button>
                             </div>
+                            <div id="upcoming-appts" class="p-6 space-y-4">
+                                <!-- Populated by JS -->
+                            </div>
                         </div>
-                        <div id="agenda-list" class="space-y-3"></div>
+
+                        <!-- Revenue Chart Section -->
+                        <div
+                            class="bg-white/40 dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 overflow-hidden flex flex-col">
+                            <div class="p-6 border-b border-slate-100 dark:border-white/5">
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Tendência Semanal</h3>
+                                <p class="text-xs text-slate-500">Receita nos últimos 7 dias</p>
+                            </div>
+                            <div class="flex-1 p-6 flex items-end justify-center pb-2 relative min-h-[200px]"
+                                id="mini-chart-container">
+                                <!-- SVG Chart injected via JS -->
+                            </div>
+                        </div>
                     </div>
-                    <!-- Próximos Agendamentos -->
-                    <div
-                        class="bg-white dark:bg-barber-card p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-slate-800 dark:text-white">Próximos Agendamentos</h3>
-                            <button onclick="router('dashboard')"
-                                class="text-sm text-brand-blue hover:text-brand-dark font-medium">
-                                Ver agenda completa &rarr;
-                            </button>
+                </section>
+
+                <!-- Agenda View -->
+                <section id="view-agenda" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                        <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
+                            <i data-lucide="calendar" class="text-brand-blue"></i> Agenda Diária
+                        </h3>
+                        <div
+                            class="flex gap-3 bg-white/40 dark:bg-barber-card p-2 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5">
+                            <button onclick="changeAgendaDate(-1)"
+                                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-xl transition-colors"><i
+                                    data-lucide="chevron-left" class="w-4 h-4 text-slate-400"></i></button>
+                            <input type="date" id="agenda-date" onchange="renderAgenda()"
+                                class="bg-transparent border-none text-sm font-bold text-slate-700 dark:text-slate-300 outline-none w-32 text-center cursor-pointer">
+                            <button onclick="changeAgendaDate(1)"
+                                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-xl transition-colors"><i
+                                    data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i></button>
                         </div>
-                        <div id="upcoming-appts" class="space-y-3">
-                            <!-- Dynamic content -->
+                    </div>
+
+                    <div
+                        class="bg-white/40 dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 overflow-x-auto glass">
+                        <div class="min-w-[800px]">
+                            <!-- Header Row (Profissionais) -->
+                            <div id="agenda-header"
+                                class="grid bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-white/5">
+                            </div>
+                            <!-- Time Slots Row -->
+                            <div id="agenda-body" class="bg-white/60 dark:bg-transparent"></div>
                         </div>
                     </div>
                 </section>
@@ -2533,6 +2572,42 @@
         <script>
             // Override executado APOS app_core.js carregar (window load event)
             window.addEventListener('load', function () {
+                // Checagem extra anti-tela preta na inicialização
+                var checkAppLoaded = function () {
+                    var key = localStorage.getItem('plena_license');
+                    var appMain = document.getElementById('app-main-content');
+                    var viewLogin = document.getElementById('view-login');
+
+                    if (key) {
+                        // Auto-confirma recibo para consistência
+                        if (!localStorage.getItem('ml_receipt_confirmed')) {
+                            localStorage.setItem('ml_receipt_confirmed', 'true');
+                        }
+                        if (viewLogin) {
+                            viewLogin.classList.add('hidden');
+                            viewLogin.style.display = 'none';
+                        }
+                        if (appMain) {
+                            appMain.style.display = 'block';
+                            appMain.classList.remove('hidden');
+                        }
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        if (appMain) {
+                            appMain.style.display = 'none';
+                            appMain.classList.add('hidden');
+                        }
+                        if (viewLogin) {
+                            viewLogin.classList.remove('hidden');
+                            viewLogin.style.display = 'flex';
+                        }
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    }
+                };
+
+                // Força rodar a checagem extra
+                setTimeout(checkAppLoaded, 200);
+
                 window.activateSystem = async function () {
                     var emailEl = document.getElementById('activation-email');
                     var keyEl = document.getElementById('activation-key');
@@ -2543,7 +2618,7 @@
                     var email = emailEl.value.trim();
                     var key = keyEl.value.trim().toUpperCase();
 
-                    if (!email || !key) { alert('Preencha o e-mail e a chave de licenca.'); return; }
+                    if (!email || !key) { alert('Preencha o e-mail e a chave de licença.'); return; }
 
                     // MASTER KEYS - bypass total, sem necessidade de API ou receipt
                     var MASTERS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
@@ -2564,6 +2639,7 @@
                         deviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
                         localStorage.setItem('device_id', deviceId);
                     }
+
                     fetch('../api_licenca_ml.php?action=activate', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -2574,11 +2650,25 @@
                         if (data.status === 'success' && data.valid === true) {
                             localStorage.setItem('plena_license', key);
                             localStorage.setItem('ml_license_email', email);
+                            localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                            // Destrava a UI (FIM DA TELA PRETA)
+                            var viewLoginEl = document.getElementById('view-login');
+                            if (viewLoginEl) {
+                                viewLoginEl.classList.add('hidden');
+                                viewLoginEl.style.display = 'none';
+                            }
+                            var appContent = document.getElementById('app-main-content');
+                            if (appContent) {
+                                appContent.style.display = 'block';
+                                appContent.classList.remove('hidden');
+                            }
+
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
                             alert('Sistema Liberado! Bem-vindo(a) ' + (data.client || ''));
-                            window.location.reload();
                         } else {
                             var errEl = document.getElementById('activation-error');
-                            var msg = data.message || 'Chave invalida.';
+                            var msg = data.message || 'Chave inválida.';
                             if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
                             else alert('Erro: ' + msg);
                             if (btn) { btn.disabled = false; btn.textContent = 'Desbloquear Acesso'; }

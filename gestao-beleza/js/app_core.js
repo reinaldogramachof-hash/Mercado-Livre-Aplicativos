@@ -3,7 +3,7 @@
    ========================================== */
 
 // ── State ──────────────────────────────────
-const DB_KEY = 'gestao_beleza_v1';
+const DB_KEY = 'brand_beauty_pro_v2';
 const getID = () => Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 const fmtMoney = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
@@ -57,8 +57,10 @@ function init() {
     document.getElementById('rep-end').value = today;
     document.getElementById('exp-date').value = today;
     document.getElementById('agenda-date').value = today;
-    document.getElementById('set-name').value = db.settings.businessName || '';
-    document.getElementById('set-hours').value = db.settings.businessHours || '';
+    const elName = document.getElementById('biz-name'); if (elName) elName.value = db.settings.businessName || '';
+    const elOwner = document.getElementById('biz-owner'); if (elOwner) elOwner.value = db.settings.businessOwner || '';
+    const elDoc = document.getElementById('biz-doc'); if (elDoc) elDoc.value = db.settings.businessDoc || '';
+    const elHours = document.getElementById('biz-hours'); if (elHours) elHours.value = db.settings.businessHours || '';
 }
 
 // ── Router ──────────────────────────────────
@@ -76,7 +78,10 @@ function router(view) {
         if (view === 'agenda') renderAgenda();
         if (view === 'reports') generateReport();
         if (view === 'inventory') renderInventory();
-        if (view === 'instructions') initManual();
+        if (view === 'instructions') {
+            updateTutorialProgress();
+            updateChecklist();
+        }
     }
     document.querySelectorAll('.nav-item').forEach(el => { el.classList.remove('active-nav', 'text-white'); el.classList.add('text-slate-400'); });
     const navEl = document.getElementById(`nav-${view}`);
@@ -863,8 +868,14 @@ function submitClient(e) {
     save(); closeModal('clientModal'); renderClients();
 }
 
-function saveSettings(e) { e.preventDefault(); db.settings.businessName = document.getElementById('set-name').value; db.settings.businessHours = document.getElementById('set-hours').value; save(); showToast('Configurações salvas'); }
-
+function saveBusinessInfo() {
+    db.settings.businessName = document.getElementById('biz-name').value;
+    db.settings.businessOwner = document.getElementById('biz-owner').value;
+    db.settings.businessDoc = document.getElementById('biz-doc').value;
+    db.settings.businessHours = document.getElementById('biz-hours').value;
+    save();
+    showToast('Informações salvas com sucesso!', 'success');
+}
 // ── Edit Functions ──────────────────────────
 function editTeam(id) { const t = db.team.find(x => x.id === id); if (t) openTeamModal(t); }
 function editService(id) { const s = db.services.find(x => x.id === id); document.getElementById('svc-id').value = s.id; document.getElementById('svc-name').value = s.name; document.getElementById('svc-price').value = s.price; document.getElementById('serviceModal').classList.remove('hidden'); }
@@ -873,7 +884,26 @@ function editClient(id) { const c = db.clients.find(x => x.id === id); if (c) op
 // ── Backup / Restore / Reset ────────────────
 function downloadBackup() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db)); const a = document.createElement('a'); a.href = dataStr; a.download = "gestao_beleza_backup.json"; document.body.appendChild(a); a.click(); a.remove(); showToast('Backup realizado!'); }
 function restoreBackup(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function (e) { try { const data = JSON.parse(e.target.result); if (data.appointments && data.team) { db = data; save(); init(); showToast('Dados restaurados com sucesso!'); } else { showToast('Arquivo inválido!', 'error'); } } catch (err) { showToast('Erro ao ler arquivo', 'error'); } }; reader.readAsText(file); }
-function resetSystem() { if (confirm('Tem certeza? Todos os dados serão apagados.')) { localStorage.removeItem(DB_KEY); location.reload(); } }
+function clearAllData() {
+    if (confirm('Tem certeza? Isso apagará TODOS os clientes, agendamentos e cadastros, mas manterá as configurações do seu negócio e links úteis.')) {
+        db.appointments = [];
+        db.team = [{ id: 't1', name: 'Profissional Principal', commission: 50, contract: 'PJ', phone: '', startDate: '' }];
+        db.services = [{ id: 's1', name: 'Corte Feminino', price: 80 }, { id: 's2', name: 'Escova', price: 50 }, { id: 's3', name: 'Manicure', price: 35 }];
+        db.clients = [];
+        db.transactions = [];
+        db.inventory = [];
+        db.stockMovements = [];
+        save();
+        location.reload();
+    }
+}
+
+function factoryReset() {
+    if (confirm('Tem certeza ABSOLUTA? Todo o sistema voltará ao zero, como se tivesse acabado de acessar a primeira vez.')) {
+        localStorage.removeItem(DB_KEY);
+        location.reload();
+    }
+}
 
 // ══════════════════════════════════════════════
 // MÓDULO DE ESTOQUE
@@ -1043,17 +1073,134 @@ function submitStockMovement(e) {
 }
 
 // ══════════════════════════════════════════════
-// MÓDULO DE MANUAL DE USO
+// MÓDULO DE MANUAL DE USO E CHECKLIST
 // ══════════════════════════════════════════════
 
-function initManual() {
-    lucide.createIcons();
-    // Setup accordion behavior
-    document.querySelectorAll('.manual-section .manual-header').forEach(header => {
-        header.onclick = () => {
-            const section = header.closest('.manual-section');
-            section.classList.toggle('open');
-        };
+// 1. Gerenciamento do Checklist Diário de Rotinas
+function updateChecklist() {
+    const checkboxes = document.querySelectorAll('.checklist-item');
+    let completed = 0;
+    const isReady = db && db.settings;
+    if (!isReady) return;
+
+    // Load state from DB if available (array of booleans)
+    if (!db.settings.checklistState) {
+        db.settings.checklistState = Array.from(checkboxes).map(() => false);
+    }
+
+    checkboxes.forEach((cb, index) => {
+        // Handle physical check via UI interaction OR initial load
+        if (event && event.target === cb) {
+            db.settings.checklistState[index] = cb.checked;
+            save(); // Save interaction immediately
+        } else {
+            // Initial load or refresh - sync from DB
+            cb.checked = db.settings.checklistState[index];
+        }
+
+        if (cb.checked) {
+            completed++;
+            cb.nextElementSibling.classList.add('line-through', 'opacity-50');
+        } else {
+            cb.nextElementSibling.classList.remove('line-through', 'opacity-50');
+        }
+    });
+
+    const total = checkboxes.length;
+    let percentage = 0;
+    if (total > 0) {
+        percentage = Math.round((completed / total) * 100);
+    }
+
+    const percentEl = document.getElementById('checklist-percent');
+    const compEl = document.getElementById('checklist-completed');
+    const totalEl = document.getElementById('checklist-total');
+    const progEl = document.getElementById('checklist-progress');
+
+    if (percentEl) percentEl.textContent = `${percentage}%`;
+    if (compEl) compEl.textContent = completed;
+    if (totalEl) totalEl.textContent = total;
+    if (progEl) progEl.style.width = `${percentage}%`;
+
+    // Save checklist overall status in DB array manually managed above
+}
+
+// 2. Sistema de Seções e Progresso do Manual
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Highlight effect
+        el.classList.add('ring-2', 'ring-brand', 'ring-offset-4', 'ring-offset-brand-dark');
+        setTimeout(() => {
+            el.classList.remove('ring-2', 'ring-brand', 'ring-offset-4', 'ring-offset-brand-dark');
+        }, 1500);
+    }
+}
+
+// Mark specific tutorial section as read/completed
+function markSectionComplete(btnOrId) {
+    let sectionId = typeof btnOrId === 'string' ? btnOrId : '';
+    let btnNode = null;
+
+    if (typeof btnOrId === 'object') {
+        btnNode = btnOrId;
+        const section = btnOrId.closest('[data-tutorial-section]');
+        if (section) sectionId = section.id;
+    } else {
+        const section = document.getElementById(sectionId);
+        if (section) btnNode = section.querySelector('button[onclick*="markSectionComplete"]');
+    }
+
+    if (!sectionId) return;
+
+    if (!db.settings.manualProgress) {
+        db.settings.manualProgress = [];
+    }
+
+    if (!db.settings.manualProgress.includes(sectionId)) {
+        db.settings.manualProgress.push(sectionId);
+        save();
+        showToast('Seção concluída! Excelente.', 'success');
+    }
+
+    if (btnNode) {
+        btnNode.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5 text-emerald-500"></i> <span class="text-emerald-500 font-bold">Concluído</span>`;
+        btnNode.classList.add('cursor-default');
+        btnNode.classList.remove('hover:text-emerald-400');
+        btnNode.onclick = null;
+    }
+
+    updateTutorialProgress();
+}
+
+function updateTutorialProgress() {
+    if (!db.settings || !db.settings.manualProgress) return;
+    const sections = document.querySelectorAll('[data-tutorial-section]');
+    const total = sections.length;
+    if (total === 0) return;
+
+    const completed = db.settings.manualProgress.length;
+    const perc = Math.round((completed / total) * 100);
+
+    const txtEl = document.getElementById('completed-steps');
+    const bEl = document.getElementById('tutorial-progress');
+
+    if (txtEl) txtEl.textContent = `${completed}/${total} etapas`;
+    if (bEl) bEl.style.width = `${perc}%`;
+
+    // Stylize already completed buttons on load
+    db.settings.manualProgress.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) {
+            const btn = section.querySelector('button[onclick*="markSectionComplete"]');
+            if (btn) {
+                btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 inline mb-0.5 text-emerald-500"></i> <span class="text-emerald-500 font-bold">Concluído</span>`;
+                btn.classList.add('cursor-default');
+                btn.classList.remove('hover:text-emerald-400');
+                btn.onclick = null;
+            }
+        }
     });
 }
 
