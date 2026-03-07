@@ -79,6 +79,21 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Active Nav Item ── */
+.active-nav {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-left: 3px solid #2563EB;
+    color: white !important;
+}
+
+/* ── Stock Status Row Colors ── */
+.stock-critical td { background-color: rgba(254, 202, 202, 0.2); }
+.stock-low td { background-color: rgba(254, 240, 138, 0.2); }
+.stock-ok td { background-color: transparent; }
+.text-critical { color: #dc2626; }
+.text-low { color: #d97706; }
+.text-ok { color: #16a34a; }
+
 /* ── Animations ── */
 .hide {
     display: none !important;
