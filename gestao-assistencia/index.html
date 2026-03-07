@@ -243,13 +243,13 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Baixo Estoque
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Vendas PDV
                                 </p>
-                                <h3 id="dash-low-stock" class="text-3xl font-bold text-red-600">0</h3>
-                                <p class="text-xs text-gray-500 mt-1">Produtos críticos</p>
+                                <h3 id="dash-pdv-sales" class="text-3xl font-bold text-purple-600">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Vendas no mês</p>
                             </div>
-                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                                <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600"></i>
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                <i data-lucide="shopping-cart" class="w-6 h-6 text-purple-600"></i>
                             </div>
                         </div>
                     </div>
@@ -1732,6 +1732,13 @@
                                 placeholder="Nome completo">
                         </div>
                         <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Técnico Responsável</label>
+                            <select id="order-technician"
+                                class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none cursor-pointer">
+                                <option value="">Selecione um técnico</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="text-xs font-bold text-gray-500 uppercase">WhatsApp/Telefone</label>
                             <input type="text" id="order-phone"
                                 class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
@@ -2500,7 +2507,8 @@
                 theme: 'light',
                 autoBackup: true,
                 termsAccepted: false,
-                termsAcceptedAt: null
+                termsAcceptedAt: null,
+                technicians: []
             }
         };
         let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
@@ -2758,26 +2766,27 @@
         // DASHBOARD
         function renderDashboard() {
             const currentMonth = new Date().toISOString().slice(0, 7);
-            const monthOrders = db.orders.filter(o => o.date.startsWith(currentMonth));
+            const monthOrders = db.orders.filter(o => o.date && o.date.startsWith(currentMonth));
+            const monthPDVSales = (db.pdvSales || []).filter(s => s.date && s.date.startsWith(currentMonth));
 
             // Calcular estatísticas
             const active = db.orders.filter(o => ['received', 'analyzing', 'waiting_parts'].includes(o.status)).length;
             const ready = db.orders.filter(o => o.status === 'ready').length;
+            const pdvCount = monthPDVSales.length;
 
-            // Estatísticas de estoque
-            const lowStock = db.products.filter(p => {
-                return p.stock > 0 && p.stock <= p.minStock;
-            }).length;
-
-            const revenue = monthOrders
+            const osRevenue = monthOrders
                 .filter(o => o.status === 'delivered')
                 .reduce((sum, o) => sum + (o.total || 0), 0);
+
+            const pdvRevenue = monthPDVSales.reduce((sum, s) => sum + (s.total || 0), 0);
+            const totalRevenue = osRevenue + pdvRevenue;
 
             // Atualizar cards
             document.getElementById('dash-active').innerText = active;
             document.getElementById('dash-ready').innerText = ready;
-            document.getElementById('dash-low-stock').innerText = lowStock;
-            document.getElementById('dash-revenue').innerText = fmtMoney(revenue);
+            const pdvSalesEl = document.getElementById('dash-pdv-sales');
+            if (pdvSalesEl) pdvSalesEl.innerText = pdvCount;
+            document.getElementById('dash-revenue').innerText = fmtMoney(totalRevenue);
 
             // Atualizar gráfico
             renderChart();
@@ -3182,7 +3191,16 @@
             document.getElementById('view-os-number').textContent = order.id;
             document.getElementById('view-os-id').textContent = order.id;
             document.getElementById('view-os-date').textContent = `Data: ${fmtDate(order.date)}`;
-            document.getElementById('view-os-status').textContent = `Status: ${statusColors[order.status]?.label || 'Recebido'}`;
+
+            // Layout das tags de status
+            let statusHtml = `Status: ${statusColors[order.status]?.label || 'Recebido'}`;
+            if (order.paid) {
+                statusHtml += ` <span class="bg-green-100 text-green-700 text-[10px] px-1.5 py-0.5 rounded ml-2 font-bold" title="Lançado no Fluxo de Caixa">💰 PAGO</span>`;
+            }
+            if (order.partsDeducted) {
+                statusHtml += ` <span class="bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0.5 rounded ml-1 font-bold" title="Peças debitadas do Estoque">📦 BAIXA ESTOQUE</span>`;
+            }
+            document.getElementById('view-os-status').innerHTML = statusHtml;
             document.getElementById('view-client').textContent = order.client;
             document.getElementById('view-phone').textContent = order.phone || 'Não informado';
             document.getElementById('view-device').textContent = order.device + (order.brand ? ` - ${order.brand}` : '');
@@ -3240,7 +3258,14 @@
                 return;
             }
 
+            if (currentViewOrder.partsDeducted) {
+                showNotification('As peças desta O.S. já foram debitadas do estoque anteriormente!', 'error');
+                return;
+            }
+
             if (confirm('Deseja debitar as peças usadas desta O.S. do estoque?\n\nEsta ação atualizará o estoque automaticamente.')) {
+                let hasError = false;
+
                 currentViewOrder.parts.forEach(part => {
                     // Encontrar o produto no estoque
                     const product = db.products.find(p => p.id === part.productId);
@@ -3267,16 +3292,25 @@
                             // Atualizar estoque do produto
                             product.stock -= part.quantity;
                         } else {
+                            hasError = true;
                             showNotification(`Estoque insuficiente para ${product.name}. Disponível: ${product.stock}, Necessário: ${part.quantity}`, 'error');
                         }
                     }
                 });
 
-                save();
-                renderInventory();
-                renderMovements();
+                if (!hasError) {
+                    currentViewOrder.partsDeducted = true;
+                    // Salva a alteração na OS atual no banco principal
+                    const idx = db.orders.findIndex(o => o.id === currentViewOrder.id);
+                    if (idx !== -1) {
+                        db.orders[idx] = currentViewOrder;
+                    }
+                    save();
+                    renderInventory();
+                    renderMovements();
 
-                showNotification('Peças debitadas do estoque com sucesso!', 'success');
+                    showNotification('Peças debitadas do estoque com sucesso!', 'success');
+                }
             }
         }
 
@@ -4538,7 +4572,7 @@
             if (el('cash-income')) el('cash-income').textContent = '+' + fmtMoney(monthIncome);
             if (el('cash-expense')) el('cash-expense').textContent = '-' + fmtMoney(monthExpense);
 
-            const catLabels = { service: 'Serviço', parts: 'Peças', supplies: 'Materiais', rent: 'Aluguel', utilities: 'Contas', other: 'Outros' };
+            const catLabels = { sale: 'Venda PDV', service: 'Serviço', parts: 'Peças', supplies: 'Materiais', rent: 'Aluguel', utilities: 'Contas', other: 'Outros' };
             const tbody = document.getElementById('trans-table-body');
 
             if (filtered.length === 0) {
@@ -4684,9 +4718,15 @@
             const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             const monthOrders = db.orders.filter(o => o.date && o.date.startsWith(monthStr));
             const monthTrans = db.transactions.filter(t => t.date && t.date.startsWith(monthStr));
+            const monthPDV = (db.pdvSales || []).filter(s => s.date && s.date.startsWith(monthStr));
 
             const totalOS = monthOrders.length;
-            const revenue = monthOrders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.total || 0), 0);
+
+            // Revenue from Orders + PDV
+            const orderRevenue = monthOrders.filter(o => o.status === 'delivered').reduce((s, o) => s + (o.total || 0), 0);
+            const pdvRevenue = monthPDV.reduce((s, o) => s + (o.total || 0), 0);
+            const revenue = orderRevenue + pdvRevenue;
+
             const income = monthTrans.filter(t => t.type === 'income').reduce((s, t) => s + (t.amount || 0), 0);
             const expense = monthTrans.filter(t => t.type === 'expense').reduce((s, t) => s + (t.amount || 0), 0);
             const balance = income - expense;
@@ -4696,6 +4736,12 @@
 
             const topClients = {};
             monthOrders.forEach(o => { topClients[o.client] = (topClients[o.client] || 0) + (o.total || 0); });
+
+            // Add PDV as a client for comparison
+            if (pdvRevenue > 0) {
+                topClients['Vendas de Balcão (PDV)'] = pdvRevenue;
+            }
+
             const topClientsList = Object.entries(topClients).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
             const reportContent = document.getElementById('report-content');
@@ -4739,7 +4785,7 @@
                                 <span class="font-medium text-gray-800 truncate">${name}</span>
                                 <span class="font-bold text-green-600 ml-2">${fmtMoney(total)}</span>
                             </div>
-                        `).join('') : '<p class="text-gray-400 text-center text-sm">Nenhuma O.S. no mês</p>'}
+                        `).join('') : '<p class="text-gray-400 text-center text-sm">Nenhum faturamento no mês</p>'}
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -4768,7 +4814,7 @@
                 byCat[t.category][t.type] = (byCat[t.category][t.type] || 0) + (t.amount || 0);
             });
 
-            const catLabels = { service: 'Serviço', parts: 'Peças', supplies: 'Materiais', rent: 'Aluguel', utilities: 'Contas', other: 'Outros' };
+            const catLabels = { sale: 'Venda PDV', service: 'Serviço', parts: 'Peças', supplies: 'Materiais', rent: 'Aluguel', utilities: 'Contas', other: 'Outros' };
 
             const byMonth = {};
             db.transactions.forEach(t => {
@@ -5100,6 +5146,69 @@
         function updateOrderStatus(status) {
             if (currentViewOrder) {
                 currentViewOrder.status = status;
+
+                // --- Automação de Fechamento de O.S (Estoque e Financeiro) ---
+                if (status === 'delivered') {
+                    // 1. Baixa Automática de Estoque (se houver peças e não tiver sido dada baixa ainda)
+                    if (currentViewOrder.parts && currentViewOrder.parts.length > 0 && !currentViewOrder.partsDeducted) {
+                        let stockError = false;
+
+                        // Checagem prévia de disponibilidade
+                        for (const part of currentViewOrder.parts) {
+                            const product = db.products.find(p => p.id === part.productId);
+                            if (!product || product.stock < part.quantity) {
+                                stockError = true;
+                                showNotification(`Estoque insuficiente para a peça: ${part.name || part.productId}. A baixa automática falhou.`, 'error');
+                                break;
+                            }
+                        }
+
+                        if (!stockError) {
+                            currentViewOrder.parts.forEach(part => {
+                                const product = db.products.find(p => p.id === part.productId);
+                                if (product) {
+                                    product.stock -= part.quantity;
+                                    db.movements.unshift({
+                                        id: getMovementID(),
+                                        productId: product.id,
+                                        productName: product.name,
+                                        type: 'out',
+                                        quantity: part.quantity,
+                                        unitValue: product.cost,
+                                        totalValue: part.quantity * product.cost,
+                                        reason: 'os_use',
+                                        notes: `Baixa automática O.S. #${currentViewOrder.id} - ${currentViewOrder.client}`,
+                                        date: new Date().toISOString().split('T')[0],
+                                        orderId: currentViewOrder.id
+                                    });
+                                }
+                            });
+                            currentViewOrder.partsDeducted = true;
+                            renderInventory();
+                            renderMovements();
+                            showNotification('Baixa de peças aplicada automaticamente!', 'success');
+                        }
+                    }
+
+                    // 2. Lançamento Automático no Fluxo de Caixa (se total > 0 e não foi pago)
+                    if (currentViewOrder.total > 0 && !currentViewOrder.paid) {
+                        db.transactions.unshift({
+                            id: 'TR' + Date.now().toString(36).toUpperCase().substr(-6),
+                            type: 'income',
+                            amount: currentViewOrder.total,
+                            desc: `Faturamento O.S. #${currentViewOrder.id} - ${currentViewOrder.client}`,
+                            category: 'service',
+                            date: new Date().toISOString().split('T')[0],
+                            createdAt: new Date().toISOString()
+                        });
+                        currentViewOrder.paid = true;
+
+                        if (typeof renderTransactions === 'function') renderTransactions();
+                        showNotification('Faturamento lançado no Caixa automaticamente!', 'success');
+                    }
+                }
+                // ----------------------------------------------------------------
+
                 const index = db.orders.findIndex(o => o.id === currentViewOrder.id);
                 if (index !== -1) {
                     db.orders[index] = currentViewOrder;
