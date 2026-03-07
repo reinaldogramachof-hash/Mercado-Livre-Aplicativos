@@ -72,7 +72,7 @@
         if (login) {
             login.classList.remove('hide');
             login.style.display = 'flex';
-            const msgEl = login.querySelector('p.text-slate-500, p.subtitle, .login-subtitle');
+            const msgEl = login.querySelector('p.text-slate-400, p.text-slate-500, p.subtitle, .login-subtitle');
             if (msgEl) msgEl.innerText = msg;
         }
         hideApp();
@@ -85,12 +85,14 @@
             login.style.display = 'flex';
 
             const h3 = login.querySelector('h3, h2');
-            const p = login.querySelector('p.text-slate-500, p.subtitle, .login-subtitle');
+            const p = login.querySelector('p.text-slate-400, p.text-slate-500, p.subtitle, .login-subtitle');
             const btn = login.querySelector("button[type='submit'], #btn-activate");
 
             if (h3) h3.innerText = titleText;
             if (p) {
-                p.innerHTML = `${msgText}<br><br><a href="../loja/checkout.html" class="text-blue-600 font-bold underline">COMPRAR VERSÃO VITALÍCIA</a>`;
+                const _waMsg = encodeURIComponent('Ola! Meu periodo de teste expirou e gostaria de adquirir a versao vitalicia do sistema. Pode me ajudar?');
+                const _waLink = 'https://wa.me/5512992191018?text=' + _waMsg;
+                p.innerHTML = `${msgText}<br><br><a href="${_waLink}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#16a34a;color:white;font-weight:bold;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:14px;margin-top:8px">Quero a Versao Vitalicia</a>`;
             }
             if (btn) btn.innerText = "Já comprei (Ativar)";
         }

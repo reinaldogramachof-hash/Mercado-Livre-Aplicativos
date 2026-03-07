@@ -145,10 +145,13 @@ if ($action === 'dashboard_stats') {
         if (!empty($l['is_trial']))
             $stats['trial']++;
 
-        $pName = $l['product'] ?? 'Desconhecido';
-        if (!isset($stats['top_products'][$pName]))
-            $stats['top_products'][$pName] = 0;
-        $stats['top_products'][$pName]++;
+        // top_products conta apenas licenças pagas (não trials)
+        if (empty($l['is_trial'])) {
+            $pName = $l['product'] ?? 'Desconhecido';
+            if (!isset($stats['top_products'][$pName]))
+                $stats['top_products'][$pName] = 0;
+            $stats['top_products'][$pName]++;
+        }
     }
     echo json_encode($stats);
     exit;
@@ -220,6 +223,36 @@ if ($action === 'update_status') {
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Chave não encontrada']);
     }
+    exit;
+}
+
+if ($action === 'convert_trial') {
+    if (!validateSecret($jsonData, $ADMIN_SECRET)) {
+        http_response_code(403);
+        exit;
+    }
+    $key = $jsonData['key'] ?? '';
+    $db = getDB($fileLicenses);
+
+    if (!isset($db[$key])) {
+        echo json_encode(['status' => 'error', 'message' => 'Chave não encontrada']);
+        exit;
+    }
+    if (empty($db[$key]['is_trial'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Esta licença não é um trial']);
+        exit;
+    }
+
+    $db[$key]['is_trial'] = false;
+    $db[$key]['type'] = 'venda_ml';
+    $db[$key]['status'] = 'active';
+    unset($db[$key]['expiration_date']);
+    unset($db[$key]['trial_duration_days']);
+    $db[$key]['converted_at'] = date('Y-m-d H:i:s');
+
+    saveDB($fileLicenses, $db);
+    addLog("Trial convertido para vitalício: chave $key", 'info');
+    echo json_encode(['status' => 'success', 'success' => true]);
     exit;
 }
 
@@ -334,8 +367,13 @@ if ($action === 'verify') {
         if (!empty($db[$key]['expiration_date'])) {
             $exp = strtotime($db[$key]['expiration_date']);
             if (time() > $exp) {
-                // Auto-expire silently or explicitly
                 $status = 'expired';
+                // Persiste o status expirado no banco para consistência
+                if ($db[$key]['status'] !== 'expired') {
+                    $db[$key]['status'] = 'expired';
+                    saveDB($fileLicenses, $db);
+                    addLog("Trial expirado: chave $key marcada como expired no banco", 'info');
+                }
             }
         }
 

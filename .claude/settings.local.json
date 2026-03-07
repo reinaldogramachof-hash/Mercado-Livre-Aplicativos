@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(python _patch_trial.py)",
+      "Bash(del \"_patch_trial.py\")",
+      "Bash(ls \"c:\\\\Users\\\\reina\\\\OneDrive\\\\Desktop\\\\Mercado Livre Aplicativos\\\\gestao-assistencia\\\\assets\\\\js\"\" && ls \"c:UsersreinaOneDriveDesktopMercado Livre Aplicativosgestao-barbeariaassetsjs\"\")"
+    ]
+  }
+}

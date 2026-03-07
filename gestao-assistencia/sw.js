@@ -1,8 +1,15 @@
-const CACHE_NAME = 'gestao-assistencia-cache-v1';
+const CACHE_NAME = 'gestao-assistencia-cache-v2';
 const urlsToCache = [
   './',
   './index.html',
-  './lock.js'
+  './lock.js',
+  './manifest.json',
+  './assets/css/styles.css',
+  './assets/js/tailwind_config.js',
+  './assets/libs/tailwindcss.js',
+  './assets/libs/lucide.js',
+  './assets/img/icons/icon-192.png',
+  './assets/img/icons/icon-512.png'
 ];
 
 self.addEventListener('install', event => {

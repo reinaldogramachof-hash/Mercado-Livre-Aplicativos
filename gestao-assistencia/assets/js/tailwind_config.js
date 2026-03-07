@@ -4,11 +4,11 @@ tailwind.config = {
         extend: {
             colors: {
                 brand: {
-                    DEFAULT: '#EA580C',
-                    primary: '#EA580C',
-                    dark: '#C2410C',
+                    DEFAULT: '#2563EB',
+                    primary: '#2563EB',
+                    dark: '#1D4ED8',
                     black: '#0f172a',
-                    blue: '#3B82F6',
+                    blue: '#2563EB',
                     green: '#10B981',
                     red: '#EF4444',
                     yellow: '#F59E0B',
@@ -30,7 +30,7 @@ tailwind.config = {
                 sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
             },
             boxShadow: {
-                'glass': '0 8px 32px 0 rgba(234, 88, 12, 0.07)',
+                'glass': '0 8px 32px 0 rgba(37, 99, 235, 0.07)',
                 'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
             },
             animation: {

@@ -298,12 +298,19 @@
                         class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
-                <div class="flex items-center gap-2 bg-orange-50 p-3 rounded-lg border border-orange-100">
-                    <input type="checkbox" id="gen-trial" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
-                    <div>
-                        <label for="gen-trial" class="block text-sm font-bold text-slate-700">Licença de Teste
-                            (Trial)</label>
-                        <p class="text-xs text-slate-500">Expira automaticamente em 72 horas após ativação.</p>
+                <div class="bg-orange-50 p-3 rounded-lg border border-orange-100 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="gen-trial" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500" onchange="toggleTrialDays()">
+                        <div>
+                            <label for="gen-trial" class="block text-sm font-bold text-slate-700">Licença de Teste (Trial)</label>
+                            <p class="text-xs text-slate-500">Expira automaticamente após o período definido abaixo.</p>
+                        </div>
+                    </div>
+                    <div id="trial-days-wrapper" class="hidden flex items-center gap-2 pt-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Duração (dias):</label>
+                        <input type="number" id="gen-trial-days" value="3" min="1" max="30"
+                            class="w-20 border border-orange-200 rounded-lg px-2 py-1 text-sm text-center outline-none focus:ring-2 focus:ring-orange-400 bg-white">
+                        <span class="text-xs text-slate-400">Ex: 3 = 72h, 1 = 24h</span>
                     </div>
                 </div>
 
@@ -647,6 +654,10 @@
                             <button onclick="copyToClip('${l.key}')" class="p-2 bg-slate-100 text-slate-600 hover:bg-blue-600 hover:text-white rounded-lg transition-all shadow-sm" title="Copiar Chave">
                                 <i data-lucide="copy" class="w-4 h-4"></i>
                             </button>
+                            ${(l.is_trial || l.type === 'trial') && l.status !== 'blocked' ?
+                        `<button onclick="convertTrial('${l.key}')" class="p-2 bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white rounded-lg transition-all shadow-sm" title="Converter para Vitalício">
+                                <i data-lucide="gem" class="w-4 h-4"></i>
+                            </button>` : ''}
                             ${l.status !== 'blocked' ?
                         `<button onclick="blockLicense('${l.key}')" class="p-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-all shadow-sm" title="Bloquear Acesso">
                                 <i data-lucide="ban" class="w-4 h-4"></i>
@@ -708,6 +719,17 @@
         }
 
         // ACTIONS
+        async function convertTrial(key) {
+            if (!confirm('Converter esta licença de TESTE para VITALÍCIA?\n\nA data de expiração será removida e o cliente terá acesso permanente.')) return;
+            const res = await apiCall('convert_trial', { key: key });
+            if (res && res.success) {
+                alert('Licença convertida para vitalícia com sucesso!');
+                loadLicenses();
+            } else {
+                alert('Erro: ' + (res?.message || 'Desconhecido'));
+            }
+        }
+
         async function resetDevice(key) {
             if (!confirm('Tem certeza que deseja desvincular o dispositivo desta licença?')) return;
             const res = await apiCall('update_status', { key: key, status: 'reset_device' });
@@ -738,6 +760,11 @@
             }
         }
 
+        function toggleTrialDays() {
+            const isTrial = document.getElementById('gen-trial').checked;
+            document.getElementById('trial-days-wrapper').classList.toggle('hidden', !isTrial);
+        }
+
         function openGenerateModal() {
             document.getElementById('generate-modal').classList.remove('hidden');
         }
@@ -750,13 +777,15 @@
 
             if (!product) return alert('Selecione um produto.');
 
+            const trialDays = isTrial ? (parseInt(document.getElementById('gen-trial-days').value) || 3) : 3;
+
             const res = await apiCall('generate', {
                 product: product,
                 client: client,
                 price: price,
                 quantity: 1,
                 trial: isTrial,
-                trial_days: 3 // Hardcoded to 3 days for now
+                trial_days: trialDays
             });
 
             if (res && res.status === 'success' && res.keys && res.keys.length > 0) {
@@ -772,8 +801,9 @@
                 let message = '';
 
                 if (isTrial) {
+                    const trialHours = trialDays * 24;
                     message = `Olá, ${client}! 🧪
-Esta é sua *Licença de Teste Gratuito (3 Dias)* para o sistema:
+Esta é sua *Licença de Teste Gratuito (${trialDays} ${trialDays === 1 ? 'Dia' : 'Dias'})* para o sistema:
 
 📱 *Acesso ao Sistema:*
 ${appLink}
@@ -784,9 +814,9 @@ ${key}
 *Instruções:*
 1. Acesse o link.
 2. Insira a chave acima.
-3. Aproveite todas as funcionalidades por 72h!
+3. Aproveite todas as funcionalidades por ${trialHours}h!
 
-O sistema irá travar automaticamente após o período. Para liberar a versão vitalícia sem perder seus dados, basta me chamar!
+O sistema irá travar automaticamente após o período. Para liberar a versão vitalícia sem perder seus dados, me chame pelo WhatsApp: (12) 99219-1018
 
 Qualquer dúvida, estou à disposição!`;
 
