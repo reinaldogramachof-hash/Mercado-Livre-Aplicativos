@@ -139,15 +139,105 @@ body {
     transition: transform 0.3s ease;
 }
 
-@media (min-width: 1024px) {
+/* ══════════════════════════════════════════════════════
+   SIDEBAR AUTO-HOVER — Padrão ML Factory
+   Retraído: 68px (só ícones) | Expandido: 280px (hover)
+   Desktop only. Mobile usa toggle (translateX).
+
+   COMO REPLICAR EM NOVOS SISTEMAS:
+   1. No <aside id="sidebar">: remover classe de largura (w-64, w-72, etc.)
+   2. No <main>: adicionar classe "main-content" e remover lg:ml-*
+   3. Adicionar estas classes nos elementos do sidebar HTML:
+      - sidebar-header       → div do cabeçalho (logo + título)
+      - sidebar-header-text  → div que envolve título + subtítulo
+      - sidebar-label        → cada <span> de texto dos nav items
+      - sidebar-section-divider → labels de seção (Operacional, Gestão, Sistema)
+      - sidebar-footer-content  → div do rodapé (licença)
+   4. Copiar este bloco CSS inteiro para o styles.css do novo sistema
+   ══════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
     .sidebar {
-        position: static;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 50;
+        height: 100vh;
+        width: 280px;
+    }
+    .sidebar.open {
         transform: translateX(0);
     }
 }
 
-.sidebar.open {
-    transform: translateX(0);
+@media (min-width: 1025px) {
+    #sidebar {
+        width: 68px !important;
+        position: fixed;
+        height: 100vh;
+        overflow: hidden;
+        transition: none !important;
+        transform: translateX(0) !important;
+    }
+    #sidebar:hover {
+        width: 280px !important;
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.3);
+    }
+    .main-content {
+        margin-left: 68px;
+    }
+    /* Centraliza header quando retraído */
+    #sidebar:not(:hover) .sidebar-header {
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    #sidebar:not(:hover) .sidebar-header > div:first-child {
+        margin-right: 0 !important;
+    }
+    /* Remove padding horizontal do nav quando retraído */
+    #sidebar:not(:hover) nav {
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+    }
+    /* Centraliza nav items quando retraído */
+    #sidebar:not(:hover) .nav-item {
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        gap: 0 !important; /* Beleza usa gap-3 em vez de mr-3 */
+    }
+    /* Lucide substitui <i> por <svg> — targetar svg */
+    #sidebar:not(:hover) .nav-item svg {
+        margin-right: 0 !important;
+        flex-shrink: 0;
+    }
+    #sidebar:not(:hover) .nav-item:hover {
+        transform: none !important;
+    }
+    #sidebar:not(:hover) .active-nav {
+        border-left: none !important;
+        border-radius: 0.75rem;
+    }
+    /* Oculta textos quando retraído */
+    #sidebar:not(:hover) .sidebar-header-text,
+    #sidebar:not(:hover) .sidebar-label,
+    #sidebar:not(:hover) .sidebar-section-divider,
+    #sidebar:not(:hover) .sidebar-footer-content {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+    /* Revela textos ao expandir — instantâneo */
+    #sidebar:hover .sidebar-header-text,
+    #sidebar:hover .sidebar-label,
+    #sidebar:hover .sidebar-section-divider,
+    #sidebar:hover .sidebar-footer-content {
+        opacity: 1;
+        width: auto;
+        pointer-events: auto;
+    }
 }
 
 /* ===[ HIDE UTILITY ]=== */

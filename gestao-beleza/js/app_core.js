@@ -88,11 +88,11 @@ function router(view) {
     if (navEl) { navEl.classList.add('active-nav', 'text-white'); navEl.classList.remove('text-slate-400'); }
     const titles = { dashboard: 'Visão Geral', agenda: 'Agenda', team: 'Profissionais', services: 'Serviços', finance: 'Financeiro', clients: 'Clientes', reports: 'Relatórios', inventory: 'Estoque', instructions: 'Manual de Uso', settings: 'Configurações' };
     document.getElementById('page-title').textContent = titles[view] || 'Gestão Beleza';
-    if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
+    if (window.innerWidth < 1024) document.getElementById('sidebar').classList.remove('open');
     document.getElementById('overlay').classList.add('hidden');
 }
 
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('overlay').classList.toggle('hidden'); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('hidden'); }
 function updateDateDisplay() {
     const update = () => {
         const now = new Date();

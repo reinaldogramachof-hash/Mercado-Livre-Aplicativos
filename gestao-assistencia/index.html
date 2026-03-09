@@ -68,14 +68,14 @@
 
     <!-- Sidebar -->
     <aside id="sidebar"
-        class="sidebar glass-dark text-white fixed top-0 left-0 z-40 w-[280px] h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
+        class="sidebar glass-dark text-white fixed top-0 left-0 z-40 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
         <div
-            class="h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-blue-500/20">
+            class="sidebar-header h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-blue-500/20">
             <div
                 class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mr-3 shadow-lg shadow-blue-500/20 flex-shrink-0">
                 <i data-lucide="wrench" class="w-5 h-5 text-white"></i>
             </div>
-            <div>
+            <div class="sidebar-header-text">
                 <h1 class="text-lg font-bold tracking-tight uppercase text-white">GESTÃO ASSISTÊNCIA</h1>
                 <p class="text-[11px] text-blue-300/70 font-medium tracking-wide">Sistema PRO • Gestão Completa</p>
             </div>
@@ -86,77 +86,77 @@
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group active-nav mb-1"
                 id="nav-dashboard">
                 <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Visão Geral</span>
+                <span class="font-medium sidebar-label">Visão Geral</span>
             </button>
 
-            <div class="px-4 mb-2 mt-4">
+            <div class="px-4 mb-2 mt-4 sidebar-section-divider">
                 <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Operacional</span>
             </div>
             <button onclick="router('orders')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-orders">
                 <i data-lucide="clipboard-list" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Ordens de Serviço</span>
+                <span class="font-medium sidebar-label">Ordens de Serviço</span>
             </button>
             <button onclick="router('clients')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-clients">
                 <i data-lucide="users" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Clientes</span>
+                <span class="font-medium sidebar-label">Clientes</span>
             </button>
             <button onclick="router('pdv')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-pdv">
                 <i data-lucide="shopping-cart" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">PDV — Vendas</span>
+                <span class="font-medium sidebar-label">PDV — Vendas</span>
             </button>
 
-            <div class="px-4 mb-2 mt-4">
+            <div class="px-4 mb-2 mt-4 sidebar-section-divider">
                 <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Gestão</span>
             </div>
             <button onclick="router('inventory')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-inventory">
                 <i data-lucide="package" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Estoque</span>
+                <span class="font-medium sidebar-label">Estoque</span>
             </button>
             <button onclick="router('transactions')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-transactions">
                 <i data-lucide="wallet" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Fluxo de Caixa</span>
+                <span class="font-medium sidebar-label">Fluxo de Caixa</span>
             </button>
             <button onclick="router('reports')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-reports">
                 <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Relatórios</span>
+                <span class="font-medium sidebar-label">Relatórios</span>
             </button>
 
-            <div class="px-4 mb-2 mt-4">
+            <div class="px-4 mb-2 mt-4 sidebar-section-divider">
                 <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Sistema</span>
             </div>
             <button onclick="router('settings')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-settings">
                 <i data-lucide="settings" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Configurações</span>
+                <span class="font-medium sidebar-label">Configurações</span>
             </button>
             <button onclick="router('instructions')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-instructions">
                 <i data-lucide="book-open" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Manual de Uso</span>
+                <span class="font-medium sidebar-label">Manual de Uso</span>
             </button>
             <button onclick="router('about')"
                 class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
                 id="nav-about">
                 <i data-lucide="info" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
-                <span class="font-medium">Informações Legais</span>
+                <span class="font-medium sidebar-label">Informações Legais</span>
             </button>
         </nav>
 
-        <div class="p-4 border-t border-white/10 text-center">
+        <div class="p-4 border-t border-white/10 text-center sidebar-footer-content">
             <div
                 class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
                 <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
@@ -1036,7 +1036,7 @@
                             Configurações da Empresa
                         </h3>
 
-                        <div class="space-y-4">
+                        <div class="space-y-4 border-b pb-6 mb-6">
                             <div>
                                 <label class="text-xs font-bold text-gray-500 uppercase">Nome da Assistência</label>
                                 <input type="text" id="company-name" placeholder="Sua Assistência Técnica"
@@ -1058,9 +1058,28 @@
                                     class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
                             </div>
                             <button onclick="saveCompanySettings()"
-                                class="w-full bg-brand-primary text-white py-3 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors mt-4">
-                                Salvar Configurações
+                                class="w-full bg-brand-primary text-white py-3 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors mt-2">
+                                Salvar Dados da Empresa
                             </button>
+                        </div>
+
+                        <!-- Gerenciamento de Técnicos -->
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="users" class="w-4 h-4 mr-2 text-brand-primary"></i>
+                                Equipe Técnica / Colaboradores
+                            </h4>
+                            <div class="flex gap-2 mb-4">
+                                <input type="text" id="new-tech-name" placeholder="Nome do técnico"
+                                    class="flex-1 border p-2 rounded-lg text-sm outline-none focus:border-brand-primary">
+                                <button onclick="addTechnician()"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition-colors">
+                                    Adicionar
+                                </button>
+                            </div>
+                            <div id="technicians-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                                <!-- Lista de técnicos via JS -->
+                            </div>
                         </div>
                     </div>
 
@@ -1132,7 +1151,7 @@
                         <span
                             class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Progresso
                             do Manual</span>
-                        <span id="tutorial-progress-text" class="text-xs font-bold text-brand-blue">0 / 5 seções</span>
+                        <span id="tutorial-progress-text" class="text-xs font-bold text-brand-blue">0 / 4 seções</span>
                     </div>
                     <div class="progress-bar w-full">
                         <div class="progress-fill" id="tutorial-progress" style="width: 0%"></div>
@@ -2749,7 +2768,61 @@
                 renderTransactions();
             } else if (view === 'settings') {
                 loadCompanySettings();
+                renderTechniciansSettings();
             }
+        }
+
+        // --- GESTÃO DE TÉCNICOS ---
+        function addTechnician() {
+            const input = document.getElementById('new-tech-name');
+            const name = input.value.trim();
+            if (!name) return;
+
+            if (!db.settings.technicians) db.settings.technicians = [];
+            db.settings.technicians.push(name);
+            save();
+            input.value = '';
+            renderTechniciansSettings();
+            showNotification('Colaborador adicionado!', 'success');
+        }
+
+        function removeTechnician(index) {
+            if (confirm('Deseja remover este colaborador?')) {
+                db.settings.technicians.splice(index, 1);
+                save();
+                renderTechniciansSettings();
+                showNotification('Colaborador removido', 'success');
+            }
+        }
+
+        function renderTechniciansSettings() {
+            const list = document.getElementById('technicians-list');
+            if (!list) return;
+
+            const techs = db.settings.technicians || [];
+            if (techs.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic">Nenhum técnico cadastrado.</p>';
+                return;
+            }
+
+            list.innerHTML = techs.map((t, i) => `
+                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100 group">
+                    <span class="text-sm font-medium text-gray-700">${sanitizeHTML(t)}</span>
+                    <button onclick="removeTechnician(${i})" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function populateTechnicianSelect(selectedValue = '') {
+            const select = document.getElementById('order-technician');
+            if (!select) return;
+
+            const techs = db.settings.technicians || [];
+            select.innerHTML = '<option value="">Selecione um técnico</option>' +
+                techs.map(t => `<option value="${sanitizeHTML(t)}" ${t === selectedValue ? 'selected' : ''}>${sanitizeHTML(t)}</option>`).join('');
         }
 
         function toggleSidebar() {
@@ -2938,6 +3011,7 @@
                     renderOrderPartsList();
                 }
 
+                populateTechnicianSelect(order.technician);
                 updateOrderSummary();
             } else {
                 // Modo criação
@@ -2947,6 +3021,7 @@
                 document.getElementById('order-labor').value = 0;
                 document.getElementById('order-discount').value = 0;
                 document.getElementById('order-parts-list').innerHTML = '';
+                populateTechnicianSelect();
                 updateOrderSummary();
             }
 
@@ -3124,7 +3199,8 @@
                 total,
                 date: id ? db.orders.find(o => o.id === id).date : new Date().toISOString().split('T')[0],
                 status: id ? db.orders.find(o => o.id === id).status : 'received',
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                technician: document.getElementById('order-technician').value
             };
 
             if (!order.client || !order.device || !order.problem) {
@@ -3210,6 +3286,15 @@
             document.getElementById('view-labor').textContent = fmtMoney(order.labor || 0);
             document.getElementById('view-discount').textContent = fmtMoney(order.discount || 0);
             document.getElementById('view-total').textContent = fmtMoney(order.total || 0);
+
+            // Exibir técnico responsável
+            const techStatus = document.getElementById('view-os-status');
+            if (order.technician) {
+                techStatus.innerHTML += `<div class="mt-2 text-[10px] text-gray-500 font-bold uppercase tracking-wider flex items-center justify-end">
+                    <i data-lucide="wrench" class="w-3 h-3 mr-1"></i> Técnico: ${order.technician}
+                </div>`;
+                lucide.createIcons();
+            }
 
             // Mostrar/ocultar botão de usar peças
             const usePartsBtn = document.getElementById('btn-use-parts');
@@ -5250,14 +5335,15 @@
 
         function updatePrintHeaders() {
             const s = db.settings;
+            // Usando estilos inline mais robustos para impressão (evitando quebras de flexbox em navegadores antigos/drivers)
             const headerHTML = `
-                <div class="flex flex-col items-center border-b-2 border-gray-800 pb-4 mb-6 print-header">
-                    <h2 class="text-2xl font-bold text-gray-800 uppercase tracking-widest text-center">${s.companyName || 'ASSISTÊNCIA TÉCNICA'}</h2>
-                    <div class="text-xs font-medium text-gray-500 flex flex-wrap justify-center gap-3 mt-2 uppercase tracking-wide">
-                        ${s.companyDoc ? `<span>CNPJ/CPF: ${s.companyDoc}</span>` : ''}
-                        ${s.companyPhone ? `<span>• Tel: ${s.companyPhone}</span>` : ''}
+                <div class="print-header-container" style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 25px; width: 100%;">
+                    <h2 style="font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; letter-spacing: 2px;">${s.companyName || 'ASSISTÊNCIA TÉCNICA'}</h2>
+                    <div style="font-size: 12px; color: #666; margin-top: 8px; font-weight: 500;">
+                        ${s.companyDoc ? `<span style="margin: 0 10px;">CNPJ/CPF: ${s.companyDoc}</span>` : ''}
+                        ${s.companyPhone ? `<span style="margin: 0 10px;">TEL: ${s.companyPhone}</span>` : ''}
                     </div>
-                    <p class="text-[10px] text-gray-400 mt-1 uppercase text-center">${s.companyAddress || ''}</p>
+                    ${s.companyAddress ? `<p style="font-size: 10px; color: #999; margin: 5px 0 0 0; text-transform: uppercase;">${s.companyAddress}</p>` : ''}
                 </div>
             `;
 
@@ -5269,7 +5355,7 @@
 
             containers.forEach(container => {
                 if (!container) return;
-                const existingHeader = container.querySelector('.print-header');
+                const existingHeader = container.querySelector('.print-header-container');
                 if (existingHeader) {
                     existingHeader.outerHTML = headerHTML;
                 } else {
@@ -5731,6 +5817,121 @@
                 }
             }
         };
+    </script>
+
+    <!-- Módulo de Manual Interativo -->
+    <script>
+    (function() {
+        // ==========================================
+        // INICIALIZAÇÃO DO MANUAL INTERATIVO
+        // ==========================================
+
+        const MANUAL_SECTIONS = ['instalacao', 'controle-estoque', 'integracao-os-estoque', 'backup'];
+        const STORAGE_KEY = 'manual_progress';
+
+        function loadProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch {
+                return {};
+            }
+        }
+
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        function updateProgressBar() {
+            const progress = loadProgress();
+            const total = MANUAL_SECTIONS.length;
+            const completed = MANUAL_SECTIONS.filter(id => progress[id] === true).length;
+            const percent = total > 0 ? (completed / total) * 100 : 0;
+
+            const bar = document.getElementById('tutorial-progress');
+            const text = document.getElementById('tutorial-progress-text');
+
+            if (bar) bar.style.width = percent + '%';
+            if (text) text.textContent = `${completed} / ${total} seções`;
+        }
+
+        function addCheckboxesToSections() {
+            MANUAL_SECTIONS.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (!section) return;
+
+                const header = section.querySelector('.flex.items-center.justify-between.mb-6');
+                if (!header) return;
+
+                if (header.querySelector('.manual-section-checkbox')) return;
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'manual-section-checkbox w-5 h-5 rounded border-gray-300 cursor-pointer';
+                checkbox.setAttribute('data-section', sectionId);
+                checkbox.setAttribute('title', 'Marcar seção como lida');
+
+                const progress = loadProgress();
+                checkbox.checked = progress[sectionId] === true;
+
+                checkbox.addEventListener('change', function(e) {
+                    e.stopPropagation();
+                    const id = this.dataset.section;
+                    const p = loadProgress();
+                    p[id] = this.checked;
+                    saveProgress(p);
+                    updateProgressBar();
+                });
+
+                header.appendChild(checkbox);
+            });
+        }
+
+        function initInteractiveManual() {
+            addCheckboxesToSections();
+            updateProgressBar();
+        }
+
+        // ==========================================
+        // INTEGRAÇÃO COM O ROTEADOR EXISTENTE
+        // ==========================================
+
+        const originalRouter = window.router;
+
+        window.router = function(view) {
+            if (originalRouter) originalRouter(view);
+            if (view === 'instructions') {
+                setTimeout(initInteractiveManual, 100);
+            }
+        };
+
+        // Fallback: inicializa se view-instructions já estiver visível
+        document.addEventListener('DOMContentLoaded', function() {
+            const vi = document.getElementById('view-instructions');
+            if (vi && !vi.classList.contains('hide')) {
+                setTimeout(initInteractiveManual, 100);
+            }
+        });
+
+        // ==========================================
+        // ESTILOS DOS CHECKBOXES
+        // ==========================================
+        const style = document.createElement('style');
+        style.textContent = `
+            .manual-section-checkbox {
+                margin-left: 12px;
+                transform: scale(1.2);
+                cursor: pointer;
+                accent-color: #2563eb;
+            }
+            @media (max-width: 640px) {
+                .manual-section-checkbox {
+                    transform: scale(1);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    })();
     </script>
 
 </body>

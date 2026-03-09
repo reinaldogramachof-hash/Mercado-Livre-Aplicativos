@@ -136,14 +136,84 @@ body {
 }
 
 @media (min-width: 1025px) {
-    .sidebar {
-        width: 280px;
+    #sidebar {
+        width: 68px !important;
         position: fixed;
         height: 100vh;
+        overflow: hidden;
+        transition: none !important;
+    }
+
+    #sidebar:hover {
+        width: 280px !important;
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.3);
     }
 
     .main-content {
-        margin-left: 280px;
+        margin-left: 68px;
+    }
+
+    /* Centraliza header quando retraído */
+    #sidebar:not(:hover) .sidebar-header {
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    #sidebar:not(:hover) .sidebar-header > div:first-child {
+        margin-right: 0 !important;
+    }
+
+    /* Remove padding horizontal do nav quando retraído */
+    #sidebar:not(:hover) nav {
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+    }
+
+    /* Centraliza nav items quando retraído */
+    #sidebar:not(:hover) .nav-item {
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* FIX: Lucide substitui <i> por <svg> — targetar svg */
+    #sidebar:not(:hover) .nav-item svg {
+        margin-right: 0 !important;
+        flex-shrink: 0;
+    }
+
+    /* Remove translateX no hover quando retraído */
+    #sidebar:not(:hover) .nav-item:hover {
+        transform: none !important;
+    }
+
+    /* Active nav sem border-left quando retraído */
+    #sidebar:not(:hover) .active-nav {
+        border-left: none !important;
+        border-radius: 0.75rem;
+    }
+
+    /* Oculta textos quando retraído */
+    #sidebar:not(:hover) .sidebar-header-text,
+    #sidebar:not(:hover) .sidebar-label,
+    #sidebar:not(:hover) .sidebar-section-divider,
+    #sidebar:not(:hover) .sidebar-footer-content {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    /* Revela textos ao expandir — sem fade, instantâneo */
+    #sidebar:hover .sidebar-header-text,
+    #sidebar:hover .sidebar-label,
+    #sidebar:hover .sidebar-section-divider,
+    #sidebar:hover .sidebar-footer-content {
+        opacity: 1;
+        width: auto;
+        pointer-events: auto;
     }
 }
 
@@ -352,5 +422,22 @@ body {
         font-size: 12px;
         line-height: 1.2;
         font-family: 'Courier New', monospace;
+    }
+
+    /* Estilos específicos para a Impressão da O.S (A4) */
+    #invoice-print {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        background: white !important;
+    }
+
+    #invoice-print * {
+        color: black !important;
+    }
+
+    .print-header-container {
+        display: block !important;
+        visibility: visible !important;
     }
 }
