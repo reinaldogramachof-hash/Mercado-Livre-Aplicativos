@@ -88,6 +88,31 @@ function router(view) {
     if (navEl) { navEl.classList.add('active-nav', 'text-white'); navEl.classList.remove('text-slate-400'); }
     const titles = { dashboard: 'Visão Geral', agenda: 'Agenda', team: 'Profissionais', services: 'Serviços', finance: 'Financeiro', clients: 'Clientes', reports: 'Relatórios', inventory: 'Estoque', instructions: 'Manual de Uso', settings: 'Configurações' };
     document.getElementById('page-title').textContent = titles[view] || 'Gestão Beleza';
+
+    // Botão de ação contextual do header
+    const headerBtn = document.getElementById('header-action-btn');
+    if (headerBtn) {
+        const headerActions = {
+            dashboard: { show: true, fn: 'openApptModal()', icon: 'plus' },
+            agenda: { show: true, fn: 'openApptModal()', icon: 'plus' },
+            clients: { show: true, fn: 'openClientModal()', icon: 'plus' },
+            team: { show: true, fn: 'openTeamModal()', icon: 'plus' },
+            services: { show: true, fn: 'openServiceModal()', icon: 'plus' },
+            finance: { show: true, fn: 'openExpenseModal()', icon: 'plus' },
+            inventory: { show: true, fn: 'openProductModal()', icon: 'plus' },
+            reports: { show: false, fn: '', icon: 'plus' },
+            settings: { show: false, fn: '', icon: 'plus' },
+            instructions: { show: false, fn: '', icon: 'plus' },
+        };
+        const action = headerActions[view] || { show: false };
+        if (action.show) {
+            headerBtn.setAttribute('onclick', action.fn);
+            headerBtn.classList.remove('hidden');
+        } else {
+            headerBtn.classList.add('hidden');
+        }
+    }
+
     if (window.innerWidth < 1024) document.getElementById('sidebar').classList.remove('open');
     document.getElementById('overlay').classList.add('hidden');
 }
@@ -190,13 +215,18 @@ function changeAgendaDate(days) { const input = document.getElementById('agenda-
 
 function renderAgenda() {
     const date = document.getElementById('agenda-date').value; const headerEl = document.getElementById('agenda-header'); const bodyEl = document.getElementById('agenda-body');
-    headerEl.style.gridTemplateColumns = `100px repeat(${db.team.length}, 1fr)`;
-    headerEl.innerHTML = `<div class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center flex items-center justify-center bg-surface-elevated">Horário</div>` + db.team.map(t => `<div class="p-4 text-sm font-bold text-slate-300 text-center truncate border-l border-white/5">${t.name}</div>`).join('');
+    const isMobile = window.innerWidth < 640;
+    const hourColWidth = isMobile ? '70px' : '100px';
+    headerEl.style.gridTemplateColumns = `${hourColWidth} repeat(${db.team.length}, 1fr)`;
+    headerEl.innerHTML = `<div class="p-3 sm:p-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center flex items-center justify-center bg-surface-elevated">Horário</div>` + db.team.map(t => {
+        const displayName = isMobile ? t.name.split(' ')[0] : t.name;
+        return `<div class="p-3 sm:p-4 text-xs sm:text-sm font-bold text-slate-300 text-center truncate border-l border-white/5">${displayName}</div>`;
+    }).join('');
     let html = '';
     for (let h = 8; h <= 20; h++) {
         const time = `${h.toString().padStart(2, '0')}:00`;
-        html += `<div class="grid divide-x divide-white/5 border-b border-white/5 hover:bg-white/[0.02] transition-colors" style="grid-template-columns: 100px repeat(${db.team.length}, 1fr)">`;
-        html += `<div class="p-3 text-xs font-bold text-slate-500 text-center flex items-center justify-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-rose-400 opacity-50"></i>${time}</div>`;
+        html += `<div class="grid divide-x divide-white/5 border-b border-white/5 hover:bg-white/[0.02] transition-colors" style="grid-template-columns: ${hourColWidth} repeat(${db.team.length}, 1fr)">`;
+        html += `<div class="p-2 sm:p-3 text-xs font-bold text-slate-500 text-center flex items-center justify-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-rose-400 opacity-50"></i>${time}</div>`;
         db.team.forEach(pro => {
             const appt = db.appointments.find(a => a.date === date && a.time === time && a.proId === pro.id && a.status !== 'canceled');
             if (appt) {

@@ -83,6 +83,36 @@
             "type": "info",
             "msg": "Geradas 1 chaves para Reinaldo Gramacho",
             "ip": "::1"
+        },
+        {
+            "timestamp": "2026-03-10 17:14:42",
+            "type": "info",
+            "msg": "Geradas 1 chaves (TRIAL) para Reinaldo Gramacho",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-03-10 17:16:49",
+            "type": "info",
+            "msg": "Sucesso: Chave FBCB-2256-6C94 ativada no device dev_z056qp4de_mmkvh2sg",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-03-10 17:16:51",
+            "type": "info",
+            "msg": "Recibo confirmado: chave=FBCB-2256-6C94 email=reinaldogramachof@gmail.com",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-03-10 17:18:51",
+            "type": "info",
+            "msg": "Trial expirado: chave FBCB-2256-6C94 marcada como expired no banco",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-03-10 17:20:26",
+            "type": "info",
+            "msg": "Trial expirado: chave FBCB-2256-6C94 marcada como expired no banco",
+            "ip": "::1"
         }
     ]
 }

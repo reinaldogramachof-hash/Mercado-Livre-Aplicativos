@@ -29,7 +29,7 @@
 
     <!-- TELA DE ATIVAÇÃO (Airlock) -->
     <section id="view-login"
-        class="hide fixed inset-0 z-[9999] min-h-screen flex items-center justify-center bg-slate-900 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-900 to-black p-6">
+        class="fixed inset-0 z-[9999] min-h-screen flex items-center justify-center bg-slate-900 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-900 to-black p-6">
         <div
             class="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl text-center">
             <div
@@ -67,8 +67,8 @@
     </div>
 
     <!-- Sidebar -->
-    <aside id="sidebar"
-        class="sidebar glass-dark text-white fixed top-0 left-0 z-40 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
+    <aside id="sidebar" style="display:none;"
+        class="hide sidebar glass-dark text-white fixed top-0 left-0 z-40 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
         <div
             class="sidebar-header h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-blue-500/20">
             <div
@@ -167,10 +167,10 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content min-h-screen flex flex-col">
+    <main id="app-main-content" style="display:none;" class="hide main-content min-h-screen flex flex-col">
         <!-- Header -->
-        <header
-            class="glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+        <header id="main-header" style="display:none;"
+            class="hide glass dark:bg-slate-900/80 h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -5646,6 +5646,39 @@
     <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
     <script>
         // ==========================================
+        // UI HELPERS (SMART LOCK)
+        // ==========================================
+        window.unlockSystem = function () {
+            const login = document.getElementById('view-login');
+            if (login) login.classList.add('hide');
+            if (login) login.style.display = 'none';
+
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('app-main-content');
+            const header = document.getElementById('main-header');
+
+            if (sidebar) { sidebar.style.display = ''; sidebar.classList.remove('hide'); }
+            if (main) { main.style.display = ''; main.classList.remove('hide'); }
+            if (header) { header.style.display = ''; header.classList.remove('hide'); }
+        };
+
+        // Verifica a licença já no carregamento local do DOM (fallback do lock.js externo)
+        document.addEventListener('DOMContentLoaded', () => {
+            const key = localStorage.getItem('assistencia_license');
+            if (key) {
+                // Se existe licença e o lock.js não barrou = Acesso Liberado!
+                unlockSystem();
+            } else {
+                // Força exibir tela de login (Airlock) se não houver licença
+                const login = document.getElementById('view-login');
+                if (login) {
+                    login.classList.remove('hide');
+                    login.style.display = 'flex';
+                }
+            }
+        });
+
+        // ==========================================
         // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
         // ==========================================
         window.activateLicense = async function (e) {
@@ -5674,10 +5707,10 @@
 
             if (_mk.includes(key.toUpperCase())) {
                 console.log('🔓 Master Access Granted');
-                localStorage.setItem('plena_license', key);
-                localStorage.setItem('ml_license_email', email);
-                localStorage.setItem('ml_master_mode', 'true');
-                localStorage.setItem('ml_receipt_confirmed', 'true');
+                localStorage.setItem('assistencia_license', key);
+                localStorage.setItem('assistencia_email', email);
+                localStorage.setItem('assistencia_master_mode', 'true');
+                localStorage.setItem('assistencia_receipt_confirmed', 'true');
 
                 if (btn) btn.innerText = '🔓 Acesso Liberado...';
                 setTimeout(() => {
@@ -5697,11 +5730,11 @@
                 const output = document.getElementById('activation-error');
                 if (output) output.classList.add('hidden');
 
-                // Gerar device_id único se não existir
-                let deviceId = localStorage.getItem('device_id');
+                // Gerar assistencia_device único se não existir
+                let deviceId = localStorage.getItem('assistencia_device');
                 if (!deviceId) {
                     deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
-                    localStorage.setItem('device_id', deviceId);
+                    localStorage.setItem('assistencia_device', deviceId);
                 }
 
                 const response = await fetch('../api_licenca_ml.php?action=activate', {
@@ -5709,7 +5742,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         license_key: key,
-                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        email: email,
                         device_id: deviceId
                     })
                 });
@@ -5718,12 +5751,12 @@
 
                 if (data.status === 'success') {
                     // ✅ Salva credenciais localmente
-                    localStorage.setItem('plena_license', key);
-                    localStorage.setItem('ml_license_email', email);
-                    localStorage.removeItem('ml_master_mode');
+                    localStorage.setItem('assistencia_license', key);
+                    localStorage.setItem('assistencia_email', email);
+                    localStorage.removeItem('assistencia_master_mode');
 
                     // Exibe modal de recibo ANTES de liberar o app
-                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                    if (!localStorage.getItem('assistencia_receipt_confirmed')) {
                         const loginView = document.getElementById('view-login');
                         if (loginView) {
                             loginView.classList.add('hide');
@@ -5779,8 +5812,8 @@
                 btn.disabled = true;
             }
 
-            const key = localStorage.getItem('plena_license');
-            const email = localStorage.getItem('ml_license_email') || '';
+            const key = localStorage.getItem('assistencia_license');
+            const email = localStorage.getItem('assistencia_email') || '';
 
             try {
                 const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
@@ -5796,7 +5829,7 @@
                 const data = await response.json();
 
                 if (data.status === 'success') {
-                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    localStorage.setItem('assistencia_receipt_confirmed', 'true');
                     const modal = document.getElementById('welcome-receipt-modal');
                     if (modal) modal.classList.add('hidden');
                     alert("Recebimento Confirmado! Bem-vindo ao sistema.");
@@ -5821,103 +5854,103 @@
 
     <!-- Módulo de Manual Interativo -->
     <script>
-    (function() {
-        // ==========================================
-        // INICIALIZAÇÃO DO MANUAL INTERATIVO
-        // ==========================================
+        (function () {
+            // ==========================================
+            // INICIALIZAÇÃO DO MANUAL INTERATIVO
+            // ==========================================
 
-        const MANUAL_SECTIONS = ['instalacao', 'controle-estoque', 'integracao-os-estoque', 'backup'];
-        const STORAGE_KEY = 'manual_progress';
+            const MANUAL_SECTIONS = ['instalacao', 'controle-estoque', 'integracao-os-estoque', 'backup'];
+            const STORAGE_KEY = 'manual_progress';
 
-        function loadProgress() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                return saved ? JSON.parse(saved) : {};
-            } catch {
-                return {};
+            function loadProgress() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    return saved ? JSON.parse(saved) : {};
+                } catch {
+                    return {};
+                }
             }
-        }
 
-        function saveProgress(progress) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-        }
+            function saveProgress(progress) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            }
 
-        function updateProgressBar() {
-            const progress = loadProgress();
-            const total = MANUAL_SECTIONS.length;
-            const completed = MANUAL_SECTIONS.filter(id => progress[id] === true).length;
-            const percent = total > 0 ? (completed / total) * 100 : 0;
-
-            const bar = document.getElementById('tutorial-progress');
-            const text = document.getElementById('tutorial-progress-text');
-
-            if (bar) bar.style.width = percent + '%';
-            if (text) text.textContent = `${completed} / ${total} seções`;
-        }
-
-        function addCheckboxesToSections() {
-            MANUAL_SECTIONS.forEach(sectionId => {
-                const section = document.getElementById(sectionId);
-                if (!section) return;
-
-                const header = section.querySelector('.flex.items-center.justify-between.mb-6');
-                if (!header) return;
-
-                if (header.querySelector('.manual-section-checkbox')) return;
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'manual-section-checkbox w-5 h-5 rounded border-gray-300 cursor-pointer';
-                checkbox.setAttribute('data-section', sectionId);
-                checkbox.setAttribute('title', 'Marcar seção como lida');
-
+            function updateProgressBar() {
                 const progress = loadProgress();
-                checkbox.checked = progress[sectionId] === true;
+                const total = MANUAL_SECTIONS.length;
+                const completed = MANUAL_SECTIONS.filter(id => progress[id] === true).length;
+                const percent = total > 0 ? (completed / total) * 100 : 0;
 
-                checkbox.addEventListener('change', function(e) {
-                    e.stopPropagation();
-                    const id = this.dataset.section;
-                    const p = loadProgress();
-                    p[id] = this.checked;
-                    saveProgress(p);
-                    updateProgressBar();
+                const bar = document.getElementById('tutorial-progress');
+                const text = document.getElementById('tutorial-progress-text');
+
+                if (bar) bar.style.width = percent + '%';
+                if (text) text.textContent = `${completed} / ${total} seções`;
+            }
+
+            function addCheckboxesToSections() {
+                MANUAL_SECTIONS.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (!section) return;
+
+                    const header = section.querySelector('.flex.items-center.justify-between.mb-6');
+                    if (!header) return;
+
+                    if (header.querySelector('.manual-section-checkbox')) return;
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'manual-section-checkbox w-5 h-5 rounded border-gray-300 cursor-pointer';
+                    checkbox.setAttribute('data-section', sectionId);
+                    checkbox.setAttribute('title', 'Marcar seção como lida');
+
+                    const progress = loadProgress();
+                    checkbox.checked = progress[sectionId] === true;
+
+                    checkbox.addEventListener('change', function (e) {
+                        e.stopPropagation();
+                        const id = this.dataset.section;
+                        const p = loadProgress();
+                        p[id] = this.checked;
+                        saveProgress(p);
+                        updateProgressBar();
+                    });
+
+                    header.appendChild(checkbox);
                 });
+            }
 
-                header.appendChild(checkbox);
+            function initInteractiveManual() {
+                addCheckboxesToSections();
+                updateProgressBar();
+            }
+
+            // ==========================================
+            // INTEGRAÇÃO COM O ROTEADOR EXISTENTE
+            // ==========================================
+
+            const originalRouter = window.router;
+
+            window.router = function (view) {
+                if (originalRouter) originalRouter(view);
+                if (view === 'instructions') {
+                    setTimeout(initInteractiveManual, 100);
+                }
+            };
+
+            // Fallback: inicializa se view-instructions já estiver visível
+            document.addEventListener('DOMContentLoaded', function () {
+                const vi = document.getElementById('view-instructions');
+                if (vi && !vi.classList.contains('hide')) {
+                    setTimeout(initInteractiveManual, 100);
+                }
             });
-        }
 
-        function initInteractiveManual() {
-            addCheckboxesToSections();
-            updateProgressBar();
-        }
-
-        // ==========================================
-        // INTEGRAÇÃO COM O ROTEADOR EXISTENTE
-        // ==========================================
-
-        const originalRouter = window.router;
-
-        window.router = function(view) {
-            if (originalRouter) originalRouter(view);
-            if (view === 'instructions') {
-                setTimeout(initInteractiveManual, 100);
-            }
-        };
-
-        // Fallback: inicializa se view-instructions já estiver visível
-        document.addEventListener('DOMContentLoaded', function() {
-            const vi = document.getElementById('view-instructions');
-            if (vi && !vi.classList.contains('hide')) {
-                setTimeout(initInteractiveManual, 100);
-            }
-        });
-
-        // ==========================================
-        // ESTILOS DOS CHECKBOXES
-        // ==========================================
-        const style = document.createElement('style');
-        style.textContent = `
+            // ==========================================
+            // ESTILOS DOS CHECKBOXES
+            // ==========================================
+            const style = document.createElement('style');
+            style.textContent = `
             .manual-section-checkbox {
                 margin-left: 12px;
                 transform: scale(1.2);
@@ -5930,8 +5963,8 @@
                 }
             }
         `;
-        document.head.appendChild(style);
-    })();
+            document.head.appendChild(style);
+        })();
     </script>
 
 </body>

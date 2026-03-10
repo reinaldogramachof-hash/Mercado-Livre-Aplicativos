@@ -103,7 +103,7 @@
 
         <!-- Sidebar -->
         <aside id="sidebar"
-            class="sidebar fixed inset-y-0 left-0 z-30 h-full glass flex flex-col shadow-2xl border-r border-white/5">
+            class="sidebar glass text-white fixed top-0 left-0 z-40 h-screen flex flex-col shadow-2xl border-r border-white/5">
             <!-- Brand - DNA Plena -->
             <div
                 class="sidebar-header h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-rose-500/15">
@@ -119,70 +119,75 @@
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+            <nav class="flex-1 overflow-y-auto py-3 px-4 space-y-1">
                 <!-- Visão Geral -->
                 <button onclick="router('dashboard')" id="nav-dashboard"
-                    class="nav-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                    class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span class="sidebar-label">Visão Geral</span>
                 </button>
 
                 <!-- Operacional -->
-                <div class="pt-4 mt-3">
-                    <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600 sidebar-section-divider">Operacional</p>
+                <div class="pt-2 mt-1">
+                    <p
+                        class="px-4 pb-1 text-[10px] font-black uppercase tracking-widest text-slate-600 sidebar-section-divider">
+                        Operacional</p>
                     <button onclick="router('agenda')" id="nav-agenda"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="calendar" class="w-5 h-5"></i>
                         <span class="sidebar-label">Agenda</span>
                     </button>
                     <button onclick="router('clients')" id="nav-clients"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="contact" class="w-5 h-5"></i>
                         <span class="sidebar-label">Clientes</span>
                     </button>
                 </div>
 
                 <!-- Gestão -->
-                <div class="pt-4 mt-2 border-t border-white/5">
-                    <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600 sidebar-section-divider">Gestão</p>
+                <div class="pt-2 mt-1 border-t border-white/5">
+                    <p
+                        class="px-4 pb-1 text-[10px] font-black uppercase tracking-widest text-slate-600 sidebar-section-divider">
+                        Gestão</p>
                     <button onclick="router('team')" id="nav-team"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="users" class="w-5 h-5"></i>
                         <span class="sidebar-label">Profissionais</span>
                     </button>
                     <button onclick="router('services')" id="nav-services"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="sparkles" class="w-5 h-5"></i>
                         <span class="sidebar-label">Serviços</span>
                     </button>
                     <button onclick="router('finance')" id="nav-finance"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="wallet" class="w-5 h-5"></i>
                         <span class="sidebar-label">Financeiro</span>
                     </button>
                     <button onclick="router('reports')" id="nav-reports"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
                         <span class="sidebar-label">Relatórios</span>
                     </button>
                     <button onclick="router('inventory')" id="nav-inventory"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
                         <i data-lucide="package" class="w-5 h-5"></i>
                         <span class="sidebar-label">Estoque</span>
                     </button>
                 </div>
 
                 <!-- Sistema -->
-                <div class="pt-4 mt-2 border-t border-white/5">
-                    <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600 sidebar-section-divider">Sistema</p>
-
+                <div class="pt-2 mt-1 border-t border-white/5">
+                    <p
+                        class="px-4 pb-1 text-[10px] font-black uppercase tracking-widest text-slate-600 sidebar-section-divider">
+                        Sistema</p>
                     <button onclick="router('settings')" id="nav-settings"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
                         <i data-lucide="settings" class="w-5 h-5"></i>
                         <span class="sidebar-label">Configurações</span>
                     </button>
                     <button onclick="router('instructions')" id="nav-instructions"
-                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
+                        class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
                         <i data-lucide="book-open" class="w-5 h-5"></i>
                         <span class="sidebar-label">Manual de Uso</span>
                     </button>
@@ -201,7 +206,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content flex-1 flex flex-col h-screen overflow-hidden relative">
+        <main class="main-content min-h-screen flex flex-col relative">
             <!-- Header -->
             <header
                 class="glass sticky top-0 z-10 px-6 py-4 flex justify-between items-center shadow-sm border-b border-white/5">
@@ -222,7 +227,7 @@
                         <i data-lucide="download" class="w-4 h-4"></i>
                         <span class="hidden sm:inline">Instalar App</span>
                     </button>
-                    <button onclick="openApptModal()"
+                    <button id="header-action-btn" onclick="openApptModal()"
                         class="bg-brand hover:bg-brand-dark text-white px-5 py-2.5 rounded-xl font-bold shadow-glow hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 text-sm">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                         <span class="hidden sm:inline">Novo Agendamento</span>
@@ -231,214 +236,247 @@
             </header>
 
             <!-- Scrollable Content Area -->
-            <div id="main-content" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-32">
+            <div id="main-content" class="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-8 pb-32">
 
                 <!-- 1. DASHBOARD -->
-                <section id="view-dashboard" class="view-section fade-in max-w-7xl mx-auto">
+                <section id="view-dashboard" class="view-section fade-in">
                     <!-- Stats Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <div
-                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
-                            <div
-                                class="absolute right-0 top-0 w-24 h-24 bg-rose-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
-                            </div>
-                            <div class="relative z-10">
-                                <p
-                                    class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
-                                    Agendamentos
-                                </p>
-                                <h3 id="dash-appt-today" class="text-3xl font-black text-white dark:text-white">0</h3>
-                                <div
-                                    class="mt-3 flex items-center text-xs font-bold text-rose-400 bg-rose-500/10 w-max px-2.5 py-1 rounded-lg">
-                                    <i data-lucide="calendar" class="w-3 h-3 mr-1.5"></i>
-                                    <span>Hoje</span>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                        Agendamentos</p>
+                                    <h3 id="dash-appt-today" class="text-3xl font-black text-rose-400">0</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Hoje</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
+                                    <i data-lucide="calendar" class="w-6 h-6 text-rose-400"></i>
                                 </div>
                             </div>
                         </div>
-
-                        <div
-                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
-                            <div
-                                class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
-                            </div>
-                            <div class="relative z-10">
-                                <p
-                                    class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
-                                    Faturamento
-                                </p>
-                                <h3 id="dash-rev-today" class="text-3xl font-black text-white dark:text-white">R$ 0,00
-                                </h3>
-                                <div
-                                    class="mt-3 flex items-center text-xs font-bold text-emerald-400 bg-emerald-500/10 w-max px-2.5 py-1 rounded-lg">
-                                    <i data-lucide="trending-up" class="w-3 h-3 mr-1.5"></i>
-                                    <span>Hoje</span>
+                        <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                        Faturamento</p>
+                                    <h3 id="dash-rev-today" class="text-2xl font-black text-emerald-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Hoje</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                    <i data-lucide="trending-up" class="w-6 h-6 text-emerald-400"></i>
                                 </div>
                             </div>
                         </div>
-
-                        <div
-                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
-                            <div
-                                class="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
-                            </div>
-                            <div class="relative z-10">
-                                <p
-                                    class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
-                                    Comissões</p>
-                                <h3 id="dash-comm-pending" class="text-3xl font-black text-white dark:text-white">R$
-                                    0,00</h3>
-                                <div
-                                    class="mt-3 flex items-center text-xs font-bold text-blue-400 bg-blue-500/10 w-max px-2.5 py-1 rounded-lg">
-                                    <i data-lucide="hourglass" class="w-3 h-3 mr-1.5"></i>
-                                    <span>Pendente</span>
+                        <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Comissões
+                                    </p>
+                                    <h3 id="dash-comm-pending" class="text-2xl font-black text-blue-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Pendente</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                    <i data-lucide="coins" class="w-6 h-6 text-blue-400"></i>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Dark Card -->
-                        <div
-                            class="bg-gradient-to-br from-rose-900/40 to-rose-950/60 p-6 rounded-2xl shadow-xl border border-rose-500/10 text-white card-hover relative overflow-hidden group">
-                            <div
-                                class="absolute right-0 top-0 w-32 h-32 bg-rose-500/5 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-125 duration-700">
-                            </div>
-                            <div class="relative z-10">
-                                <p class="text-xs font-bold text-rose-300/60 uppercase tracking-wider mb-4">Ações
-                                    Rápidas</p>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <button onclick="openClosingModal()"
-                                        class="bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-colors text-center border border-white/5">
-                                        <i data-lucide="lock" class="w-5 h-5 mx-auto mb-1 text-rose-300"></i>
-                                        <span class="text-[10px] font-bold">Fechar Caixa</span>
-                                    </button>
-                                    <button onclick="router('finance')"
-                                        class="bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-colors text-center border border-white/5">
-                                        <i data-lucide="pie-chart" class="w-5 h-5 mx-auto mb-1 text-emerald-300"></i>
-                                        <span class="text-[10px] font-bold">Relatórios</span>
-                                    </button>
+                        <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Clientes
+                                        Ativos</p>
+                                    <h3 id="dash-active-clients" class="text-3xl font-black text-amber-400">0</h3>
+                                    <p class="text-xs text-slate-500 mt-1">No mês</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center">
+                                    <i data-lucide="users" class="w-6 h-6 text-amber-400"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Quick Actions + Chart Row -->
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+                        <!-- Quick Actions Card -->
+                        <div class="bg-surface-card p-6 rounded-2xl shadow-sm border border-white/5">
+                            <h3 class="font-bold text-white mb-4 flex items-center">
+                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-rose-400"></i>
+                                Ações Rápidas
+                            </h3>
+                            <div class="space-y-3">
+                                <button onclick="openApptModal()"
+                                    class="w-full flex items-center justify-between p-3 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors">
+                                    <span class="text-sm font-medium text-rose-300">Novo Agendamento</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4 text-rose-400"></i>
+                                </button>
+                                <button onclick="openClosingModal()"
+                                    class="w-full flex items-center justify-between p-3 bg-amber-500/10 hover:bg-amber-500/20 rounded-lg transition-colors">
+                                    <span class="text-sm font-medium text-amber-300">Fechar Caixa</span>
+                                    <i data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
+                                </button>
+                                <button onclick="router('reports')"
+                                    class="w-full flex items-center justify-between p-3 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-lg transition-colors">
+                                    <span class="text-sm font-medium text-emerald-300">Gerar Relatório</span>
+                                    <i data-lucide="bar-chart-3" class="w-4 h-4 text-emerald-400"></i>
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- Upcoming List -->
                         <div
-                            class="col-span-2 bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden">
+                            class="xl:col-span-2 bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden">
                             <div
-                                class="p-6 border-b border-white/5 flex justify-between items-center bg-surface-elevated/30">
-                                <h3 class="font-bold text-lg text-white flex items-center gap-2">
-                                    <i data-lucide="clock" class="w-5 h-5 text-rose-400"></i>
-                                    Próximos Agendamentos
+                                class="p-4 sm:p-6 border-b border-white/5 flex justify-between items-center bg-surface-elevated/30 gap-3">
+                                <h3 class="font-bold text-base sm:text-lg text-white flex items-center gap-2 min-w-0">
+                                    <i data-lucide="clock" class="w-5 h-5 text-rose-400 flex-shrink-0"></i>
+                                    <span class="truncate">Próximos Agendamentos</span>
                                 </h3>
                                 <button onclick="router('agenda')"
-                                    class="text-xs font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 px-3 py-1.5 rounded-lg transition-colors">
-                                    Ver todos
+                                    class="text-xs font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex-shrink-0">
+                                    Ver todos →
                                 </button>
                             </div>
                             <div id="upcoming-appts" class="p-6 space-y-4">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Revenue Chart Section -->
-                        <div
-                            class="bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden flex flex-col">
-                            <div class="p-6 border-b border-white/5">
-                                <h3 class="font-bold text-lg text-white dark:text-white">Tendência Semanal</h3>
-                                <p class="text-xs text-slate-500">Receita nos últimos 7 dias</p>
-                            </div>
-                            <div class="flex-1 p-6 flex items-end justify-center pb-2 relative min-h-[200px]"
-                                id="mini-chart-container">
-                                <!-- SVG Chart Injected Here -->
-                            </div>
+                    <!-- Revenue Chart -->
+                    <div
+                        class="bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden flex flex-col mb-8">
+                        <div class="p-6 border-b border-white/5">
+                            <h3 class="font-bold text-lg text-white">Tendência Semanal</h3>
+                            <p class="text-xs text-slate-500">Receita nos últimos 7 dias</p>
+                        </div>
+                        <div class="flex-1 p-6 flex items-end justify-center pb-2 relative min-h-[200px]"
+                            id="mini-chart-container">
+                            <!-- SVG Chart Injected Here -->
                         </div>
                     </div>
                 </section>
 
                 <!-- 2. TEAM MANAGEMENT -->
-                <section id="view-team" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-lg text-white dark:text-white">Profissionais</h3>
+                <section id="view-team" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Profissionais</h2>
+                            <p class="text-sm text-slate-500">Gerencie a equipe do salão</p>
+                        </div>
                         <button onclick="openTeamModal()"
-                            class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
-                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand text-white rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            <span class="hidden sm:inline">Adicionar Profissional</span>
+                            <span class="sm:hidden">Adicionar</span>
                         </button>
                     </div>
                     <div id="team-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </section>
 
                 <!-- 3. SERVICES MANAGEMENT -->
-                <section id="view-services" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-lg text-white dark:text-white">Serviços</h3>
+                <section id="view-services" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Serviços</h2>
+                            <p class="text-sm text-slate-500">Gerencie os serviços oferecidos</p>
+                        </div>
                         <button onclick="openServiceModal()"
-                            class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
-                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand text-white rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span class="hidden sm:inline">Adicionar Serviço</span>
+                            <span class="sm:hidden">Adicionar</span>
                         </button>
                     </div>
                     <div id="services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </section>
 
                 <!-- 4. FINANCE MANAGEMENT -->
-                <section id="view-finance" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <h3 class="font-bold text-lg text-white">Financeiro</h3>
-                        <div class="flex gap-2">
+                <section id="view-finance" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Financeiro</h2>
+                            <p class="text-sm text-slate-500">Controle de receitas, despesas e comissões</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                             <button onclick="openClosingModal()"
-                                class="bg-surface-card border border-white/10 text-slate-300 px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/10 transition-colors">
-                                <i data-lucide="lock" class="w-4 h-4 inline mr-1"></i> Fechar Caixa
+                                class="flex-1 sm:flex-none bg-surface-card border border-white/10 text-slate-300 px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5 min-h-[44px]">
+                                <i data-lucide="lock" class="w-4 h-4"></i> <span>Fechar Caixa</span>
                             </button>
                             <button onclick="openExpenseModal()"
-                                class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-rose-500/20 transition-colors">
-                                <i data-lucide="plus-circle" class="w-4 h-4 inline mr-1"></i> Lançamento
+                                class="flex-1 sm:flex-none bg-rose-500 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-rose-500/20 transition-colors flex items-center justify-center gap-1.5 min-h-[44px]">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i> <span>Lançamento</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Summary Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div
-                            class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
-                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Receita do Mês
-                            </p>
-                            <h3 id="fin-income" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Receita do
+                                        Mês</p>
+                                    <h3 id="fin-income" class="text-2xl font-black text-emerald-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Entradas</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                    <i data-lucide="trending-up" class="w-6 h-6 text-emerald-400"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
-                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Despesas do Mês
-                            </p>
-                            <h3 id="fin-expense" class="text-2xl font-black text-rose-400 mt-2">R$ 0,00</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Despesas
+                                        do Mês</p>
+                                    <h3 id="fin-expense" class="text-2xl font-black text-rose-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Saídas</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
+                                    <i data-lucide="trending-down" class="w-6 h-6 text-rose-400"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
-                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Comissões do Mês
-                            </p>
-                            <h3 id="fin-commission" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Comissões
+                                        do Mês</p>
+                                    <h3 id="fin-commission" class="text-2xl font-black text-blue-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">A pagar</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                    <i data-lucide="coins" class="w-6 h-6 text-blue-400"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Filters -->
                     <div
-                        class="bg-surface-card p-4 rounded-2xl border border-white/5 mb-6 flex flex-wrap gap-3 items-center">
-                        <input type="text" id="search-term" placeholder="Buscar..."
-                            class="flex-1 min-w-[150px] bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-white focus:border-rose-500 outline-none"
+                        class="bg-surface-card p-3 sm:p-4 rounded-2xl border border-white/5 mb-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center">
+                        <input type="text" id="search-term" placeholder="🔍 Buscar..."
+                            class="flex-1 min-w-0 sm:min-w-[150px] bg-white/5 border border-white/10 px-3 py-2.5 rounded-xl text-sm text-white focus:border-rose-500 outline-none"
                             oninput="renderFinance()">
                         <select id="filter-type"
-                            class="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
+                            class="bg-white/5 border border-white/10 px-3 py-2.5 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none w-full sm:w-auto"
                             onchange="renderFinance()">
                             <option value="all">Todos</option>
                             <option value="income">Entradas</option>
                             <option value="expense">Saídas</option>
                         </select>
-                        <input type="date" id="filter-start"
-                            class="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
-                            onchange="renderFinance()">
-                        <input type="date" id="filter-end"
-                            class="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
-                            onchange="renderFinance()">
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <input type="date" id="filter-start"
+                                class="flex-1 sm:flex-none bg-white/5 border border-white/10 px-3 py-2.5 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
+                                onchange="renderFinance()">
+                            <input type="date" id="filter-end"
+                                class="flex-1 sm:flex-none bg-white/5 border border-white/10 px-3 py-2.5 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
+                                onchange="renderFinance()">
+                        </div>
                         <button onclick="clearFinanceFilters()"
-                            class="text-xs font-bold text-slate-500 hover:text-rose-400 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors">
-                            <i data-lucide="x-circle" class="w-4 h-4 inline mr-1"></i>Limpar
+                            class="text-xs font-bold text-slate-500 hover:text-rose-400 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors flex items-center justify-center gap-1 min-h-[44px] sm:min-h-0">
+                            <i data-lucide="x-circle" class="w-4 h-4"></i><span>Limpar</span>
                         </button>
                     </div>
 
@@ -466,10 +504,13 @@
                 </section>
 
                 <!-- 5. REPORTS -->
-                <section id="view-reports" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                        <h3 class="font-bold text-lg text-white">Relatórios</h3>
-                        <div class="flex flex-wrap gap-2 items-center">
+                <section id="view-reports" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Relatórios</h2>
+                            <p class="text-sm text-slate-500">Análise de performance e resultados</p>
+                        </div>
+                        <div class="flex items-center gap-3">
                             <div class="flex gap-2 bg-surface-card p-2 rounded-xl shadow-sm border border-white/5">
                                 <input type="date" id="rep-start"
                                     class="text-sm border-none outline-none text-slate-300 bg-transparent">
@@ -480,28 +521,52 @@
                                     class="bg-brand text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-brand-dark transition-colors">Filtrar</button>
                             </div>
                             <button onclick="shareReport()"
-                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl font-bold transition-colors shadow-lg flex items-center gap-2">
-                                <i data-lucide="message-circle" class="w-4 h-4"></i> <span
-                                    class="hidden md:inline">Compartilhar</span>
+                                class="flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-colors shadow-lg">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                <span class="hidden sm:inline">Compartilhar</span>
                             </button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div
-                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Receita Total</p>
-                            <h3 id="rep-total-rev" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Receita
+                                        Total</p>
+                                    <h3 id="rep-total-rev" class="text-2xl font-black text-emerald-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">No período</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                    <i data-lucide="trending-up" class="w-6 h-6 text-emerald-400"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Despesas</p>
-                            <h3 id="rep-total-exp" class="text-3xl font-black text-rose-400 mt-2">R$ 0,00</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Despesas
+                                    </p>
+                                    <h3 id="rep-total-exp" class="text-2xl font-black text-rose-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">No período</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
+                                    <i data-lucide="trending-down" class="w-6 h-6 text-rose-400"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Lucro Líquido</p>
-                            <h3 id="rep-net-profit" class="text-3xl font-black text-brand mt-2">R$ 0,00</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Lucro
+                                        Líquido</p>
+                                    <h3 id="rep-net-profit" class="text-2xl font-black text-brand">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Resultado</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
+                                    <i data-lucide="wallet" class="w-6 h-6 text-rose-400"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -520,12 +585,17 @@
                 </section>
 
                 <!-- 6. CLIENTS -->
-                <section id="view-clients" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-lg text-white">Clientes</h3>
+                <section id="view-clients" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Clientes</h2>
+                            <p class="text-sm text-slate-500">Gerencie seu cadastro de clientes</p>
+                        </div>
                         <button onclick="openClientModal()"
-                            class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
-                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
+                            class="flex items-center gap-2 px-4 py-2.5 bg-brand text-white rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            <span class="hidden sm:inline">Novo Cliente</span>
+                            <span class="sm:hidden">Adicionar</span>
                         </button>
                     </div>
                     <div id="clients-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -534,67 +604,94 @@
 
 
                 <!-- AGENDA VIEW -->
-                <section id="view-agenda" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <section id="view-agenda" class="view-section hide fade-in">
+                    <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center mb-6 gap-3">
                         <h3 class="font-bold text-lg text-white flex items-center gap-2">
                             <i data-lucide="calendar-heart" class="text-rose-400"></i> Agenda Diária
                         </h3>
-                        <div class="flex gap-3 bg-surface-card p-2 rounded-2xl shadow-sm border border-white/5">
+                        <div
+                            class="flex gap-2 sm:gap-3 bg-surface-card p-2 rounded-2xl shadow-sm border border-white/5 justify-center items-center">
                             <button onclick="changeAgendaDate(-1)"
-                                class="p-2 hover:bg-white/5 rounded-xl transition-colors"><i data-lucide="chevron-left"
-                                    class="w-5 h-5 text-slate-400"></i></button>
+                                class="p-2.5 hover:bg-white/5 rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"><i
+                                    data-lucide="chevron-left" class="w-5 h-5 text-slate-400"></i></button>
                             <input type="date" id="agenda-date"
-                                class="border-none text-slate-300 font-bold text-sm focus:ring-0 outline-none bg-transparent"
+                                class="border-none text-slate-300 font-bold text-sm focus:ring-0 outline-none bg-transparent text-center flex-1 sm:flex-none"
                                 onchange="renderAgenda()">
                             <button onclick="changeAgendaDate(1)"
-                                class="p-2 hover:bg-white/5 rounded-xl transition-colors"><i data-lucide="chevron-right"
-                                    class="w-5 h-5 text-slate-400"></i></button>
+                                class="p-2.5 hover:bg-white/5 rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"><i
+                                    data-lucide="chevron-right" class="w-5 h-5 text-slate-400"></i></button>
                         </div>
                     </div>
 
                     <div
-                        class="bg-surface-card rounded-3xl shadow-sm border border-white/5 overflow-hidden relative min-h-[500px]">
+                        class="bg-surface-card rounded-3xl shadow-sm border border-white/5 overflow-x-auto relative min-h-[500px]">
                         <div id="agenda-header"
-                            class="grid divide-x divide-white/5 bg-surface-elevated border-b border-white/5 sticky top-0 z-10 w-full">
+                            class="grid divide-x divide-white/5 bg-surface-elevated border-b border-white/5 sticky top-0 z-10 w-full"
+                            style="min-width: 320px">
                         </div>
-                        <div id="agenda-body" class="relative w-full"></div>
+                        <div id="agenda-body" class="relative w-full" style="min-width: 320px"></div>
                     </div>
                 </section>
 
                 <!-- 9. ESTOQUE -->
-                <section id="view-inventory" class="view-section hide fade-in max-w-7xl mx-auto">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-bold text-lg text-white flex items-center gap-2">
-                            <i data-lucide="package" class="text-rose-400"></i> Estoque
-                        </h3>
-                        <div class="flex gap-2">
+                <section id="view-inventory" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Controle de Estoque</h2>
+                            <p class="text-sm text-slate-500">Gerencie produtos e movimentações</p>
+                        </div>
+                        <div class="flex items-center gap-3">
                             <button onclick="openMovementModal()"
-                                class="border border-white/10 hover:bg-white/5 text-slate-300 px-4 py-2 rounded-xl text-sm font-bold transition-colors">
-                                <i data-lucide="arrow-left-right" class="w-4 h-4 inline mr-1"></i> Movimentar
+                                class="flex-1 sm:flex-none border border-white/10 hover:bg-white/5 text-slate-300 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-1.5 min-h-[44px]">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4"></i> <span>Movimentar</span>
                             </button>
                             <button onclick="openProductModal()"
-                                class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
-                                <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Novo Produto
+                                class="flex-1 sm:flex-none bg-brand text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors flex items-center justify-center gap-1.5 min-h-[44px]">
+                                <i data-lucide="plus" class="w-4 h-4"></i> <span>Novo Produto</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div
-                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Produtos</p>
-                            <h3 id="inv-total-products" class="text-3xl font-black text-white mt-2">0</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total
+                                        Produtos</p>
+                                    <h3 id="inv-total-products" class="text-3xl font-black text-white">0</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Itens cadastrados</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
+                                    <i data-lucide="package" class="w-6 h-6 text-rose-400"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Valor em Estoque</p>
-                            <h3 id="inv-total-value" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Valor em
+                                        Estoque</p>
+                                    <h3 id="inv-total-value" class="text-2xl font-black text-emerald-400">R$ 0,00</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Em estoque</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                    <i data-lucide="dollar-sign" class="w-6 h-6 text-emerald-400"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Estoque Baixo</p>
-                            <h3 id="inv-low-stock" class="text-3xl font-black text-amber-400 mt-2">0</h3>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Estoque
+                                        Baixo</p>
+                                    <h3 id="inv-low-stock" class="text-3xl font-black text-amber-400">0</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Atenção necessária</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center">
+                                    <i data-lucide="alert-triangle" class="w-6 h-6 text-amber-400"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1299,7 +1396,7 @@
                 </section>
 
                 <!-- View: Configurações -->
-                <section id="view-settings" class="view-section hide fade-in max-w-6xl mx-auto">
+                <section id="view-settings" class="view-section hide fade-in">
                     <div class="mb-6">
                         <h2 class="text-xl font-bold text-white mb-2">Configurações</h2>
                         <p class="text-sm text-slate-400">Personalize o sistema</p>
@@ -1475,12 +1572,12 @@
                 </div>
                 <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Serviço</label><select
                         id="ap-service" required
-                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none [&>option]:text-black"></select>
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none"></select>
                 </div>
                 <div><label
                         class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Profissional</label><select
                         id="ap-pro" required
-                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none [&>option]:text-black"></select>
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none"></select>
                 </div>
                 <button type="submit"
                     class="w-full bg-brand text-white py-4 rounded-xl font-bold shadow-glow hover:bg-brand-dark transition-all mt-4 transform active:scale-95">Confirmar

@@ -1,159 +1,48 @@
-/**
- * Lock.js - GuardiÃ£o de SeguranÃ§a V12.1 (Receipt + Trial + Email Capture)
- * PadrÃ£o ML Factory - Confirm Receipt System
- */
 (function () {
-    const LICENSE_KEY = 'plena_license';
-    const EMAIL_KEY = 'ml_license_email';
-    const API_URL = '../api_licenca_ml.php';
+    // V11.4 - SMART LOCK (Status Check)
+    const licenseKey = localStorage.getItem('assistencia_license');
+    const licenseEmail = localStorage.getItem('assistencia_email');
 
-    function getLocalLicense() {
-        return localStorage.getItem(LICENSE_KEY);
+    // 1. Verificação Básica de Existência
+    if (!licenseKey || !licenseEmail) {
+        // Redireciona para ativação se não houver licença, exceto na página de entrada
+        const isEntryPage = window.location.pathname.endsWith('index.html') ||
+            window.location.pathname.endsWith('/') ||
+            window.location.pathname === '';
+
+        if (!isEntryPage) {
+            console.log('Acesso negado: Redirecionando para ativação.');
+            window.location.href = 'index.html';
+        }
+        return;
     }
 
-    async function checkStatus() {
-        // --- MASTER PASSWORD BYPASS ---
-        if (localStorage.getItem('ml_master_mode') === 'true') {
-            unlockSystem();
-            console.log('ðŸ”“ Master Mode Enabled - API Check Skipped');
-            return;
-        }
+    // 2. Smart Lock: Verificação de Status Online (Silenciosa)
+    // Se tiver internet, valida se a chave foi bloqueada/cancelada
+    if (navigator.onLine) {
+        // Endpoint relativo, assume que lock.js está na raiz do app (ex: /gestao-assistencia/lock.js)
+        const API_CHECK = '../api_licenca_ml.php?action=verify';
 
-        const key = getLocalLicense();
-
-        if (!key) {
-            redirectToLogin("Ative sua licenÃ§a para continuar.");
-            return;
-        }
-
-        try {
-            const res = await fetch(API_URL + '?action=verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ license_key: key })
-            });
-            const data = await res.json();
-
-            if (data.status === 'success') {
-                if (data.license_status === 'expired') {
-                    blockSystem("Seu perÃ­odo de teste acabou.", "Adquira a versÃ£o vitalÃ­cia para continuar usando seus dados.");
-                } else if (data.license_status === 'blocked') {
-                    blockSystem("LicenÃ§a Bloqueada", "Entre em contato com o suporte.");
-                } else {
-                    // ATIVO ou TRIAL VÃLIDO
-                    if (!localStorage.getItem('ml_receipt_confirmed') && localStorage.getItem('ml_master_mode') !== 'true') {
-                        hideApp();
-                        const login = document.getElementById('view-login');
-                        if (login) login.style.display = 'none';
-                        const receiptModal = document.getElementById('welcome-receipt-modal');
-                        if (receiptModal) receiptModal.classList.remove('hidden');
-                    } else {
-                        unlockSystem();
-                        if (data.is_trial && data.expiration_date) {
-                            showTrialBanner(data.expiration_date);
-                        }
-                    }
+        fetch(API_CHECK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ license_key: licenseKey })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success' && data.license_status === 'blocked') {
+                    console.warn('Licença BLOCKED pelo servidor.');
+                    localStorage.removeItem('assistencia_license'); // Mata a sessão
+                    localStorage.removeItem('assistencia_email');
+                    window.location.href = 'access_denied.html'; // Chuta para página de bloqueio
                 }
-            } else {
-                redirectToLogin("LicenÃ§a invÃ¡lida ou nÃ£o encontrada.");
-            }
-
-        } catch (e) {
-            console.warn("Erro ao verificar licenÃ§a (offline?):", e);
-            // Fail-open se jÃ¡ tem chave local (evita bloquear usuÃ¡rios offline)
-            if (key) unlockSystem();
-        }
+            })
+            .catch(err => {
+                // Falha silenciosa (servidor offline ou erro de rede).
+                // O sistema continua funcionando (Standalone Promise).
+                console.log('Smart Lock: Verificação offline mantida.');
+            });
     }
 
-    // --- UI HELPERS ---
-
-    function redirectToLogin(msg) {
-        const login = document.getElementById('view-login');
-        if (login) {
-            login.classList.remove('hide');
-            login.style.display = 'flex';
-            const msgEl = login.querySelector('p.text-slate-400, p.text-slate-500, p.subtitle, .login-subtitle');
-            if (msgEl) msgEl.innerText = msg;
-        }
-        hideApp();
-    }
-
-    function blockSystem(titleText, msgText) {
-        const login = document.getElementById('view-login');
-        if (login) {
-            login.classList.remove('hide');
-            login.style.display = 'flex';
-
-            const h3 = login.querySelector('h3, h2');
-            const p = login.querySelector('p.text-slate-400, p.text-slate-500, p.subtitle, .login-subtitle');
-            const btn = login.querySelector("button[type='submit'], #btn-activate");
-
-            if (h3) h3.innerText = titleText;
-            if (p) {
-                const _waMsg = encodeURIComponent('Ola! Meu periodo de teste expirou e gostaria de adquirir a versao vitalicia do sistema. Pode me ajudar?');
-                const _waLink = 'https://wa.me/5512992191018?text=' + _waMsg;
-                p.innerHTML = `${msgText}<br><br><a href="${_waLink}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#16a34a;color:white;font-weight:bold;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:14px;margin-top:8px">Quero a Versao Vitalicia</a>`;
-            }
-            if (btn) btn.innerText = "JÃ¡ comprei (Ativar)";
-        }
-        hideApp();
-    }
-
-    function hideApp() {
-        const sidebar = document.getElementById('sidebar');
-        const main = document.querySelector('main');
-        const header = document.querySelector('header');
-        if (sidebar) sidebar.style.display = 'none';
-        if (main) main.style.display = 'none';
-        if (header) header.style.display = 'none';
-    }
-
-    function unlockSystem() {
-        const login = document.getElementById('view-login');
-        if (login) {
-            login.classList.add('hide');
-        }
-        const sidebar = document.getElementById('sidebar');
-        const main = document.querySelector('main');
-        const header = document.querySelector('header');
-        if (sidebar) sidebar.style.display = '';
-        if (main) main.style.display = '';
-        if (header) header.style.display = '';
-    }
-
-    function showTrialBanner(expDate) {
-        const old = document.getElementById('trial-banner');
-        if (old) old.remove();
-
-        const exp = new Date(expDate);
-        const now = new Date();
-        const diffHrs = Math.ceil((exp - now) / (1000 * 60 * 60));
-
-        if (diffHrs <= 0) return;
-
-        const banner = document.createElement('div');
-        banner.id = 'trial-banner';
-        banner.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #f97316;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            pointer-events: none;
-        `;
-        banner.innerHTML = `â³ Teste GrÃ¡tis: Restam ${diffHrs}h`;
-        document.body.appendChild(banner);
-    }
-
-    // INIT
-    document.addEventListener('DOMContentLoaded', checkStatus);
-    setInterval(checkStatus, 5 * 60 * 1000);
-
+    console.log('Filtro de Segurança: Licença ativa localmente.');
 })();
