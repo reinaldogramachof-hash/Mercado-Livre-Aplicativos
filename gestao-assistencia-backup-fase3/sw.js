@@ -1,16 +1,9 @@
-const CACHE_NAME = 'gestao-assistencia-cache-v5';
+﻿const CACHE_NAME = 'gestao-assistencia-cache-v3';
 const urlsToCache = [
   './',
   './index.html',
   './lock.js',
-  './assets/js/db.js',
-  './assets/js/router.js',
-  './assets/js/modules/clients.js',
-  './assets/js/modules/inventory.js',
-  './assets/js/modules/orders.js',
-  './assets/js/modules/financial.js',
-  './assets/js/modules/pdv.js',
-  './assets/js/app.js',
+  './assets/js/app_core.js',
   './manifest.json',
   './assets/css/styles.css',
   './assets/js/tailwind_config.js',

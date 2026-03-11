@@ -490,27 +490,16 @@
                 <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">PDV — Ponto de Venda</h2>
-                        <div class="flex items-center gap-2 mt-1">
-                            <p class="text-sm text-gray-600">Venda produtos diretamente para seus clientes</p>
-                            <div id="cashier-status-label"></div>
-                        </div>
+                        <p class="text-sm text-gray-600">Venda produtos diretamente para seus clientes</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button id="cashier-action-btn" onclick="openCashierModal()"
-                            class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-colors">
-                            <i data-lucide="unlock" class="w-4 h-4"></i>
-                            Abrir Caixa
-                        </button>
-                        <button onclick="exportSalesCSV()"
-                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
-                            <i data-lucide="download" class="w-4 h-4"></i> Exportar
-                        </button>
-                    </div>
+                    <button onclick="exportSalesCSV()"
+                        class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                        <i data-lucide="download" class="w-4 h-4"></i> Exportar Vendas
+                    </button>
                 </div>
 
                 <!-- PDV Layout: Produtos + Carrinho -->
-                <div class="relative">
-                    <div id="pdv-layout-container" class="flex flex-col lg:flex-row gap-6 mb-8 transition-all duration-500">
+                <div class="flex flex-col lg:flex-row gap-6 mb-8">
 
                     <!-- Painel Esquerdo: Grid de Produtos -->
                     <div class="flex-1 min-w-0">
@@ -690,23 +679,6 @@
                                     Finalizar Venda
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                    </div>
-                    
-                    <!-- Overlay de Bloqueio (Caixa Fechado) -->
-                    <div id="pdv-locked-overlay" class="absolute inset-0 z-40 bg-white/60 backdrop-blur-[2px] rounded-2xl flex items-center justify-center hidden">
-                        <div class="bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 text-center max-w-xs animate-in fade-in zoom-in duration-300">
-                            <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i data-lucide="lock" class="w-10 h-10 text-orange-600"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Caixa Fechado</h3>
-                            <p class="text-sm text-gray-500 mb-6 font-medium">Você precisa abrir o caixa para começar a vender produtos.</p>
-                            <button onclick="openCashierModal()" 
-                                class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
-                                <i data-lucide="unlock" class="w-4 h-4"></i>
-                                Abrir Caixa Agora
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -2527,15 +2499,9 @@
         </div>
     </div>
 
-    <!-- JavaScript (Padrão Diamante Modularizado) -->
-    <script src="assets/js/db.js"></script>
-    <script src="assets/js/router.js"></script>
-    <script src="assets/js/modules/clients.js"></script>
-    <script src="assets/js/modules/inventory.js"></script>
-    <script src="assets/js/modules/orders.js"></script>
-    <script src="assets/js/modules/financial.js"></script>
-    <script src="assets/js/modules/pdv.js"></script>
-    <script src="assets/js/app.js"></script>
+    <!-- JavaScript -->
+    <script src="assets/js/lock.js"></script>
+    <script src="assets/js/app_core.js"></script>
 
     <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
     <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog"
@@ -2914,32 +2880,4 @@
         })();
     </script>
 
-    <!-- PDV Success / Print Confirmation Modal -->
-    <div id="pdvSuccessModal" class="fixed inset-0 modal-backdrop hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all">
-            <div class="bg-green-600 p-8 text-center text-white">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-white/50 animate-bounce">
-                    <i data-lucide="check" class="w-10 h-10 text-white"></i>
-                </div>
-                <h3 class="text-2xl font-black uppercase tracking-tight">Venda Realizada!</h3>
-                <p class="text-green-100 text-sm opacity-80 mt-1">O estoque foi atualizado com sucesso.</p>
-            </div>
-            <div class="p-6 space-y-3">
-                <p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest">Deseja imprimir o recibo?</p>
-                
-                <button onclick="printLastSale()" 
-                    class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
-                    <i data-lucide="printer" class="w-5 h-5"></i>
-                    <span>Imprimir Recibo</span>
-                </button>
-                
-                <button onclick="closeModal('pdvSuccessModal')"
-                    class="w-full bg-gray-100 text-gray-600 py-3 rounded-2xl font-bold hover:bg-gray-200 transition-all text-sm">
-                    Continuar Vendendo
-                </button>
-            </div>
-        </div>
-    </div>
 </body>
-
-</html>
