@@ -34,7 +34,7 @@ function generateMonthlyReport() {
     reportContent.innerHTML = `
         <div class="flex justify-between items-center mb-6 border-b pb-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-800">Relatório Mensal Consolidade</h3>
+                <h3 class="text-xl font-bold text-gray-800">Relatório Mensal Consolidado</h3>
                 <p class="text-sm text-gray-500 uppercase font-bold tracking-wider">${monthLabel}</p>
             </div>
             <button onclick="window.print()" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
@@ -133,17 +133,27 @@ function generateFinancialReport() {
 
     const monthTrans = db.transactions.filter(t => (t.date || '').startsWith(currentMonth));
     
+    const catMap = {
+        'service': 'Serviço',
+        'parts': 'Peças',
+        'supplies': 'Materiais/Insumos',
+        'rent': 'Aluguel',
+        'utilities': 'Contas de Consumo',
+        'other': 'Outros',
+        'sale': 'Venda PDV'
+    };
+
     // Agrupar Saídas por Categoria
     const expensesByCategory = {};
     monthTrans.filter(t => t.type === 'expense').forEach(t => {
-        const cat = t.category || 'Outros';
+        const cat = catMap[t.category] || t.category || 'Outros';
         expensesByCategory[cat] = (expensesByCategory[cat] || 0) + t.amount;
     });
 
     // Agrupar Entradas por Categoria (OS, Venda, etc)
     const incomeByCategory = {};
     monthTrans.filter(t => t.type === 'income').forEach(t => {
-        const cat = t.category || 'Outros';
+        const cat = catMap[t.category] || t.category || 'Outros';
         incomeByCategory[cat] = (incomeByCategory[cat] || 0) + t.amount;
     });
 
@@ -151,7 +161,7 @@ function generateFinancialReport() {
         .sort((a, b) => b[1] - a[1])
         .map(([cat, val]) => `
             <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                <span class="capitalize text-gray-600">${cat}</span>
+                <span class="text-gray-600">${cat}</span>
                 <span class="font-bold text-red-600">${fmtMoney(val)}</span>
             </div>
         `).join('');
@@ -160,7 +170,7 @@ function generateFinancialReport() {
         .sort((a, b) => b[1] - a[1])
         .map(([cat, val]) => `
             <div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                <span class="capitalize text-gray-600">${cat}</span>
+                <span class="text-gray-600">${cat}</span>
                 <span class="font-bold text-green-600">${fmtMoney(val)}</span>
             </div>
         `).join('');

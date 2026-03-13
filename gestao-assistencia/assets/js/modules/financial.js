@@ -116,11 +116,20 @@ function renderTransactions() {
         const catMap = {
             'service': 'Serviço',
             'parts': 'Peças',
-            'supplies': 'Materiais',
+            'supplies': 'Materiais/Insumos',
             'rent': 'Aluguel',
-            'utilities': 'Contas',
+            'utilities': 'Contas de Consumo',
             'other': 'Outros',
             'sale': 'Venda PDV'
+        };
+
+        const methodMap = {
+            'money': 'Dinheiro',
+            'dinheiro': 'Dinheiro',
+            'credit': 'Cartão',
+            'cartao': 'Cartão',
+            'pix': 'Pix',
+            'misto': 'Misto'
         };
 
         return `
@@ -140,7 +149,7 @@ function renderTransactions() {
                             ${t.type === 'income' ? '+' : '-'} ${fmtMoney(t.amount)}
                         </span>
                         <div class="flex items-center gap-1 mt-1 opacity-60">
-                            <span class="text-[10px] font-bold uppercase">${t.method || 'money'}</span>
+                            <span class="text-[10px] font-bold uppercase">${methodMap[t.method] || t.method || 'dinheiro'}</span>
                         </div>
                     </div>
                 </td>
@@ -172,11 +181,13 @@ function renderCategoryStats(transactions) {
     const expenses = transactions.filter(t => t.type === 'expense');
     const categories = {};
     const catMap = {
+        'service': 'Serviço',
         'parts': 'Peças',
-        'supplies': 'Materiais',
+        'supplies': 'Materiais/Insumos',
         'rent': 'Aluguel',
-        'utilities': 'Contas',
-        'other': 'Outros'
+        'utilities': 'Contas de Consumo',
+        'other': 'Outros',
+        'sale': 'Venda PDV'
     };
 
     expenses.forEach(t => {

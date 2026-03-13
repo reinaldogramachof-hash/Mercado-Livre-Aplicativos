@@ -13,6 +13,9 @@ function renderPDVGrid(event) {
 
     if (!grid) return;
 
+    // Popular seletor de clientes se houver
+    populatePDVClients();
+
     // Filtra produtos ativos no estoque
     let filtered = db.products.filter(product =>
         product.name.toLowerCase().includes(term) ||
@@ -273,6 +276,21 @@ function calculateChange() {
     }
 }
 
+function populatePDVClients() {
+    const select = document.getElementById('pdv-client-select');
+    if (!select) return;
+
+    // Preserva o valor selecionado se houver
+    const currentVal = select.value;
+    
+    let html = '<option value="">👤 Consumidor Final (Padrão)</option>';
+    db.clients.sort((a, b) => a.name.localeCompare(b.name)).forEach(client => {
+        html += `<option value="${client.id}" ${currentVal === client.id ? 'selected' : ''}>${sanitizeHTML(client.name)}</option>`;
+    });
+    
+    select.innerHTML = html;
+}
+
 function finalizeSale() {
     if (pdvCart.length === 0) return;
 
@@ -311,6 +329,7 @@ function finalizeSale() {
         return;
     }
 
+    const clientId = document.getElementById('pdv-client-select')?.value || null;
     const saleId = 'V' + Date.now().toString(36).toUpperCase().substr(-5);
     const saleDate = new Date().toISOString();
     const change = Math.max(0, received - total);
@@ -319,6 +338,7 @@ function finalizeSale() {
     db.pdvSales.unshift({
         id: saleId,
         date: saleDate,
+        clientId: clientId, // Vincula ao cliente
         items: [...pdvCart],
         subtotal: subtotal,
         discount: discountVal,
@@ -328,6 +348,14 @@ function finalizeSale() {
         changeValue: change,
         splitDetails: splitDetails
     });
+
+    // 1.1 Atualizar Total Gasto do Cliente se houver
+    if (clientId) {
+        const clientIdx = db.clients.findIndex(c => c.id === clientId);
+        if (clientIdx > -1) {
+            db.clients[clientIdx].totalSpent = (db.clients[clientIdx].totalSpent || 0) + total;
+        }
+    }
 
     // 2. Baixa no Estoque
     pdvCart.forEach(item => {
@@ -534,6 +562,16 @@ function renderPDVSalesHistory() {
     }
 
     if (emptyMsg) emptyMsg.classList.add('hidden');
+    
+    const methodMap = {
+        'money': 'Dinheiro',
+        'dinheiro': 'Dinheiro',
+        'credit': 'Cartão',
+        'cartao': 'Cartão',
+        'pix': 'Pix',
+        'misto': 'Misto'
+    };
+
     container.innerHTML = db.pdvSales.slice(0, 10).map(sale => `
         <tr class="border-b border-gray-50 text-xs hover:bg-gray-50 transition-colors">
             <td class="px-6 py-3 font-bold text-gray-700">#${sale.id}</td>
@@ -547,7 +585,7 @@ function renderPDVSalesHistory() {
                 <span class="text-xs text-gray-500">${sale.items.length} item(ns)</span>
             </td>
             <td class="px-6 py-3">
-                <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider border border-blue-100">${sale.payment}</span>
+                <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider border border-blue-100">${methodMap[sale.payment] || sale.payment}</span>
             </td>
             <td class="px-6 py-3 font-bold text-gray-800 text-right">${fmtMoney(sale.total)}</td>
             <td class="px-6 py-3 text-center">

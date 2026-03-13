@@ -77,6 +77,8 @@ function router(view) {
             break;
         case 'settings':
             document.getElementById('page-title').textContent = 'Configurações';
+            if (typeof loadCompanySettings === 'function') loadCompanySettings();
+            if (typeof renderTechniciansList === 'function') renderTechniciansList();
             break;
     }
 }

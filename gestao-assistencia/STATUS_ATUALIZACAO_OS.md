@@ -26,4 +26,34 @@ Esta atualização focou exclusivamente no aprimoramento do layout de impressão
 - `gestao-assistencia/assets/js/modules/orders.js` (Lógica da Comanda, manipulação e injeção do CSS Print Dinâmico).
 
 ***
-*Atualização entregue e comitada (branch main) com sucesso.*
+
+## Nova Atualização: Módulo de Clientes, Configurações e Manual (Geral)
+**Data:** 13 de Março de 2026 (Reforço)
+
+### 1. Auditoria e Evolução do Módulo de Clientes
+- **Data Integrity:** Sincronização do `totalSpent` entre o PDV e o cadastro do cliente.
+- **BI e Métricas:** Implementação e tradução de indicadores como "Ticket Médio" e "Frequência de Visitas".
+- **Visão 360°:** Consolidação de todo o histórico de Ordens de Serviço e Vendas PDV no perfil do cliente.
+- **Ações Rápidas:** Botões de "Nova O.S." e "Venda PDV" integrados diretamente na listagem e perfil.
+
+### 2. Restauração do Módulo de Configurações
+- **Equipe Técnica:** Implementação do CRUD (Adicionar/Listar/Remover) de técnicos, que estava ausente no código.
+- **Auto-Load:** Correção do carregamento automático dos dados da empresa ao abrir a tela de configurações.
+- **Segurança:** Validação total das funções de Backup (.json), Restauração e Reset de Fábrica.
+
+### 3. Expansão do Manual de Uso Interativo
+- **Conteúdo Completo:** Ampliação de 4 para 7 seções (Instalação, Estoque, O.S., PDV, Clientes, Financeiro e Backup).
+- **Lógica de Progresso:** Atualização da barra de progresso interativa para monitorar o aprendizado em todo o ecossistema do app.
+
+### 4. Padronização PT-BR (Geral)
+- Revisão e tradução de todos os termos técnicos, modais e mensagens de sistema para Português do Brasil.
+
+## Arquivos Modificados
+- `gestao-assistencia/index.html` (Expansão do Manual e UI de Configurações).
+- `gestao-assistencia/assets/js/db.js` (Lógica de Backup e Estado).
+- `gestao-assistencia/assets/js/app.js` (Gestão de Técnicos e Inicialização).
+- `gestao-assistencia/assets/js/router.js` (Integração de roteamento e carregamento de dados).
+- `gestao-assistencia/assets/js/modules/clients.js` (Métricas BI e Tradução).
+
+***
+*Todas as auditorias solicitadas foram concluídas. Sistema estabilizado e documentado.*

@@ -133,3 +133,72 @@ function saveCompanySettings() {
     document.querySelectorAll('.company-name-display').forEach(el => el.textContent = db.settings.companyName || 'Minha Assistência Técnica');
     showNotification('Configurações da empresa salvas com sucesso!', 'success');
 }
+
+// ==========================================
+// GERENCIAMENTO DE TÉCNICOS
+// ==========================================
+function renderTechniciansList() {
+    const list = document.getElementById('technicians-list');
+    if (!list) return;
+
+    const techs = db.settings.technicians || [];
+    if (techs.length === 0) {
+        list.innerHTML = '<p class="text-gray-400 text-xs italic p-2">Nenhum técnico cadastrado.</p>';
+        return;
+    }
+
+    list.innerHTML = techs.map((t, index) => `
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100 group">
+            <div class="flex items-center">
+                <i data-lucide="user" class="w-3 h-3 mr-2 text-gray-400"></i>
+                <span class="text-sm text-gray-700">${sanitizeHTML(t)}</span>
+            </div>
+            <button onclick="removeTechnician(${index})" class="text-red-400 hover:text-red-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <i data-lucide="trash-2" class="w-3 h-3"></i>
+            </button>
+        </div>
+    `).join('');
+    
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function addTechnician() {
+    const input = document.getElementById('new-tech-name');
+    if (!input) return;
+
+    const name = input.value.trim();
+    if (!name) {
+        showNotification('Digite o nome do técnico.', 'warning');
+        return;
+    }
+
+    if (!db.settings.technicians) db.settings.technicians = [];
+    
+    // Evitar duplicados
+    if (db.settings.technicians.includes(name)) {
+        showNotification('Este técnico já está cadastrado.', 'warning');
+        return;
+    }
+
+    db.settings.technicians.push(name);
+    save();
+    input.value = '';
+    renderTechniciansList();
+    
+    // Atualiza selects de técnicos em outros locais se necessário
+    if (typeof populateTechnicianSelect === 'function') populateTechnicianSelect();
+    
+    showNotification('Técnico adicionado com sucesso!', 'success');
+}
+
+function removeTechnician(index) {
+    if (!confirm('Excluir este técnico?')) return;
+    
+    db.settings.technicians.splice(index, 1);
+    save();
+    renderTechniciansList();
+    
+    if (typeof populateTechnicianSelect === 'function') populateTechnicianSelect();
+    
+    showNotification('Técnico removido.', 'info');
+}

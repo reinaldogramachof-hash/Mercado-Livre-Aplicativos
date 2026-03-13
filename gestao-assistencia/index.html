@@ -453,6 +453,58 @@
                     </div>
                 </div>
 
+                <!-- Client Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Clientes</p>
+                                <h3 id="client-total-count" class="text-3xl font-bold text-brand-primary">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Registrados na base</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                                <i data-lucide="users" class="w-6 h-6 text-brand-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Novos este Mês</p>
+                                <h3 id="client-new-month" class="text-3xl font-bold text-green-600">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Cadastros recentes</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="user-check" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Clientes Ativos</p>
+                                <h3 id="client-active-count" class="text-3xl font-bold text-blue-600">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Frequentes (60 dias)</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="activity" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Ticket Médio</p>
+                                <h3 id="client-ticket-avg" class="text-2xl font-bold text-gray-900">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Gastos O.S + PDV</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Clients Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
                     <div class="p-4 bg-gray-50 border-b border-gray-200">
@@ -546,6 +598,15 @@
                                 </h3>
                                 <button onclick="clearCart()"
                                     class="text-xs text-red-400 hover:text-red-600 transition-colors font-medium">Limpar</button>
+                            </div>
+
+                            <!-- Cliente no PDV -->
+                            <div class="p-3 bg-blue-50 border-b border-blue-100">
+                                <label class="text-[10px] font-bold text-blue-800 uppercase mb-1 block">Cliente para esta Venda</label>
+                                <select id="pdv-client-select" class="w-full border border-blue-200 rounded-lg p-2 text-sm outline-none focus:border-brand-primary bg-white">
+                                    <option value="">👤 Consumidor Final (Padrão)</option>
+                                    <!-- Clients will be populated here -->
+                                </select>
                             </div>
 
                             <!-- Itens do Carrinho -->
@@ -1204,7 +1265,7 @@
                         <span
                             class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Progresso
                             do Manual</span>
-                        <span id="tutorial-progress-text" class="text-xs font-bold text-brand-blue">0 / 4 seções</span>
+                        <span id="tutorial-progress-text" class="text-xs font-bold text-brand-blue">0 / 7 seções</span>
                     </div>
                     <div class="progress-bar w-full">
                         <div class="progress-fill" id="tutorial-progress" style="width: 0%"></div>
@@ -1452,88 +1513,166 @@
                         </div>
                     </div>
 
-                    <!-- Seção 3: Integração O.S. + Estoque -->
-                    <div id="integracao-os-estoque"
-                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
+                    <!-- Seção 3: Ordens de Serviço (O.S.) -->
+                    <div id="ordens-servico" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
                                 <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">3
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800">Integração O.S. + Estoque</h3>
+                                <h3 class="text-xl font-bold text-gray-800">Fluxo de Ordens de Serviço (O.S.)</h3>
                             </div>
                         </div>
 
-                        <div
-                            class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-200 mb-6">
-                            <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                                <i data-lucide="link" class="w-5 h-5 mr-2 text-brand-primary"></i>
-                                Fluxo Integrado de Trabalho
-                            </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                                <div class="bg-white p-4 rounded-lg text-center">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-blue-700">1</span>
-                                    </div>
-                                    <p class="font-bold text-gray-800">Cadastro</p>
-                                    <p class="text-gray-600">Produtos no estoque com preços</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="border border-blue-100 bg-blue-50/50 p-4 rounded-xl">
+                                <h4 class="font-bold text-blue-700 text-sm mb-2 flex items-center">
+                                    <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i> Abertura
+                                </h4>
+                                <p class="text-xs text-gray-600">Cadastre o equipamento, peças iniciais e o problema relatado. O sistema gera um número único.</p>
+                            </div>
+                            <div class="border border-yellow-100 bg-yellow-50/50 p-4 rounded-xl">
+                                <h4 class="font-bold text-yellow-700 text-sm mb-2 flex items-center">
+                                    <i data-lucide="search" class="w-4 h-4 mr-2"></i> Diagnóstico
+                                </h4>
+                                <p class="text-xs text-gray-600">Atualize o status conforme avança. Adicione peças do estoque para abater automaticamente.</p>
+                            </div>
+                            <div class="border border-green-100 bg-green-50/50 p-4 rounded-xl">
+                                <h4 class="font-bold text-green-700 text-sm mb-2 flex items-center">
+                                    <i data-lucide="check-check" class="w-4 h-4 mr-2"></i> Entrega
+                                </h4>
+                                <p class="text-xs text-gray-600">Altere para "Entregue" para confirmar o faturamento. Você pode imprimir ou enviar via WhatsApp.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <h5 class="font-bold text-gray-800 mb-3 flex items-center text-sm">
+                                <i data-lucide="printer" class="w-4 h-4 mr-2 text-brand-primary"></i> Impressão e Recibos
+                            </h5>
+                            <p class="text-sm text-gray-600 mb-2">O sistema gera um layout profissional com <strong>2 vias automática</strong>:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-xs text-gray-500">
+                                <li>Via da Assistência (com seu controle interno)</li>
+                                <li>Via do Cliente (com termos de garantia configuráveis)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Frente de Caixa (PDV) -->
+                    <div id="pdv-manual" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4
                                 </div>
-                                <div class="bg-white p-4 rounded-lg text-center">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-green-700">2</span>
-                                    </div>
-                                    <p class="font-bold text-gray-800">O.S.</p>
-                                    <p class="text-gray-600">Seleciona peças usadas</p>
+                                <h3 class="text-xl font-bold text-gray-800">Frente de Caixa (PDV)</h3>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-gray-900 to-slate-800 rounded-2xl p-6 text-white mb-6">
+                            <div class="flex items-start gap-4 mb-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                    <i data-lucide="shopping-cart" class="w-6 h-6 text-brand-primary"></i>
                                 </div>
-                                <div class="bg-white p-4 rounded-lg text-center">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-yellow-700">3</span>
-                                    </div>
-                                    <p class="font-bold text-gray-800">Automático</p>
-                                    <p class="text-gray-600">Estoque é debitado</p>
+                                <div>
+                                    <h4 class="font-bold">Agilidade no Balcão</h4>
+                                    <p class="text-gray-400 text-sm">Venda acessórios e produtos rapidamente sem precisar abrir uma O.S.</p>
                                 </div>
-                                <div class="bg-white p-4 rounded-lg text-center">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
-                                        <span class="font-bold text-purple-700">4</span>
-                                    </div>
-                                    <p class="font-bold text-gray-800">Relatório</p>
-                                    <p class="text-gray-600">Custo real calculado</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+                                    <p class="font-bold text-brand-primary mb-1">Abertura de Caixa</p>
+                                    <p class="text-gray-400">Inicie o dia informando o saldo inicial (suprimento).</p>
+                                </div>
+                                <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+                                    <p class="font-bold text-brand-primary mb-1">Métodos Compostos</p>
+                                    <p class="text-gray-400">Receba pagamentos combinados (Pix + Cartão, etc).</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white p-4 rounded-xl border border-gray-200">
-                                <h5 class="font-bold text-gray-800 mb-2">Como usar peças do estoque na O.S.</h5>
-                                <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-600">
-                                    <li>Crie a Ordem de Serviço normalmente</li>
-                                    <li>Na seção "Peças", clique em "Adicionar do Estoque"</li>
-                                    <li>Selecione o produto e a quantidade</li>
-                                    <li>O sistema calcula automaticamente o valor</li>
-                                    <li>Ao salvar, o estoque é atualizado</li>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h5 class="font-bold text-blue-800 mb-2 text-sm">Destaque: Fechamento de Caixa</h5>
+                            <p class="text-xs text-blue-700 leading-relaxed">
+                                Ao final do expediente, clique em "Encerrar Caixa". O sistema gera um resumo completo das entradas e saídas por método de pagamento, pronto para ser impresso ou compartilhado via WhatsApp.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Gestão de Clientes (Visão 360) -->
+                    <div id="clientes-manual" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Gestão de Clientes (Visão 360°)</h3>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-6 mb-6">
+                            <div class="flex-1 space-y-4">
+                                <div class="flex gap-3">
+                                    <i data-lucide="user-plus" class="w-5 h-5 text-brand-primary mt-1"></i>
+                                    <div>
+                                        <p class="font-bold text-gray-800 text-sm">Cadastro Inteligente</p>
+                                        <p class="text-xs text-gray-500">Busca automática de endereço via CEP (ViaCEP).</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <i data-lucide="history" class="w-5 h-5 text-brand-primary mt-1"></i>
+                                    <div>
+                                        <p class="font-bold text-gray-800 text-sm">Histórico Único</p>
+                                        <p class="text-xs text-gray-500">Veja todas as Ordens de Serviço e Vendas PDV de um cliente em um só lugar.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Como usar a Visão 360</p>
+                                <ol class="list-decimal pl-5 text-xs text-gray-600 space-y-2">
+                                    <li>Acesse o menu <strong>Clientes</strong></li>
+                                    <li>Clique no nome do cliente na tabela</li>
+                                    <li>O perfil abrirá com métricas de gasto total e frequência</li>
+                                    <li>Inicie novas O.S. ou Vendas direto do perfil</li>
                                 </ol>
-                            </div>
-                            <div class="bg-white p-4 rounded-xl border border-gray-200">
-                                <h5 class="font-bold text-gray-800 mb-2">Benefícios da Integração</h5>
-                                <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
-                                    <li>Controle preciso do estoque</li>
-                                    <li>Cálculo automático de custos</li>
-                                    <li>Alertas de reposição</li>
-                                    <li>Histórico completo de movimentações</li>
-                                    <li>Margem de lucro real</li>
-                                </ul>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seção 4: Backup e Segurança -->
+                    <!-- Seção 6: Financeiro e Fluxo de Caixa -->
+                    <div id="financeiro-manual" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Financeiro e Fluxo de Caixa</h3>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                                <h4 class="font-bold text-red-700 text-sm mb-2">Controle de Despesas</h4>
+                                <p class="text-xs text-red-600">Registre aluguel, luz, salários e compra de insumos. Tudo o que sai do caixa deve ser lançado para um lucro real.</p>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-xl border border-green-100">
+                                <h4 class="font-bold text-green-700 text-sm mb-2">Receitas Automáticas</h4>
+                                <p class="text-xs text-green-600">Vendas do PDV e O.S. finalizadas entram automaticamente no financeiro. Você só precisa auditar.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex items-center gap-4 p-4 border rounded-xl bg-white shadow-sm">
+                            <div class="p-2 bg-brand-primary/10 rounded-lg">
+                                <i data-lucide="bar-chart-3" class="w-6 h-6 text-brand-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-800 text-sm">Dashboard de BI</h5>
+                                <p class="text-xs text-gray-500">Acompanhe faturamento líquido, volume de vendas e produtos curva A em tempo real.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 7: Backup e Segurança -->
                     <div id="backup" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">4
+                                <div class="step-number bg-gradient-to-r from-brand-primary to-brand-dark text-white">7
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
                             </div>
@@ -2495,17 +2634,30 @@
             <form onsubmit="submitClient(event)" class="space-y-4">
                 <input type="hidden" id="client-id">
 
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase">Nome Completo *</label>
-                    <input type="text" id="client-name" required
-                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
-                        placeholder="Nome do cliente">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Nome Completo *</label>
+                        <input type="text" id="client-name" required
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                            placeholder="Nome do cliente">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">CPF / CNPJ</label>
+                        <input type="text" id="client-cpf-cnpj"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                            placeholder="000.000.000-00">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data de Nascimento</label>
+                        <input type="date" id="client-birthdate"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
-                        <input type="text" id="client-phone"
+                        <label class="text-xs font-bold text-gray-500 uppercase">Telefone *</label>
+                        <input type="text" id="client-phone" required
                             class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
                             placeholder="(00) 00000-0000">
                     </div>
@@ -2517,11 +2669,48 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
-                    <input type="text" id="client-address"
-                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
-                        placeholder="Endereço completo">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Endereço e Localização</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">CEP</label>
+                            <div class="relative">
+                                <input type="text" id="client-cep" onblur="searchCEP(this.value)"
+                                    class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                                    placeholder="00000-000">
+                                <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Bairro</label>
+                            <input type="text" id="client-neighborhood"
+                                class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                                placeholder="Bairro">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Logradouro (Rua, Av.)</label>
+                        <input type="text" id="client-address"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                            placeholder="Ex: Rua das Flores, 123">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Cidade</label>
+                            <input type="text" id="client-city"
+                                class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
+                                placeholder="Cidade">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Estado (UF)</label>
+                            <input type="text" id="client-state" maxlength="2"
+                                class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none uppercase"
+                                placeholder="UF">
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -2536,6 +2725,126 @@
                     Salvar Cliente
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Client Profile Modal (Visão 360) -->
+    <div id="clientProfileModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-brand-primary/10 rounded-full flex items-center justify-center text-brand-primary">
+                        <i data-lucide="user" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 id="profile-name" class="text-xl font-bold text-gray-800">Nome do Cliente</h3>
+                        <p id="profile-since" class="text-xs text-gray-500">Cliente desde: --/--/----</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="createNewOrderFromProfile()" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg font-bold text-xs hover:bg-green-700 transition-colors shadow-sm shadow-green-100">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        Nova O.S.
+                    </button>
+                    <button onclick="createNewSaleFromProfile()" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-xs hover:bg-blue-700 transition-colors shadow-sm shadow-blue-100">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                        Nova Venda
+                    </button>
+                    <button onclick="closeModal('clientProfileModal')" class="ml-2 text-gray-400 hover:text-gray-600 p-2">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-8">
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest border-b pb-2">Contato e Dados</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 text-sm">
+                                <i data-lucide="phone" class="w-4 h-4 text-gray-400"></i>
+                                <span id="profile-phone">--</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i data-lucide="mail" class="w-4 h-4 text-gray-400"></i>
+                                <span id="profile-email">--</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i data-lucide="fingerprint" class="w-4 h-4 text-gray-400"></i>
+                                <span id="profile-cpf">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest border-b pb-2">Localização</h4>
+                        <div class="text-sm text-gray-600" id="profile-address-full">--</div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest border-b pb-2">Métricas Financeiras</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                                <p class="text-[10px] font-bold text-blue-400 uppercase">Total Gasto</p>
+                                <p id="profile-total-spent" class="font-bold text-blue-700">R$ 0,00</p>
+                            </div>
+                            <div class="bg-purple-50 p-3 rounded-xl border border-purple-100">
+                                <p class="text-[10px] font-bold text-purple-400 uppercase">Qtd. Ordens</p>
+                                <p id="profile-orders-count" class="font-bold text-purple-700">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="space-y-4">
+                    <div class="flex border-b gap-4">
+                        <button id="tab-os" onclick="switchProfileTab('os')" class="px-6 py-2 font-bold text-sm border-b-2 border-brand-primary text-brand-primary">Ordens de Serviço</button>
+                        <button id="tab-pdv" onclick="switchProfileTab('pdv')" class="px-6 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-brand-primary transition-colors">Vendas PDV</button>
+                    </div>
+                    
+                    <!-- OS History -->
+                    <div id="profile-os-container" class="bg-white rounded-xl border overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50 text-gray-500 text-xs">
+                                <tr>
+                                    <th class="px-6 py-3">O.S.</th>
+                                    <th class="px-6 py-3">Equipamento</th>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="profile-orders-table" class="divide-y">
+                                <!-- Preenchido via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- PDV Sales History -->
+                    <div id="profile-pdv-container" class="bg-white rounded-xl border overflow-hidden hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50 text-gray-500 text-xs">
+                                <tr>
+                                    <th class="px-6 py-3">Venda</th>
+                                    <th class="px-6 py-3">Itens</th>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Pagamento</th>
+                                    <th class="px-6 py-3 text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="profile-pdv-table" class="divide-y">
+                                <!-- Preenchido via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 bg-gray-50 border-t flex justify-end">
+                <button onclick="closeModal('clientProfileModal')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold text-sm hover:bg-gray-300 transition-colors">
+                    Fechar Perfil
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2968,7 +3277,7 @@
             // INICIALIZAÇÃO DO MANUAL INTERATIVO
             // ==========================================
 
-            const MANUAL_SECTIONS = ['instalacao', 'controle-estoque', 'integracao-os-estoque', 'backup'];
+            const MANUAL_SECTIONS = ['instalacao', 'controle-estoque', 'ordens-servico', 'pdv-manual', 'clientes-manual', 'financeiro-manual', 'backup'];
             const STORAGE_KEY = 'manual_progress';
 
             function loadProgress() {
