@@ -65,7 +65,7 @@ function setupEventListeners() {
     
     // PDV / Frente de Caixa
     if(el('pdv-search')) el('pdv-search').addEventListener('input', renderPDVGrid);
-    if(el('pdv-received')) el('pdv-received').addEventListener('input', updatePDVChange);
+    if(el('pdv-amount-received')) el('pdv-amount-received').addEventListener('input', calculateChange);
     
     // Transações
     if(el('transaction-search')) el('transaction-search').addEventListener('input', renderTransactions);

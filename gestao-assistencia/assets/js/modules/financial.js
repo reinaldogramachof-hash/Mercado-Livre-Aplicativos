@@ -11,6 +11,7 @@ function openTransactionModal(type = 'income', trans = null) {
     document.getElementById('trans-amount').value = trans ? trans.amount.toFixed(2).replace('.', ',') : '';
     document.getElementById('trans-desc').value = trans?.desc || '';
     document.getElementById('trans-category').value = trans?.category || (type === 'income' ? 'service' : 'supplies');
+    document.getElementById('trans-method').value = trans?.method || 'money';
     document.getElementById('trans-date').value = trans ? trans.date : new Date().toISOString().split('T')[0];
 
     // Ajustar tipo (Radio)
@@ -37,6 +38,7 @@ function submitTransaction(event) {
     const amount = parseFloat(amountStr) || 0;
     const desc = document.getElementById('trans-desc').value.trim();
     const category = document.getElementById('trans-category').value;
+    const method = document.getElementById('trans-method').value;
     const date = document.getElementById('trans-date').value;
 
     if (!desc || amount <= 0 || !date) {
@@ -50,6 +52,7 @@ function submitTransaction(event) {
         amount,
         desc,
         category,
+        method,
         date,
         createdAt: new Date().toISOString()
     };
@@ -132,9 +135,14 @@ function renderTransactions() {
                     </span>
                 </td>
                 <td class="px-6 py-4 text-right">
-                    <span class="font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}">
-                        ${t.type === 'income' ? '+' : '-'} ${fmtMoney(t.amount)}
-                    </span>
+                    <div class="flex flex-col items-end">
+                        <span class="font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-500'}">
+                            ${t.type === 'income' ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </span>
+                        <div class="flex items-center gap-1 mt-1 opacity-60">
+                            <span class="text-[10px] font-bold uppercase">${t.method || 'money'}</span>
+                        </div>
+                    </div>
                 </td>
                 <td class="px-6 py-4 text-center">
                     <div class="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -154,21 +162,110 @@ function renderTransactions() {
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
     updateFinancialStats(filtered);
+    renderCategoryStats(filtered);
 }
 
-function updateFinancialStats(transactions) {
+function renderCategoryStats(transactions) {
+    const container = document.getElementById('category-stats-container');
+    if (!container) return;
+
+    const expenses = transactions.filter(t => t.type === 'expense');
+    const categories = {};
+    const catMap = {
+        'parts': 'Peças',
+        'supplies': 'Materiais',
+        'rent': 'Aluguel',
+        'utilities': 'Contas',
+        'other': 'Outros'
+    };
+
+    expenses.forEach(t => {
+        categories[t.category] = (categories[t.category] || 0) + t.amount;
+    });
+
+    const sortedCats = Object.entries(categories).sort((a, b) => b[1] - a[1]);
+
+    if (sortedCats.length === 0) {
+        container.innerHTML = '<p class="text-xs text-gray-400 italic">Sem despesas no período.</p>';
+        return;
+    }
+
+    container.innerHTML = sortedCats.map(([cat, amount]) => `
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <span class="text-xs font-bold text-gray-600 uppercase">${catMap[cat] || cat}</span>
+            <span class="text-xs font-bold text-red-500">${fmtMoney(amount)}</span>
+        </div>
+    `).join('');
+}
+
+function updateFinancialStats(filteredTransactions) {
     const incomeEl = document.getElementById('cash-income');
     const expenseEl = document.getElementById('cash-expense');
     const balanceEl = document.getElementById('cash-balance');
+    const periodBalanceEl = document.getElementById('period-balance');
 
-    const totalIncome = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
-    const totalExpense = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
-    const balance = totalIncome - totalExpense;
+    // Cálculos do Período (Filtrados)
+    const periodIncome = filteredTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+    const periodExpense = filteredTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+    const periodBalance = periodIncome - periodExpense;
 
-    if (incomeEl) incomeEl.textContent = fmtMoney(totalIncome);
-    if (expenseEl) expenseEl.textContent = '- ' + fmtMoney(totalExpense);
+    // Saldo Total Acumulado (Todos os Lançamentos)
+    const totalIncome = db.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+    const totalExpense = db.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+    const totalBalance = totalIncome - totalExpense;
+
+    if (incomeEl) incomeEl.textContent = fmtMoney(periodIncome);
+    if (expenseEl) expenseEl.textContent = '- ' + fmtMoney(periodExpense);
+    
     if (balanceEl) {
-        balanceEl.textContent = fmtMoney(balance);
-        balanceEl.className = `text-3xl font-bold ${balance >= 0 ? 'text-gray-900' : 'text-red-600'}`;
+        balanceEl.textContent = fmtMoney(totalBalance);
+        balanceEl.className = `text-3xl font-bold ${totalBalance >= 0 ? 'text-gray-900' : 'text-red-600'}`;
     }
+
+    if (periodBalanceEl) {
+        periodBalanceEl.textContent = (periodBalance >= 0 ? '+ ' : '') + fmtMoney(periodBalance);
+        periodBalanceEl.className = `text-sm font-bold ${periodBalance >= 0 ? 'text-green-600' : 'text-red-500'}`;
+    }
+}
+
+function exportFinancialCSV() {
+    const start = document.getElementById('cash-start')?.value || '';
+    const end = document.getElementById('cash-end')?.value || '';
+    
+    let toExport = db.transactions;
+    if (start || end) {
+        toExport = db.transactions.filter(t => {
+            if (start && t.date < start) return false;
+            if (end && t.date > end) return false;
+            return true;
+        });
+    }
+
+    if (toExport.length === 0) {
+        showNotification('Nenhum dado para exportar!', 'warning');
+        return;
+    }
+
+    const headers = ['Data', 'Descricao', 'Tipo', 'Categoria', 'Metodo', 'Valor'];
+    const rows = toExport.map(t => [
+        fmtDate(t.date),
+        t.desc.replace(/,/g, ';'),
+        t.type === 'income' ? 'Receita' : 'Despesa',
+        t.category,
+        t.method || 'money',
+        t.amount.toFixed(2)
+    ]);
+
+    let csvContent = "data:text/csv;charset=utf-8," 
+        + headers.join(",") + "\n"
+        + rows.map(e => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `fluxo_caixa_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showNotification('CSV financeiro exportado!', 'success');
 }

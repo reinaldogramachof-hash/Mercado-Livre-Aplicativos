@@ -918,6 +918,11 @@
                         <p class="text-sm text-gray-600">Controle financeiro da assistência</p>
                     </div>
                     <div class="flex items-center gap-3">
+                        <button onclick="exportFinancialCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Exportar
+                        </button>
                         <button onclick="openTransactionModal()"
                             class="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
@@ -933,7 +938,10 @@
                             <div>
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Saldo Total</p>
                                 <h3 id="cash-balance" class="text-3xl font-bold text-gray-900">R$ 0,00</h3>
-                                <p class="text-xs text-gray-500 mt-1">Disponível</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Período:</p>
+                                    <p id="period-balance" class="text-sm font-bold text-green-600">R$ 0,00</p>
+                                </div>
                             </div>
                             <div class="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
                                 <i data-lucide="wallet" class="w-6 h-6 text-brand-primary"></i>
@@ -965,6 +973,17 @@
                                 <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Resumo por Categoria -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-8">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="pie-chart" class="w-4 h-4 text-brand-primary"></i>
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Despesas por Categoria</h4>
+                    </div>
+                    <div id="category-stats-container" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <!-- Preenchido via JS -->
                     </div>
                 </div>
 
@@ -1917,6 +1936,43 @@
         </div>
     </div>
 
+    <!-- Product History Modal -->
+    <div id="productHistoryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b bg-gray-50">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">Histórico de Movimentações</h3>
+                    <p id="history-product-name" class="text-xs text-gray-500 font-medium mt-1">Produto: --</p>
+                </div>
+                <button onclick="closeModal('productHistoryModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-0">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-500 text-[10px] uppercase sticky top-0 border-b">
+                        <tr>
+                            <th class="px-6 py-3">Data</th>
+                            <th class="px-6 py-3">Tipo</th>
+                            <th class="px-6 py-3 text-center">Quantidade</th>
+                            <th class="px-6 py-3">Motivo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-history-body" class="divide-y divide-gray-100 text-sm italic text-gray-400">
+                        <!-- Preenchido via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="p-4 bg-gray-50 border-t flex justify-end">
+                <button onclick="closeModal('productHistoryModal')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold text-sm hover:bg-gray-300 transition-colors">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Product Modal -->
     <div id="productModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -1979,15 +2035,27 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Custo (R$)</label>
-                        <input type="number" step="0.01" id="product-cost" required
+                        <input type="number" step="0.01" id="product-cost" oninput="calculateProfit()" required
                             class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="0.00" value="0">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Venda (R$)</label>
-                        <input type="number" step="0.01" id="product-price" required
+                        <input type="number" step="0.01" id="product-price" oninput="calculateProfit()" required
                             class="w-full border p-2 rounded-lg bg-white focus:border-brand-primary outline-none"
                             placeholder="0.00" value="0">
+                    </div>
+                </div>
+
+                <!-- Resumo Financeiro do Produto -->
+                <div id="product-profit-stats" class="bg-blue-50 p-3 rounded-xl border border-blue-100 grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-blue-400 uppercase">Lucro Estimado</p>
+                        <p id="product-profit-val" class="font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-blue-400 uppercase">Margem de Lucro</p>
+                        <p id="product-profit-percent" class="font-bold text-blue-700">0%</p>
                     </div>
                 </div>
 
@@ -2335,11 +2403,22 @@
                     <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
                     <select id="trans-category" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
                         <option value="service">Serviço Prestado</option>
+                        <option value="sale">Venda PDV</option>
                         <option value="parts">Peças</option>
                         <option value="supplies">Materiais</option>
                         <option value="rent">Aluguel</option>
                         <option value="utilities">Contas</option>
                         <option value="other">Outros</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Método de Pagamento</label>
+                    <select id="trans-method" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                        <option value="money">Dinheiro</option>
+                        <option value="pix">Pix</option>
+                        <option value="debit">Cartão de Débito</option>
+                        <option value="credit">Cartão de Crédito</option>
                     </select>
                 </div>
 
@@ -2410,6 +2489,42 @@
                     class="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-brand-dark transition-all mt-2">
                     Salvar Cliente
                 </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cashier Open Modal -->
+    <div id="cashierOpenModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-center text-white">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-white/50">
+                    <i data-lucide="unlock" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3 class="font-bold text-lg uppercase tracking-tight">Abrir Caixa</h3>
+                <p class="text-green-100 text-xs opacity-80 mt-1">Informe o valor inicial para começar</p>
+            </div>
+            <form onsubmit="submitOpenCashier(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase block mb-2 text-center">Valor Inicial em Dinheiro (Suprimento)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">R$</span>
+                        <input type="number" id="cashier-opening-amount" step="0.01" min="0" required autofocus
+                            class="w-full border-2 border-gray-100 p-4 pl-12 rounded-2xl text-2xl font-black text-center focus:border-green-500 outline-none transition-all"
+                            placeholder="0,00">
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeModal('cashierOpenModal')"
+                        class="flex-1 bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all text-sm">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="flex-[2] bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-100 flex items-center justify-center gap-2">
+                        <i data-lucide="play" class="w-4 h-4"></i>
+                        Abrir Agora
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -2535,6 +2650,7 @@
     <script src="assets/js/modules/orders.js"></script>
     <script src="assets/js/modules/financial.js"></script>
     <script src="assets/js/modules/pdv.js"></script>
+    <script src="assets/js/modules/reports.js"></script>
     <script src="assets/js/app.js"></script>
 
     <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->

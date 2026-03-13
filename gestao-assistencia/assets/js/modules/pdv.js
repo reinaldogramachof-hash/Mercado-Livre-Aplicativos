@@ -352,28 +352,28 @@ function finalizeSale() {
             db.transactions.unshift({
                 id: 'TR' + Date.now().toString(36).toUpperCase().substr(-6),
                 type: 'income', amount: splitDetails.dinheiro - change, desc: `Venda PDV #${saleId} (Dinheiro)`,
-                category: 'sale', date: saleDate.split('T')[0], paymentMethod: 'dinheiro', createdAt: saleDate
+                category: 'sale', date: saleDate.split('T')[0], method: 'money', createdAt: saleDate
             });
         }
         if (splitDetails.cartao > 0) {
             db.transactions.unshift({
                 id: 'TR' + Date.now().toString(36).toUpperCase().substr(-6),
                 type: 'income', amount: splitDetails.cartao, desc: `Venda PDV #${saleId} (Cartão)`,
-                category: 'sale', date: saleDate.split('T')[0], paymentMethod: 'cartao', createdAt: saleDate
+                category: 'sale', date: saleDate.split('T')[0], method: 'credit', createdAt: saleDate
             });
         }
         if (splitDetails.pix > 0) {
             db.transactions.unshift({
                 id: 'TR' + Date.now().toString(36).toUpperCase().substr(-6),
                 type: 'income', amount: splitDetails.pix, desc: `Venda PDV #${saleId} (Pix)`,
-                category: 'sale', date: saleDate.split('T')[0], paymentMethod: 'pix', createdAt: saleDate
+                category: 'sale', date: saleDate.split('T')[0], method: 'pix', createdAt: saleDate
             });
         }
     } else {
         db.transactions.unshift({
             id: 'TR' + Date.now().toString(36).toUpperCase().substr(-6),
             type: 'income', amount: total, desc: `Venda PDV #${saleId}`,
-            category: 'sale', date: saleDate.split('T')[0], paymentMethod: paymentMethod, createdAt: saleDate
+            category: 'sale', date: saleDate.split('T')[0], method: paymentMethod, createdAt: saleDate
         });
     }
 
