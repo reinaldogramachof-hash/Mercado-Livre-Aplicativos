@@ -264,6 +264,13 @@ function openOrderModal(order = null) {
         document.getElementById('order-password').value = order.password || '';
         document.getElementById('order-problem').value = order.problem || '';
         document.getElementById('order-diagnosis').value = order.diagnosis || '';
+        
+        document.getElementById('order-entry-notes').value = order.entryNotes || '';
+        ['screen', 'back', 'buttons', 'tray', 'cameras', 'biometrics', 'power', 'connector'].forEach(key => {
+            const chk = document.getElementById(`chk-${key}`);
+            if (chk) chk.checked = order.checklist ? !!order.checklist[key] : false;
+        });
+
         document.getElementById('order-labor').value = order.labor || 0;
         document.getElementById('order-discount').value = order.discount || 0;
 
@@ -280,6 +287,13 @@ function openOrderModal(order = null) {
         title.textContent = 'Nova Ordem de Serviço';
         modal.querySelector('form').reset();
         document.getElementById('order-id').value = '';
+        
+        document.getElementById('order-entry-notes').value = '';
+        ['screen', 'back', 'buttons', 'tray', 'cameras', 'biometrics', 'power', 'connector'].forEach(key => {
+            const chk = document.getElementById(`chk-${key}`);
+            if (chk) chk.checked = false;
+        });
+
         document.getElementById('order-labor').value = 0;
         document.getElementById('order-discount').value = 0;
         document.getElementById('order-parts-list').innerHTML = '';
@@ -455,6 +469,17 @@ function submitOrder(e) {
         password: document.getElementById('order-password').value.trim(),
         problem: document.getElementById('order-problem').value.trim(),
         diagnosis: document.getElementById('order-diagnosis').value.trim(),
+        entryNotes: (document.getElementById('order-entry-notes')?.value || '').trim(),
+        checklist: {
+            screen: document.getElementById('chk-screen')?.checked || false,
+            back: document.getElementById('chk-back')?.checked || false,
+            buttons: document.getElementById('chk-buttons')?.checked || false,
+            tray: document.getElementById('chk-tray')?.checked || false,
+            cameras: document.getElementById('chk-cameras')?.checked || false,
+            biometrics: document.getElementById('chk-biometrics')?.checked || false,
+            power: document.getElementById('chk-power')?.checked || false,
+            connector: document.getElementById('chk-connector')?.checked || false
+        },
         parts: currentOrderParts,
         labor,
         discount,
@@ -542,6 +567,35 @@ function openOrderView(id) {
     document.getElementById('view-phone').textContent = order.phone || 'Não informado';
     document.getElementById('view-device').textContent = order.device + (order.brand ? ` - ${order.brand}` : '');
     document.getElementById('view-serial').textContent = order.serial || 'N/D';
+    
+    document.getElementById('view-entry-notes').textContent = order.entryNotes || 'Nenhuma observação de entrada.';
+    const checklistLabels = {
+        screen: 'Tela Intacta', back: 'Tampa Traseira', buttons: 'Botões',
+        tray: 'Gaveta Chip', cameras: 'Câmeras', biometrics: 'Biometria', 
+        power: 'Liga Facilmente', connector: 'Conector Carga'
+    };
+    let checklistHtml = '';
+    if (order.checklist) {
+        for (const [key, label] of Object.entries(checklistLabels)) {
+            const isChecked = order.checklist[key];
+            const icon = isChecked ? '<i data-lucide="check-square" class="w-3 h-3 text-green-600 inline mr-1"></i>' : '<i data-lucide="square" class="w-3 h-3 text-gray-300 inline mr-1"></i>';
+            checklistHtml += `<div class="flex items-center">${icon} ${label}</div>`;
+        }
+    } else {
+        checklistHtml = '<div class="col-span-full">Checklist não preenchido.</div>';
+    }
+    const viewChecklistGrid = document.getElementById('view-checklist-grid');
+    if (viewChecklistGrid) {
+        viewChecklistGrid.innerHTML = checklistHtml;
+    }
+
+    const warrantyContainer = document.getElementById('view-warranty-terms');
+    if (warrantyContainer) {
+        const defaultWarranty = "A garantia cobre apenas defeitos de fabricação das peças substituídas e falhas na mão de obra executada, pelo prazo legal de 60 dias (Art. 26, II do CDC). A garantia é anulada automaticamente em caso de: mau uso, quedas, contato com líquidos, oxidação, descarga elétrica ou violação do selo de garantia.\n\nABANDONO: Conforme Art. 1.275 do Código Civil, aparelhos não retirados no prazo de 60 dias após notificação de conclusão serão considerados abandonados, podendo ser descartados ou vendidos para custear despesas de armazenamento e reparo.";
+        let terms = db.settings ? (db.settings.warrantyTerms || defaultWarranty) : defaultWarranty;
+        warrantyContainer.innerHTML = terms.split('\n').map(p => p.trim() ? `<p class="mb-2">${sanitizeHTML(p)}</p>` : '').join('');
+    }
+
     document.getElementById('view-problem').textContent = order.problem || 'Não informado';
     document.getElementById('view-diagnosis').textContent = order.diagnosis || 'Em análise';
     document.getElementById('view-labor').textContent = fmtMoney(order.labor || 0);
@@ -902,6 +956,150 @@ function clearFilters() {
 
 
 
+
+function printOSDualLayout() {
+    const original = document.getElementById('invoice-print');
+    if(!original) return;
+    
+    // Criar um container limpo na raiz do Body para fugir de qualquer "overflow" ou "fixed" do Modal originário
+    const printContainer = document.createElement('div');
+    printContainer.id = 'clean-print-container';
+    
+    const clone = original.cloneNode(true);
+    clone.id = 'clean-invoice-print';
+    
+    // Assinatura Customizada
+    const viaAssistencia = clone.querySelector('.text-center.mt-6');
+    if(viaAssistencia) viaAssistencia.innerHTML = '---------- VIA DO CLIENTE & ASSISTÊNCIA ----------';
+    
+    // Capturar dados para a Comanda do Cliente
+    const osNumber = clone.querySelector('#view-os-id') ? clone.querySelector('#view-os-id').innerText : 'N/A';
+    const clientName = clone.querySelector('#view-client') ? clone.querySelector('#view-client').innerText : 'N/A';
+    const deviceName = clone.querySelector('#view-device') ? clone.querySelector('#view-device').innerText : 'N/A';
+    
+    // O html tem 'Data: 13/03...', pegamos limpo
+    let entryDate = 'N/A';
+    if(clone.querySelector('#view-os-date')) {
+        entryDate = clone.querySelector('#view-os-date').innerText.replace('Data:', '').trim();
+    }
+
+    // Criar Miniguia (Comanda) SUPER compacta para não empurrar a OS para a página 2
+    const guiaHeader = document.createElement('div');
+    guiaHeader.className = 'w-full mb-2 pb-2 font-sans text-sm border-b border-dashed border-gray-400';
+    guiaHeader.innerHTML = `
+        <div class="flex justify-between items-center mb-1">
+            <h2 class="font-bold text-sm uppercase">Comanda do Cliente - ${osNumber}</h2>
+            <span class="text-xs text-gray-500 font-bold">${entryDate}</span>
+        </div>
+        <div class="flex justify-between text-gray-700 text-xs">
+            <span><strong>Cliente:</strong> ${clientName}</span>
+            <span><strong>Aparelho:</strong> ${deviceName}</span>
+        </div>
+        <div class="text-center mt-2 text-[10px] font-bold text-gray-400">✂️ <span class="mx-2">LINHA DE CORTE</span> ✂️</div>
+    `;
+    
+    clone.insertBefore(guiaHeader, clone.firstChild);
+
+    printContainer.appendChild(clone);
+    document.body.appendChild(printContainer);
+    
+    const styleId = 'print-single-styles';
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = styleId;
+        // Mover a quebra de página de "mt-8" (Termos) para "financial-summary-container" (Resumo + Termos)
+        styleEl.innerHTML = `
+            @media print {
+                @page { margin: 5mm; size: A4 portrait; }
+                
+                /* Esconde TUDO no body, exceto o nosso container limpo */
+                body > *:not(#clean-print-container) { display: none !important; }
+                
+                body { 
+                    visibility: visible !important; background: white !important; 
+                    padding: 0 !important; margin: 0 !important; 
+                    height: auto !important; overflow: visible !important; display: block !important; 
+                }
+                html { height: auto !important; overflow: visible !important; display: block !important; background: white !important; }
+
+                #clean-print-container { 
+                    display: block !important; width: 100%; height: auto !important; 
+                    position: static !important; overflow: visible !important;
+                    background: white !important;
+                }
+                
+                #clean-invoice-print { 
+                    display: block !important; width: 100%; height: auto !important; 
+                    overflow: visible !important; padding: 0; margin: 0; box-sizing: border-box;
+                    zoom: 0.85; /* Encolhendo 15% para caber toda a tabela de peças na Página 1 */
+                    transform-origin: top left;
+                }
+
+                /* Forçar quebra de página trazendo o Resumo Financeiro + Termos para a Página 2 */
+                #financial-summary-container { 
+                    page-break-before: always !important; 
+                    break-before: page !important;
+                    margin-top: 20px !important;
+                }
+                
+                /* Estilizando a tipografia e layout dos Termos de Garantia especificamente na impressão (Página 2) */
+                #clean-print-container .text-\\[10px\\].text-gray-500.text-justify.leading-relaxed {
+                    font-size: 13px !important;
+                    line-height: 1.8 !important;
+                    color: #374151 !important; /* text-gray-700 para maior legibilidade */
+                    margin-bottom: 3rem !important; /* Espaço até as assinaturas */
+                }
+                
+                #clean-print-container .uppercase.text-gray-700 {
+                    font-size: 15px !important;
+                    color: #1f2937 !important;
+                    display: block !important;
+                    margin-bottom: 15px !important;
+                }
+                
+                #clean-print-container #view-warranty-terms {
+                    border-bottom: none !important; /* Vamos usar uma linha superior nas assinaturas ao invés desta */
+                }
+
+                /* Aumentando e formatando os blocos de Assinatura */
+                #clean-print-container .flex.justify-between.gap-8 {
+                    margin-top: 60px !important;
+                    padding-bottom: 30px !important;
+                }
+                
+                #clean-print-container .flex-1.border-t.border-gray-400 {
+                    border-top-width: 2px !important;
+                    padding-top: 15px !important;
+                }
+                
+                #clean-print-container .text-\\[10px\\].font-bold.text-gray-600.uppercase {
+                    font-size: 13px !important;
+                }
+
+                #clean-print-container .text-\\[9px\\].text-gray-400 {
+                    font-size: 11px !important;
+                    margin-top: 5px !important;
+                }
+                
+                /* Esconder o "VIA DA ASSISTÊNCIA" que fica repetido no fim pois já temos Comanda "VIA DO CLIENTE & ASSISTENCIA" no Topo */
+                #clean-print-container .text-center.mt-6.text-\\[9px\\] {
+                    display: none !important;
+                }
+            }
+        `;
+        document.head.appendChild(styleEl);
+    }
+    
+    setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+            // Limpeza completa após enviar impressora
+            if (printContainer.parentNode) printContainer.parentNode.removeChild(printContainer);
+            if (document.getElementById(styleId)) document.getElementById(styleId).remove();
+        }, 1000);
+    }, 150);
+}
 
 function populateTechnicianSelect(selectedValue = '') {
     const select = document.getElementById('order-technician');

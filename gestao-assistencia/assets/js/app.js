@@ -105,3 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
         router('dashboard');
     }
 });
+
+// ==========================================
+// CONFIGURAÇÕES DA EMPRESA
+// ==========================================
+function loadCompanySettings() {
+    const s = db.settings;
+    if(document.getElementById('company-name')) document.getElementById('company-name').value = s.companyName || '';
+    if(document.getElementById('company-doc')) document.getElementById('company-doc').value = s.companyDoc || '';
+    if(document.getElementById('company-phone')) document.getElementById('company-phone').value = s.companyPhone || '';
+    if(document.getElementById('company-address')) document.getElementById('company-address').value = s.companyAddress || '';
+    if(document.getElementById('company-warranty')) document.getElementById('company-warranty').value = s.warrantyTerms || '';
+}
+
+function saveCompanySettings() {
+    if(!db.settings) db.settings = {};
+    const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
+    
+    db.settings.companyName = getVal('company-name');
+    db.settings.companyDoc = getVal('company-doc');
+    db.settings.companyPhone = getVal('company-phone');
+    db.settings.companyAddress = getVal('company-address');
+    db.settings.warrantyTerms = getVal('company-warranty');
+    
+    save();
+    
+    document.querySelectorAll('.company-name-display').forEach(el => el.textContent = db.settings.companyName || 'Minha Assistência Técnica');
+    showNotification('Configurações da empresa salvas com sucesso!', 'success');
+}
