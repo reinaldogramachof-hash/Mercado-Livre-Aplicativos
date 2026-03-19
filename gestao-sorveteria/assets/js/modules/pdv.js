@@ -4,6 +4,7 @@
 // ============================================================
 
 let cart = [];
+let currentSaleTotal = 0;
 let currentPdvCategory = 'all';
 let pdvPaymentMethod = 'dinheiro';
 
@@ -132,7 +133,20 @@ function updateCart() {
 
 function clearSale() {
     cart = [];
+    currentSaleTotal = 0;
     updateCartDisplay();
+
+    const discountEl = document.getElementById('discount-input');
+    if (discountEl) discountEl.value = '';
+
+    const totalEl = document.getElementById('cart-total');
+    const subtotalEl = document.getElementById('cart-subtotal');
+    if (totalEl) totalEl.textContent = 'R$ 0,00';
+    if (subtotalEl) subtotalEl.textContent = 'R$ 0,00';
+
+    pdvPaymentMethod = 'dinheiro';
+    const defaultBtn = document.querySelector('.pdv-pay-btn[data-method="dinheiro"]');
+    if (defaultBtn) setPDVPayment('dinheiro', defaultBtn);
 }
 
 function addCustomIceCream() {
@@ -158,15 +172,7 @@ function applyDiscount() {
     showNotification(`Desconto de ${fmtMoney(discount)} aplicado.`, 'info');
 }
 
-function setPaymentMethod(method) {
-    pdvPaymentMethod = method;
-    document.querySelectorAll('.payment-method').forEach(btn => {
-        const isActive = btn.dataset.method === method;
-        btn.className = `payment-method p-2 rounded border text-sm ${isActive
-            ? 'bg-teal-50 border-teal-500 text-teal-700 font-bold'
-            : 'hover:bg-gray-50 border-gray-200'}`;
-    });
-}
+
 
 function completeSale() {
     if (cart.length === 0) {
@@ -174,7 +180,7 @@ function completeSale() {
         return;
     }
     const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-    window.currentSaleTotal = total;
+    currentSaleTotal = total;
 
     const pdvTotalEl = document.getElementById('pdv-checkout-total');
     if (pdvTotalEl) pdvTotalEl.textContent = fmtMoney(total);
@@ -214,26 +220,21 @@ function finalizeSale(paymentMethod = 'dinheiro') {
     showNotification(`Venda de ${fmtMoney(total)} finalizada! Pagamento: ${paymentMethod}`, 'success');
 }
 
-function setPDVPayment(method) {
+function setPDVPayment(method, el) {
     pdvPaymentMethod = method;
     document.querySelectorAll('.pdv-pay-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-50', 'border-teal-500');
+        btn.classList.remove('bg-teal-50', 'border-teal-500');
         btn.classList.add('border-gray-200');
     });
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('bg-blue-50', 'border-teal-500');
-        event.currentTarget.classList.remove('border-gray-200');
+    if (el) {
+        el.classList.add('bg-teal-50', 'border-teal-500');
+        el.classList.remove('border-gray-200');
     }
-
     const moneySection = document.getElementById('pdv-money-section');
     const changeSection = document.getElementById('pdv-change-section');
-    if (method === 'dinheiro') {
-        if (moneySection) moneySection.classList.remove('hidden');
-        if (changeSection) changeSection.classList.remove('hidden');
-    } else {
-        if (moneySection) moneySection.classList.add('hidden');
-        if (changeSection) changeSection.classList.add('hidden');
-    }
+    const isDinheiro = method === 'dinheiro';
+    if (moneySection) moneySection.classList.toggle('hidden', !isDinheiro);
+    if (changeSection) changeSection.classList.toggle('hidden', !isDinheiro);
 }
 
 function calculatePDVChange() {
@@ -242,7 +243,7 @@ function calculatePDVChange() {
     const changeEl = document.getElementById('pdv-change');
     if (!totalEl || !receivedEl || !changeEl) return;
 
-    const total = parseFloat(totalEl.textContent.replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0;
+    const total = parseFloat(totalEl.textContent.replace('R$', '').replace(/\./g, '').replace(',', '.').trim()) || 0;
     const received = parseFloat(receivedEl.value) || 0;
     const change = received - total;
 
@@ -271,7 +272,7 @@ function processSaleCompletion() {
     const sale = {
         id: getID(),
         items: [...cart],
-        total: window.currentSaleTotal || cart.reduce((acc, item) => acc + (item.price * (item.qty || item.quantity || 1)), 0),
+        total: currentSaleTotal || cart.reduce((acc, item) => acc + (item.price * (item.qty || item.quantity || 1)), 0),
         paymentMethod: pdvPaymentMethod,
         date: new Date().toISOString().split('T')[0],
         timestamp: new Date().toISOString()

@@ -257,7 +257,7 @@ function init() {
     // Intervalos de atualização
     setInterval(save, 30000);
     if (typeof updateTime === 'function') setInterval(updateTime, 60000);
-    if (typeof updateTemperatures === 'function') setInterval(updateTemperatures, 300000);
+
 }
 
 

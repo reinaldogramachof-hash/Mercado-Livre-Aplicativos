@@ -63,7 +63,7 @@ function router(view) {
     } else if (view === 'production') {
         if (typeof renderProduction === 'function') renderProduction();
     } else if (view === 'inventory') {
-        if (typeof renderInventory === 'function') renderInventory();
+        if (typeof showInventoryTab === 'function') showInventoryTab('ingredients');
     } else if (view === 'products') {
         if (typeof renderProductsCatalog === 'function') renderProductsCatalog();
     } else if (view === 'sales') {

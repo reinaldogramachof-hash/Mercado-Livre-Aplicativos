@@ -23,8 +23,12 @@ function renderTemperature() {
                     </span>
                 </div>
                 <div class="text-center mb-4">
-                    <div class="text-4xl font-bold text-teal-600">${freezer.currentTemp}°C</div>
-                    <p class="text-sm text-gray-500">Ideal: ${freezer.idealTemp}°C</p>
+                    ${(() => {
+                        const last = db.temperatures.filter(t => t.freezerId === freezer.id).sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp))[0];
+                        return last
+                            ? `<div class="text-4xl font-bold text-teal-600">${last.temperature}°C</div><p class="text-sm text-gray-500">Ideal: ${freezer.idealTemp}°C</p>`
+                            : `<div class="text-4xl font-bold text-gray-300">--°C</div><p class="text-sm text-gray-400">Nenhum registro. Registre a temperatura.</p>`;
+                    })()}
                 </div>
                 <div class="space-y-2">
                     <div class="flex justify-between text-sm">
@@ -33,10 +37,13 @@ function renderTemperature() {
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Última leitura:</span>
-                        <span class="font-medium">Agora</span>
+                        <span class="font-medium">${(() => {
+                            const last = db.temperatures.filter(t => t.freezerId === freezer.id).sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp))[0];
+                            return last ? new Date(last.timestamp).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) : 'Sem registro';
+                        })()}</span>
                     </div>
                 </div>
-                <button onclick="openTemperatureModal()" class="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-lg text-sm font-medium">
+                <button onclick="openTemperatureModal('${freezer.id}')" class="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-lg text-sm font-medium">
                     Registrar Temperatura
                 </button>
             </div>
@@ -70,11 +77,15 @@ function renderTemperatureChart() {
         if (readings.length > 0) {
             hourlyTemps[hour] = readings.reduce((a, b) => a + b.temperature, 0) / readings.length;
         } else {
-            hourlyTemps[hour] = -18; // Default value if no readings
+            hourlyTemps[hour] = null;
         }
     });
 
-    const temps = Object.values(hourlyTemps);
+    const temps = Object.values(hourlyTemps).filter(t => t !== null);
+    if (temps.length === 0) {
+        chartArea.innerHTML = '<p class="text-gray-400 text-sm text-center py-8">Nenhum registro de temperatura nas últimas 24 horas.</p>';
+        return;
+    }
     const maxTemp = Math.max(...temps);
     const minTemp = Math.min(...temps);
     const range = maxTemp - minTemp || 1;
@@ -83,8 +94,11 @@ function renderTemperatureChart() {
     hours.forEach((hour, index) => {
         const temp = hourlyTemps[hour];
         const hourLabel = new Date(hour).getHours().toString().padStart(2, '0') + 'h';
+        if (temp === null) {
+            chartHTML += `<div class="bar-group"><div class="bar-wrapper"></div><div class="x-label">${hourLabel}</div></div>`;
+            return;
+        }
         const height = ((temp - minTemp) / range) * 100;
-
         chartHTML += `
             <div class="bar-group">
                 <div class="bar-wrapper">
@@ -142,53 +156,14 @@ function renderTemperatureLog() {
     }).join('');
 }
 
-function updateTemperatures() {
-    // Simular variação de temperatura
-    db.freezers.forEach(freezer => {
-        // Variação aleatória de ±0.5°C
-        const variation = (Math.random() - 0.5) * 1;
-        freezer.currentTemp = parseFloat((freezer.currentTemp + variation).toFixed(1));
 
-        // Atualizar status
-        if (freezer.currentTemp > db.settings.criticalTemp) {
-            freezer.status = 'critico';
-        } else if (freezer.currentTemp > freezer.idealTemp + 2) {
-            freezer.status = 'alto';
-        } else {
-            freezer.status = 'normal';
-        }
 
-        // Registrar no histórico
-        db.temperatures.push({
-            id: getID(),
-            freezerId: freezer.id,
-            temperature: freezer.currentTemp,
-            status: freezer.status,
-            timestamp: new Date().toISOString(),
-            notes: 'Leitura automática'
-        });
-    });
-
-    save();
-
-    // Atualizar dashboard se estiver visível
-    const dashView = document.getElementById('view-dashboard');
-    if (dashView && !dashView.classList.contains('hide')) {
-        if (typeof renderDashboard === 'function') renderDashboard();
-    }
-    
-    const tempView = document.getElementById('view-temperature');
-    if (tempView && !tempView.classList.contains('hide')) {
-        renderTemperature();
-    }
-}
-
-function openTemperatureModal() {
+function openTemperatureModal(preselectedId) {
     const select = document.getElementById('temp-freezer');
     if (!select) return;
 
     select.innerHTML = '<option value="">Selecione o freezer</option>' +
-        db.freezers.map(f => `<option value="${f.id}">${f.name} (${f.currentTemp}°C)</option>`).join('');
+        db.freezers.map(f => `<option value="${f.id}" ${f.id === preselectedId ? 'selected' : ''}>${f.name}</option>`).join('');
 
     const modal = document.getElementById('temperatureModal');
     if (modal) modal.classList.remove('hidden');

@@ -136,28 +136,52 @@ function exportProductionCSV() {
 
 function saveProduction(e) {
     if (e) e.preventDefault();
-    const product = document.getElementById('prod-product')?.value || '';
-    const type = document.getElementById('prod-type')?.value || 'sorvete';
-    const quantity = parseFloat(document.getElementById('prod-quantity')?.value || 0);
-    const unit = document.getElementById('prod-unit')?.value || 'L';
-    const date = document.getElementById('prod-date')?.value || new Date().toISOString().slice(0,10);
-    const notes = document.getElementById('prod-notes')?.value || '';
 
-    if (!product || quantity <= 0) { showNotification('Preencha produto e quantidade.', 'error'); return; }
+    const product  = document.getElementById('prod-product')?.value?.trim() || '';
+    const type     = document.getElementById('prod-type')?.value || 'sorvete';
+    const quantity = parseFloat(document.getElementById('prod-quantity')?.value || 0);
+    const unit     = document.getElementById('prod-unit')?.value || 'litro';
+    const date     = document.getElementById('prod-date')?.value || new Date().toISOString().slice(0, 10);
+    const notes    = document.getElementById('prod-notes')?.value?.trim() || '';
+
+    if (!product || quantity <= 0) {
+        showNotification('Preencha o produto e a quantidade.', 'error');
+        return;
+    }
+
+    // Calcular total de ingredientes usados (convertido para kg)
+    let ingredientsUsed = 0;
+    const ingredientRows = document.querySelectorAll('#prod-ingredients-list > div');
+    ingredientRows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        const qty = parseFloat(inputs[1]?.value || 0);
+        const unitIngr = row.querySelector('select')?.value || 'kg';
+        if (unitIngr === 'kg' || unitIngr === 'litro') ingredientsUsed += qty;
+        // unidades: peso negligível, ignora
+    });
 
     const item = {
         id: getID(),
         code: 'PRD' + Date.now().toString().slice(-4),
         product, type, quantity, unit, date, notes,
+        ingredientsUsed,
         status: 'produzindo',
         createdAt: new Date().toISOString()
     };
+
     db.production.push(item);
     save();
+
+    // Fechar modal e limpar formulário
     const modal = document.getElementById('productionModal');
     if (modal) modal.classList.add('hidden');
+    const form = document.getElementById('production-form');
+    if (form) form.reset();
+    const ingredList = document.getElementById('prod-ingredients-list');
+    if (ingredList) ingredList.innerHTML = '';
+
     renderProduction();
-    showNotification(`Produção de ${product} iniciada!`, 'success');
+    showNotification(`Produção de "${product}" iniciada!`, 'success');
 }
 
 function updateProductionStatus(id, status) {

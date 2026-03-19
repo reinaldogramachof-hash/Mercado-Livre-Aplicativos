@@ -85,6 +85,7 @@ function renderInventory() {
     }).join('');
 
     updateInventoryCounters();
+    renderExpiryAlerts();
     if (window.lucide) lucide.createIcons();
 }
 
@@ -137,6 +138,85 @@ function exportInventoryCSV() {
     a.download = `estoque_sorveteria_${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
     showNotification('CSV exportado!', 'success');
+}
+
+function openInventoryItemModal() {
+    const modal = document.getElementById('inventoryItemModal');
+    if (modal) modal.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
+}
+
+function closeInventoryItemModal() {
+    const modal = document.getElementById('inventoryItemModal');
+    if (modal) modal.classList.add('hidden');
+    const form = document.getElementById('inventory-item-form');
+    if (form) form.reset();
+}
+
+function saveInventoryItem(e) {
+    if (e) e.preventDefault();
+    const name     = document.getElementById('inv-name')?.value?.trim() || '';
+    const category = document.getElementById('inv-category')?.value || 'outro';
+    const unit     = document.getElementById('inv-unit')?.value || 'kg';
+    const stock    = parseFloat(document.getElementById('inv-stock')?.value || 0);
+    const minStock = parseFloat(document.getElementById('inv-min-stock')?.value || 0);
+    const cost     = parseFloat(document.getElementById('inv-cost')?.value || 0);
+    const expiry   = document.getElementById('inv-expiry')?.value || '';
+
+    if (!name || stock < 0 || minStock < 0) {
+        showNotification('Preencha nome, quantidade e estoque mínimo.', 'error');
+        return;
+    }
+
+    const item = {
+        id: getID(),
+        code: 'ING' + Date.now().toString().slice(-4),
+        name, category, unit, stock, minStock,
+        cost, expiryDate: expiry || null,
+        createdAt: new Date().toISOString()
+    };
+
+    if (!db.inventory) db.inventory = [];
+    db.inventory.push(item);
+    save();
+    closeInventoryItemModal();
+    showInventoryTab('ingredients');
+    showNotification(`"${name}" adicionado ao estoque!`, 'success');
+}
+
+function renderExpiryAlerts() {
+    const container = document.getElementById('expiry-alerts');
+    if (!container) return;
+
+    const today = new Date();
+    const in7days = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+    const allItems = [...(db.inventory || []), ...(db.products || [])];
+    const expiring = allItems
+        .filter(i => i.expiryDate && new Date(i.expiryDate) <= in7days)
+        .sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+
+    if (expiring.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500">Nenhum item vencendo nos próximos 7 dias.</p>';
+        return;
+    }
+
+    container.innerHTML = expiring.map(i => {
+        const daysLeft = Math.ceil((new Date(i.expiryDate) - today) / (1000 * 60 * 60 * 24));
+        const isExpired = daysLeft < 0;
+        const color = isExpired ? 'red' : daysLeft <= 2 ? 'orange' : 'yellow';
+        return `<div class="flex items-center justify-between p-3 bg-white rounded-lg border border-${color}-200">
+            <div>
+                <p class="text-sm font-medium text-gray-800">${i.name}</p>
+                <p class="text-xs text-${color}-600">
+                    ${isExpired ? `Vencido há ${Math.abs(daysLeft)} dia(s)` : daysLeft === 0 ? 'Vence hoje!' : `Vence em ${daysLeft} dia(s) — ${fmtDate(i.expiryDate)}`}
+                </p>
+            </div>
+            <span class="text-xs font-bold text-${color}-700 bg-${color}-100 px-2 py-1 rounded-full">
+                ${i.stock} ${i.unit || ''}
+            </span>
+        </div>`;
+    }).join('');
 }
 
 function openStockEntryModal(itemId, source) {

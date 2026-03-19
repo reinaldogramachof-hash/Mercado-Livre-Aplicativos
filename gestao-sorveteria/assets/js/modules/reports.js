@@ -254,15 +254,14 @@ function renderReports() {
     }
 
     const totalSales = filteredSales.reduce((sum, s) => sum + s.total, 0);
-    const expenses = totalSales * 0.4;
-    const profit = totalSales - expenses;
+    const avgTicket = filteredSales.length > 0 ? totalSales / filteredSales.length : 0;
 
     const repInc = document.getElementById('rep-inc');
     const repExp = document.getElementById('rep-exp');
     const repBal = document.getElementById('rep-bal');
     if (repInc) repInc.textContent = fmtMoney(totalSales);
-    if (repExp) repExp.textContent = fmtMoney(expenses);
-    if (repBal) repBal.textContent = fmtMoney(profit);
+    if (repExp) repExp.textContent = `${filteredSales.length} venda(s)`;
+    if (repBal) repBal.textContent = fmtMoney(avgTicket);
 }
 
 // --- CONFIGURAÇÕES ---
