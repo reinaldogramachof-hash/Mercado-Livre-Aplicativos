@@ -202,3 +202,34 @@ function removeTechnician(index) {
     
     showNotification('Técnico removido.', 'info');
 }
+// ==========================================
+// PWA - SERVICE WORKER & INSTALLATION
+// ==========================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker registrado!', reg))
+            .catch(err => console.log('Falha ao registrar SW', err));
+    });
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBtn = document.getElementById('install-app-btn');
+    if (installBtn) {
+        installBtn.classList.remove('hidden');
+        installBtn.classList.add('flex');
+    }
+});
+
+async function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Usuário escolheu: ${outcome}`);
+    deferredPrompt = null;
+    const installBtn = document.getElementById('install-app-btn');
+    if (installBtn) installBtn.classList.add('hidden');
+}

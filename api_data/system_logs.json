@@ -1,0 +1,16 @@
+{
+    "logs": [
+        {
+            "timestamp": "2026-03-14 23:06:24",
+            "type": "error",
+            "msg": "Falha: Tentativa de ativação com chave inválida MASTER123",
+            "ip": "::1"
+        },
+        {
+            "timestamp": "2026-03-14 23:06:30",
+            "type": "error",
+            "msg": "Falha: Tentativa de ativação com chave inválida MATER",
+            "ip": "::1"
+        }
+    ]
+}

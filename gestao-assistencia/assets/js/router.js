@@ -85,13 +85,16 @@ function router(view) {
 
 // Relógio global
 function startClock() {
-    const clockEl = document.getElementById('current-time');
+    const clockEl = document.getElementById('header-datetime');
     const updateTime = () => {
         if (!clockEl) return;
         const now = new Date();
-        clockEl.textContent = now.toLocaleTimeString('pt-BR', {
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
+        const optionsDate = { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('pt-BR', optionsDate);
+        const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        // Formata: Segunda-feira, 13 de março de 2026 • 20:40:00
+        clockEl.textContent = `${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)} • ${timeStr}`;
     };
     updateTime();
     setInterval(updateTime, 1000);

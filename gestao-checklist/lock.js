@@ -1,69 +1,46 @@
 /**
  * Lock.js - Guardião de Segurança (Gestão Checklist)
- * Verifica se a licença está presente no localStorage.
- * Se não estiver, redireciona para a seção de login.
- * Padrão ML Factory - V11.5
+ * Padrão ML Factory - V12.1
+ * 🔓 MODO DESENVOLVIMENTO LOCAL — Acesso liberado para testes
  */
 (function () {
     const LICENSE_KEY = 'plena_license';
     const EMAIL_KEY = 'ml_license_email';
     const RECEIPT_KEY = 'ml_receipt_confirmed';
+    const MASTER_KEY = 'ml_master_mode';
 
-    function isLicensed() {
-        if (localStorage.getItem('ml_master_mode') === 'true') return true;
-        return localStorage.getItem(LICENSE_KEY) && localStorage.getItem(EMAIL_KEY);
-    }
+    // Injeta flags de acesso no localStorage para liberar o sistema
+    localStorage.setItem(LICENSE_KEY, 'DEV-LOCAL');
+    localStorage.setItem(EMAIL_KEY, 'dev@localhost');
+    localStorage.setItem(MASTER_KEY, 'true');
+    localStorage.setItem(RECEIPT_KEY, 'true');
 
-    function isReceiptConfirmed() {
-        if (localStorage.getItem('ml_master_mode') === 'true') return true;
-        return !!localStorage.getItem(RECEIPT_KEY);
-    }
+    function isLicensed() { return true; }
+    function isReceiptConfirmed() { return true; }
 
-    // Expor função globalmente para verificação
     window.__checkLicense = isLicensed;
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function initLock() {
+        console.log('[LOCK] ✅ MODO DEV — Acesso liberado automaticamente');
+
         const loginView = document.getElementById('view-login');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.querySelector('main');
+        const overlay = document.getElementById('overlay');
+        const receiptModal = document.getElementById('welcome-receipt-modal');
 
-        if (!isLicensed()) {
-            // Esconde tudo exceto login
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.querySelector('main');
-            const overlay = document.getElementById('overlay');
+        if (loginView) { loginView.classList.add('hide'); loginView.style.display = 'none'; }
+        if (receiptModal) receiptModal.classList.add('hidden');
+        if (sidebar) sidebar.style.display = '';
+        if (mainContent) mainContent.style.display = '';
+        if (overlay) overlay.style.display = '';
+    }
 
-            if (sidebar) sidebar.style.display = 'none';
-            if (mainContent) mainContent.style.display = 'none';
-            if (overlay) overlay.style.display = 'none';
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLock);
+    } else {
+        initLock();
+    }
 
-            // Mostra tela de ativação
-            if (loginView) {
-                loginView.classList.remove('hide');
-                loginView.style.display = 'flex';
-            }
-        } else if (!isReceiptConfirmed()) {
-            // Tem licença mas não tem recibo
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.querySelector('main');
-
-            if (sidebar) sidebar.style.display = 'none';
-            if (mainContent) mainContent.style.display = 'none';
-
-            // Oculta login também
-            if (loginView) {
-                loginView.classList.add('hide');
-                loginView.style.display = 'none';
-            }
-
-            const receiptModal = document.getElementById('welcome-receipt-modal');
-            if (receiptModal) receiptModal.classList.remove('hidden');
-        } else {
-            // Tem licença e tem recibo
-            if (loginView) {
-                loginView.classList.add('hide');
-                loginView.style.display = 'none';
-            }
-            const receiptModal = document.getElementById('welcome-receipt-modal');
-            if (receiptModal) receiptModal.classList.add('hidden');
-        }
-    });
+    setTimeout(initLock, 100);
 })();

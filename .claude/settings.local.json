@@ -4,7 +4,15 @@
       "Bash(python3:*)",
       "Bash(python _patch_trial.py)",
       "Bash(del \"_patch_trial.py\")",
-      "Bash(ls \"c:\\\\Users\\\\reina\\\\OneDrive\\\\Desktop\\\\Mercado Livre Aplicativos\\\\gestao-assistencia\\\\assets\\\\js\"\" && ls \"c:UsersreinaOneDriveDesktopMercado Livre Aplicativosgestao-barbeariaassetsjs\"\")"
+      "Bash(ls \"c:\\\\Users\\\\reina\\\\OneDrive\\\\Desktop\\\\Mercado Livre Aplicativos\\\\gestao-assistencia\\\\assets\\\\js\"\" && ls \"c:UsersreinaOneDriveDesktopMercado Livre Aplicativosgestao-barbeariaassetsjs\"\")",
+      "Bash(wc -l \"/c/Users/reina/OneDrive/Desktop/Mercado Livre Aplicativos/_matriz/gestao_sorveteria/\"*)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/reina/OneDrive/Desktop/Mercado Livre Aplicativos/**)",
+      "Bash(grep -n \"replace\\(/\\\\\\\\./g\\\\|currentSaleTotal\\\\|window\\\\.currentSaleTotal\\\\|setPaymentMethod\\\\b\\\\|setPDVPayment\\\\|clearSale\\\\|bg-blue-100\\\\|setPDVPayment.*this\" \"c:\\\\Users\\\\reina\\\\OneDrive\\\\Desktop\\\\Mercado Livre Aplicativos\\\\gestao-sorveteria\\\\assets\\\\js\\\\modules\\\\pdv.js\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\reina\\OneDrive\\Desktop\\Mercado Livre Aplicativos\\.agent"
     ]
   }
 }
