@@ -220,9 +220,42 @@ function renderExpiryAlerts() {
 }
 
 function openStockEntryModal(itemId, source) {
-    // Simple inline prompt fallback
-    const qty = parseFloat(prompt('Quantidade de entrada:'));
-    if (isNaN(qty) || qty <= 0) return;
+    // Remove modal anterior se existir
+    const old = document.getElementById('stock-entry-inline-modal');
+    if (old) old.remove();
+
+    const item = source === 'product'
+        ? db.products.find(x => x.id === itemId)
+        : (db.inventory || []).find(x => x.id === itemId);
+    if (!item) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'stock-entry-inline-modal';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+    modal.innerHTML = `
+        <div class="fixed inset-0 bg-black/40" onclick="document.getElementById('stock-entry-inline-modal')?.remove()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm z-10">
+            <h3 class="font-bold text-gray-800 mb-1">Entrada de Estoque</h3>
+            <p class="text-sm text-gray-500 mb-4">${item.name} — atual: ${item.stock} ${item.unit || ''}</p>
+            <label class="text-xs font-bold text-gray-500 uppercase">Quantidade a adicionar</label>
+            <input type="number" id="stock-entry-qty" min="0.01" step="0.01"
+                class="w-full border rounded-lg px-3 py-2 mt-1 mb-4 text-sm outline-none focus:border-teal-400"
+                placeholder="Ex: 10">
+            <div class="flex gap-2">
+                <button onclick="confirmStockEntry('${itemId}','${source}')"
+                    class="flex-1 bg-teal-500 text-white rounded-lg py-2 font-bold text-sm hover:bg-teal-600">Confirmar</button>
+                <button onclick="document.getElementById('stock-entry-inline-modal')?.remove()"
+                    class="flex-1 border border-gray-300 text-gray-700 rounded-lg py-2 font-bold text-sm hover:bg-gray-50">Cancelar</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    setTimeout(() => document.getElementById('stock-entry-qty')?.focus(), 100);
+}
+
+function confirmStockEntry(itemId, source) {
+    const qty = parseFloat(document.getElementById('stock-entry-qty')?.value || 0);
+    if (isNaN(qty) || qty <= 0) { showNotification('Informe uma quantidade válida.', 'error'); return; }
     if (source === 'product') {
         const p = db.products.find(x => x.id === itemId);
         if (p) { p.stock += qty; save(); renderInventory(); showNotification(`+${qty} adicionado ao estoque de ${p.name}`, 'success'); }
@@ -230,6 +263,7 @@ function openStockEntryModal(itemId, source) {
         const i = (db.inventory || []).find(x => x.id === itemId);
         if (i) { i.stock += qty; save(); renderInventory(); showNotification(`+${qty} adicionado`, 'success'); }
     }
+    document.getElementById('stock-entry-inline-modal')?.remove();
 }
 
 function openStockTakeModal() {

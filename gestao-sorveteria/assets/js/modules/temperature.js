@@ -93,7 +93,7 @@ function renderTemperatureChart() {
     let chartHTML = '';
     hours.forEach((hour, index) => {
         const temp = hourlyTemps[hour];
-        const hourLabel = new Date(hour).getHours().toString().padStart(2, '0') + 'h';
+        const hourLabel = hour.slice(11, 13) + 'h';
         if (temp === null) {
             chartHTML += `<div class="bar-group"><div class="bar-wrapper"></div><div class="x-label">${hourLabel}</div></div>`;
             return;

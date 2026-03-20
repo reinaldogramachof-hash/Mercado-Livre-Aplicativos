@@ -188,6 +188,17 @@ function completeSale() {
     const pdvModal = document.getElementById('pdvCheckoutModal');
     if (pdvModal) {
         pdvModal.classList.remove('hidden');
+        // Inicializar visibilidade do campo de troco conforme método ativo
+        const moneySection = document.getElementById('pdv-money-section');
+        const changeSection = document.getElementById('pdv-change-section');
+        const isDinheiro = pdvPaymentMethod === 'dinheiro';
+        if (moneySection) moneySection.classList.toggle('hidden', !isDinheiro);
+        if (changeSection) changeSection.classList.toggle('hidden', !isDinheiro);
+        // Resetar campo de valor recebido
+        const receivedEl = document.getElementById('pdv-received');
+        if (receivedEl) receivedEl.value = '';
+        const changeEl = document.getElementById('pdv-change');
+        if (changeEl) changeEl.textContent = 'R$ 0,00';
     } else {
         // Fallback: finalizar direto
         finalizeSale(pdvPaymentMethod);
@@ -360,7 +371,7 @@ function openQuickSaleModal() {
     grid.innerHTML = products.length === 0
         ? '<p class="col-span-2 text-center text-gray-400 py-4 text-sm">Nenhum produto em estoque.</p>'
         : products.map(p => `
-            <button onclick="addToCart('${p.id}'); showNotification('${p.name} adicionado!', 'success');"
+            <button onclick="addToCart('${p.id}'); closeQuickSaleModal(); showNotification('${p.name} adicionado!', 'success');"
                 class="p-3 bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 rounded-xl text-left transition-all active:scale-95">
                 <p class="text-xs font-bold text-gray-800 leading-tight">${p.name}</p>
                 <p class="text-xs text-teal-600 font-bold mt-1">${fmtMoney(p.price)}</p>
@@ -374,4 +385,9 @@ function openQuickSaleModal() {
 function closeQuickSaleModal() {
     const modal = document.getElementById('quick-sale-modal');
     if (modal) modal.classList.add('hidden');
+}
+
+function newSale() {
+    clearSale();
+    router('cashier');
 }
