@@ -235,9 +235,8 @@ function init() {
     restoreSidebarState();
 
     const _now = new Date();
-    const today = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-${String(_now.getDate()).padStart(2,'0')}`;
     const dateEl = document.getElementById('current-date');
-    if (dateEl) dateEl.textContent = fmtDate(today);
+    if (dateEl) dateEl.textContent = `${String(_now.getDate()).padStart(2,'0')}/${String(_now.getMonth()+1).padStart(2,'0')}/${_now.getFullYear()}`;
     if (typeof updateTime === 'function') updateTime();
 
     // Inicializar produtos padrão se vazio

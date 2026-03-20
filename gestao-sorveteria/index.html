@@ -21,6 +21,7 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS -->
+    <script src="assets/js/tailwind_config.js"></script>
     <script src="assets/libs/tailwindcss.js"></script>
     <script src="assets/libs/lucide.js"></script>
 
@@ -35,7 +36,6 @@
     <script src="assets/js/modules/production.js"></script>
     <script src="assets/js/modules/reports.js"></script>
     <script src="assets/js/app.js"></script>
-    <script src="assets/js/tailwind_config.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
@@ -644,23 +644,23 @@
                                     <label class="text-sm font-medium text-gray-700 mb-2 block">Forma de
                                         Pagamento</label>
                                     <div class="grid grid-cols-2 gap-2">
-                                        <button onclick="setPaymentMethod('dinheiro')"
-                                            class="payment-method p-2 rounded border text-sm hover:bg-gray-50"
+                                        <button onclick="setPDVPayment('dinheiro', this)"
+                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
                                             data-method="dinheiro">
                                             Dinheiro
                                         </button>
-                                        <button onclick="setPaymentMethod('pix')"
-                                            class="payment-method p-2 rounded border text-sm hover:bg-gray-50"
+                                        <button onclick="setPDVPayment('pix', this)"
+                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
                                             data-method="pix">
                                             PIX
                                         </button>
-                                        <button onclick="setPaymentMethod('debito')"
-                                            class="payment-method p-2 rounded border text-sm hover:bg-gray-50"
+                                        <button onclick="setPDVPayment('debito', this)"
+                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
                                             data-method="debito">
                                             Débito
                                         </button>
-                                        <button onclick="setPaymentMethod('credito')"
-                                            class="payment-method p-2 rounded border text-sm hover:bg-gray-50"
+                                        <button onclick="setPDVPayment('credito', this)"
+                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
                                             data-method="credito">
                                             Crédito
                                         </button>
