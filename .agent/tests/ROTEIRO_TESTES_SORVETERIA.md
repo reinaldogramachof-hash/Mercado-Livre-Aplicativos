@@ -608,40 +608,40 @@ Você é um **QA Sênior simulando um usuário real** — um operador de sorvete
 
 | ID | Módulo | Status | Observação |
 |----|--------|--------|------------|
-| T-01 | Login / Ativação | ✅ PASS | Master Mode ativado e Dashboard ok. |
-| T-02 | Header | ✅ PASS | Data/Hora ok, Modal Venda rápida abriu. |
-| T-03 | Dashboard KPIs | ✅ PASS | Zerados. Sem dados falseados. |
-| T-04 | Freezer Log | ✅ PASS | Todos atualizados sem randomização. |
-| T-05 | Freezer Reminder | ✅ PASS | Banner reagiu e scroll ok. |
-| T-06 | Cadastro Produtos | ❌ FAIL | Instabilidades com form validity de Estoque Mínimo no modal. |
-| T-07 | PDV — Fluxo completo | ❌ FAIL | Desconto no carrinho ignorado pelo checkout modal. |
-| T-08 | PDV — Troco > R$999 | ❌ FAIL | Bloqueado por T-06/T-07. |
-| T-09 | PDV — Limpar venda | ❌ FAIL | Ao limpar a venda, desconto e forma de pgto retidos. |
-| T-10 | Venda Rápida | ❌ FAIL | Modal não auto-fecha após seleção de produto. |
-| T-11 | Produção — Registrar | ✅ PASS | Salvo em estado "Produzindo". |
-| T-12 | Produção — Marcar Pronto | ✅ PASS | Alteração flutuou badge e KPIs. |
-| T-13 | Estoque — Novo Ingrediente | ✅ PASS | Salvo com preenchimento correto de custo|
-| T-14 | Estoque — Alerta Validade | ✅ PASS | Card alertou laranjado produto em risco. |
-| T-15 | Estoque — Entrada por linha | ❌ FAIL | Botão (+) clicado ignora e não traz modal de entrada pontual. |
-| T-16 | Temperatura — Modal | ⚠️ PARCIAL | Picolés sumido do DB nativo, mas drop seleto funcionou em outros. |
-| T-17 | Temperatura — Gráfico | ✅ PASS | Grafico reagiu com gap/barras reais ok. |
-| T-18 | Clientes | ✅ PASS | Maria cadastrada com 0. |
+| T-01 | Login / Ativação | ⚠️ PARCIAL | O sistema redireciona direto para o Dashboard burlando a tela de login inicial. |
+| T-02 | Header | ⚠️ PARCIAL | Data exibida está desatualizada (19/03/2026). Modal "Venda Rápida" ok. |
+| T-03 | Dashboard KPIs | ⚠️ PARCIAL | Valores zerados, mas rótulos diferentes (Mês vs Hoje, Estoque vs Clientes). |
+| T-04 | Freezer Log | ❌ FAIL | Card exibe apenas contagem (0/3); não possui campos de input para temperaturas. |
+| T-05 | Freezer Reminder | ❌ FAIL | Banner de lembrete não renderiza ao expirar o tempo limite. |
+| T-06 | Cadastro Produtos | ❌ FAIL | Botão "Novo Produto" ausente ou inativo na lista, bloqueando criação manual. |
+| T-07 | PDV — Fluxo completo | ❌ FAIL | Ausência completa do campo "Valor Recebido", impedindo finalização em Dinheiro. |
+| T-08 | PDV — Troco > R$999 | ❌ FAIL | Inviável testar devido à ausência do campo relatada no T-07. |
+| T-09 | PDV — Limpar venda | ❌ FAIL | Botão "Nova Venda / Limpar" não esvazia o carrinho retido na tela. |
+| T-10 | Venda Rápida | ⚠️ PARCIAL | Modal adiciona item, mas não fecha automaticamente. Tranca a UI fluida. |
+| T-11 | Produção — Registrar | ✅ PASS | Registro funcional e KPIs respondem. |
+| T-12 | Produção — Marcar Pronto | ✅ PASS | Alteração para "Pronto" funcional. |
+| T-13 | Estoque — Novo Ingrediente | ✅ PASS | Salvo com preenchimento correto. |
+| T-14 | Estoque — Alerta Validade | ✅ PASS | Alertou produto em risco na seção dedicada. |
+| T-15 | Estoque — Entrada por linha | ❌ FAIL | O botão (+) não invoca modal nem dialog; botão morto. |
+| T-16 | Temperatura — Modal | ✅ PASS | Registro inserido com sucesso via seleção de dropdown. |
+| T-17 | Temperatura — Gráfico | ⚠️ PARCIAL | Barras renderizam valores, porém eixos X exibem labels "NaNh" ou invalidados. |
+| T-18 | Clientes | ✅ PASS | Cliente cadastrado perfeitamente. |
 | T-19 | Fornecedores | ✅ PASS | Fornecedor gravado. |
-| T-20 | Relatórios | ✅ PASS | Despesas 40% fake sumiram real. |
-| T-21 | Configurações | ✅ PASS | Salvo no LocalStorage sem reveses. |
-| T-22 | Backup | ✅ PASS | Processo JSON disparado ok. |
-| T-23 | Sidebar Collapse | ✅ PASS | CSS Toggle e refresh perfeitamente lidos. |
-| T-24 | Persistência F5 | ✅ PASS | Base viva inteiramente sem resets. |
-| T-25 | White-Label | ✅ PASS | Nenhuma marcação do desenvolvedor aparente. |
+| T-20 | Relatórios | ✅ PASS | Exibição real coerente baseada no Storage vazio. Despesas falsas removidas. |
+| T-21 | Configurações | ✅ PASS | Persistência preservada e salva de volta. |
+| T-22 | Backup | ✅ PASS | Download ativado nativamente. |
+| T-23 | Sidebar Collapse | ✅ PASS | Toggle CSS flutua e refresh é suportado. |
+| T-24 | Persistência F5 | ✅ PASS | Nenhum estado perdeu dados do Storage Local. |
+| T-25 | White-Label | ✅ PASS | Nenhuma marcação impura mantida na view completa. |
 
 ---
 
 ## Score Final
 
 ```
-PASS:    18/25
-FAIL:    06/25
-PARCIAL: 01/25
+PASS:    13/25
+FAIL:    07/25
+PARCIAL: 05/25
 ```
 
 **Classificação:**
@@ -655,12 +655,16 @@ PARCIAL: 01/25
 
 | # | Teste | Comportamento Observado | Reproduzível? |
 |---|-------|------------------------|---------------|
-| 1 | T-06 | Erro na validação HTML5 do formulário limitando a digitação no campo `Estoque Mínimo`. | Sim |
-| 2 | T-07 | Desconto subtraído no carrinho não debita o Subtotal apresentado na tela visual do troco. | Sim |
-| 3 | T-08 | Impossibilitado de validar valores de Troco grandes devido ao erro global no checkout. | Sim |
-| 4 | T-09 | Botão "Nova Venda / Limpar" apenas esvazia carrinho, não limpando desconto ou pgto em `pdv.js`. | Sim |
-| 5 | T-10 | Venda Rápida adiciona o valor, porém o modal não executa `closeModal()`, trancando a UI. | Sim |
-| 6 | T-15 | Clicar no ícone de "Entrada (+)" não invoca via onclick o `openStockEntryModal()`. | Sim |
+| 1 | T-01 | Login inicial via URL é forçado para o Dashboard, não exigindo destrancar primeiro. | Sim |
+| 2 | T-02 | A data em header foi engessada em formato literal ou atrasada em fuso horário (19/03). | Sim |
+| 3 | T-04 | Card Freezers apresenta apenas um "resumo 0/3" e nenhum campo text-input para digitação real diária. | Sim |
+| 4 | T-05 | Lógica de alerta por timeout de freezers parou de sinalizar o banner visual âmbar. | Sim |
+| 5 | T-06 | Operação de gerir inventário/produto está travada por ocultação de DOM do botão de +. | Sim |
+| 6 | T-07 | PDV travado de receber pagamentos via modal; ausência notória da key de "Valor recebido" em Dinheiro. | Sim |
+| 7 | T-09 | Ao clicar no header superior direito em "Nova Venda", sistema abandona a UX e o array de cart permance inalterado. | Sim |
+| 8 | T-10 | Quick Sales Overlay força dismiss manual em via de encavalamento sobre o painel real do pdv. | Sim |
+| 9 | T-15 | Lista UI de Ingredientes injetou svg/HTML para um botão "+" com eventListener deficiente ou nulo. | Sim |
+| 10 | T-17 | Problemas no parsing de hora do Chart JS ou similar (`NaNh`), perdendo rótulo X de temporalidade. | Sim |
 
 ---
 
