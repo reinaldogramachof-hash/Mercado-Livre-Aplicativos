@@ -231,30 +231,29 @@ function deleteSupplier(id) {
 // --- RELATÓRIOS ---
 function renderReports() {
     const periodEl = document.getElementById('report-period');
-    const period = periodEl ? periodEl.value : 'all';
-    let filteredSales = db.sales;
-    let filteredProduction = db.production;
+    const period = periodEl ? periodEl.value : 'month';
+    let filteredSales = [...db.sales];
 
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
 
     if (period === 'today') {
         filteredSales = filteredSales.filter(s => s.date === todayStr);
-        filteredProduction = filteredProduction.filter(p => p.date === todayStr);
     } else if (period === 'week') {
         const lastWeek = new Date(today);
         lastWeek.setDate(today.getDate() - 7);
         filteredSales = filteredSales.filter(s => new Date(s.date) >= lastWeek);
     } else if (period === 'month') {
         const currentMonth = todayStr.slice(0, 7);
-        filteredSales = filteredSales.filter(s => s.date.startsWith(currentMonth));
+        filteredSales = filteredSales.filter(s => s.date && s.date.startsWith(currentMonth));
     } else if (period === 'year') {
         const currentYear = todayStr.slice(0, 4);
-        filteredSales = filteredSales.filter(s => s.date.startsWith(currentYear));
+        filteredSales = filteredSales.filter(s => s.date && s.date.startsWith(currentYear));
     }
 
-    const totalSales = filteredSales.reduce((sum, s) => sum + s.total, 0);
-    const avgTicket = filteredSales.length > 0 ? totalSales / filteredSales.length : 0;
+    // ── KPIs principais ──
+    const totalSales = filteredSales.reduce((sum, s) => sum + (s.total || 0), 0);
+    const avgTicket  = filteredSales.length > 0 ? totalSales / filteredSales.length : 0;
 
     const repInc = document.getElementById('rep-inc');
     const repExp = document.getElementById('rep-exp');
@@ -262,6 +261,93 @@ function renderReports() {
     if (repInc) repInc.textContent = fmtMoney(totalSales);
     if (repExp) repExp.textContent = `${filteredSales.length} venda(s)`;
     if (repBal) repBal.textContent = fmtMoney(avgTicket);
+
+    // ── Breakdown por forma de pagamento ──
+    const paymentEl = document.getElementById('rep-payment-breakdown');
+    if (paymentEl) {
+        const paymentMap = {};
+        filteredSales.forEach(s => {
+            const method = s.paymentMethod || 'dinheiro';
+            if (!paymentMap[method]) paymentMap[method] = { count: 0, total: 0 };
+            paymentMap[method].count++;
+            paymentMap[method].total += (s.total || 0);
+        });
+
+        const labels = {
+            dinheiro: '💵 Dinheiro',
+            pix:      '📱 PIX',
+            debito:   '💳 Débito',
+            credito:  '💳 Crédito'
+        };
+        const entries = Object.entries(paymentMap).sort((a, b) => b[1].total - a[1].total);
+
+        if (entries.length === 0) {
+            paymentEl.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Nenhuma venda no período</p>';
+        } else {
+            paymentEl.innerHTML = entries.map(([method, data]) => {
+                const pct = totalSales > 0 ? Math.round((data.total / totalSales) * 100) : 0;
+                return `
+                    <div class="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
+                        <span class="text-sm font-medium text-gray-700 w-28 shrink-0">${labels[method] || method}</span>
+                        <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                            <div class="h-full bg-teal-500 rounded-full transition-all" style="width:${pct}%"></div>
+                        </div>
+                        <span class="text-xs font-bold text-gray-700 w-20 text-right">${fmtMoney(data.total)}</span>
+                        <span class="text-xs text-gray-400 w-10 text-right">${pct}%</span>
+                    </div>`;
+            }).join('');
+        }
+    }
+
+    // ── Top produtos por receita ──
+    const chartEl = document.getElementById('top-flavors-chart');
+    if (chartEl) {
+        const productMap = {};
+        filteredSales.forEach(s => {
+            (s.items || []).forEach(item => {
+                if (!productMap[item.name]) productMap[item.name] = { total: 0, qty: 0 };
+                productMap[item.name].total += (item.total || 0);
+                productMap[item.name].qty   += (item.qty || 1);
+            });
+        });
+
+        const topProducts = Object.entries(productMap)
+            .sort((a, b) => b[1].total - a[1].total)
+            .slice(0, 5);
+
+        if (topProducts.length === 0) {
+            chartEl.className = 'h-40 flex items-center justify-center text-gray-400 text-sm bg-gray-50 rounded-lg';
+            chartEl.innerHTML = 'Nenhuma venda no período selecionado';
+        } else {
+            const maxVal = topProducts[0][1].total;
+            const medals = ['🥇', '🥈', '🥉', '4°', '5°'];
+            chartEl.className = 'space-y-3 pt-2';
+            chartEl.innerHTML = topProducts.map(([name, data], i) => {
+                const pct = maxVal > 0 ? Math.round((data.total / maxVal) * 100) : 0;
+                return `
+                    <div class="flex items-center gap-3">
+                        <span class="text-base w-6 text-center shrink-0">${medals[i]}</span>
+                        <span class="text-sm font-medium text-gray-700 w-36 truncate shrink-0" title="${sanitizeHTML(name)}">${sanitizeHTML(name)}</span>
+                        <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-teal-400 to-teal-600 rounded-full" style="width:${pct}%"></div>
+                        </div>
+                        <span class="text-xs font-bold text-teal-700 w-20 text-right">${fmtMoney(data.total)}</span>
+                    </div>`;
+            }).join('');
+        }
+    }
+}
+
+function shareReport() {
+    const periodEl  = document.getElementById('report-period');
+    const periodTxt = periodEl ? periodEl.options[periodEl.selectedIndex]?.text : 'Período';
+    const repInc    = document.getElementById('rep-inc')?.textContent  || 'R$ 0,00';
+    const repExp    = document.getElementById('rep-exp')?.textContent  || '0';
+    const repBal    = document.getElementById('rep-bal')?.textContent  || 'R$ 0,00';
+    const store     = db.settings?.companyName || 'Sorveteria';
+
+    const msg = `📊 *Relatório — ${store}*\n📅 Período: ${periodTxt}\n\n💰 Receita Total: ${repInc}\n🧾 Nº de Vendas: ${repExp}\n📈 Ticket Médio: ${repBal}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 // --- CONFIGURAÇÕES ---

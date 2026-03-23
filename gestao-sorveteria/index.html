@@ -1110,7 +1110,7 @@
                 </div>
 
                 <!-- Freezers Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div id="freezer-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <!-- Freezer cards will be loaded here -->
                 </div>
 
@@ -1317,12 +1317,26 @@
                         </div>
                     </div>
 
-                    <!-- Top Flavors (Placeholder for future implementation) -->
+                    <!-- Breakdown por Forma de Pagamento -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="font-bold text-gray-800 mb-4">Sabores Mais Vendidos</h3>
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i data-lucide="credit-card" class="w-5 h-5 text-teal-500"></i>
+                            Formas de Pagamento
+                        </h3>
+                        <div id="rep-payment-breakdown">
+                            <p class="text-gray-400 text-sm text-center py-4">Nenhuma venda no período</p>
+                        </div>
+                    </div>
+
+                    <!-- Top Produtos / Sabores Mais Vendidos -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5 text-teal-500"></i>
+                            Produtos Mais Vendidos
+                        </h3>
                         <div id="top-flavors-chart"
                             class="h-40 flex items-center justify-center text-gray-400 text-sm bg-gray-50 rounded-lg">
-                            Gráfico de sabores será exibido aqui
+                            Nenhuma venda no período selecionado
                         </div>
                     </div>
 
