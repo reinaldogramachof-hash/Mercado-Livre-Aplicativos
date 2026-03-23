@@ -8,10 +8,14 @@
     --brand-dark: #0F766E;
     --brand-black: #0f172a;
     --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --body-bg: #F8FAFC;
-    --text-main: #1e293b;
-    --card-bg: #FFFFFF;
+    --glass-bg: rgba(21, 27, 44, 0.85);
+    --body-bg: #0F172A;
+    --text-main: #F8FAFC;
+    --card-bg: #151B2C;
+    --card-secondary: #1E2940;
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.10);
+    --border-subtle: rgba(255, 255, 255, 0.08);
 }
 
 .dark {
@@ -21,6 +25,9 @@
     --glass-bg: rgba(21, 27, 44, 0.8);
     --glass-border: rgba(255, 255, 255, 0.05);
 }
+
+/* Dark override — app cards 
+   (tratado via Tailwind override abaixo) */
 
 
 /* ── Body with Radial Gradient ── */
@@ -228,7 +235,7 @@ body {
 
 .x-label {
     font-size: 10px;
-    color: #666;
+    color: #94A3B8;
     text-align: center;
     margin-top: 8px;
     font-weight: 500;
@@ -246,14 +253,14 @@ body {
     letter-spacing: 0.05em;
 }
 
-.badge-success { background-color: #DCFCE7; color: #166534; }
-.badge-warning { background-color: #FEF3C7; color: #92400E; }
-.badge-danger  { background-color: #FEE2E2; color: #991B1B; }
+.badge-success { background-color: rgba(22, 101, 52, 0.3);  color: #86EFAC; border: 1px solid rgba(134, 239, 172, 0.2); }
+.badge-warning { background-color: rgba(146, 64, 14, 0.3);  color: #FCD34D; border: 1px solid rgba(252, 211, 77, 0.2); }
+.badge-danger  { background-color: rgba(153, 27, 27, 0.3);  color: #FCA5A5; border: 1px solid rgba(252, 165, 165, 0.2); }
 
 /* ── Progress Bar ── */
 .progress-bar {
     height: 8px;
-    background: #e2e8f0;
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 99px;
     overflow: hidden;
 }
@@ -275,12 +282,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #334155;
     border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #475569;
 }
 
 /* ── Manual Section ── */
@@ -381,4 +388,264 @@ body {
         line-height: 1.2;
         font-family: 'Courier New', monospace;
     }
+}
+
+/* ── Dark Mode Global Override ── */
+.main-content .bg-white,
+.main-content .bg-gray-50,
+.main-content .bg-slate-50 {
+    background-color: var(--card-bg) !important;
+}
+
+.main-content .bg-gray-100,
+.main-content .bg-slate-100 {
+    background-color: var(--card-secondary) !important;
+}
+
+.main-content .border-gray-200,
+.main-content .border-slate-200,
+.main-content .border-gray-100 {
+    border-color: var(--border-subtle) !important;
+}
+
+.main-content .text-gray-900,
+.main-content .text-gray-800,
+.main-content .text-slate-900,
+.main-content .text-slate-800 {
+    color: #F8FAFC !important;
+}
+
+.main-content .text-gray-700,
+.main-content .text-slate-700,
+.main-content .text-gray-600,
+.main-content .text-slate-600 {
+    color: #CBD5E1 !important;
+}
+
+.main-content .text-gray-500,
+.main-content .text-slate-500 {
+    color: #94A3B8 !important;
+}
+
+input:not([class*="bg-teal"]):not([class*="bg-brand"]),
+select:not([class*="bg-teal"]),
+textarea {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: #F8FAFC !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #64748B !important;
+}
+
+/* table rows */
+.main-content table thead tr {
+    background-color: #1E2940 !important;
+}
+.main-content table tbody tr {
+    border-color: var(--border-subtle) !important;
+}
+.main-content table tbody tr:hover,
+.main-content .hover\:bg-gray-50:hover,
+.main-content .hover\:bg-gray-100:hover {
+    background-color: rgba(255,255,255,0.04) !important;
+}
+
+/* ── Cards coloridos (alertas, status) ── */
+.main-content .bg-amber-50,
+.main-content .bg-yellow-50 {
+    background-color: rgba(120, 53, 15, 0.25) !important;
+    border-color: rgba(252, 211, 77, 0.2) !important;
+}
+.main-content .bg-green-50,
+.main-content .bg-teal-50,
+.main-content .bg-emerald-50 {
+    background-color: rgba(13, 148, 136, 0.15) !important;
+    border-color: rgba(13, 148, 136, 0.25) !important;
+}
+.main-content .bg-red-50,
+.main-content .bg-rose-50 {
+    background-color: rgba(153, 27, 27, 0.2) !important;
+    border-color: rgba(252, 165, 165, 0.2) !important;
+}
+.main-content .bg-blue-50,
+.main-content .bg-indigo-50 {
+    background-color: rgba(30, 58, 138, 0.2) !important;
+    border-color: rgba(147, 197, 253, 0.2) !important;
+}
+.main-content .bg-orange-50 {
+    background-color: rgba(124, 45, 18, 0.2) !important;
+    border-color: rgba(253, 186, 116, 0.2) !important;
+}
+
+/* textos em cards coloridos */
+.main-content .text-amber-700,
+.main-content .text-yellow-700 { color: #FCD34D !important; }
+.main-content .text-amber-600,
+.main-content .text-yellow-600 { color: #FDE68A !important; }
+.main-content .text-green-700,
+.main-content .text-teal-700   { color: #6EE7B7 !important; }
+.main-content .text-green-600,
+.main-content .text-teal-600   { color: #99F6E4 !important; }
+.main-content .text-red-700,
+.main-content .text-rose-700   { color: #FCA5A5 !important; }
+.main-content .text-red-600    { color: #FECACA !important; }
+.main-content .text-blue-700,
+.main-content .text-indigo-700 { color: #93C5FD !important; }
+.main-content .text-cyan-600,
+.main-content .text-cyan-700   { color: #67E8F9 !important; }
+.main-content .text-orange-700 { color: #FDBA74 !important; }
+
+/* ── Modais — bg-white escapam do .main-content ── */
+[class*="fixed"][class*="inset"] .bg-white,
+[class*="fixed"][class*="z-"] .bg-white,
+.bg-white.rounded-2xl,
+.bg-white.rounded-xl {
+    background-color: var(--card-bg) !important;
+    color: var(--text-main) !important;
+}
+
+[class*="fixed"][class*="inset"] .text-gray-900,
+[class*="fixed"][class*="inset"] .text-gray-800,
+[class*="fixed"][class*="z-"] .text-gray-900,
+[class*="fixed"][class*="z-"] .text-gray-800 {
+    color: #F8FAFC !important;
+}
+
+[class*="fixed"][class*="inset"] .text-gray-600,
+[class*="fixed"][class*="inset"] .text-gray-500,
+[class*="fixed"][class*="z-"] .text-gray-600,
+[class*="fixed"][class*="z-"] .text-gray-500 {
+    color: #94A3B8 !important;
+}
+
+[class*="fixed"][class*="inset"] .border-gray-200,
+[class*="fixed"][class*="z-"] .border-gray-200 {
+    border-color: var(--border-subtle) !important;
+}
+
+[class*="fixed"][class*="inset"] .bg-gray-50,
+[class*="fixed"][class*="inset"] .bg-gray-100,
+[class*="fixed"][class*="z-"] .bg-gray-50,
+[class*="fixed"][class*="z-"] .bg-gray-100 {
+    background-color: var(--card-secondary) !important;
+}
+
+/* ── PATCH: border-gray-300 (ausente no override anterior) ── */
+.main-content .border-gray-300,
+.main-content .border-slate-300,
+[class*="fixed"][class*="inset"] .border-gray-300,
+[class*="fixed"][class*="z-"] .border-gray-300 {
+    border-color: rgba(255,255,255,0.12) !important;
+}
+
+/* ── PATCH: bg-gray-200 / bg-blue-100 — botões de filtro e limpar ── */
+.main-content .bg-gray-200,
+.main-content .bg-slate-200 {
+    background-color: var(--card-secondary) !important;
+    color: #CBD5E1 !important;
+}
+.main-content .bg-blue-100 {
+    background-color: rgba(30, 58, 138, 0.2) !important;
+    border-color: rgba(147, 197, 253, 0.15) !important;
+}
+
+/* ── PATCH: bg-green-100 — botões Exportar ── */
+.main-content .bg-green-100 {
+    background-color: rgba(13, 148, 136, 0.15) !important;
+    border-color: rgba(13, 148, 136, 0.3) !important;
+}
+.main-content .text-green-800,
+.main-content .text-emerald-800 { color: #6EE7B7 !important; }
+
+/* ── PATCH: textos orange — alertas de validade ── */
+.main-content .text-orange-800 { color: #FDBA74 !important; }
+.main-content .text-orange-600 { color: #FB923C !important; }
+
+/* ── PATCH: text-blue-600/500 — avisos em Configurações ── */
+.main-content .text-blue-600,
+.main-content .text-blue-500 { color: #93C5FD !important; }
+[class*="fixed"][class*="inset"] .text-blue-600,
+[class*="fixed"][class*="z-"] .text-blue-600 { color: #93C5FD !important; }
+
+/* ── PATCH: text-red-400/500 — badges temperatura ── */
+.main-content .text-red-400,
+.main-content .text-red-500 { color: #FCA5A5 !important; }
+
+/* ── PATCH: Header (fora do .main-content) ── */
+#header .bg-gray-100,
+#header .bg-white,
+.header .bg-gray-100,
+.header .bg-white {
+    background-color: var(--card-secondary) !important;
+}
+#header .text-gray-700, #header .text-gray-600,
+.header .text-gray-700,  .header .text-gray-600 {
+    color: #CBD5E1 !important;
+}
+#header .border-gray-200, #header .border-gray-300,
+.header .border-gray-200,  .header .border-gray-300 {
+    border-color: var(--border-subtle) !important;
+}
+
+/* ── PATCH: select option (dropdown nativo) ── */
+select option {
+    background-color: #1E2940;
+    color: #F8FAFC;
+}
+
+/* ── PATCH: bg-red-100 / bg-purple-100 (ícones KPI) ── */
+.main-content .bg-red-100 {
+    background-color: rgba(153, 27, 27, 0.25) !important;
+}
+.main-content .bg-purple-100,
+.main-content .bg-violet-100 {
+    background-color: rgba(88, 28, 135, 0.25) !important;
+}
+.main-content .bg-pink-100 {
+    background-color: rgba(131, 24, 67, 0.2) !important;
+}
+.main-content .bg-cyan-50 {
+    background-color: rgba(8, 145, 178, 0.15) !important;
+}
+.main-content .hover\:bg-cyan-100:hover {
+    background-color: rgba(8, 145, 178, 0.25) !important;
+}
+
+/* ── PATCH: bg-purple-50 / bg-violet-50 (cards Manual de Uso) ── */
+.main-content .bg-purple-50,
+.main-content .bg-violet-50 {
+    background-color: rgba(88, 28, 135, 0.15) !important;
+}
+.main-content .text-purple-800,
+.main-content .text-purple-700 { color: #C4B5FD !important; }
+.main-content .text-purple-600  { color: #DDD6FE !important; }
+.main-content .border-purple-100,
+.main-content .border-purple-200 { border-color: rgba(196, 181, 253, 0.15) !important; }
+
+/* ── PATCH: Gradiente from-red/orange (Alertas de Validade, Informações Legais) ── */
+/* Tailwind gera background-image, não background-color — precisa nulificar o gradient */
+.main-content [class*="from-red-50"],
+.main-content [class*="from-orange-50"],
+.main-content [class*="from-amber-50"],
+.main-content [class*="from-rose-50"] {
+    background-image: none !important;
+    background-color: rgba(120, 45, 15, 0.2) !important;
+}
+.main-content .border-red-100,
+.main-content .border-red-200 {
+    border-color: rgba(252, 165, 165, 0.15) !important;
+}
+/* Alertas de Validade — texto interno */
+.main-content .text-red-800,
+.main-content .text-red-900 { color: #FCA5A5 !important; }
+.main-content .text-orange-900 { color: #FDBA74 !important; }
+
+/* ── PATCH: divide-y (Tailwind usa > * + * que escapa dos overrides normais) ── */
+.main-content .divide-gray-50 > :not([hidden]) ~ :not([hidden]),
+.main-content .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.main-content .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(255, 255, 255, 0.06) !important;
 }

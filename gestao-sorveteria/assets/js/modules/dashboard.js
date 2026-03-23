@@ -314,6 +314,14 @@ function renderFreezerLog() {
     const summary = document.getElementById('freezer-log-summary');
     if (!container) return;
 
+    // Restaurar estado de collapse
+    const body = document.getElementById('freezer-log-body');
+    const chevron = document.getElementById('freezer-chevron');
+    if (body && localStorage.getItem('freezer_card_collapsed') === '1') {
+        body.style.maxHeight = '0px';
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+    }
+
     const today = new Date().toISOString().split('T')[0];
     const now = Date.now();
     // Compatível com registros que têm só timestamp (sem campo date)
@@ -497,4 +505,15 @@ function dismissFreezerReminder() {
 function scrollToFreezerLog() {
     const card = document.getElementById('freezer-log-card');
     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function toggleFreezerCard() {
+    const body    = document.getElementById('freezer-log-body');
+    const chevron = document.getElementById('freezer-chevron');
+    if (!body) return;
+
+    const isCollapsed = body.style.maxHeight === '0px';
+    body.style.maxHeight = isCollapsed ? '600px' : '0px';
+    if (chevron) chevron.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+    localStorage.setItem('freezer_card_collapsed', isCollapsed ? '0' : '1');
 }

@@ -291,17 +291,23 @@
 
                 <!-- Card: Registro de temperatura dos freezers -->
                 <div id="freezer-log-card" class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6">
-                    <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="p-4 border-b border-gray-100 flex items-center justify-between cursor-pointer select-none"
+                         onclick="toggleFreezerCard()">
                         <div class="flex items-center gap-2">
                             <i data-lucide="thermometer-snowflake" class="w-5 h-5 text-teal-500"></i>
                             <h3 class="font-bold text-gray-800">Verificação de Freezers</h3>
                         </div>
-                        <span class="text-xs text-gray-400 italic" id="freezer-log-summary">Nenhum registro hoje</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-400 italic" id="freezer-log-summary">Nenhum registro hoje</span>
+                            <i data-lucide="chevron-up" id="freezer-chevron" class="w-4 h-4 text-gray-400 transition-transform duration-300"></i>
+                        </div>
                     </div>
+                    <div id="freezer-log-body" class="overflow-hidden transition-all duration-300" style="max-height: 600px;">
                     <div id="freezer-log-list" class="divide-y divide-gray-50">
                         <!-- Renderizado por renderFreezerLog() em dashboard.js -->
-                    </div>
-                </div>
+                    </div><!-- /freezer-log-list -->
+                    </div><!-- /freezer-log-body -->
+                </div><!-- /freezer-log-card -->
 
                 <!-- Welcome Card -->
                 <div class="bg-gradient-to-r from-teal-500 to-teal-400 rounded-2xl p-6 text-white mb-6">
