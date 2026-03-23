@@ -37,7 +37,9 @@ function renderProductsCatalog(category = 'all') {
                 <div class="text-xs text-gray-500 uppercase font-bold mb-1">${product.category}</div>
                 <h3 class="font-bold text-gray-800 mb-2 truncate">${product.name}</h3>
                 <div class="flex justify-between items-end">
-                    <div class="text-lg font-bold text-teal-600">${fmtMoney(product.price)}</div>
+                    <div class="text-lg font-bold text-teal-600">
+                        ${product.tipo === 'massa' ? fmtMoney(product.pricePerHundredGrams || 0) + '/100g' : (product.tipo === 'acai' ? 'Variável' : fmtMoney(product.price || 0))}
+                    </div>
                     <button onclick="deleteProduct('${product.id}')" class="text-gray-400 hover:text-red-600 p-1">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
@@ -78,6 +80,13 @@ function openProductModal() {
     document.getElementById('p-unit').value = 'unidade';
     document.getElementById('p-ingredients').value = '';
     document.getElementById('p-description').value = '';
+
+    // Novos campos
+    document.getElementById('p-tipo').value = 'padrao';
+    document.getElementById('p-price-hundred').value = '';
+    document.getElementById('acai-sizes-list').innerHTML = '';
+    toggleProductTypeFields();
+
     document.getElementById('productModal').classList.remove('hidden');
 }
 
@@ -96,8 +105,20 @@ function saveProduct(e) {
         minStock: parseFloat(document.getElementById('p-min-stock').value) || 0,
         unit: document.getElementById('p-unit').value,
         ingredients: document.getElementById('p-ingredients').value,
-        description: document.getElementById('p-description').value
+        description: document.getElementById('p-description').value,
+        tipo: document.getElementById('p-tipo').value || 'padrao'
     };
+
+    if (product.tipo === 'massa') {
+        product.pricePerHundredGrams = parseFloat(document.getElementById('p-price-hundred').value) || 0;
+    } else if (product.tipo === 'acai') {
+        product.sizes = [];
+        document.querySelectorAll('.acai-size-row').forEach(row => {
+            const label = row.querySelector('.size-label').value;
+            const price = parseFloat(row.querySelector('.size-price').value) || 0;
+            if (label) product.sizes.push({ label, price });
+        });
+    }
 
     // Check if update or new
     const existingIndex = db.products.findIndex(p => p.id === product.id);
@@ -119,4 +140,41 @@ function deleteProduct(id) {
         save();
         renderProductsCatalog();
     }
+}
+
+// ── Funções de Interface do Modal de Produto ──
+
+function toggleProductTypeFields() {
+    const tipo = document.getElementById('p-tipo').value;
+    const wPrice = document.getElementById('wrapper-p-price');
+    const wPriceHundred = document.getElementById('wrapper-p-price-hundred');
+    const wAcaiSizes = document.getElementById('wrapper-p-acai-sizes');
+    const priceInput = document.getElementById('p-price');
+
+    if (wPrice) wPrice.classList.toggle('hidden', tipo !== 'padrao');
+    if (wPriceHundred) wPriceHundred.classList.toggle('hidden', tipo !== 'massa');
+    if (wAcaiSizes) wAcaiSizes.classList.toggle('hidden', tipo !== 'acai');
+
+    if (tipo === 'padrao') {
+        priceInput.setAttribute('required', 'true');
+    } else {
+        priceInput.removeAttribute('required');
+    }
+
+    if (tipo === 'massa') {
+        document.getElementById('p-unit').value = 'gramas';
+    }
+}
+
+function addAcaiSizeRow() {
+    const container = document.getElementById('acai-sizes-list');
+    const div = document.createElement('div');
+    div.className = 'acai-size-row flex gap-2 items-center';
+    div.innerHTML = `
+        <input type="text" placeholder="Ex: 300ml" class="size-label flex-1 border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
+        <input type="number" step="0.01" min="0" placeholder="R$" class="size-price w-24 border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm outline-none">
+        <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 p-2"><i data-lucide="x" class="w-4 h-4"></i></button>
+    `;
+    container.appendChild(div);
+    if (window.lucide) lucide.createIcons();
 }

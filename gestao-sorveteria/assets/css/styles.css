@@ -649,3 +649,31 @@ select option {
 .main-content .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
     border-color: rgba(255, 255, 255, 0.06) !important;
 }
+
+/* ── PDV — botões forma de pagamento ── */
+.pdv-pay-btn {
+    background-color: rgba(255,255,255,0.06) !important;
+    color: #CBD5E1 !important;
+    border-color: rgba(255,255,255,0.12) !important;
+    transition: all 0.15s ease;
+}
+.pdv-pay-btn:hover {
+    background-color: rgba(13,148,136,0.15) !important;
+    border-color: rgba(13,148,136,0.5) !important;
+    color: #5EEAD4 !important;
+}
+.pdv-pay-btn.bg-teal-50 {
+    background-color: rgba(13,148,136,0.25) !important;
+    border-color: #0D9488 !important;
+    color: #CCFBF1 !important;
+    font-weight: 700;
+}
+
+/* ── PDV — círculo ícone de produto ── */
+#products-grid .bg-teal-100 {
+    background-color: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+#products-grid .text-teal-600 {
+    color: #5EEAD4 !important;
+}

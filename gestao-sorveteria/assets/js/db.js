@@ -6,6 +6,10 @@
 const DB_KEY = 'gestao_sorveteria_v1';
 
 const defaultDB = {
+    // Campos NOVOS a suportar no schema (adicionar ao merge/validação):
+    // tipo: 'padrao' | 'massa' | 'acai'   (default: 'padrao')
+    // pricePerHundredGrams: number         (só para tipo='massa')
+    // sizes: [{label, price}]              (só para tipo='acai')
     products: [],
     sales: [],
     clients: [],
@@ -50,6 +54,18 @@ const defaultDB = {
         { id: 'COB002', code: 'COB002', name: 'Calda de Morango', category: 'cobertura', flavor: 'Morango', cost: 1.80, price: 2.80, stock: 8, minStock: 3, unit: 'litro', temperature: 'Ambiente', ingredients: 'Morango, açúcar', description: 'Calda de morango' },
         { id: 'COM001', code: 'COM001', name: 'Granola', category: 'complemento', flavor: 'Natural', cost: 4.00, price: 6.00, stock: 5, minStock: 2, unit: 'kg', temperature: 'Ambiente', ingredients: 'Aveia, mel, castanhas', description: 'Granola crocante' },
         { id: 'COM002', code: 'COM002', name: 'Leite Condensado', category: 'complemento', flavor: 'Doce', cost: 3.50, price: 5.00, stock: 12, minStock: 5, unit: 'litro', temperature: 'Geladeira', ingredients: 'Leite, açúcar', description: 'Leite condensado' }
+    ],
+    adicionais: [
+        { id: 'ad1', name: 'Leite Ninho',  price: 2.00 },
+        { id: 'ad2', name: 'Paçoca',        price: 1.50 },
+        { id: 'ad3', name: 'Granola',       price: 1.00 },
+        { id: 'ad4', name: 'Banana',        price: 0.00 },
+        { id: 'ad5', name: 'Morango',       price: 0.00 },
+        { id: 'ad6', name: 'Mel',           price: 1.50 },
+        { id: 'ad7', name: 'Bis',           price: 2.00 },
+        { id: 'ad8', name: 'Ovomaltine',    price: 2.00 },
+        { id: 'ad9', name: 'Amendoim',      price: 1.00 },
+        { id: 'ad10', name: 'Tapioca',      price: 1.50 }
     ]
 };
 
@@ -57,6 +73,9 @@ let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
 
 // Schema fill — garante novos campos em bancos antigos
 db = Object.assign({}, defaultDB, db);
+if (!db.adicionais || db.adicionais.length === 0) {
+    db.adicionais = [...defaultDB.adicionais];
+}
 
 function save() {
     localStorage.setItem(DB_KEY, JSON.stringify(db));
@@ -110,6 +129,12 @@ function showNotification(message, type = 'info') {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
+}
+
+function sanitizeHTML(str) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(str || ''));
+    return div.innerHTML;
 }
 
 function updateDataStatus() {

@@ -613,11 +613,11 @@
                                 class="p-4 bg-gradient-to-r from-teal-500/10 to-teal-400/10 border-b border-gray-200">
                                 <h3 class="font-bold text-gray-800">Carrinho de Vendas</h3>
                             </div>
-                            <div class="p-4 max-h-[400px] overflow-y-auto" id="sale-cart">
-                                <div class="text-center text-gray-400 py-8">
+                            <div class="p-4 max-h-[400px] overflow-y-auto" id="pdv-cart-items">
+                                <div class="text-center text-gray-400 py-8" id="pdv-cart-empty">
                                     <i data-lucide="shopping-cart" class="w-12 h-12 mx-auto mb-4"></i>
                                     <p>Nenhum produto no carrinho</p>
-                                    <p class="text-sm mt-2">Selecione produtos à esquerda</p>
+                                    <p class="text-[10px] mt-2">Selecione produtos à esquerda</p>
                                 </div>
                             </div>
                         </div>
@@ -627,49 +627,57 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600">Subtotal:</span>
-                                    <span class="font-bold" id="cart-subtotal">R$ 0,00</span>
+                                    <span class="font-bold" id="pdv-subtotal">R$ 0,00</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600">Desconto:</span>
                                     <div class="flex items-center gap-2">
-                                        <input type="number" id="discount-input" min="0" step="0.01"
-                                            class="w-20 border p-1 rounded text-sm text-right" placeholder="0.00">
-                                        <button onclick="applyDiscount()"
-                                            class="text-xs text-brand-primary hover:text-brand-dark">
-                                            Aplicar
-                                        </button>
+                                        <input type="number" id="pdv-discount" min="0" step="0.01"
+                                            class="w-20 border p-1 rounded text-sm text-right" placeholder="0.00" oninput="renderCartTotals()">
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center border-t pt-4">
                                     <span class="text-lg font-bold text-gray-800">Total:</span>
-                                    <span class="text-2xl font-bold text-brand-primary" id="cart-total">R$ 0,00</span>
+                                    <span class="text-2xl font-bold text-brand-primary" id="pdv-total">R$ 0,00</span>
                                 </div>
 
                                 <!-- Payment Method -->
                                 <div class="pt-4">
-                                    <label class="text-sm font-medium text-gray-700 mb-2 block">Forma de
-                                        Pagamento</label>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <button onclick="setPDVPayment('dinheiro', this)"
-                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
-                                            data-method="dinheiro">
-                                            Dinheiro
-                                        </button>
-                                        <button onclick="setPDVPayment('pix', this)"
-                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
-                                            data-method="pix">
-                                            PIX
-                                        </button>
-                                        <button onclick="setPDVPayment('debito', this)"
-                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
-                                            data-method="debito">
-                                            Débito
-                                        </button>
-                                        <button onclick="setPDVPayment('credito', this)"
-                                            class="pdv-pay-btn payment-method p-2 rounded border text-sm hover:bg-teal-50 hover:border-teal-400"
-                                            data-method="credito">
-                                            Crédito
-                                        </button>
+                                    <label class="text-sm font-medium text-gray-700 mb-2 block">Forma de Pagamento</label>
+                                    <div class="grid grid-cols-4 gap-1 p-1 bg-black/20 rounded-xl mb-3">
+                                        <label class="cursor-pointer text-center">
+                                            <input type="radio" name="pdv-payment" value="dinheiro" class="peer hidden" onchange="toggleChangeInput()" checked>
+                                            <div class="py-2 text-xs font-bold text-gray-400 rounded-lg peer-checked:bg-teal-500 peer-checked:text-white peer-checked:shadow transition-all">💵 Dinheiro</div>
+                                        </label>
+                                        <label class="cursor-pointer text-center">
+                                            <input type="radio" name="pdv-payment" value="pix" class="peer hidden" onchange="toggleChangeInput()">
+                                            <div class="py-2 text-xs font-bold text-gray-400 rounded-lg peer-checked:bg-teal-500 peer-checked:text-white peer-checked:shadow transition-all">📱 PIX</div>
+                                        </label>
+                                        <label class="cursor-pointer text-center">
+                                            <input type="radio" name="pdv-payment" value="debito" class="peer hidden" onchange="toggleChangeInput()">
+                                            <div class="py-2 text-xs font-bold text-gray-400 rounded-lg peer-checked:bg-teal-500 peer-checked:text-white peer-checked:shadow transition-all">💳 Débito</div>
+                                        </label>
+                                        <label class="cursor-pointer text-center">
+                                            <input type="radio" name="pdv-payment" value="credito" class="peer hidden" onchange="toggleChangeInput()">
+                                            <div class="py-2 text-xs font-bold text-gray-400 rounded-lg peer-checked:bg-teal-500 peer-checked:text-white peer-checked:shadow transition-all">💳 Crédito</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Troco -->
+                                    <div id="pdv-change-section" class="space-y-2 mb-3 p-3 rounded-xl border border-teal-500/30 bg-teal-500/10">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <label class="text-xs font-bold text-gray-400 uppercase">Recebido</label>
+                                            <div class="relative w-2/3">
+                                                <span class="absolute left-2 top-1.5 text-gray-400 text-sm">R$</span>
+                                                <input type="number" id="pdv-amount-received" min="0" step="0.01" placeholder="0.00"
+                                                    oninput="calculateChange()"
+                                                    class="w-full rounded-lg p-1.5 pl-8 text-sm outline-none font-bold">
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-400">Troco</span>
+                                            <span id="pdv-change-val" class="text-lg font-bold text-teal-400">R$ 0,00</span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -684,7 +692,7 @@
                                 </div>
 
                                 <!-- Checkout Button -->
-                                <button onclick="completeSale()" id="checkout-btn"
+                                <button onclick="finalizeSale()" id="checkout-btn"
                                     class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                     FINALIZAR VENDA
                                 </button>
@@ -692,6 +700,60 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal de Massa -->
+                <div id="massa-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+                        <h3 class="font-bold text-lg mb-1" id="massa-modal-title">Sorvete de Massa</h3>
+                        <p class="text-sm text-gray-500 mb-4" id="massa-modal-price-label">R$ --/100g</p>
+                        <label class="text-sm font-medium text-gray-700 block mb-1">Peso (gramas)</label>
+                        <input type="number" id="massa-weight-input" min="1" step="1" placeholder="Ex: 350"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-2xl text-center font-bold outline-none focus:border-teal-500 mb-2"
+                            oninput="updateMassaPrice()">
+                        <p class="text-center text-3xl font-bold text-teal-600 mb-5" id="massa-calculated-price">R$ 0,00</p>
+                        <div class="flex gap-3">
+                            <button onclick="closeMassaModal()" class="flex-1 border border-gray-200 rounded-xl py-3 font-bold text-sm">Cancelar</button>
+                            <button onclick="confirmMassaItem()" class="flex-1 bg-teal-500 text-white rounded-xl py-3 font-bold text-sm hover:bg-teal-600">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Açaí -->
+                <div id="acai-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl max-h-[92vh] overflow-y-auto">
+                        <h3 class="font-bold text-lg mb-4" id="acai-modal-title">Personalizar Açaí</h3>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Tamanho</p>
+                        <div id="acai-sizes-container" class="grid grid-cols-2 gap-2 mb-5"></div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Adicionais</p>
+                        <div id="acai-adicionais-container" class="grid grid-cols-2 gap-2 mb-5"></div>
+                        <div class="border-t border-gray-100 pt-4 mb-4 text-center">
+                            <p class="text-3xl font-bold text-teal-600" id="acai-total-price">R$ 0,00</p>
+                            <p class="text-xs text-gray-400 mt-1" id="acai-summary-text"></p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="closeAcaiModal()" class="flex-1 border border-gray-200 rounded-xl py-3 font-bold text-sm">Cancelar</button>
+                            <button onclick="confirmAcaiItem()" class="flex-1 bg-teal-500 text-white rounded-xl py-3 font-bold text-sm hover:bg-teal-600">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Sucesso Pós Venda -->
+                <div id="pdvSuccessModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl text-center">
+                        <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="check-circle" class="w-8 h-8 text-teal-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-1">Venda Finalizada!</h3>
+                        <p class="text-gray-500 text-sm mb-6">Deseja imprimir o cupom?</p>
+                        <div class="flex gap-3">
+                            <button onclick="closeModal('pdvSuccessModal')" class="flex-1 border border-gray-200 rounded-xl py-3 font-bold text-sm text-gray-600">Agora não</button>
+                            <button onclick="printLastSale()" class="flex-1 bg-teal-500 text-white rounded-xl py-3 font-bold text-sm hover:bg-teal-600 flex items-center justify-center gap-2">
+                                <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
             <!-- Production View Específica -->
@@ -2046,10 +2108,18 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-500 uppercase">Sabor Principal</label>
-                        <input type="text" id="p-flavor"
-                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
-                            placeholder="Ex: Chocolate, Morango, etc.">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Sabor / Tipo Produto</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="p-flavor"
+                                class="w-1/2 border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
+                                placeholder="Sabor (Ex: Menta)">
+                            <select id="p-tipo" onchange="toggleProductTypeFields()"
+                                class="w-1/2 border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none">
+                                <option value="padrao">Venda Padrão</option>
+                                <option value="massa">Massa (por peso)</option>
+                                <option value="acai">Açaí (Tamanhos)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -2060,9 +2130,15 @@
                             class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="0.00">
                     </div>
-                    <div>
+                    <div id="wrapper-p-price">
                         <label class="text-xs font-bold text-gray-500 uppercase">Preço de Venda (R$)</label>
-                        <input type="number" id="p-price" step="0.01" min="0" required
+                        <input type="number" id="p-price" step="0.01" min="0"
+                            class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
+                            placeholder="0.00">
+                    </div>
+                    <div id="wrapper-p-price-hundred" class="hidden">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Preço por 100g (R$)</label>
+                        <input type="number" id="p-price-hundred" step="0.01" min="0"
                             class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="0.00">
                     </div>
@@ -2072,6 +2148,15 @@
                             class="w-full border dark:border-white/10 dark:bg-slate-800 dark:text-white p-2 rounded-lg text-sm mt-1 outline-none"
                             placeholder="Ex: -18°C">
                     </div>
+                </div>
+
+                <!-- Gestão de Tamanhos Açaí -->
+                <div id="wrapper-p-acai-sizes" class="hidden border border-gray-100 dark:border-white/10 rounded-lg p-3 mt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Tamanhos e Preços</label>
+                        <button type="button" onclick="addAcaiSizeRow()" class="text-xs bg-teal-500 text-white px-2 py-1 rounded hover:bg-teal-600">+ Tamanho</button>
+                    </div>
+                    <div id="acai-sizes-list" class="space-y-2"></div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -2356,70 +2441,6 @@
                     Salvar Fornecedor
                 </button>
             </form>
-        </div>
-    </div>
-
-    <!-- Transaction Modal (Simple Version for Sales/Expenses) -->
-    <!-- Note: Detailed transaction modal might be needed if user wants full finance control -->
-
-    <!-- PDV Checkout Modal -->
-    <div id="pdvCheckoutModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-gray-800">Finalizar Venda</h3>
-                <button onclick="closeModal('pdvCheckoutModal')" class="text-gray-400 hover:text-gray-600">
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-
-            <div class="mb-6">
-                <div class="text-center">
-                    <p class="text-sm text-gray-500">Total a Pagar</p>
-                    <p id="pdv-checkout-total" class="text-3xl font-bold text-brand-primary">R$ 0,00</p>
-                </div>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase">Forma de Pagamento</label>
-                    <div class="grid grid-cols-3 gap-2 mt-2">
-                        <button onclick="setPDVPayment('dinheiro', this)"
-                            class="pdv-pay-btn border p-3 rounded-lg text-sm font-medium hover:bg-blue-50 hover:border-brand-primary">
-                            <i data-lucide="banknote" class="w-4 h-4 mx-auto mb-1"></i>
-                            <span>Dinheiro</span>
-                        </button>
-                        <button onclick="setPDVPayment('pix', this)"
-                            class="pdv-pay-btn border p-3 rounded-lg text-sm font-medium hover:bg-blue-50 hover:border-brand-primary">
-                            <i data-lucide="qr-code" class="w-4 h-4 mx-auto mb-1"></i>
-                            <span>Pix</span>
-                        </button>
-                        <button onclick="setPDVPayment('cartao', this)"
-                            class="pdv-pay-btn border p-3 rounded-lg text-sm font-medium hover:bg-blue-50 hover:border-brand-primary">
-                            <i data-lucide="credit-card" class="w-4 h-4 mx-auto mb-1"></i>
-                            <span>Cartão</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="pdv-money-section" class="hidden">
-                    <label class="text-xs font-bold text-gray-500 uppercase">Valor Recebido</label>
-                    <input type="number" id="pdv-received" step="0.01" min="0"
-                        class="w-full border p-2 rounded-lg text-sm focus:border-brand-primary outline-none"
-                        placeholder="0,00" oninput="calculatePDVChange()">
-                </div>
-
-                <div id="pdv-change-section" class="hidden bg-gray-50 p-3 rounded-lg">
-                    <div class="flex justify-between">
-                        <span class="font-medium">Troco:</span>
-                        <span id="pdv-change" class="font-bold text-green-600">R$ 0,00</span>
-                    </div>
-                </div>
-
-                <button onclick="finalizePDVSale()"
-                    class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all mt-4">
-                    Confirmar Venda
-                </button>
-            </div>
         </div>
     </div>
 
