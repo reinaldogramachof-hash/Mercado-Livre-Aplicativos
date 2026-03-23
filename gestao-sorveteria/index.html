@@ -2325,6 +2325,41 @@
         </div>
     </div>
 
+    <!-- Novo Freezer Modal -->
+    <div id="freezerModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-lg font-bold text-gray-800">Novo Freezer</h3>
+                <button onclick="closeModal('freezerModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form onsubmit="saveFreezer(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase block mb-1">Nome do Freezer</label>
+                    <input type="text" id="freezer-modal-name" placeholder="Ex: Freezer de Paletas"
+                        class="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:border-teal-400" required>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase block mb-1">Temperatura Ideal (°C)</label>
+                    <input type="number" id="freezer-modal-ideal" step="0.5" placeholder="-18"
+                        class="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:border-teal-400" required>
+                    <p class="text-xs text-gray-400 mt-1">Sorvete: -18°C · Açaí: -15°C · Câmara: -20°C</p>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeModal('freezerModal')"
+                        class="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-50">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="flex-1 bg-teal-500 text-white rounded-xl py-2.5 text-sm font-bold hover:bg-teal-600">
+                        Adicionar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Temperature Modal -->
     <div id="temperatureModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6">

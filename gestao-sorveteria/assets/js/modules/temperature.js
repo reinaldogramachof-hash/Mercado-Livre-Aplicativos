@@ -4,57 +4,174 @@
 // ============================================================
 
 function renderTemperature() {
-    // Renderizar cards de freezers
-    const container = document.querySelector('#view-temperature .grid');
+    renderCriticalAlerts();
+
+    const container = document.getElementById('freezer-cards-grid');
     if (!container) return;
 
+    if (db.freezers.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12 text-gray-400">
+                <i data-lucide="thermometer-snowflake" class="w-12 h-12 mx-auto mb-3 text-gray-300"></i>
+                <p class="font-medium">Nenhum freezer cadastrado</p>
+                <p class="text-sm mt-1">Clique em "Novo Freezer" para adicionar</p>
+            </div>`;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        renderTemperatureLog();
+        renderTemperatureChart();
+        return;
+    }
+
+    const statusColorMap = { normal: 'green', alto: 'yellow', critico: 'red' };
+    const statusLabelMap = { normal: 'Normal', alto: 'Alerta', critico: 'Crítico' };
+
     container.innerHTML = db.freezers.map(freezer => {
-        const statusColor = freezer.status === 'normal' ? 'green' :
-            freezer.status === 'alto' ? 'yellow' : 'red';
-        const statusText = freezer.status === 'normal' ? 'Normal' :
-            freezer.status === 'alto' ? 'Alerta' : 'Crítico';
+        const last = db.temperatures
+            .filter(t => t.freezerId === freezer.id)
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+
+        const sc = statusColorMap[freezer.status] || 'gray';
+        const sl = statusLabelMap[freezer.status] || freezer.status;
+
+        const tempDisplay = last
+            ? `<div class="text-4xl font-bold text-teal-600">${last.temperature}°C</div>
+               <p class="text-sm text-gray-500 mt-1">Ideal: ${freezer.idealTemp}°C</p>`
+            : `<div class="text-4xl font-bold text-gray-300">--°C</div>
+               <p class="text-sm text-gray-400 mt-1">Sem registro ainda</p>`;
+
+        const lastTime = last
+            ? new Date(last.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            : 'Sem registro';
+
+        const deleteBtn = freezer.userAdded
+            ? `<button onclick="deleteFreezer('${freezer.id}')" class="text-gray-300 hover:text-red-500 transition-colors ml-2" title="Excluir">
+                   <i data-lucide="trash-2" class="w-4 h-4"></i>
+               </button>`
+            : '';
 
         return `
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-gray-800">${freezer.name}</h3>
-                    <span class="text-xs px-2 py-1 rounded-full bg-${statusColor}-100 text-${statusColor}-600">
-                        ${statusText}
-                    </span>
-                </div>
-                <div class="text-center mb-4">
-                    ${(() => {
-                        const last = db.temperatures.filter(t => t.freezerId === freezer.id).sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp))[0];
-                        return last
-                            ? `<div class="text-4xl font-bold text-teal-600">${last.temperature}°C</div><p class="text-sm text-gray-500">Ideal: ${freezer.idealTemp}°C</p>`
-                            : `<div class="text-4xl font-bold text-gray-300">--°C</div><p class="text-sm text-gray-400">Nenhum registro. Registre a temperatura.</p>`;
-                    })()}
-                </div>
-                <div class="space-y-2">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-600">Status:</span>
-                        <span class="font-medium">${freezer.status}</span>
-                    </div>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-600">Última leitura:</span>
-                        <span class="font-medium">${(() => {
-                            const last = db.temperatures.filter(t => t.freezerId === freezer.id).sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp))[0];
-                            return last ? new Date(last.timestamp).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}) : 'Sem registro';
-                        })()}</span>
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="font-bold text-gray-800 flex-1">${sanitizeHTML(freezer.name)}</h3>
+                    <div class="flex items-center shrink-0">
+                        <span class="text-xs px-2 py-1 rounded-full bg-${sc}-100 text-${sc}-700 font-medium">${sl}</span>
+                        ${deleteBtn}
                     </div>
                 </div>
-                <button onclick="openTemperatureModal('${freezer.id}')" class="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-lg text-sm font-medium">
+                <div class="text-center mb-4">${tempDisplay}</div>
+                <div class="flex justify-between text-sm mb-4">
+                    <span class="text-gray-500">Última leitura:</span>
+                    <span class="font-medium text-gray-700">${lastTime}</span>
+                </div>
+                <button onclick="openTemperatureModal('${freezer.id}')"
+                    class="w-full bg-teal-50 hover:bg-teal-100 text-teal-700 py-2 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="thermometer" class="w-4 h-4"></i>
                     Registrar Temperatura
                 </button>
-            </div>
-        `;
+            </div>`;
     }).join('');
 
-    // Renderizar histórico
+    if (typeof lucide !== 'undefined') lucide.createIcons();
     renderTemperatureLog();
-
-    // Renderizar gráfico
     renderTemperatureChart();
+}
+
+function renderCriticalAlerts() {
+    const container = document.getElementById('critical-temp-alerts');
+    if (!container) return;
+
+    const alerts = db.freezers.filter(f => f.status === 'critico' || f.status === 'alto');
+    if (alerts.length === 0) { container.innerHTML = ''; return; }
+
+    container.innerHTML = alerts.map(f => {
+        const isCrit = f.status === 'critico';
+        return `
+            <div class="flex items-center gap-3 p-4 mb-2 rounded-xl border ${isCrit ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'}">
+                <i data-lucide="alert-triangle" class="w-5 h-5 ${isCrit ? 'text-red-500' : 'text-yellow-500'} shrink-0"></i>
+                <div class="flex-1">
+                    <p class="text-sm font-bold ${isCrit ? 'text-red-700' : 'text-yellow-700'}">${sanitizeHTML(f.name)}</p>
+                    <p class="text-xs ${isCrit ? 'text-red-500' : 'text-yellow-600'}">${isCrit ? 'Temperatura crítica' : 'Temperatura acima do ideal'} — verifique imediatamente</p>
+                </div>
+                <button onclick="openTemperatureModal('${f.id}')"
+                    class="text-xs font-bold px-3 py-1.5 rounded-lg ${isCrit ? 'bg-red-500 text-white' : 'bg-yellow-400 text-yellow-900'}">
+                    Registrar
+                </button>
+            </div>`;
+    }).join('');
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// ── CRUD Freezer ──
+
+function addFreezerModal() {
+    const modal = document.getElementById('freezerModal');
+    if (!modal) return;
+    document.getElementById('freezer-modal-name').value = '';
+    document.getElementById('freezer-modal-ideal').value = '-18';
+    modal.classList.remove('hidden');
+}
+
+function saveFreezer(e) {
+    if (e) e.preventDefault();
+    const name = document.getElementById('freezer-modal-name').value.trim();
+    const idealTemp = parseFloat(document.getElementById('freezer-modal-ideal').value);
+
+    if (!name) { showNotification('Informe o nome do freezer', 'error'); return; }
+    if (isNaN(idealTemp)) { showNotification('Informe a temperatura ideal', 'error'); return; }
+
+    db.freezers.push({
+        id: 'freezer_' + getID(),
+        name,
+        idealTemp,
+        currentTemp: idealTemp,
+        status: 'normal',
+        userAdded: true
+    });
+
+    save();
+    closeModal('freezerModal');
+    renderTemperature();
+    showNotification(`${name} adicionado com sucesso!`, 'success');
+}
+
+function deleteFreezer(id) {
+    const freezer = db.freezers.find(f => f.id === id);
+    if (!freezer) return;
+    if (confirm(`Excluir "${freezer.name}"? Os registros de temperatura deste freezer também serão removidos.`)) {
+        db.freezers = db.freezers.filter(f => f.id !== id);
+        db.temperatures = db.temperatures.filter(t => t.freezerId !== id);
+        save();
+        renderTemperature();
+        showNotification('Freezer removido.', 'info');
+    }
+}
+
+// ── Exportar Log CSV ──
+
+function exportTemperatureLog() {
+    if (db.temperatures.length === 0) {
+        showNotification('Nenhum registro para exportar', 'warning');
+        return;
+    }
+
+    const lines = ['"Data/Hora","Freezer","Temperatura (°C)","Status","Observações"'];
+    db.temperatures
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .forEach(t => {
+            const name = db.freezers.find(f => f.id === t.freezerId)?.name || 'Desconhecido';
+            lines.push(`"${new Date(t.timestamp).toLocaleString('pt-BR')}","${name}","${t.temperature}","${t.status}","${t.notes || ''}"`);
+        });
+
+    const csv = '\uFEFF' + lines.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `temperatura_log_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showNotification('Log exportado com sucesso!', 'success');
 }
 
 function renderTemperatureChart() {
