@@ -43,19 +43,18 @@ function renderTemperature() {
             ? new Date(last.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
             : 'Sem registro';
 
-        const deleteBtn = freezer.userAdded
-            ? `<button onclick="deleteFreezer('${freezer.id}')" class="text-gray-300 hover:text-red-500 transition-colors ml-2" title="Excluir">
-                   <i data-lucide="trash-2" class="w-4 h-4"></i>
-               </button>`
-            : '';
-
         return `
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
                 <div class="flex justify-between items-start mb-4">
                     <h3 class="font-bold text-gray-800 flex-1">${sanitizeHTML(freezer.name)}</h3>
-                    <div class="flex items-center shrink-0">
+                    <div class="flex items-center gap-1 shrink-0">
                         <span class="text-xs px-2 py-1 rounded-full bg-${sc}-100 text-${sc}-700 font-medium">${sl}</span>
-                        ${deleteBtn}
+                        <button onclick="editFreezerModal('${freezer.id}')" class="text-gray-300 hover:text-teal-500 transition-colors p-1" title="Editar">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteFreezer('${freezer.id}')" class="text-gray-300 hover:text-red-500 transition-colors p-1" title="Excluir">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="text-center mb-4">${tempDisplay}</div>
@@ -107,32 +106,57 @@ function renderCriticalAlerts() {
 function addFreezerModal() {
     const modal = document.getElementById('freezerModal');
     if (!modal) return;
+    document.getElementById('freezer-modal-id').value = '';
     document.getElementById('freezer-modal-name').value = '';
     document.getElementById('freezer-modal-ideal').value = '-18';
+    document.getElementById('freezer-modal-title').textContent = 'Novo Freezer';
+    modal.classList.remove('hidden');
+}
+
+function editFreezerModal(id) {
+    const freezer = db.freezers.find(f => f.id === id);
+    if (!freezer) return;
+    const modal = document.getElementById('freezerModal');
+    if (!modal) return;
+    document.getElementById('freezer-modal-id').value = freezer.id;
+    document.getElementById('freezer-modal-name').value = freezer.name;
+    document.getElementById('freezer-modal-ideal').value = freezer.idealTemp;
+    document.getElementById('freezer-modal-title').textContent = 'Editar Freezer';
     modal.classList.remove('hidden');
 }
 
 function saveFreezer(e) {
     if (e) e.preventDefault();
-    const name = document.getElementById('freezer-modal-name').value.trim();
+    const editId   = document.getElementById('freezer-modal-id').value.trim();
+    const name     = document.getElementById('freezer-modal-name').value.trim();
     const idealTemp = parseFloat(document.getElementById('freezer-modal-ideal').value);
 
     if (!name) { showNotification('Informe o nome do freezer', 'error'); return; }
     if (isNaN(idealTemp)) { showNotification('Informe a temperatura ideal', 'error'); return; }
 
-    db.freezers.push({
-        id: 'freezer_' + getID(),
-        name,
-        idealTemp,
-        currentTemp: idealTemp,
-        status: 'normal',
-        userAdded: true
-    });
-
-    save();
-    closeModal('freezerModal');
-    renderTemperature();
-    showNotification(`${name} adicionado com sucesso!`, 'success');
+    if (editId) {
+        // Modo edição
+        const freezer = db.freezers.find(f => f.id === editId);
+        if (freezer) { freezer.name = name; freezer.idealTemp = idealTemp; }
+        save();
+        closeModal('freezerModal');
+        renderTemperature();
+        showNotification(`${name} atualizado!`, 'success');
+    } else {
+        // Modo criação
+        db.freezers.push({
+            id: 'freezer_' + getID(),
+            name,
+            idealTemp,
+            currentTemp: idealTemp,
+            status: 'normal',
+            userAdded: true
+        });
+        save();
+        closeModal('freezerModal');
+        renderTemperature();
+        showNotification(`${name} adicionado com sucesso!`, 'success');
+    }
 }
 
 function deleteFreezer(id) {

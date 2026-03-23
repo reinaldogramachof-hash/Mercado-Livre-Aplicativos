@@ -2325,16 +2325,17 @@
         </div>
     </div>
 
-    <!-- Novo Freezer Modal -->
+    <!-- Freezer Modal (Novo / Editar) -->
     <div id="freezerModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
             <div class="flex justify-between items-center mb-5">
-                <h3 class="text-lg font-bold text-gray-800">Novo Freezer</h3>
+                <h3 id="freezer-modal-title" class="text-lg font-bold text-gray-800">Novo Freezer</h3>
                 <button onclick="closeModal('freezerModal')" class="text-gray-400 hover:text-gray-600">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
             <form onsubmit="saveFreezer(event)" class="space-y-4">
+                <input type="hidden" id="freezer-modal-id">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase block mb-1">Nome do Freezer</label>
                     <input type="text" id="freezer-modal-name" placeholder="Ex: Freezer de Paletas"
@@ -2353,7 +2354,7 @@
                     </button>
                     <button type="submit"
                         class="flex-1 bg-teal-500 text-white rounded-xl py-2.5 text-sm font-bold hover:bg-teal-600">
-                        Adicionar
+                        Salvar
                     </button>
                 </div>
             </form>
