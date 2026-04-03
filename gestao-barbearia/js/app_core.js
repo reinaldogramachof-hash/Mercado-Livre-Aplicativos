@@ -1,4 +1,4 @@
-﻿
+
 // ESTADO GLOBAL
 const DB_KEY = 'brand_barber_pro_v2';
 const defaultDB = {
@@ -49,6 +49,7 @@ let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
 // Migração: garantir que campos novos existam em bancos antigos
 if (!db.inventory) db.inventory = [];
 if (!db.stockMovements) db.stockMovements = [];
+if (db.settings.productCommission === undefined) db.settings.productCommission = 0;
 // UTILITÁRIOS
 const sanitizeHTML = (str) => {
     if (!str) return '';
@@ -134,6 +135,7 @@ async function init() {
         if (document.getElementById('biz-owner')) document.getElementById('biz-owner').value = db.settings.businessOwner || '';
         if (document.getElementById('biz-doc')) document.getElementById('biz-doc').value = db.settings.businessDoc || '';
         if (document.getElementById('biz-hours')) document.getElementById('biz-hours').value = db.settings.businessHours || '';
+        if (document.getElementById('biz-prod-comm')) document.getElementById('biz-prod-comm').value = db.settings.productCommission || 0;
 
         // Renderizar dados iniciais
         renderDashboard();
@@ -387,6 +389,7 @@ function router(view) {
         inventory: 'Estoque',
         finance: 'Financeiro',
         clients: 'Clientes',
+        pdv: 'Ponto de Venda',
         reports: 'Relatórios',
         settings: 'Configurações',
         instructions: 'Manual de Uso',
@@ -412,6 +415,8 @@ function router(view) {
         renderFinance();
     } else if (view === 'clients') {
         renderClients();
+    } else if (view === 'pdv') {
+        if(typeof renderPDV === 'function') renderPDV();
     }
 }
 function toggleSidebar() {
@@ -444,7 +449,7 @@ function renderDashboard() {
     const todayStr = getLocalIsoDate();
     const todayTrans = db.transactions.filter(t => t.date === todayStr);
     const incomeToday = todayTrans
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + t.amount, 0);
     const expenseToday = todayTrans
         .filter(t => t.type === 'expense')
@@ -460,7 +465,7 @@ function renderDashboard() {
     // Calcular crescimento vs ontem
     const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
     const yesterdayIncome = db.transactions
-        .filter(t => t.date === yesterdayStr && t.type === 'income')
+        .filter(t => t.date === yesterdayStr && t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + t.amount, 0);
     const growth = calculatePercentage(incomeToday, yesterdayIncome);
     document.getElementById('rev-growth').innerText = `${growth}%`;
@@ -499,7 +504,7 @@ function renderDashboard() {
     for (let i = 6; i >= 0; i--) {
         const d = new Date(); d.setDate(d.getDate() - i);
         const isoDate = d.toISOString().split('T')[0];
-        const rev = db.transactions.filter(t => t.date === isoDate && t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+        const rev = db.transactions.filter(t => t.date === isoDate && t.type === 'income' && !t.isPending).reduce((acc, t) => acc + t.amount, 0);
         chartData.push(rev);
     }
     renderWeeklyChart(chartData);
@@ -702,13 +707,13 @@ function renderFinance() {
             transDate.getFullYear() === today.getFullYear();
     });
     const incomeMonth = monthTrans
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + t.amount, 0);
     const expenseMonth = monthTrans
         .filter(t => t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
     const commissionMonth = monthTrans
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + (t.commission || 0), 0);
     document.getElementById('fin-income').textContent = fmtMoney(incomeMonth);
     document.getElementById('fin-expense').textContent = fmtMoney(expenseMonth);
@@ -724,20 +729,25 @@ function renderFinance() {
     emptyMsg.classList.add('hidden');
     tbody.innerHTML = filtered.map(t => {
         const isIncome = t.type === 'income';
+        const isPending = !!t.isPending;
+        const rowClass = isPending ? 'bg-rose-50/40 dark:bg-rose-900/10' : '';
+        const pendingBadge = isPending
+            ? '<span class="ml-1.5 text-[10px] font-bold bg-rose-100 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400 px-1.5 py-0.5 rounded-full">FIADO</span>'
+            : '';
+        const typeBadge = isPending
+            ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400">Fiado</span>'
+            : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isIncome ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'}">${isIncome ? 'Entrada' : 'Saída'}</span>`;
+        const amtColor = isPending ? 'text-rose-500 dark:text-rose-400' : (isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400');
         return `
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 group border-b border-slate-100 dark:border-white/5 transition-colors">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 group border-b border-slate-100 dark:border-white/5 transition-colors ${rowClass}">
                         <td class="px-6 py-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">${fmtDate(t.date)}</td>
                         <td class="px-6 py-4">
-                            <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(t.description)}</div>
+                            <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(t.description)}${pendingBadge}</div>
                         ${t.category ? `<div class="text-xs text-slate-400 dark:text-slate-500">${sanitizeHTML(t.category)}</div>` : ''}
                     </td>
                     <td class="px-6 py-4 dark:text-slate-300">${t.proName ? sanitizeHTML(t.proName) : '-'}</td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isIncome ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'}">
-                                ${isIncome ? 'Entrada' : 'Saída'}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                        <td class="px-6 py-4">${typeBadge}</td>
+                        <td class="px-6 py-4 text-right font-bold ${amtColor}">
                             ${isIncome ? '+' : '-'} ${fmtMoney(t.amount)}
                         </td>
                         <td class="px-6 py-4 text-right text-sm text-slate-500 dark:text-slate-400">
@@ -781,10 +791,18 @@ function renderClients() {
         const rawPhone = client.phone ? client.phone.replace(/\D/g, '') : '';
         const waLink = rawPhone ? `https://wa.me/55${rawPhone}` : '#';
 
+        // Debt badge
+        const debtTotal = db.transactions
+            .filter(t => t.clientId === client.id && t.isPending)
+            .reduce((sum, t) => sum + t.amount, 0);
+        const debtBadge = debtTotal > 0
+            ? `<span class="ml-2 text-[10px] font-bold bg-rose-100 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400 px-1.5 py-0.5 rounded-full">Fiado ${fmtMoney(debtTotal)}</span>`
+            : '';
+
         return `
             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 border-b border-slate-100 dark:border-white/5 transition-colors">
                 <td class="px-6 py-4">
-                    <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(client.name)}</div>
+                    <div class="font-medium text-slate-800 dark:text-white">${sanitizeHTML(client.name)}${debtBadge}</div>
                     ${client.email ? `<div class="text-xs text-slate-400 dark:text-slate-500">${sanitizeHTML(client.email)}</div>` : ''}
                 </td>
                 <td class="px-6 py-4 text-slate-600 dark:text-slate-400">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
@@ -824,10 +842,11 @@ function openClientDetails(clientId) {
     document.getElementById('cd-name').textContent = client.name;
     document.getElementById('cd-phone').textContent = client.phone || 'Sem telefone';
 
-    // 2. Stats Calculation
+    // 2. Stats Calculation — apenas transações quitadas entram nas métricas
     const clientTrans = db.transactions.filter(t => t.clientId === clientId && t.type === 'income');
-    const totalSpent = clientTrans.reduce((sum, t) => sum + t.amount, 0);
-    const visits = clientTrans.length;
+    const paidTrans = clientTrans.filter(t => !t.isPending);
+    const totalSpent = paidTrans.reduce((sum, t) => sum + t.amount, 0);
+    const visits = paidTrans.length;
     const avgTicket = visits > 0 ? (totalSpent / visits) : 0;
 
     document.getElementById('cd-total-spent').textContent = fmtMoney(totalSpent);
@@ -868,23 +887,37 @@ function openClientDetails(clientId) {
         openClientModal(client); // Reuse existing edit modal
     };
 
-    // 5. History Timeline
+    // 5. History Timeline — inclui pendentes com badge visual
     const historyContainer = document.getElementById('cd-history-list');
     if (clientTrans.length === 0) {
         historyContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum histórico encontrado.</p>';
     } else {
         historyContainer.innerHTML = clientTrans
-            .sort((a, b) => new Date(b.date) - new Date(a.date)) // Newest first
-            .map(t => `
-                <div class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-white/5 transition-all">
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .map(t => {
+                const pending = t.isPending;
+                const rowBg = pending
+                    ? 'bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-500/30'
+                    : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-white/5';
+                const amtColor = pending
+                    ? 'text-rose-500 dark:text-rose-400'
+                    : 'text-green-600 dark:text-green-400';
+                const badge = pending
+                    ? '<span class="ml-2 text-[10px] font-bold bg-rose-200 text-rose-700 dark:bg-rose-800 dark:text-rose-300 px-1.5 py-0.5 rounded-full">FIADO</span>'
+                    : '';
+                return `
+                <div class="flex justify-between items-center p-3 rounded-lg border transition-all ${rowBg}">
                     <div>
-                        <p class="font-bold text-slate-700 dark:text-white text-sm">${sanitizeHTML(t.description)}</p>
+                        <p class="font-bold text-slate-700 dark:text-white text-sm">${sanitizeHTML(t.description)}${badge}</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400">${fmtDate(t.date)} • ${t.proName || 'Barbearia'}</p>
                     </div>
-                    <span class="font-bold text-green-600 dark:text-green-400 text-sm">${fmtMoney(t.amount)}</span>
-                </div>
-            `).join('');
+                    <span class="font-bold ${amtColor} text-sm">${fmtMoney(t.amount)}</span>
+                </div>`;
+            }).join('');
     }
+
+    // 6. Seção de dívida ativa (integrado diretamente — não depende do override pdv.js)
+    if (typeof openClientDebtCard === 'function') openClientDebtCard(clientId);
 
     // Show Modal
     const modal = document.getElementById('clientDetailsModal');
@@ -992,13 +1025,13 @@ function openClosingModal() {
     const today = getLocalIsoDate();
     const todayTrans = db.transactions.filter(t => t.date === today);
     const incomeToday = todayTrans
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + t.amount, 0);
     const expenseToday = todayTrans
         .filter(t => t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
     const commissionToday = todayTrans
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + (t.commission || 0), 0);
     const balanceToday = incomeToday - expenseToday - commissionToday;
     document.getElementById('close-inc').textContent = fmtMoney(incomeToday);
@@ -1219,31 +1252,145 @@ function submitClient(e) {
     showNotification('Cliente salvo com sucesso!', 'success');
 }
 // APPOINTMENT ACTIONS
+let currentCheckoutAppt = null;
+let currentCheckoutProducts = [];
+
 function finishAppt(id) {
-    if (!confirm('Finalizar corte e lançar no caixa?')) return;
-    const index = db.appointments.findIndex(a => a.id === id);
-    const appt = db.appointments[index];
+    const appt = db.appointments.find(a => a.id === id);
+    if (!appt) return;
+    currentCheckoutAppt = appt;
+    currentCheckoutProducts = [];
+    
+    document.getElementById('co-appt-id').value = id;
+    document.getElementById('co-client-name').textContent = appt.client;
+    document.getElementById('co-service-name').textContent = appt.serviceName;
+    document.getElementById('co-service-price').textContent = `R$ ${appt.price.toFixed(2)}`;
+    
+    updateCheckoutApptModal();
+    
+    // Popular select de produtos
+    const sel = document.getElementById('co-product-select');
+    sel.innerHTML = '<option value="">Selecione um produto...</option>';
+    db.inventory.forEach(p => {
+        if(p.quantity > 0) {
+            sel.innerHTML += `<option value="${p.id}">${p.name} - R$ ${parseFloat(p.price || p.unitPrice).toFixed(2)} (Estoque: ${p.quantity})</option>`;
+        }
+    });
+
+    document.getElementById('checkoutApptModal').classList.remove('hidden');
+}
+
+function updateCheckoutApptModal() {
+    const list = document.getElementById('co-products-list');
+    list.innerHTML = '';
+    let totalProd = 0;
+    
+    currentCheckoutProducts.forEach((p, idx) => {
+        totalProd += p.price;
+        list.innerHTML += `
+            <div class="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800/30 rounded-lg border border-slate-100 dark:border-white/5">
+                <div class="flex items-center gap-2">
+                    <button onclick="removeCheckoutApptProduct(${idx})" class="text-rose-500 hover:text-rose-700">
+                        <i data-lucide="minus-circle" class="w-4 h-4"></i>
+                    </button>
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-300">${p.name}</span>
+                </div>
+                <span class="text-sm font-bold text-slate-900 dark:text-white">R$ ${p.price.toFixed(2)}</span>
+            </div>
+        `;
+    });
+    lucide.createIcons();
+    
+    const finalTotal = currentCheckoutAppt.price + totalProd;
+    document.getElementById('co-total-price').textContent = `R$ ${finalTotal.toFixed(2)}`;
+}
+
+function addCheckoutApptProduct() {
+    const sel = document.getElementById('co-product-select');
+    if(!sel.value) return;
+    
+    const product = db.inventory.find(i => i.id === sel.value);
+    if(product) {
+        currentCheckoutProducts.push({
+            id: product.id,
+            name: product.name,
+            price: parseFloat(product.price || product.unitPrice)
+        });
+        updateCheckoutApptModal();
+        sel.value = '';
+    }
+}
+
+function removeCheckoutApptProduct(index) {
+    currentCheckoutProducts.splice(index, 1);
+    updateCheckoutApptModal();
+}
+
+function confirmCheckoutAppt(paymentType) {
+    const appt = currentCheckoutAppt;
     appt.status = 'done';
-    // Criar transação de entrada
-    const incomeTransaction = {
+
+    if (paymentType === 'pending' && (!appt.client || !appt.client.trim())) {
+        showNotification('Fiado exige um cliente vinculado ao agendamento!', 'error');
+        return;
+    }
+
+    const clientId = findOrCreateClient(appt.client);
+    let totalProductsPrice = 0;
+    let totalProductCommission = 0;
+    const globalCommPercent = parseFloat(db.settings.productCommission) || 0;
+
+    currentCheckoutProducts.forEach(p => {
+        totalProductsPrice += p.price;
+        totalProductCommission += (p.price * globalCommPercent / 100);
+        
+        // Baixa no estoque
+        const invItem = db.inventory.find(i => i.id === p.id);
+        if(invItem && invItem.quantity > 0) {
+            invItem.quantity--;
+            db.stockMovements.push({
+                id: getID(),
+                date: new Date().toISOString().split('T')[0],
+                productId: p.id,
+                productName: p.name,
+                type: 'out',
+                quantity: 1,
+                reason: `Venda Agendamento: ${appt.client}`
+            });
+            checkLowStock(invItem);
+        }
+    });
+
+    const isPending = (paymentType === 'pending');
+    
+    const t = {
         id: getID(),
         type: 'income',
-        description: `Serviço: ${appt.serviceName} - ${appt.client}`,
-        amount: appt.price,
+        description: `Serviço: ${appt.serviceName} + ${currentCheckoutProducts.length} prod(s) - ${appt.client}`,
+        amount: appt.price + totalProductsPrice,
         date: appt.date,
         proId: appt.proId,
         proName: appt.proName,
         serviceId: appt.serviceId,
-        clientId: findOrCreateClient(appt.client),
-        commission: appt.commissionVal
+        clientId: clientId,
+        commission: (appt.commissionVal || 0) + totalProductCommission,
+        isPending: isPending,
+        productsOrigin: currentCheckoutProducts.map(p => ({id: p.id, name: p.name, price: p.price}))
     };
-    db.transactions.push(incomeTransaction);
+    
+    db.transactions.push(t);
     save();
     renderDashboard();
     if (document.getElementById('view-agenda') && !document.getElementById('view-agenda').classList.contains('hide')) {
         renderAgenda();
     }
-    showNotification('Corte finalizado e lançado no caixa!', 'success');
+    closeModal('checkoutApptModal');
+    
+    if(isPending) {
+        showNotification('Fiado lançado na ficha do cliente!', 'warning');
+    } else {
+        showNotification('Corte e produtos finalizados no caixa!', 'success');
+    }
 }
 function cancelAppt(id) {
     if (confirm('Cancelar este agendamento?')) {
@@ -1326,7 +1473,7 @@ function generateReport() {
         if (tDate >= startDate && tDate <= endDate) {
             const val = parseFloat(t.amount || 0);
 
-            if (t.type === 'income') {
+            if (t.type === 'income' && !t.isPending) {
                 income += val;
                 commission += parseFloat(t.commission || 0);
 
@@ -1676,6 +1823,8 @@ function saveBusinessInfo() {
     db.settings.businessOwner = document.getElementById('biz-owner').value;
     db.settings.businessDoc = document.getElementById('biz-doc').value;
     db.settings.businessHours = document.getElementById('biz-hours').value;
+    const prodComm = parseFloat(document.getElementById('biz-prod-comm').value);
+    db.settings.productCommission = isNaN(prodComm) ? 0 : prodComm;
     save();
     showNotification('Informações salvas com sucesso!', 'success');
 }
@@ -2046,6 +2195,15 @@ function getInventoryStats() {
     return { totalProducts, totalValue, lowStock, movementsMonth };
 }
 
+function checkLowStock(product) {
+    if (!product) return;
+    if (product.quantity <= 0) {
+        setTimeout(() => showNotification(`🔴 ESGOTADO: "${product.name}" sem estoque!`, 'warning'), 1500);
+    } else if (product.quantity <= (product.minQuantity || product.minStock || 2)) {
+        setTimeout(() => showNotification(`⚠️ Estoque baixo: "${product.name}" (${product.quantity} un)`, 'warning'), 1500);
+    }
+}
+
 function renderInventory() {
     const stats = getInventoryStats();
     document.getElementById('inv-total-products').textContent = stats.totalProducts;
@@ -2104,6 +2262,7 @@ function renderInventory() {
                     </td>
                     <td class="px-6 py-4 text-center text-slate-500 dark:text-slate-400">${p.minQuantity}</td>
                     <td class="px-6 py-4 text-right font-medium text-slate-700 dark:text-slate-300">${fmtMoney(p.unitPrice)}</td>
+                    <td class="px-6 py-4 text-right font-medium text-emerald-600 dark:text-emerald-400">${fmtMoney(parseFloat(p.price || p.unitPrice) || 0)}</td>
                     <td class="px-6 py-4 text-center">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${status.color}">${status.label}</span>
                     </td>
@@ -2178,6 +2337,7 @@ function openInventoryModal(product = null) {
     document.getElementById('inv-name').value = '';
     document.getElementById('inv-category').value = 'cosmeticos';
     document.getElementById('inv-price').value = '';
+    document.getElementById('inv-sell-price').value = '';
     document.getElementById('inv-quantity').value = '';
     document.getElementById('inv-min-quantity').value = '';
     document.getElementById('inv-supplier').value = '';
@@ -2189,6 +2349,7 @@ function openInventoryModal(product = null) {
         document.getElementById('inv-name').value = product.name;
         document.getElementById('inv-category').value = product.category;
         document.getElementById('inv-price').value = product.unitPrice;
+        document.getElementById('inv-sell-price').value = product.price || '';
         document.getElementById('inv-quantity').value = product.quantity;
         document.getElementById('inv-min-quantity').value = product.minQuantity;
         document.getElementById('inv-supplier').value = product.supplier || '';
@@ -2206,6 +2367,7 @@ function submitInventoryProduct(e) {
     const name = document.getElementById('inv-name').value.trim();
     const category = document.getElementById('inv-category').value;
     const unitPrice = parseFloat(document.getElementById('inv-price').value) || 0;
+    const price = parseFloat(document.getElementById('inv-sell-price').value) || 0;
     const quantity = parseInt(document.getElementById('inv-quantity').value) || 0;
     const minQuantity = parseInt(document.getElementById('inv-min-quantity').value) || 0;
     const supplier = document.getElementById('inv-supplier').value.trim();
@@ -2220,7 +2382,7 @@ function submitInventoryProduct(e) {
         const idx = db.inventory.findIndex(p => p.id === id);
         if (idx !== -1) {
             const oldQty = db.inventory[idx].quantity;
-            db.inventory[idx] = { ...db.inventory[idx], name, category, unitPrice, quantity, minQuantity, supplier, notes };
+            db.inventory[idx] = { ...db.inventory[idx], name, category, unitPrice, price, quantity, minQuantity, supplier, notes };
             if (quantity !== oldQty) {
                 const diff = quantity - oldQty;
                 db.stockMovements.push({
@@ -2242,6 +2404,7 @@ function submitInventoryProduct(e) {
             name,
             category,
             unitPrice,
+            price,
             quantity,
             minQuantity,
             supplier,

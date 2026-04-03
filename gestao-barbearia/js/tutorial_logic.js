@@ -7,6 +7,7 @@ const tutorialSections = [
     'instalacao',
     'primeiro-cadastro',
     'agendamentos',
+    'pdv-balcao',
     'relatorios',
     'backup',
     'duvidas',

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
 <head>
@@ -116,6 +116,12 @@
                     <i data-lucide="user" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Clientes</span>
                 </button>
+                <button onclick="router('pdv')"
+                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    id="nav-pdv">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
+                    <span class="font-medium sidebar-label">PDV (Balcão)</span>
+                </button>
                 <!-- GESTÃO -->
                 <div class="px-4 mb-2 mt-4 sidebar-section-divider">
                     <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Gestão</span>
@@ -173,7 +179,7 @@
                     <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
                     <span class="text-[11px] font-bold text-amber-400 tracking-wide">LICENÇA VITALÍCIA</span>
                 </div>
-                <p class="text-[10px] text-slate-500">v7.0 PRO • Gestão Completa</p>
+                <p class="text-[10px] text-slate-500">v7.2 PRO • Gestão Completa</p>
             </div>
         </aside>
         <!-- Main Content -->
@@ -507,7 +513,8 @@
                                         <th class="px-6 py-3">Categoria</th>
                                         <th class="px-6 py-3 text-center">Qtd Atual</th>
                                         <th class="px-6 py-3 text-center">Qtd Mín.</th>
-                                        <th class="px-6 py-3 text-right">Val. Unit.</th>
+                                        <th class="px-6 py-3 text-right">Custo</th>
+                                        <th class="px-6 py-3 text-right">V. Venda</th>
                                         <th class="px-6 py-3 text-center">Status</th>
                                         <th class="px-6 py-3 text-right">Ações</th>
                                     </tr>
@@ -635,6 +642,161 @@
                         <div id="empty-msg" class="hidden p-8 text-center text-slate-400">
                             <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
                             <p>Nenhuma transação encontrada.</p>
+                        </div>
+                    </div>
+                </section>
+                <!-- PDV View -->
+                <section id="view-pdv" class="view-section hide fade-in">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800 dark:text-white">PDV — Ponto de Venda</h2>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Venda produtos diretos ou faturados
+                            </p>
+                        </div>
+                    </div>
+                    <!-- PDV Layout: Produtos + Carrinho -->
+                    <div class="flex flex-col lg:flex-row gap-6 mb-8">
+                        <!-- Painel Esquerdo: Grid de Produtos -->
+                        <div class="flex-1 min-w-0">
+                            <div
+                                class="bg-white dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 overflow-hidden h-full flex flex-col">
+                                <div
+                                    class="p-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/5">
+                                    <div class="relative">
+                                        <i data-lucide="search"
+                                            class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+                                        <input type="text" id="pdv-search" onkeyup="renderPDVGrid()" autofocus
+                                            placeholder="Buscar produto por nome..."
+                                            class="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 dark:border-white/10 dark:bg-slate-900 focus:border-brand-blue outline-none text-sm text-slate-800 dark:text-white">
+                                    </div>
+                                </div>
+                                <div id="pdv-product-grid"
+                                    class="p-4 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 bg-slate-50/50 dark:bg-slate-900/20 flex-1 overflow-y-auto min-h-[400px] max-h-[600px]">
+                                    <!-- preenchido por JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel Direito: Carrinho -->
+                        <div class="w-full lg:w-80 flex-shrink-0">
+                            <div
+                                class="bg-white dark:bg-barber-card rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 flex flex-col h-full sticky top-24">
+                                <div
+                                    class="p-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
+                                    <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                                        <i data-lucide="shopping-cart" class="w-5 h-5 text-brand-blue"></i>
+                                        Carrinho
+                                    </h3>
+                                    <button onclick="clearPDVCart()"
+                                        class="text-xs text-red-500 hover:text-red-700 font-bold uppercase transition-colors">Limpar</button>
+                                </div>
+
+                                <!-- Tipo de Venda e Cliente -->
+                                <div
+                                    class="p-4 border-b border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-transparent">
+                                    <div class="flex gap-4 mb-3">
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="radio" name="pdv-sale-type" value="direct"
+                                                onchange="togglePDVSaleType()" checked class="text-brand-blue">
+                                            <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Venda
+                                                Direta</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="radio" name="pdv-sale-type" value="client"
+                                                onchange="togglePDVSaleType()" class="text-brand-blue">
+                                            <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Vincular
+                                                Cliente</span>
+                                        </label>
+                                    </div>
+                                    <div id="pdv-client-container"
+                                        class="hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <select id="pdv-client-select"
+                                            class="w-full border border-slate-300 dark:border-white/10 dark:bg-slate-900 rounded-lg p-2 text-sm outline-none focus:border-brand-blue text-slate-800 dark:text-white">
+                                            <option value="">Selecione um cliente...</option>
+                                        </select>
+                                    </div>
+                                    <!-- Profissional Responsável pela Venda -->
+                                    <div class="mt-3">
+                                        <label
+                                            class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Profissional</label>
+                                        <select id="pdv-pro-select" onchange="renderPDVCart()"
+                                            class="w-full border border-slate-300 dark:border-white/10 dark:bg-slate-900 rounded-lg p-2 text-sm outline-none focus:border-brand-blue text-slate-800 dark:text-white">
+                                            <!-- preenchido por populatePDVProfessionals() -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Itens do Carrinho -->
+                                <div id="pdv-cart-items"
+                                    class="flex-1 overflow-y-auto max-h-64 p-3 space-y-2 bg-slate-50/50 dark:bg-transparent">
+                                    <p id="pdv-cart-empty"
+                                        class="text-center text-slate-400 dark:text-slate-500 text-sm py-6">
+                                        <i data-lucide="shopping-cart"
+                                            class="w-8 h-8 mx-auto mb-2 text-slate-300 dark:text-slate-600 block"></i>
+                                        Nenhum item adicionado
+                                    </p>
+                                </div>
+
+                                <!-- Totais e Pagamento -->
+                                <div
+                                    class="p-4 border-t border-slate-100 dark:border-white/5 space-y-3 bg-slate-50 dark:bg-transparent rounded-b-2xl">
+                                    <div class="space-y-1 text-sm">
+                                        <div
+                                            class="flex justify-between font-bold text-slate-900 dark:text-white text-lg">
+                                            <span>Total</span>
+                                            <span id="pdv-total">R$ 0,00</span>
+                                        </div>
+                                        <!-- Preview de Comissão do Profissional -->
+                                        <div id="pdv-commission-row"
+                                            class="flex justify-between text-xs text-slate-500 dark:text-slate-400 hidden">
+                                            <span id="pdv-commission-label">Comissão</span>
+                                            <span id="pdv-commission-val">R$ 0,00</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pagamento -->
+                                    <div>
+                                        <label
+                                            class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Pagamento</label>
+                                        <div
+                                            class="grid grid-cols-3 gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-lg mb-2">
+                                            <label class="cursor-pointer text-center">
+                                                <input type="radio" name="pdv-payment" value="dinheiro"
+                                                    class="peer hidden" checked>
+                                                <div
+                                                    class="py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 rounded-md peer-checked:bg-white dark:peer-checked:bg-slate-600 peer-checked:text-emerald-600 dark:peer-checked:text-emerald-400 peer-checked:shadow-sm transition-all">
+                                                    💵 Din.</div>
+                                            </label>
+                                            <label class="cursor-pointer text-center">
+                                                <input type="radio" name="pdv-payment" value="cartao"
+                                                    class="peer hidden">
+                                                <div
+                                                    class="py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 rounded-md peer-checked:bg-white dark:peer-checked:bg-slate-600 peer-checked:text-blue-600 dark:peer-checked:text-brand-lightblue peer-checked:shadow-sm transition-all">
+                                                    💳 Cart.</div>
+                                            </label>
+                                            <label class="cursor-pointer text-center">
+                                                <input type="radio" name="pdv-payment" value="pix" class="peer hidden">
+                                                <div
+                                                    class="py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 rounded-md peer-checked:bg-white dark:peer-checked:bg-slate-600 peer-checked:text-purple-600 dark:peer-checked:text-purple-400 peer-checked:shadow-sm transition-all">
+                                                    📱 Pix</div>
+                                            </label>
+                                        </div>
+                                        <div id="pdv-fiado-btn" class="hidden mb-2">
+                                            <label class="cursor-pointer block w-full text-center">
+                                                <input type="radio" name="pdv-payment" value="pendente"
+                                                    class="peer hidden">
+                                                <div
+                                                    class="py-2 text-xs font-bold text-rose-500 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 rounded-lg border border-rose-200 dark:border-rose-500/30 peer-checked:bg-rose-500 peer-checked:text-white transition-all">
+                                                    ⚠️ Deixar Pendente (Fiado)</div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button onclick="finalizePDVSale()"
+                                        class="w-full bg-brand-blue text-white py-3 rounded-xl font-bold hover:bg-brand-dark transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                                        <i data-lucide="check-circle" class="w-5 h-5"></i> Finalizar Venda
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -805,6 +967,14 @@
                                         class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
                                         placeholder="Ex: 09:00 às 19:00">
                                 </div>
+                                <div>
+                                    <label
+                                        class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Comissão
+                                        Média sobre Produtos (%)</label>
+                                    <input type="number" id="biz-prod-comm" min="0" max="100" step="1"
+                                        class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                        placeholder="Ex: 10">
+                                </div>
                                 <button onclick="saveBusinessInfo()"
                                     class="w-full bg-slate-900 dark:bg-brand-blue text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black dark:hover:bg-brand-dark transition-all">
                                     Salvar Informações
@@ -957,10 +1127,10 @@
                                 </div>
                                 <div class="flex justify-between text-xs text-gray-500 dark:text-slate-500 mt-2">
                                     <span>0% Concluído</span>
-                                    <span id="completed-steps">0/7 etapas</span>
+                                    <span id="completed-steps">0/8 etapas</span>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                            <div class="grid grid-cols-2 md:grid-cols-8 gap-2">
                                 <button onclick="scrollToSection('instalacao')"
                                     class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
                                     1. Instalação
@@ -973,21 +1143,25 @@
                                     class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
                                     3. Agendas
                                 </button>
+                                <button onclick="scrollToSection('pdv-balcao')"
+                                    class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
+                                    4. PDV
+                                </button>
                                 <button onclick="scrollToSection('relatorios')"
                                     class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
-                                    4. Relatórios
+                                    5. Relatórios
                                 </button>
                                 <button onclick="scrollToSection('backup')"
                                     class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
-                                    5. Backup
+                                    6. Backup
                                 </button>
                                 <button onclick="scrollToSection('duvidas')"
                                     class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
-                                    6. Dúvidas
+                                    7. Dúvidas
                                 </button>
                                 <button onclick="scrollToSection('checklist')"
                                     class="tutorial-step text-center p-2 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs dark:text-slate-400">
-                                    7. Checklist
+                                    8. Checklist
                                 </button>
                             </div>
                         </div>
@@ -1339,14 +1513,196 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Seção 4: Relatórios -->
-                        <div id="relatorios"
+                        <!-- Seção 4: PDV — Caixa Balcão -->
+                        <div id="pdv-balcao"
                             class="bg-white dark:bg-barber-card border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                             <div class="flex items-center justify-between mb-6">
                                 <div class="flex items-center">
                                     <div
                                         class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-brand-blue to-brand-dark text-white font-bold">
                                         4
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">PDV — Caixa Balcão e
+                                        Venda Direta</h3>
+                                </div>
+                                <button onclick="markSectionComplete('pdv-balcao')"
+                                    class="text-xs text-gray-500 dark:text-slate-500 hover:text-green-600">
+                                    <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                                </button>
+                            </div>
+
+                            <!-- O que é o PDV -->
+                            <div
+                                class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10 p-5 rounded-xl border border-blue-200 dark:border-blue-800/20 mb-6">
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-2 flex items-center">
+                                    <i data-lucide="shopping-cart" class="w-5 h-5 mr-2 text-brand-blue"></i>
+                                    O que é o PDV?
+                                </h4>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">O <strong
+                                        class="dark:text-white">Ponto de Venda (PDV)</strong> permite vender produtos do
+                                    estoque diretamente no balcão — sem precisar criar um agendamento. Ideal para vender
+                                    shampoos, pomadas, acessórios e qualquer item cadastrado no inventário.</p>
+                            </div>
+
+                            <!-- Fluxo de venda PDV -->
+                            <h4 class="font-bold text-gray-700 dark:text-white mb-4 flex items-center text-sm">
+                                <i data-lucide="workflow" class="w-4 h-4 mr-2 text-brand-blue"></i>
+                                Como Realizar uma Venda no PDV
+                            </h4>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs mb-6">
+                                <div
+                                    class="bg-white dark:bg-slate-800 p-3 rounded-lg text-center shadow-sm border dark:border-white/5">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-blue-700 dark:text-blue-400">1</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800 dark:text-white">Selecionar</p>
+                                    <p class="text-gray-600 dark:text-slate-400">Clique nos produtos da grade</p>
+                                </div>
+                                <div
+                                    class="bg-white dark:bg-slate-800 p-3 rounded-lg text-center shadow-sm border dark:border-white/5">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-purple-700 dark:text-purple-400">2</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800 dark:text-white">Profissional</p>
+                                    <p class="text-gray-600 dark:text-slate-400">Atribua quem realizou a venda</p>
+                                </div>
+                                <div
+                                    class="bg-white dark:bg-slate-800 p-3 rounded-lg text-center shadow-sm border dark:border-white/5">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-green-700 dark:text-green-400">3</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800 dark:text-white">Cliente</p>
+                                    <p class="text-gray-600 dark:text-slate-400">Venda Direta ou vincula ao cadastro</p>
+                                </div>
+                                <div
+                                    class="bg-white dark:bg-slate-800 p-3 rounded-lg text-center shadow-sm border dark:border-white/5">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-amber-700 dark:text-amber-400">4</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800 dark:text-white">Pagamento</p>
+                                    <p class="text-gray-600 dark:text-slate-400">Dinheiro, Cartão, Pix ou Fiado</p>
+                                </div>
+                                <div
+                                    class="bg-white dark:bg-slate-800 p-3 rounded-lg text-center shadow-sm border dark:border-white/5">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-green-700 dark:text-green-400">✓</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800 dark:text-white">Finalizar</p>
+                                    <p class="text-gray-600 dark:text-slate-400">Estoque, caixa e comissão atualizados
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Grid de recursos PDV -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- Comissão PDV -->
+                                <div
+                                    class="bg-green-50 dark:bg-green-900/10 p-4 rounded-xl border border-green-100 dark:border-green-800/20">
+                                    <h5
+                                        class="font-bold text-green-700 dark:text-green-400 mb-2 flex items-center text-sm">
+                                        <i data-lucide="percent" class="w-4 h-4 mr-2"></i>
+                                        Comissão Automática
+                                    </h5>
+                                    <ul class="space-y-1 text-xs text-gray-700 dark:text-slate-400">
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                            <span>Selecione o profissional responsável pela venda</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                            <span>A comissão é calculada pelo % individual do profissional</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                            <span>Aparece no card da Equipe junto às comissões de serviços</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                            <span>Sem profissional selecionado = venda Balcão, comissão zero</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Fiado -->
+                                <div
+                                    class="bg-amber-50 dark:bg-amber-900/10 p-4 rounded-xl border border-amber-100 dark:border-amber-800/20">
+                                    <h5
+                                        class="font-bold text-amber-700 dark:text-amber-400 mb-2 flex items-center text-sm">
+                                        <i data-lucide="clock" class="w-4 h-4 mr-2"></i>
+                                        Venda Fiado (Crédito)
+                                    </h5>
+                                    <ul class="space-y-1 text-xs text-gray-700 dark:text-slate-400">
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-amber-500 mr-2 mt-0.5"></i>
+                                            <span>Selecione um cliente cadastrado e marque <strong>Fiado</strong></span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-amber-500 mr-2 mt-0.5"></i>
+                                            <span>A venda fica pendente — não entra no caixa do dia</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-amber-500 mr-2 mt-0.5"></i>
+                                            <span>Para quitar: acesse o card do cliente → botão <strong>Quitar
+                                                    Dívida</strong></span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-amber-500 mr-2 mt-0.5"></i>
+                                            <span>Ao quitar, a comissão do profissional é liberada
+                                                automaticamente</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Estoque -->
+                                <div
+                                    class="bg-rose-50 dark:bg-rose-900/10 p-4 rounded-xl border border-rose-100 dark:border-rose-800/20">
+                                    <h5
+                                        class="font-bold text-rose-700 dark:text-rose-400 mb-2 flex items-center text-sm">
+                                        <i data-lucide="package" class="w-4 h-4 mr-2"></i>
+                                        Controle de Estoque
+                                    </h5>
+                                    <ul class="space-y-1 text-xs text-gray-700 dark:text-slate-400">
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-rose-500 mr-2 mt-0.5"></i>
+                                            <span>Cada venda deduz 1 unidade do estoque automaticamente</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-rose-500 mr-2 mt-0.5"></i>
+                                            <span>Produto esgotado fica bloqueado na grade (não clicável)</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-rose-500 mr-2 mt-0.5"></i>
+                                            <span>Alerta automático ao atingir o estoque mínimo cadastrado</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i data-lucide="check" class="w-3 h-3 text-rose-500 mr-2 mt-0.5"></i>
+                                            <span>Reponha pelo módulo Estoque → Entrada de produtos</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Dica final -->
+                            <div
+                                class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
+                                <p class="text-xs text-blue-800 dark:text-blue-300">
+                                    <strong>💡 Dica:</strong> Você pode combinar PDV com agendamento — no checkout do
+                                    agendamento há a opção de adicionar produtos da venda casada, e a comissão sobre os
+                                    produtos também é calculada automaticamente.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Seção 5: Relatórios -->
+                        <div id="relatorios"
+                            class="bg-white dark:bg-barber-card border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-brand-blue to-brand-dark text-white font-bold">
+                                        5
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Relatórios e Análise de
                                         Performance</h3>
@@ -1394,14 +1750,14 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Seção 5: Backup e Segurança -->
+                        <!-- Seção 6: Backup e Segurança -->
                         <div id="backup"
                             class="bg-white dark:bg-barber-card border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                             <div class="flex items-center justify-between mb-6">
                                 <div class="flex items-center">
                                     <div
                                         class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-brand-blue to-brand-dark text-white font-bold">
-                                        5
+                                        6
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Backup e Segurança dos
                                         Dados
@@ -1511,14 +1867,14 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Seção 6: Dúvidas Frequentes -->
+                        <!-- Seção 7: Dúvidas Frequentes -->
                         <div id="duvidas"
                             class="bg-white dark:bg-barber-card border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                             <div class="flex items-center justify-between mb-6">
                                 <div class="flex items-center">
                                     <div
                                         class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-brand-blue to-brand-dark text-white font-bold">
-                                        6
+                                        7
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Dúvidas Frequentes (FAQ)
                                     </h3>
@@ -1586,16 +1942,83 @@
                                             Barbeiro" e preencha o nome e a porcentagem de comissão dele.</p>
                                     </div>
                                 </details>
+                                <details
+                                    class="group bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 rounded-xl overflow-hidden shadow-sm">
+                                    <summary
+                                        class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors select-none">
+                                        <div class="flex items-center gap-3 font-bold text-gray-700 dark:text-white">
+                                            <i data-lucide="shopping-cart"
+                                                class="w-5 h-5 text-brand-blue dark:text-brand-lightblue"></i>
+                                            Como funciona o PDV (Caixa Balcão)?
+                                        </div>
+                                        <i data-lucide="chevron-down"
+                                            class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="p-4 pt-0 border-t border-gray-100 dark:border-white/5">
+                                        <p class="text-sm text-gray-600 dark:text-slate-400 mt-3">Acesse o menu <strong
+                                                class="dark:text-white">PDV</strong>, clique nos produtos que deseja
+                                            vender, selecione o profissional responsável (opcional), escolha o tipo de
+                                            venda (Direta ou Cliente Cadastrado), a forma de pagamento e clique em
+                                            <strong class="dark:text-white">Finalizar Venda</strong>. O estoque é
+                                            descontado automaticamente e a comissão do profissional é registrada no
+                                            módulo Equipe.</p>
+                                    </div>
+                                </details>
+                                <details
+                                    class="group bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 rounded-xl overflow-hidden shadow-sm">
+                                    <summary
+                                        class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors select-none">
+                                        <div class="flex items-center gap-3 font-bold text-gray-700 dark:text-white">
+                                            <i data-lucide="clock"
+                                                class="w-5 h-5 text-amber-500 dark:text-amber-400"></i>
+                                            O que é Fiado e como quitar a dívida do cliente?
+                                        </div>
+                                        <i data-lucide="chevron-down"
+                                            class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="p-4 pt-0 border-t border-gray-100 dark:border-white/5">
+                                        <p class="text-sm text-gray-600 dark:text-slate-400 mt-3">Fiado é uma venda
+                                            registrada como pendente — o produto sai do estoque mas o valor não entra no
+                                            caixa ainda. Para registrar: no PDV, selecione um cliente cadastrado e
+                                            escolha <strong class="dark:text-white">Fiado</strong> como pagamento. Para
+                                            quitar: acesse <strong class="dark:text-white">Clientes</strong> → abra o
+                                            card do cliente → clique em <strong class="dark:text-white">Quitar
+                                                Dívida</strong>. O valor entra no caixa do dia e as comissões do
+                                            profissional são liberadas automaticamente.</p>
+                                    </div>
+                                </details>
+                                <details
+                                    class="group bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 rounded-xl overflow-hidden shadow-sm">
+                                    <summary
+                                        class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors select-none">
+                                        <div class="flex items-center gap-3 font-bold text-gray-700 dark:text-white">
+                                            <i data-lucide="percent"
+                                                class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                                            A comissão do PDV aparece junto com a do serviço no relatório do barbeiro?
+                                        </div>
+                                        <i data-lucide="chevron-down"
+                                            class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <div class="p-4 pt-0 border-t border-gray-100 dark:border-white/5">
+                                        <p class="text-sm text-gray-600 dark:text-slate-400 mt-3">Sim! As comissões de
+                                            vendas PDV são somadas automaticamente às comissões de serviços
+                                            (agendamentos) do mesmo profissional. No módulo <strong
+                                                class="dark:text-white">Equipe</strong>, o card de cada barbeiro exibe o
+                                            total unificado de comissões pendentes. Ao clicar em <strong
+                                                class="dark:text-white">Pagar Comissão</strong>, todas as vendas
+                                            (serviços + PDV) são quitadas de uma vez.</p>
+                                    </div>
+                                </details>
                             </div>
                         </div>
-                        <!-- Seção 7: Checklist Interativo -->
+                        <!-- Seção 8: Checklist Interativo -->
                         <div id="checklist"
                             class="bg-white dark:bg-barber-card border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
                             <div class="flex items-center justify-between mb-6">
                                 <div class="flex items-center">
                                     <div
                                         class="step-number w-10 h-10 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-brand-blue to-brand-dark text-white font-bold">
-                                        7
+                                        8
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800 dark:text-white">Checklist de Rotina do
                                         Barbeiro</h3>
@@ -1652,6 +2075,12 @@
                                                 atendimentos
                                                 finalizados</span>
                                         </div>
+                                        <div class="checklist-item flex items-center gap-3">
+                                            <input type="checkbox" id="c7" onchange="updateChecklist()"
+                                                class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-800 text-blue-600 focus:ring-blue-500">
+                                            <span class="text-sm text-gray-700 dark:text-slate-400">Verificar alertas de
+                                                estoque mínimo (PDV)</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div
@@ -1680,6 +2109,12 @@
                                             <span class="text-sm text-gray-700 dark:text-slate-400">Gerar relatório de
                                                 faturamento</span>
                                         </div>
+                                        <div class="checklist-item flex items-center gap-3">
+                                            <input type="checkbox" id="c8" onchange="updateChecklist()"
+                                                class="w-5 h-5 rounded border-gray-300 dark:border-white/10 dark:bg-slate-800 text-green-600 focus:ring-green-500">
+                                            <span class="text-sm text-gray-700 dark:text-slate-400">Quitar fiados
+                                                pendentes de clientes (Módulo Clientes)</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1698,7 +2133,8 @@
                             </a>
                         </div>
                         <div class="text-center mt-8">
-                            <p class="text-[10px] text-gray-400">Versão 4.1 Pro â€¢ Sistema de Gestão</p>
+                            <p class="text-[10px] text-gray-400">Versão 4.2 Pro • Sistema de Gestão — PDV + Comissões +
+                                Fiado</p>
                         </div>
                     </div>
                 </section>
@@ -2209,6 +2645,82 @@
         <!-- Commission Modal -->
         <!-- Commission Modal (Removed Duplicate) -->
 
+        <!-- Checkout Appt Modal (Venda Casada) -->
+        <div id="checkoutApptModal"
+            class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div
+                class="bg-white dark:bg-barber-card rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border dark:border-white/5 animate-in fade-in zoom-in duration-200">
+                <div
+                    class="bg-gradient-to-r from-emerald-600 to-teal-500 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i> Finalizar Comanda
+                    </h3>
+                    <button onclick="closeModal('checkoutApptModal')" class="text-white/60 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <input type="hidden" id="co-appt-id">
+
+                    <div class="mb-4">
+                        <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Serviço Prestado
+                        </p>
+                        <div
+                            class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-white/5">
+                            <div>
+                                <p id="co-client-name" class="font-bold text-slate-800 dark:text-white text-sm">Cliente
+                                </p>
+                                <p id="co-service-name" class="text-xs text-slate-500 dark:text-slate-400">Serviço</p>
+                            </div>
+                            <span id="co-service-price"
+                                class="font-bold text-brand-blue dark:text-brand-lightblue text-sm">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Adicionar Produto
+                        </p>
+                        <div class="flex gap-2">
+                            <select id="co-product-select"
+                                class="flex-1 border dark:border-white/10 dark:bg-slate-900 rounded-lg p-2 text-sm outline-none focus:border-emerald-500 text-slate-800 dark:text-white">
+                                <option value="">Selecione um produto...</option>
+                            </select>
+                            <button onclick="addCheckoutApptProduct()"
+                                class="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-lg font-bold hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition-colors">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="co-products-list" class="space-y-2 mb-4 max-h-32 overflow-y-auto">
+                        <!-- Lista de produtos adicionados -->
+                    </div>
+
+                    <div class="border-t border-slate-100 dark:border-white/5 pt-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase">Total a
+                                Pagar</span>
+                            <span id="co-total-price" class="text-2xl font-bold text-slate-900 dark:text-white">R$
+                                0,00</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="confirmCheckoutAppt('paid')"
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-lg active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
+                            Receber Agora
+                        </button>
+                        <button onclick="confirmCheckoutAppt('pending')"
+                            class="bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30 hover:bg-rose-100 dark:hover:bg-rose-500/20 font-bold py-3 px-4 rounded-xl text-sm transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                            Deixar Pendente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Client Details Modal (CRM) -->
         <div id="clientDetailsModal"
             class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
@@ -2290,6 +2802,25 @@
                                     <span class="text-slate-500 dark:text-slate-400">Aniversário</span>
                                     <span id="cd-birthday" class="font-medium text-slate-800 dark:text-white">-</span>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Debt Section (Fiado) -->
+                        <div id="cd-debt-section" class="hidden">
+                            <div
+                                class="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-500/30 p-4 rounded-xl mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                <div>
+                                    <h4
+                                        class="font-bold text-rose-800 dark:text-rose-400 flex items-center text-sm mb-1">
+                                        <i data-lucide="alert-circle" class="w-4 h-4 mr-2"></i> Dívida Ativa (Fiado)
+                                    </h4>
+                                    <p id="cd-debt-amount" class="text-2xl font-bold text-rose-600 dark:text-rose-400">
+                                        R$ 0,00</p>
+                                </div>
+                                <button id="cd-btn-pay-debt"
+                                    class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-6 rounded-lg text-sm transition-colors w-full sm:w-auto">
+                                    Quitar Integralmente
+                                </button>
                             </div>
                         </div>
 
@@ -2401,10 +2932,18 @@
                         </div>
                         <div>
                             <label
-                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Valor
-                                Unitário (R$)</label>
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1 block">Custo
+                                (R$)</label>
                             <input type="number" id="inv-price" required step="0.01" min="0" placeholder="0,00"
                                 class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none">
+                        </div>
+                        <div>
+                            <label
+                                class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-1 block">Venda
+                                PDV
+                                (R$)</label>
+                            <input type="number" id="inv-sell-price" required step="0.01" min="0" placeholder="0,00"
+                                class="w-full border dark:border-white/10 p-2.5 rounded-lg text-sm bg-emerald-50 dark:bg-slate-800 dark:text-white outline-none focus:border-emerald-500">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -2513,8 +3052,8 @@
             </div>
         </div>
 
-        <!-- JavaScript -->
         <script src="js/app_core.js"></script>
+        <script src="js/pdv.js"></script>
 
         <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (MERCADO LIVRE / COMPRA GARANTIDA) -->
         <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog"
