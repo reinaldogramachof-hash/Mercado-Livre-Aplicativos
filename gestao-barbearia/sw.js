@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'app-cache-v3';
+const CACHE_NAME = 'app-cache-v3.1';
 const urlsToCache = [
   './',
   './index.html',
@@ -35,6 +35,14 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+  
+  // Ignorar chamadas de API do cache
+  if (url.pathname.includes('/api_') || url.pathname.endsWith('.php')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {

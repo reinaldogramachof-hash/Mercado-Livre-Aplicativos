@@ -3,7 +3,7 @@
 // Busca notificações em sistemasdegestao.tech/api_notificacoes.php
 // ============================================================
 
-const NOTIF_API_URL   = 'https://sistemasdegestao.tech/api_notificacoes.php';
+const NOTIF_API_URL   = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '../api_notificacoes.php' : 'https://sistemasdegestao.tech/api_notificacoes.php';
 const NOTIF_TARGET    = 'barbearia';
 const NOTIF_READ_KEY  = 'ml_notif_read_barber';
 const NOTIF_CACHE_KEY = 'ml_notif_cache_barber';
@@ -11,18 +11,28 @@ const NOTIF_MAX       = 10;
 
 let _notifData = []; // lista processada e filtrada
 
-// ── Inicialização ─────────────────────────────────────────
+// ── Inicialização e Background Refresh ──────────────────────
 function initNotifications() {
     fetchNotifications();
+
+    // Auto-atualizar silenciosamente quando o usuário voltar para a aba
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            fetchNotifications(true);
+        }
+    });
 }
 
 // ── Fetch com cache de 30 min ─────────────────────────────
-async function fetchNotifications() {
+async function fetchNotifications(forceNetwork = false) {
     const cached = (() => { try { return JSON.parse(localStorage.getItem(NOTIF_CACHE_KEY)); } catch { return null; } })();
     const now = Date.now();
 
-    // Usar cache se fresco (< 30 min)
-    if (cached && (now - cached.fetchedAt) < 30 * 60 * 1000) {
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const cacheTime = isLocal ? 0 : 30 * 60 * 1000;
+
+    // Usar cache se fresco (< 30 min em produção, 0 em local para testes), e se não for forceNetwork
+    if (!forceNetwork && cached && (now - cached.fetchedAt) < cacheTime) {
         processNotifications(cached.data);
         return;
     }
@@ -30,12 +40,20 @@ async function fetchNotifications() {
     try {
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), 5000);
-        const res   = await fetch(`${NOTIF_API_URL}?target=${NOTIF_TARGET}`, { signal: ctrl.signal });
+        // Cache-busting parameter para evitar interceptação do Service Worker em retornos à aba
+        const res   = await fetch(`${NOTIF_API_URL}?target=${NOTIF_TARGET}&_t=${now}`, { signal: ctrl.signal });
         clearTimeout(timer);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
+        
+        // Verifica se os dados chegaram diferentes para re-renderizar
+        const isDataChanged = !cached || JSON.stringify(cached.data) !== JSON.stringify(data);
+        
         localStorage.setItem(NOTIF_CACHE_KEY, JSON.stringify({ data, fetchedAt: now }));
-        processNotifications(data);
+        
+        if (isDataChanged || !forceNetwork) {
+            processNotifications(data);
+        }
     } catch (e) {
         // Offline ou erro → usar cache antigo silenciosamente
         if (cached) processNotifications(cached.data);
@@ -119,7 +137,7 @@ function renderNotifications() {
     container.innerHTML = _notifData.map(n => {
         const isRead = read.includes(n.id);
         const tc     = typeMap[n.type] || typeMap.info;
-        const date   = new Date(n.published).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+        const date   = new Date(n.published).toLocaleString('pt-BR', { title: 'Exato', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit' });
         const pulse  = !isRead ? '<span class="w-2 h-2 rounded-full bg-brand-blue animate-pulse inline-block ml-1 align-middle"></span>' : '';
 
         return `

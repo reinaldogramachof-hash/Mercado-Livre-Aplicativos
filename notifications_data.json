@@ -1,26 +1,86 @@
 [
-  {
-    "id": "notif_20260406_v42_barber",
-    "type": "update",
-    "priority": "high",
-    "title": "Atualização v4.2 Pro disponível — PDV, Comissões e Fiado",
-    "body": "Seu sistema foi atualizado com base nas sugestões de vocês! O PDV agora registra comissões por profissional automaticamente, suporta venda Fiado vinculada ao cliente e emite alertas de estoque mínimo.",
-    "details": "Novidades: (1) Selecione o profissional responsável pela venda no PDV — comissão calculada pelo % individual. (2) Venda Fiado: produto sai do estoque, valor entra no caixa somente ao quitar. (3) Alertas automáticos ao atingir estoque mínimo. (4) Manual de uso atualizado com seção dedicada ao PDV.",
-    "published": "2026-04-06T08:00:00Z",
-    "expires": "2026-06-30T23:59:59Z",
-    "targets": ["barbearia"],
-    "version": "4.2"
-  },
-  {
-    "id": "notif_20260403_backup_reminder",
-    "type": "backup",
-    "priority": "normal",
-    "title": "Lembrete de Backup Semanal",
-    "body": "Seus dados ficam exclusivamente no seu dispositivo. Faça backup toda semana para garantir que nada seja perdido em caso de troca ou formatação.",
-    "details": "Como fazer: Configurações → Baixar Backup → salve o arquivo .json no seu e-mail ou WhatsApp pessoal. Leva menos de 30 segundos!",
-    "published": "2026-04-03T08:00:00Z",
-    "expires": "2026-12-31T23:59:59Z",
-    "targets": ["all"],
-    "version": null
-  }
+    {
+        "id": "notif_20260403_u6kv",
+        "type": "update",
+        "priority": "normal",
+        "title": "NOVAS FUNCIONALIDADES",
+        "body": "Olá! Temos novidades que vocês mesmos pediram. 🎉\n\nEsta atualização foi construída a partir das sugestões enviadas diretamente por vocês, nossos clientes. Cada melhoria abaixo surgiu de um feedback real — obrigado pela confiança e por nos ajudar a evoluir o sistema.\n\nO que muda na versão 7.2 Pro\nPDV — Caixa Balcão (novo módulo)\nO módulo de venda direta ganhou recursos profissionais completos:\n\nAtribuição de profissional responsável pela venda — a comissão é calculada automaticamente pelo percentual individual de cada barbeiro\nAs comissões de vendas PDV agora aparecem unificadas com as de atendimentos no card do profissional. Um único clique em \"Pagar Comissão\" quita tudo\nSuporte a venda Fiado: o produto sai do estoque, a dívida fica registrada no cadastro do cliente e o caixa só é atualizado no momento da quitação\nAlerta automático de estoque mínimo ao finalizar cada venda — produtos esgotados ficam bloqueados na grade automaticamente\nMódulo Clientes — Gestão de Fiado\n\nO card do cliente agora exibe o saldo devedor em aberto com o botão Quitar Dívida\nAo quitar, o valor entra no caixa do dia e as comissões do profissional são liberadas instantaneamente\nO histórico do cliente distingue visualmente transações pagas de pendências em aberto\nFinanceiro\n\nTransações Fiado recebem destaque visual (badge vermelho) na lista — impossível confundir com receita efetiva do caixa\nManual do Usuário\n\nNova seção dedicada ao PDV com fluxo passo a passo, explicação de Fiado e alertas de estoque\nFAQ expandido com as perguntas mais frequentes sobre comissões e PDV\nChecklist de rotina atualizado com tarefas de controle de estoque e gestão de fiados\n⚠️ Faça o Backup ANTES da Atualização\nSeus dados ficam exclusivamente no seu dispositivo. Antes de segunda-feira, realize o backup:\n\nConfigurações → Baixar Backup → Salve o arquivo .json em local seguro\n\nEnvie para seu e-mail ou WhatsApp pessoal. Isso garante que nenhum dado seja perdido durante a atualização.",
+        "details": "Quando acontece?\nA atualização entra em produção na segunda-feira, dia 06\/04\/2026. Após a atualização, ao abrir o sistema você verá a nova versão 4.2 Pro automaticamente — sem precisar reinstalar nada.",
+        "published": "2026-04-03T21:35:17.792Z",
+        "expires": null,
+        "targets": [
+            "all"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_9oaw",
+        "type": "update",
+        "priority": "high",
+        "title": "NOVAS FUNCIONALIDADES",
+        "body": "TESTE TESTE TESTE",
+        "details": "TESTE DIA 06\/04\/2026",
+        "published": "2026-04-03T21:46:51.094Z",
+        "expires": "2027-04-03T23:00:00.000Z",
+        "targets": [
+            "barbearia"
+        ],
+        "version": "7.2"
+    },
+    {
+        "id": "notif_20260403_eqzg",
+        "type": "update",
+        "priority": "high",
+        "title": "teste",
+        "body": "teste do teste",
+        "details": "teste de notificação rápida",
+        "published": "2026-04-03T21:52:35.939Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_ehfs",
+        "type": "update",
+        "priority": "normal",
+        "title": "testando a função de notificações",
+        "body": "A notoficação deve aparecer sem ação necesária por parte do cliente.",
+        "details": "envio\/recebimento atual",
+        "published": "2026-04-03T21:54:23.761Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_1zy7",
+        "type": "update",
+        "priority": "normal",
+        "title": "NOVAS FUNCIONALIDADES",
+        "body": "agora vai",
+        "details": "teste",
+        "published": "2026-04-03T21:54:58.200Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_fy85",
+        "type": "update",
+        "priority": "normal",
+        "title": "Função de hora registrada",
+        "body": "teste de aplicação de data e hora ativos instantaneamente",
+        "details": "agora",
+        "published": "2026-04-03T22:00:05.621Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    }
 ]
