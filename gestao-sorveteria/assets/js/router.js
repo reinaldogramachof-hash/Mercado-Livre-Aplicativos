@@ -54,31 +54,21 @@ function router(view) {
         if (typeof toggleSidebar === 'function') toggleSidebar();
     }
 
-    // Renderizar dados específicos da view
-    if (view === 'dashboard') {
-        if (typeof renderDashboard === 'function') renderDashboard();
-        if (typeof renderFreezerLog === 'function') renderFreezerLog();
-    } else if (view === 'cashier') {
-        if (typeof renderCashierProducts === 'function') renderCashierProducts();
-    } else if (view === 'production') {
-        if (typeof renderProduction === 'function') renderProduction();
-    } else if (view === 'inventory') {
-        if (typeof showInventoryTab === 'function') showInventoryTab('ingredients');
-    } else if (view === 'products') {
-        if (typeof renderProductsCatalog === 'function') renderProductsCatalog();
-    } else if (view === 'sales') {
-        if (typeof renderSales === 'function') renderSales();
-    } else if (view === 'clients') {
-        if (typeof renderClients === 'function') renderClients();
-    } else if (view === 'suppliers') {
-        if (typeof renderSuppliers === 'function') renderSuppliers();
-    } else if (view === 'reports') {
-        if (typeof renderReports === 'function') renderReports();
-    } else if (view === 'settings') {
-        if (typeof renderSettings === 'function') renderSettings();
-    } else if (view === 'temperature') {
-        if (typeof renderTemperature === 'function') renderTemperature();
-    }
+    // Chamar função de render da view ativa
+    const renderMap = {
+        dashboard:   () => { if (typeof renderDashboard === 'function') renderDashboard(); },
+        cashier:     () => { if (typeof renderCashierProducts === 'function') renderCashierProducts(); },
+        production:  () => { if (typeof renderProduction === 'function') renderProduction(); if (typeof renderProductionSchedule === 'function') renderProductionSchedule(); },
+        inventory:   () => { if (typeof renderInventory === 'function') renderInventory(); },
+        products:    () => { if (typeof renderProductsCatalog === 'function') renderProductsCatalog(); },
+        sales:       () => { if (typeof renderSales === 'function') renderSales(); },
+        clients:     () => { if (typeof renderClients === 'function') renderClients(); },
+        suppliers:   () => { if (typeof renderSuppliers === 'function') renderSuppliers(); },
+        reports:     () => { if (typeof renderReports === 'function') renderReports(); },
+        temperature: () => { if (typeof renderTemperature === 'function') renderTemperature(); },
+        settings:    () => { if (typeof renderSettings === 'function') renderSettings(); },
+    };
+    if (renderMap[view]) renderMap[view]();
 }
 
 function toggleSidebar() {

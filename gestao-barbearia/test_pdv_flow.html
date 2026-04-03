@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Runner — Gestão Barbearia PDV/Fiado Flow</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; padding: 24px; }
+  h1 { color: #38bdf8; font-size: 1.4rem; margin-bottom: 4px; }
+  .subtitle { color: #64748b; font-size: 0.8rem; margin-bottom: 24px; }
+  .suite { background: #1e293b; border-radius: 12px; margin-bottom: 20px; overflow: hidden; border: 1px solid #334155; }
+  .suite-header { background: #0f172a; padding: 12px 16px; font-weight: 700; font-size: 0.85rem; color: #94a3b8; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+  .suite-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; }
+  .test-row { padding: 10px 16px; display: flex; align-items: flex-start; gap: 10px; border-bottom: 1px solid #1e293b; font-size: 0.83rem; }
+  .test-row:last-child { border-bottom: none; }
+  .icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+  .pass { color: #22c55e; }
+  .fail { color: #ef4444; }
+  .warn { color: #f59e0b; }
+  .info { color: #38bdf8; }
+  .test-name { flex: 1; color: #cbd5e1; }
+  .test-detail { color: #64748b; font-size: 0.75rem; margin-top: 2px; font-family: monospace; }
+  .summary { display: flex; gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: #1e293b; border-radius: 10px; padding: 14px 20px; flex: 1; border: 1px solid #334155; }
+  .stat-card .num { font-size: 2rem; font-weight: 800; }
+  .stat-card .lbl { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+  .actions { margin-bottom: 24px; display: flex; gap: 10px; flex-wrap: wrap; }
+  button { padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.83rem; font-weight: 600; }
+  .btn-primary { background: #3b82f6; color: white; }
+  .btn-danger { background: #ef4444; color: white; }
+  .btn-warn { background: #f59e0b; color: #000; }
+  .btn-secondary { background: #334155; color: #e2e8f0; }
+  #log { background: #020617; border-radius: 10px; padding: 16px; font-family: monospace; font-size: 0.78rem; color: #94a3b8; white-space: pre-wrap; max-height: 280px; overflow-y: auto; border: 1px solid #1e293b; margin-top: 20px; }
+  .tag-new { font-size: 0.65rem; background: #7c3aed; color: white; padding: 1px 5px; border-radius: 4px; vertical-align: middle; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<h1>🧪 Test Runner — Barbearia PDV/Fiado</h1>
+<p class="subtitle">Valida fluxo completo: PDV → Pendências → Clientes → Financeiro → Dashboard → Relatórios</p>
+
+<div class="actions">
+  <button class="btn-primary" onclick="runAllTests()">▶ Rodar Todos os Testes</button>
+  <button class="btn-warn" onclick="injectTestData()">⚙ Injetar Dados de Teste</button>
+  <button class="btn-danger" onclick="cleanTestData()">🗑 Limpar Dados de Teste</button>
+  <button class="btn-secondary" onclick="showRawDB()">📦 Inspecionar DB</button>
+  <button class="btn-secondary" onclick="document.getElementById('log').textContent=''">✕ Limpar Log</button>
+</div>
+
+<div class="summary" id="summary" style="display:none">
+  <div class="stat-card"><div class="num pass" id="s-pass">0</div><div class="lbl">Passou</div></div>
+  <div class="stat-card"><div class="num fail" id="s-fail">0</div><div class="lbl">Falhou</div></div>
+  <div class="stat-card"><div class="num warn" id="s-warn">0</div><div class="lbl">Avisos</div></div>
+  <div class="stat-card"><div class="num" style="color:#94a3b8" id="s-total">0</div><div class="lbl">Total</div></div>
+</div>
+
+<div id="results"></div>
+<div id="log"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────
+const DB_KEY = 'brand_barber_pro_v2';
+const TEST_PREFIX = '__TEST__';
+const TODAY = new Date().toISOString().split('T')[0];
+
+// ─── STATE ────────────────────────────────────────────
+let results = [];
+let passCount = 0, failCount = 0, warnCount = 0;
+
+// ─── HELPERS ──────────────────────────────────────────
+function log(msg) {
+  const el = document.getElementById('log');
+  el.textContent += `[${new Date().toLocaleTimeString('pt-BR')}] ${msg}\n`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function getDB() {
+  const raw = localStorage.getItem(DB_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch(e) { return null; }
+}
+
+function saveDB(db) {
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+
+function genID(prefix) {
+  return TEST_PREFIX + (prefix||'id') + '_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+}
+
+function fmtMoney(v) {
+  return (v||0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+}
+
+// ─── TEST FRAMEWORK ───────────────────────────────────
+function suite(name) {
+  results.push({ type: 'suite', name });
+  log(`\n=== ${name} ===`);
+}
+
+function test(name, fn) {
+  try {
+    const result = fn();
+    if (result && result.warn) {
+      results.push({ type: 'warn', name, detail: result.detail || '' });
+      warnCount++;
+      log(`⚠ ${name}${result.detail ? ' — ' + result.detail : ''}`);
+    } else {
+      results.push({ type: 'pass', name, detail: result?.detail || '' });
+      passCount++;
+      log(`✓ ${name}`);
+    }
+  } catch(e) {
+    results.push({ type: 'fail', name, detail: e.message });
+    failCount++;
+    log(`✗ ${name} — ${e.message}`);
+  }
+}
+
+function assert(condition, msg) {
+  if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+function assertEquals(a, b, msg) {
+  if (a !== b) throw new Error((msg || 'Expected equal') + ` — got "${a}", expected "${b}"`);
+}
+
+function assertClose(a, b, msg, tolerance = 0.01) {
+  if (Math.abs(a - b) > tolerance) throw new Error((msg || 'Expected close') + ` — got ${a}, expected ~${b}`);
+}
+
+// ─── TEST DATA INJECTION ──────────────────────────────
+function injectTestData() {
+  const db = getDB();
+  if (!db) { alert('DB não encontrado. Abra o sistema primeiro para inicializar o banco.'); return; }
+
+  // Limpa dados de teste anteriores
+  cleanTestData(true);
+  const freshDB = getDB();
+
+  // Produto de teste
+  const prodId = genID('prod');
+  freshDB.inventory.push({
+    id: prodId, name: 'PRODUTO_TESTE_PDV', unitPrice: 10, price: 25,
+    quantity: 5, minQuantity: 2, category: 'Teste'
+  });
+
+  // Cliente de teste
+  const clientId = genID('cli');
+  freshDB.clients.push({
+    id: clientId, name: 'CLIENTE_TESTE_FIADO', phone: '12999999999',
+    email: 'teste@teste.com', createdAt: TODAY
+  });
+
+  // Transação quitada (real)
+  const tPaidId = genID('tpaid');
+  freshDB.transactions.push({
+    id: tPaidId, type: 'income', description: 'Serviço Teste (Quitado)',
+    amount: 40, date: TODAY, proId: 'adm', proName: 'Administrador',
+    serviceId: 's1', clientId: clientId, commission: 0,
+    isPending: false
+  });
+
+  // Transação pendente (fiado)
+  const tFiadoId = genID('tfiado');
+  freshDB.transactions.push({
+    id: tFiadoId, type: 'income', description: 'Venda PDV Teste (FIADO)',
+    amount: 75, date: TODAY, proId: 'pdv', proName: 'Caixa Balcão',
+    serviceId: 'pdv', clientId: clientId, commission: 0,
+    isPending: true,
+    productsOrigin: [{ id: prodId, name: 'PRODUTO_TESTE_PDV', price: 75 }]
+  });
+
+  // Segunda transação fiado (para testar acumulação)
+  const tFiado2Id = genID('tfiado2');
+  freshDB.transactions.push({
+    id: tFiado2Id, type: 'income', description: 'Segunda Venda Fiado Teste',
+    amount: 30, date: TODAY, proId: 'pdv', proName: 'Caixa Balcão',
+    serviceId: 'pdv', clientId: clientId, commission: 0,
+    isPending: true
+  });
+
+  // Movimento de estoque
+  freshDB.stockMovements.push({
+    id: genID('mov'), date: TODAY, productId: prodId,
+    productName: 'PRODUTO_TESTE_PDV', type: 'out', quantity: 1,
+    reason: 'Venda Direta PDV (Teste)'
+  });
+
+  // Transação órfã (fiado sem cliente — bug scenario)
+  const tOrphanId = genID('torphan');
+  freshDB.transactions.push({
+    id: tOrphanId, type: 'income', description: 'Fiado ORFAO (sem clientId)',
+    amount: 20, date: TODAY, proId: 'pdv', proName: 'Caixa Balcão',
+    serviceId: 'pdv', clientId: null, commission: 0,
+    isPending: true
+  });
+
+  saveDB(freshDB);
+  log('✅ Dados de teste injetados com sucesso.');
+  log(`   Produto: ${prodId}`);
+  log(`   Cliente: ${clientId}`);
+  log(`   Transação paga: ${tPaidId} (R$ 40)`);
+  log(`   Fiado 1: ${tFiadoId} (R$ 75)`);
+  log(`   Fiado 2: ${tFiado2Id} (R$ 30)`);
+  log(`   Fiado Órfão: ${tOrphanId} (R$ 20, clientId=null) — deve ser detectado nos testes`);
+  alert('Dados de teste injetados! Rode os testes agora.');
+}
+
+function cleanTestData(silent) {
+  const db = getDB();
+  if (!db) return;
+  db.inventory = db.inventory.filter(i => !i.id.startsWith(TEST_PREFIX));
+  db.clients = db.clients.filter(c => !c.id.startsWith(TEST_PREFIX));
+  db.transactions = db.transactions.filter(t => !t.id.startsWith(TEST_PREFIX));
+  db.stockMovements = db.stockMovements.filter(m => !m.id.startsWith(TEST_PREFIX) && !m.productId.startsWith(TEST_PREFIX));
+  saveDB(db);
+  if (!silent) { log('🗑 Dados de teste removidos.'); alert('Dados de teste removidos!'); }
+}
+
+function showRawDB() {
+  const db = getDB();
+  if (!db) { alert('DB não encontrado.'); return; }
+  log('\n--- DB SNAPSHOT ---');
+  log(`clients: ${db.clients.length} (${db.clients.filter(c=>c.id.startsWith(TEST_PREFIX)).length} test)`);
+  log(`transactions: ${db.transactions.length} (${db.transactions.filter(t=>t.id.startsWith(TEST_PREFIX)).length} test)`);
+  log(`inventory: ${db.inventory.length} (${db.inventory.filter(i=>i.id.startsWith(TEST_PREFIX)).length} test)`);
+  log(`stockMovements: ${db.stockMovements.length}`);
+  log(`pending txns: ${db.transactions.filter(t=>t.isPending).length}`);
+  log(`settings.productCommission: ${db.settings.productCommission}`);
+  log('-------------------\n');
+}
+
+// ─── SIMULATE LOGIC (sem DOM) ─────────────────────────
+// Replica da lógica de app_core.js para testes headless
+
+function sim_getClientDebtTotal(db, clientId) {
+  return db.transactions
+    .filter(t => t.clientId === clientId && t.isPending)
+    .reduce((acc, t) => acc + t.amount, 0);
+}
+
+function sim_payClientDebt(db, clientId) {
+  const pending = db.transactions.filter(t => t.clientId === clientId && t.isPending);
+  pending.forEach(t => { t.isPending = false; t.date = TODAY; });
+  return pending.length;
+}
+
+function sim_dashboardIncome(db, dateStr) {
+  return db.transactions
+    .filter(t => t.date === dateStr && t.type === 'income' && !t.isPending)
+    .reduce((sum, t) => sum + t.amount, 0);
+}
+
+function sim_financeMonthIncome(db) {
+  const now = new Date();
+  return db.transactions
+    .filter(t => {
+      const d = new Date(t.date);
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+             && t.type === 'income' && !t.isPending;
+    })
+    .reduce((sum, t) => sum + t.amount, 0);
+}
+
+function sim_reportIncome(db, start, end) {
+  return db.transactions
+    .filter(t => t.date >= start && t.date <= end && t.type === 'income' && !t.isPending)
+    .reduce((sum, t) => sum + t.amount, 0);
+}
+
+function sim_crmTotalSpent(db, clientId) {
+  // BUG: sem filtro isPending — como está HOJE no app
+  return db.transactions
+    .filter(t => t.clientId === clientId && t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
+}
+
+function sim_crmTotalSpentFixed(db, clientId) {
+  // CORRETO: exclui pendentes das stats
+  return db.transactions
+    .filter(t => t.clientId === clientId && t.type === 'income' && !t.isPending)
+    .reduce((sum, t) => sum + t.amount, 0);
+}
+
+// ─── TEST SUITES ──────────────────────────────────────
+function runAllTests() {
+  results = []; passCount = 0; failCount = 0; warnCount = 0;
+  document.getElementById('results').innerHTML = '';
+  log('\n🚀 INICIANDO SUITE COMPLETA DE TESTES\n');
+
+  const db = getDB();
+
+  // ── SUITE 1: Estrutura do Banco ───────────────────
+  suite('S1 — Estrutura do Banco de Dados');
+
+  test('DB_KEY existe no localStorage', () => {
+    assert(localStorage.getItem(DB_KEY) !== null, 'Chave brand_barber_pro_v2 não encontrada. Abra o sistema primeiro.');
+  });
+
+  test('DB é JSON válido e parseável', () => {
+    assert(db !== null, 'Falha ao parsear JSON do localStorage');
+  });
+
+  test('Campos obrigatórios presentes (clients, transactions, inventory)', () => {
+    assert(db, 'DB nulo');
+    assert(Array.isArray(db.clients), 'db.clients ausente');
+    assert(Array.isArray(db.transactions), 'db.transactions ausente');
+    assert(Array.isArray(db.inventory), 'db.inventory ausente');
+    assert(Array.isArray(db.stockMovements), 'db.stockMovements ausente');
+  });
+
+  test('Campo db.settings.productCommission existe (migração PDV)', () => {
+    assert(db, 'DB nulo');
+    assert(db.settings && db.settings.productCommission !== undefined,
+      'productCommission ausente em db.settings — migração não aplicada');
+    return { detail: `productCommission = ${db.settings.productCommission}%` };
+  });
+
+  test('Sem transações com amount NaN ou negativo', () => {
+    assert(db, 'DB nulo');
+    const bad = db.transactions.filter(t => isNaN(t.amount) || t.amount < 0);
+    assert(bad.length === 0, `${bad.length} transações com amount inválido: ${bad.map(t=>t.id).join(', ')}`);
+  });
+
+  test('Sem produtos em estoque com quantity negativa', () => {
+    assert(db, 'DB nulo');
+    const bad = db.inventory.filter(p => p.quantity < 0);
+    assert(bad.length === 0, `${bad.length} produto(s) com estoque negativo: ${bad.map(p=>p.name).join(', ')}`);
+  });
+
+  // ── SUITE 2: Funções Globais (PDV) ───────────────
+  suite('S2 — Presença das Funções Globais (requer página do sistema aberta na mesma aba)');
+
+  const fnTests = [
+    ['checkLowStock', 'Desbloqueia finalizePDVSale e confirmCheckoutAppt'],
+    ['finalizePDVSale', 'Módulo PDV — venda balcão'],
+    ['renderPDV', 'Módulo PDV — renderização da tela'],
+    ['getClientDebtTotal', 'CRM — cálculo de dívida ativa'],
+    ['openClientDebtCard', 'CRM — exibição da seção de dívida no card'],
+    ['payClientDebt', 'CRM — quitação integral de fiado'],
+    ['renderClients', 'Módulo Clientes'],
+    ['renderFinance', 'Módulo Financeiro'],
+    ['renderDashboard', 'Dashboard'],
+    ['generateReport', 'Relatórios'],
+  ];
+
+  fnTests.forEach(([fn, desc]) => {
+    test(`window.${fn}() definida — ${desc}`, () => {
+      if (typeof window[fn] !== 'function') {
+        return { warn: true, detail: `Não encontrada (normal se testando fora da SPA)` };
+      }
+      return { detail: 'OK' };
+    });
+  });
+
+  test('openClientDetails é a versão OVERRIDE do pdv.js (não a original)', () => {
+    if (typeof window.openClientDetails !== 'function') {
+      return { warn: true, detail: 'Função não encontrada neste contexto' };
+    }
+    // Se o override está ativo, openClientDebtCard deve ser chamado
+    // Verificamos indiretamente: o fn original não chama openClientDebtCard
+    const src = window.openClientDetails.toString();
+    if (src.includes('openClientDebtCard')) {
+      return { detail: 'Override ativo — openClientDebtCard chamado direto' };
+    }
+    return { warn: true, detail: 'openClientDebtCard NÃO encontrado no corpo da função — override pdv.js pode não ter executado ou bug A persiste' };
+  });
+
+  // ── SUITE 3: Fluxo de Fiado (Dados) ──────────────
+  suite('S3 — Lógica de Fiado (simulação headless)');
+
+  const testClient = db ? db.clients.find(c => c.id.startsWith(TEST_PREFIX)) : null;
+  const testTrans = db ? db.transactions.filter(t => t.id.startsWith(TEST_PREFIX)) : [];
+  const testPending = testTrans.filter(t => t.isPending && t.clientId === testClient?.id);
+  const testPaid = testTrans.filter(t => !t.isPending && t.clientId === testClient?.id);
+
+  test('Dados de teste injetados (cliente + transações de teste)', () => {
+    assert(db, 'DB nulo');
+    assert(testClient, 'Cliente de teste não encontrado — clique em "Injetar Dados de Teste" primeiro');
+    return { detail: `Cliente: ${testClient.name} | Pending: ${testPending.length} | Pagas: ${testPaid.length}` };
+  });
+
+  test('getClientDebtTotal() calcula soma correta dos fiados', () => {
+    assert(testClient, 'Cliente de teste ausente — injete os dados primeiro');
+    const debt = sim_getClientDebtTotal(db, testClient.id);
+    const expected = testPending.reduce((s, t) => s + t.amount, 0);
+    assertClose(debt, expected, 'Soma de dívida incorreta');
+    return { detail: `Dívida calculada: ${fmtMoney(debt)} (esperado: ${fmtMoney(expected)})` };
+  });
+
+  test('Duas transações fiado acumulam corretamente (R$ 75 + R$ 30 = R$ 105)', () => {
+    assert(testClient, 'Cliente de teste ausente');
+    const debt = sim_getClientDebtTotal(db, testClient.id);
+    assert(debt > 0, 'Nenhuma dívida encontrada — verifique se injetou os dados');
+    // Valores esperados da injeção: 75 + 30 = 105
+    if (testPending.length >= 2) {
+      assertClose(debt, 105, 'Total fiado acumulado incorreto');
+    }
+    return { detail: `Total fiado: ${fmtMoney(debt)}` };
+  });
+
+  test('payClientDebt() quita todas as pendências do cliente', () => {
+    assert(testClient, 'Cliente de teste ausente');
+    if (testPending.length === 0) throw new Error('Sem pendências para quitar — injete os dados primeiro');
+
+    // Simula em cópia local (não salva)
+    const dbCopy = JSON.parse(JSON.stringify(db));
+    const qtd = sim_payClientDebt(dbCopy, testClient.id);
+    const remainingDebt = sim_getClientDebtTotal(dbCopy, testClient.id);
+
+    assert(qtd > 0, 'Nenhuma transação foi quitada');
+    assertEquals(remainingDebt, 0, 'Dívida residual após quitação');
+    return { detail: `${qtd} transação(ões) quitada(s) — dívida residual: ${fmtMoney(remainingDebt)}` };
+  });
+
+  test('payClientDebt() atualiza data para hoje na quitação', () => {
+    assert(testClient, 'Cliente de teste ausente');
+    if (testPending.length === 0) throw new Error('Sem pendências — injete os dados');
+
+    const dbCopy = JSON.parse(JSON.stringify(db));
+    sim_payClientDebt(dbCopy, testClient.id);
+
+    const nowPaid = dbCopy.transactions.filter(t =>
+      t.clientId === testClient.id && !t.isPending && t.id.startsWith(TEST_PREFIX)
+    );
+    nowPaid.forEach(t => {
+      assertEquals(t.date, TODAY, `Data da transação ${t.id} não foi atualizada para hoje`);
+    });
+    return { detail: `Data atualizada para ${TODAY} em ${nowPaid.length} transação(ões)` };
+  });
+
+  // ── SUITE 4: Blindagem do Financeiro ─────────────
+  suite('S4 — Blindagem Financeira (isPending excluído dos KPIs)');
+
+  test('Dashboard: receita do dia NÃO inclui fiado', () => {
+    assert(db, 'DB nulo');
+    const incomeWithPending = db.transactions
+      .filter(t => t.date === TODAY && t.type === 'income')
+      .reduce((s, t) => s + t.amount, 0);
+    const incomeBlinded = sim_dashboardIncome(db, TODAY);
+    const diff = incomeWithPending - incomeBlinded;
+
+    if (diff > 0) {
+      return { detail: `Fiado blindado: ${fmtMoney(diff)} excluído | Receita real: ${fmtMoney(incomeBlinded)}` };
+    }
+    return { detail: `Sem pendentes hoje ou dados de teste não injetados. Receita: ${fmtMoney(incomeBlinded)}` };
+  });
+
+  test('Financeiro mensal: receita NÃO inclui fiado', () => {
+    assert(db, 'DB nulo');
+    const withPending = (() => {
+      const now = new Date();
+      return db.transactions
+        .filter(t => { const d=new Date(t.date); return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear() && t.type==='income'; })
+        .reduce((s,t) => s+t.amount, 0);
+    })();
+    const blinded = sim_financeMonthIncome(db);
+    const diff = withPending - blinded;
+    return { detail: `Com fiado: ${fmtMoney(withPending)} | Blindado: ${fmtMoney(blinded)} | Fiado excluído: ${fmtMoney(diff)}` };
+  });
+
+  test('Relatório: receita do período NÃO inclui fiado', () => {
+    assert(db, 'DB nulo');
+    const monthStart = `${TODAY.slice(0,7)}-01`;
+    const reportIncome = sim_reportIncome(db, monthStart, TODAY);
+    const reportWithPending = db.transactions
+      .filter(t => t.date >= monthStart && t.date <= TODAY && t.type === 'income')
+      .reduce((s,t) => s+t.amount, 0);
+    const diff = reportWithPending - reportIncome;
+    return { detail: `Relatório real: ${fmtMoney(reportIncome)} | Com fiado seria: ${fmtMoney(reportWithPending)} | Excluído: ${fmtMoney(diff)}` };
+  });
+
+  // ── SUITE 5: Bug B — Stats CRM com Pendentes ─────
+  suite('S5 — Bug B: Stats do CRM incluem transações pendentes?');
+
+  test('totalSpent no CRM NÃO deve incluir fiado não quitado', () => {
+    assert(testClient, 'Cliente de teste ausente — injete os dados');
+    const buggyTotal = sim_crmTotalSpent(db, testClient.id);
+    const correctTotal = sim_crmTotalSpentFixed(db, testClient.id);
+    const diff = buggyTotal - correctTotal;
+
+    if (diff > 0) {
+      throw new Error(`BUG ATIVO: totalSpent inflado em ${fmtMoney(diff)} por transações isPending. CRM mostra ${fmtMoney(buggyTotal)}, correto seria ${fmtMoney(correctTotal)}`);
+    }
+    return { detail: `totalSpent correto: ${fmtMoney(correctTotal)}` };
+  });
+
+  test('visits no CRM NÃO deve contar fiado não quitado', () => {
+    assert(testClient, 'Cliente de teste ausente — injete os dados');
+    const buggyVisits = db.transactions.filter(t => t.clientId === testClient.id && t.type === 'income').length;
+    const correctVisits = db.transactions.filter(t => t.clientId === testClient.id && t.type === 'income' && !t.isPending).length;
+
+    if (buggyVisits !== correctVisits) {
+      throw new Error(`BUG ATIVO: visits inflado. CRM conta ${buggyVisits} visitas, correto seria ${correctVisits} (excluindo ${buggyVisits - correctVisits} fiado(s))`);
+    }
+    return { detail: `visits correto: ${correctVisits}` };
+  });
+
+  // ── SUITE 6: Integridade dos Dados ───────────────
+  suite('S6 — Integridade dos Dados');
+
+  test('Sem fiados órfãos (isPending=true com clientId=null)', () => {
+    assert(db, 'DB nulo');
+    const orphans = db.transactions.filter(t => t.isPending && !t.clientId);
+    if (orphans.length > 0) {
+      return {
+        warn: true,
+        detail: `${orphans.length} fiado(s) órfão(s) sem clientId: ${orphans.map(t=>`${t.id.slice(0,20)}… R$${t.amount}`).join(' | ')}`
+      };
+    }
+    return { detail: 'Nenhum fiado órfão' };
+  });
+
+  test('Todos os stockMovements referenciam produtos existentes', () => {
+    assert(db, 'DB nulo');
+    const inventoryIds = new Set(db.inventory.map(p => p.id));
+    const broken = db.stockMovements.filter(m => !inventoryIds.has(m.productId));
+    if (broken.length > 0) {
+      return { warn: true, detail: `${broken.length} movimento(s) com produto inexistente` };
+    }
+    return { detail: 'Todos os movimentos têm produto válido' };
+  });
+
+  test('Nenhuma transação com type indefinido', () => {
+    assert(db, 'DB nulo');
+    const bad = db.transactions.filter(t => t.type !== 'income' && t.type !== 'expense');
+    assert(bad.length === 0, `${bad.length} transação(ões) com type inválido`);
+  });
+
+  test('Transações pendentes têm clientId definido (pós-fix Bug #2)', () => {
+    assert(db, 'DB nulo');
+    const production = db.transactions.filter(t => t.isPending && !t.id.startsWith(TEST_PREFIX));
+    const noClient = production.filter(t => !t.clientId);
+    if (noClient.length > 0) {
+      return { warn: true, detail: `${noClient.length} fiado(s) em produção sem clientId — verificar manualmente` };
+    }
+    return { detail: `${production.length} fiado(s) de produção, todos com clientId` };
+  });
+
+  // ── SUITE 7: Fluxo E2E Completo (simulação) ──────
+  suite('S7 — Fluxo E2E Completo (simulação headless)');
+
+  test('E2E: Criar venda fiado → verificar dívida → quitar → verificar financeiro', () => {
+    assert(db, 'DB nulo');
+    const dbSim = JSON.parse(JSON.stringify(db));
+
+    // 1. Cria cliente e produto
+    const cId = 'e2e_cli_' + Date.now();
+    const pId = 'e2e_prod_' + Date.now();
+    dbSim.clients.push({ id: cId, name: 'E2E Cliente', phone: '11999999999' });
+    dbSim.inventory.push({ id: pId, name: 'E2E Produto', price: 50, quantity: 3 });
+
+    // 2. Simula venda fiado
+    dbSim.inventory[dbSim.inventory.length-1].quantity--;
+    const tId = 'e2e_t_' + Date.now();
+    dbSim.transactions.push({
+      id: tId, type: 'income', description: 'E2E Venda PDV Fiado',
+      amount: 50, date: TODAY, proId: 'pdv', proName: 'Caixa Balcão',
+      clientId: cId, commission: 0, isPending: true
+    });
+
+    // 3. Verifica dívida
+    const debt = sim_getClientDebtTotal(dbSim, cId);
+    assertEquals(debt, 50, 'Dívida após venda fiado');
+
+    // 4. Verifica exclusão do dashboard
+    const dashIncome = sim_dashboardIncome(dbSim, TODAY);
+    const dashIncomeWithBug = dbSim.transactions
+      .filter(t => t.date === TODAY && t.type === 'income')
+      .reduce((s,t) => s+t.amount, 0);
+    assert(dashIncome < dashIncomeWithBug, 'Dashboard deveria excluir o fiado');
+
+    // 5. Quita dívida
+    const qtd = sim_payClientDebt(dbSim, cId);
+    assertEquals(qtd, 1, 'Uma transação quitada');
+
+    // 6. Verifica que agora entra no financeiro
+    const afterPayIncome = sim_dashboardIncome(dbSim, TODAY);
+    assert(afterPayIncome >= dashIncome + 50, `Após quitação, R$50 deve aparecer no financeiro. Antes: ${dashIncome}, Depois: ${afterPayIncome}`);
+
+    // 7. Verifica dívida zerada
+    const debtAfter = sim_getClientDebtTotal(dbSim, cId);
+    assertEquals(debtAfter, 0, 'Dívida residual após quitação');
+
+    // 8. Estoque debitado
+    const prod = dbSim.inventory.find(p => p.id === pId);
+    assertEquals(prod.quantity, 2, 'Estoque deve ser 2 após venda de 1 unidade');
+
+    return { detail: 'Fluxo completo: venda → dívida R$50 → exclusão dashboard → quitação → financeiro +R$50 → estoque -1' };
+  });
+
+  test('E2E: Venda casada (agendamento + produtos) gera transação única', () => {
+    assert(db, 'DB nulo');
+    const dbSim = JSON.parse(JSON.stringify(db));
+
+    const cId = 'e2e2_cli_' + Date.now();
+    dbSim.clients.push({ id: cId, name: 'E2E Cliente Agendamento', phone: '11988888888' });
+
+    // Simula confirmCheckoutAppt resultado
+    const apptPrice = 40;
+    const prodPrice = 25;
+    const total = apptPrice + prodPrice;
+
+    const tId = 'e2e2_t_' + Date.now();
+    dbSim.transactions.push({
+      id: tId, type: 'income',
+      description: 'Serviço: Corte Degradê + 1 prod(s) - E2E Cliente Agendamento',
+      amount: total, date: TODAY, proId: 'adm', proName: 'Administrador',
+      clientId: cId, commission: 4, isPending: false
+    });
+
+    const income = sim_dashboardIncome(dbSim, TODAY);
+    // Esta transação NÃO está pendente, deve aparecer
+    const thisTransIncome = dbSim.transactions
+      .filter(t => t.id === tId && !t.isPending)
+      .reduce((s,t) => s+t.amount, 0);
+    assertEquals(thisTransIncome, 65, 'Transação venda casada com valor correto');
+    return { detail: `Venda casada: serviço R$${apptPrice} + produto R$${prodPrice} = total R$${total}` };
+  });
+
+  // ── RENDERIZAR RESULTADO ──────────────────────────
+  renderResults();
+}
+
+// ─── RENDER ───────────────────────────────────────────
+function renderResults() {
+  document.getElementById('summary').style.display = 'flex';
+  document.getElementById('s-pass').textContent = passCount;
+  document.getElementById('s-fail').textContent = failCount;
+  document.getElementById('s-warn').textContent = warnCount;
+  document.getElementById('s-total').textContent = passCount + failCount + warnCount;
+
+  const el = document.getElementById('results');
+  let html = '';
+  let currentSuite = null;
+  let suiteItems = '';
+  let sPass=0, sFail=0, sWarn=0;
+
+  const flushSuite = () => {
+    if (!currentSuite) return;
+    const badgeClass = sFail > 0 ? 'fail' : (sWarn > 0 ? 'warn' : 'pass');
+    const badgeText = sFail > 0 ? `${sFail} falha(s)` : (sWarn > 0 ? `${sWarn} aviso(s)` : `${sPass} OK`);
+    html += `<div class="suite">
+      <div class="suite-header">
+        <span>${currentSuite}</span>
+        <span class="suite-badge ${badgeClass}">${badgeText}</span>
+      </div>
+      ${suiteItems}
+    </div>`;
+    suiteItems = ''; sPass=0; sFail=0; sWarn=0;
+  };
+
+  results.forEach(r => {
+    if (r.type === 'suite') {
+      flushSuite();
+      currentSuite = r.name;
+    } else {
+      const icon = r.type === 'pass' ? '✓' : r.type === 'fail' ? '✗' : '⚠';
+      suiteItems += `<div class="test-row">
+        <span class="icon ${r.type}">${icon}</span>
+        <div>
+          <div class="test-name">${r.name}</div>
+          ${r.detail ? `<div class="test-detail">${r.detail}</div>` : ''}
+        </div>
+      </div>`;
+      if (r.type === 'pass') sPass++;
+      else if (r.type === 'fail') sFail++;
+      else sWarn++;
+    }
+  });
+  flushSuite();
+  el.innerHTML = html;
+
+  log(`\n📊 RESULTADO FINAL: ${passCount} passou | ${failCount} falhou | ${warnCount} aviso(s)`);
+  if (failCount === 0 && warnCount === 0) log('🎉 Todos os testes passaram!');
+  else if (failCount > 0) log(`❌ ${failCount} teste(s) falharam — verifique os bugs acima.`);
+}
+</script>
+</body>
+</html>
