@@ -172,6 +172,15 @@
                     <i data-lucide="book-open" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Manual de Uso</span>
                 </button>
+                <button onclick="router('notifications')"
+                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    id="nav-notifications">
+                    <div class="relative mr-3">
+                        <i data-lucide="bell" class="w-5 h-5 text-white/60 group-hover:text-white"></i>
+                        <span class="notif-badge hidden absolute -top-1 -right-1 min-w-[14px] h-3.5 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center px-0.5">0</span>
+                    </div>
+                    <span class="font-medium sidebar-label">Notificações</span>
+                </button>
             </nav>
             <div class="p-4 border-t border-white/10 text-center sidebar-footer-content">
                 <div
@@ -203,6 +212,12 @@
                         class="hidden relative flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-200 active:scale-95 mr-2"><i
                             data-lucide="download" class="w-5 h-5 sm:mr-2"></i><span class="hidden sm:inline">Instalar
                             App</span><span class="sm:hidden">Instalar</span></button>
+                    <!-- Sino de Notificações -->
+                    <button onclick="router('notifications')" title="Notificações"
+                        class="relative p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
+                        <i data-lucide="bell" class="w-5 h-5 text-slate-500 dark:text-slate-400"></i>
+                        <span class="notif-badge hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1">0</span>
+                    </button>
                     <div class="relative group">
                         <div
                             class="absolute -inset-1 bg-green-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
@@ -2138,6 +2153,42 @@
                         </div>
                     </div>
                 </section>
+                <!-- Notifications View -->
+                <section id="view-notifications" class="view-section hide fade-in">
+                    <div class="max-w-2xl mx-auto pb-12">
+                        <!-- Header da View -->
+                        <div class="bg-white dark:bg-barber-card p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 mb-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-brand-dark flex items-center justify-center shadow-lg">
+                                        <i data-lucide="bell" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Notificações</h2>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Atualizações, avisos e novidades do sistema</p>
+                                    </div>
+                                </div>
+                                <button onclick="markAllAsRead()"
+                                    class="text-xs text-brand-blue hover:text-brand-dark font-medium flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all">
+                                    <i data-lucide="check-check" class="w-4 h-4"></i>
+                                    Marcar todas como lidas
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Lista de Notificações -->
+                        <div id="notif-list" class="space-y-4">
+                            <!-- Preenchido por renderNotifications() -->
+                            <div class="text-center py-20 text-slate-400 dark:text-slate-500">
+                                <i data-lucide="loader-2" class="w-8 h-8 mx-auto mb-3 opacity-40 animate-spin"></i>
+                                <p class="text-sm">Carregando notificações...</p>
+                            </div>
+                        </div>
+                        <!-- Rodapé -->
+                        <div class="mt-8 text-center">
+                            <p class="text-[10px] text-slate-400 dark:text-slate-600">As notificações são enviadas pela equipe de suporte do sistema. Últimas 10 exibidas.</p>
+                        </div>
+                    </div>
+                </section>
                 <!-- About View (V4 Standard) -->
                 <section id="view-about" class="view-section hide fade-in">
                     <div class="max-w-4xl mx-auto pb-12">
@@ -3054,6 +3105,7 @@
 
         <script src="js/app_core.js"></script>
         <script src="js/pdv.js"></script>
+        <script src="js/notif_logic.js"></script>
 
         <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (MERCADO LIVRE / COMPRA GARANTIDA) -->
         <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog"

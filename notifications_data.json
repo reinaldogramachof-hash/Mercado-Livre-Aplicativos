@@ -1,0 +1,26 @@
+[
+  {
+    "id": "notif_20260406_v42_barber",
+    "type": "update",
+    "priority": "high",
+    "title": "Atualização v4.2 Pro disponível — PDV, Comissões e Fiado",
+    "body": "Seu sistema foi atualizado com base nas sugestões de vocês! O PDV agora registra comissões por profissional automaticamente, suporta venda Fiado vinculada ao cliente e emite alertas de estoque mínimo.",
+    "details": "Novidades: (1) Selecione o profissional responsável pela venda no PDV — comissão calculada pelo % individual. (2) Venda Fiado: produto sai do estoque, valor entra no caixa somente ao quitar. (3) Alertas automáticos ao atingir estoque mínimo. (4) Manual de uso atualizado com seção dedicada ao PDV.",
+    "published": "2026-04-06T08:00:00Z",
+    "expires": "2026-06-30T23:59:59Z",
+    "targets": ["barbearia"],
+    "version": "4.2"
+  },
+  {
+    "id": "notif_20260403_backup_reminder",
+    "type": "backup",
+    "priority": "normal",
+    "title": "Lembrete de Backup Semanal",
+    "body": "Seus dados ficam exclusivamente no seu dispositivo. Faça backup toda semana para garantir que nada seja perdido em caso de troca ou formatação.",
+    "details": "Como fazer: Configurações → Baixar Backup → salve o arquivo .json no seu e-mail ou WhatsApp pessoal. Leva menos de 30 segundos!",
+    "published": "2026-04-03T08:00:00Z",
+    "expires": "2026-12-31T23:59:59Z",
+    "targets": ["all"],
+    "version": null
+  }
+]

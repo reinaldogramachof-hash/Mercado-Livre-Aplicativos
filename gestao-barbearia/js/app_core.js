@@ -151,6 +151,9 @@ async function init() {
         // Inicializar Tutorial
         if (typeof initTutorial === 'function') initTutorial();
 
+        // Inicializar Notificações
+        if (typeof initNotifications === 'function') initNotifications();
+
         // Lógica de Auditoria e Airlock
         checkAirlock();
 
@@ -393,6 +396,7 @@ function router(view) {
         reports: 'Relatórios',
         settings: 'Configurações',
         instructions: 'Manual de Uso',
+        notifications: 'Notificações',
         about: 'Sobre'
     };
     document.getElementById('page-title').innerText = titles[view] || 'Gestão Barbearia';
@@ -417,6 +421,8 @@ function router(view) {
         renderClients();
     } else if (view === 'pdv') {
         if(typeof renderPDV === 'function') renderPDV();
+    } else if (view === 'notifications') {
+        if(typeof renderNotifications === 'function') renderNotifications();
     }
 }
 function toggleSidebar() {
