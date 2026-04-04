@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'app-cache-v3.1';
+const CACHE_NAME = 'app-cache-v4.0';
 const urlsToCache = [
   './',
   './index.html',
@@ -37,9 +37,19 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   
-  // Ignorar chamadas de API do cache
-  if (url.pathname.includes('/api_') || url.pathname.endsWith('.php')) {
-    event.respondWith(fetch(event.request));
+  // Ignorar chamadas de API do cache (por pathname OU por hostname externo)
+  const isApiCall = url.pathname.includes('/api_') || 
+                    url.pathname.endsWith('.php') ||
+                    url.href.includes('api_notificacoes') ||
+                    url.hostname !== self.location.hostname;
+
+  if (isApiCall) {
+    // Sempre ir direto à rede, sem cache
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' }).catch(() => new Response('{}', {
+        headers: { 'Content-Type': 'application/json' }
+      }))
+    );
     return;
   }
 

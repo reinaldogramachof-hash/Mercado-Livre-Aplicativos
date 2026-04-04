@@ -7,8 +7,11 @@
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET');
-header('Cache-Control: public, max-age=300'); // Cache de 5 min no browser
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+// Nunca cachear — sempre servir dados frescos do disco
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 // Sanitiza o parâmetro target
 $target   = isset($_GET['target']) ? preg_replace('/[^a-z0-9_-]/', '', strtolower(trim($_GET['target']))) : 'all';

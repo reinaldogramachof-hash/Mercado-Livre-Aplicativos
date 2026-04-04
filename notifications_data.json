@@ -82,5 +82,61 @@
             "barbearia"
         ],
         "version": ""
+    },
+    {
+        "id": "notif_20260403_39em",
+        "type": "update",
+        "priority": "normal",
+        "title": "teste",
+        "body": "teste",
+        "details": "teste",
+        "published": "2026-04-03T23:29:44.046Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_lyrz",
+        "type": "update",
+        "priority": "normal",
+        "title": "teste 4",
+        "body": "teste 4",
+        "details": "teste 4",
+        "published": "2026-04-03T23:32:03.857Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_zm1v",
+        "type": "update",
+        "priority": "normal",
+        "title": "testando a função de notificações",
+        "body": "mais uma vez teste local",
+        "details": "olá teste",
+        "published": "2026-04-03T23:39:45.025Z",
+        "expires": null,
+        "targets": [
+            "barbearia"
+        ],
+        "version": ""
+    },
+    {
+        "id": "notif_20260403_h1ly",
+        "type": "update",
+        "priority": "normal",
+        "title": "Função de hora registrada",
+        "body": "teste5",
+        "details": "",
+        "published": "2026-04-03T23:40:14.059Z",
+        "expires": null,
+        "targets": [
+            "all"
+        ],
+        "version": ""
     }
 ]
