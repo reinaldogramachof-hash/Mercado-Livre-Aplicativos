@@ -34,6 +34,13 @@ const defaultDB = {
     settings: {
         businessName: '',
         businessHours: '09:00 às 19:00',
+        businessStart: 8,
+        businessEnd: 20,
+        agendaInterval: 60,
+        workDays: {
+            saturday: { active: true, start: 9, end: 18 },
+            sunday: { active: false, start: 9, end: 14 }
+        },
         theme: 'blue',
         termsAccepted: false,
         termsAcceptedAt: null
@@ -74,6 +81,11 @@ const fmtMoney = (v) => {
 };
 const fmtDate = (d) => {
     if (!d) return '--/--/--';
+    // Se for string YYYY-MM-DD, formata preservando o dia exato (sem sofrer fuso horário)
+    if (typeof d === 'string' && d.includes('-')) {
+        const [y, m, day] = d.split('-');
+        if (y.length === 4) return `${day}/${m}/${y}`;
+    }
     const date = new Date(d);
     return date.toLocaleDateString('pt-BR');
 };
@@ -137,9 +149,33 @@ async function init() {
         if (document.getElementById('biz-hours')) document.getElementById('biz-hours').value = db.settings.businessHours || '';
         if (document.getElementById('biz-prod-comm')) document.getElementById('biz-prod-comm').value = db.settings.productCommission || 0;
 
+        // Novos campos de agenda
+        if (document.getElementById('agenda-interval')) document.getElementById('agenda-interval').value = db.settings.agendaInterval || 60;
+        if (document.getElementById('hour-start-week')) document.getElementById('hour-start-week').value = db.settings.businessStart || 8;
+        if (document.getElementById('hour-end-week')) document.getElementById('hour-end-week').value = db.settings.businessEnd || 20;
+
+        if (db.settings.workDays) {
+            const sat = db.settings.workDays.saturday;
+            const sun = db.settings.workDays.sunday;
+
+            if (document.getElementById('closed-sat')) {
+                document.getElementById('closed-sat').checked = !sat.active;
+                document.getElementById('hour-start-sat').value = sat.start;
+                document.getElementById('hour-end-sat').value = sat.end;
+                toggleDayInput('sat');
+            }
+            if (document.getElementById('closed-sun')) {
+                document.getElementById('closed-sun').checked = !sun.active;
+                document.getElementById('hour-start-sun').value = sun.start;
+                document.getElementById('hour-end-sun').value = sun.end;
+                toggleDayInput('sun');
+            }
+        }
+
         // Renderizar dados iniciais
         renderDashboard();
         updateDataStatus();
+        updateClientsDatalist();
         if (typeof updateTermsVisuals === 'function') updateTermsVisuals();
 
         // Configurar periodicidade para salvar
@@ -420,9 +456,9 @@ function router(view) {
     } else if (view === 'clients') {
         renderClients();
     } else if (view === 'pdv') {
-        if(typeof renderPDV === 'function') renderPDV();
+        if (typeof renderPDV === 'function') renderPDV();
     } else if (view === 'notifications') {
-        if(typeof renderNotifications === 'function') renderNotifications();
+        if (typeof renderNotifications === 'function') renderNotifications();
     }
 }
 function toggleSidebar() {
@@ -434,14 +470,49 @@ function toggleSidebar() {
 }
 
 // ── Weekly Chart ────────────────────────────
-function renderWeeklyChart(data) {
+function renderWeeklyChart(data, labels = []) {
     const container = document.getElementById('mini-chart-container');
     if (!container) return;
-    if (data.length < 2 || data.every(v => v === 0)) { container.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-slate-500"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50 text-slate-400"></i><span class="text-xs">Sem dados suficientes</span></div>'; lucide.createIcons(); return; }
-    const maxVal = Math.max(...data) || 100;
-    const points = data.map((val, i) => { const x = (i / (data.length - 1)) * 100; const y = 100 - ((val / maxVal) * 80); return `${x},${y}`; }).join(' ');
-    // Trocado de rosa (#e11d48) para azul (#3b82f6)
-    const svg = `<svg viewBox="0 0 100 100" class="w-full h-full overflow-visible" preserveAspectRatio="none"><defs><linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" /><stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" /></linearGradient></defs><path d="M0,100 ${points.split(' ').map((p, i) => 'L' + p).join(' ')} L100,100 Z" fill="url(#gradient)" stroke="none" /><polyline points="${points}" fill="none" stroke="#3b82f6" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>${data.map((val, i) => `<circle cx="${(i / (data.length - 1)) * 100}" cy="${100 - ((val / maxVal) * 80)}" r="1.5" fill="#3b82f6" />`).join('')}</svg>`;
+    if (data.length < 2 || data.every(v => v === 0)) {
+        container.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-slate-500"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50 text-slate-400"></i><span class="text-xs">Sem dados suficientes</span></div>';
+        lucide.createIcons(); return;
+    }
+    const maxVal = Math.max(...data) * 1.1 || 100;
+    const barWidth = 8;
+    const spacing = (100 - (barWidth * data.length)) / (data.length + 1);
+
+    const svg = `
+    <svg viewBox="0 0 100 130" class="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
+        <defs>
+            <linearGradient id="barGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.2" />
+            </linearGradient>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+        </defs>
+        ${data.map((val, i) => {
+        const x = spacing + i * (barWidth + spacing);
+        const barHeight = (val / maxVal) * 90;
+        const y = 100 - barHeight;
+        const isToday = i === data.length - 1;
+
+        return `
+            <g class="cursor-pointer group">
+                <rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="2.5" 
+                    fill="url(#barGrad)" filter="${isToday ? 'url(#glow)' : ''}" 
+                    class="transition-all duration-300 opacity-80 group-hover:opacity-100 group-hover:brightness-110">
+                    <title>${labels[i]}: ${fmtMoney(val)}</title>
+                </rect>
+                <text x="${x + barWidth / 2}" y="115" font-size="6" fill="#94a3b8" text-anchor="middle" font-weight="${isToday ? 'bold' : 'medium'}">${labels[i]}</text>
+                ${val > 0 ? `<text x="${x + barWidth / 2}" y="${y - 4}" font-size="5" fill="#3b82f6" text-anchor="middle" font-weight="bold" class="opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">${fmtMoney(val)}</text>` : ''}
+            </g>
+            `;
+    }).join('')}
+        <line x1="0" y1="102" x2="100" y2="102" stroke="#94a3b8" stroke-width="0.5" stroke-opacity="0.2" />
+    </svg>`;
     container.innerHTML = svg;
 }
 
@@ -454,30 +525,58 @@ function renderDashboard() {
     // Calcular estatísticas
     const todayStr = getLocalIsoDate();
     const todayTrans = db.transactions.filter(t => t.date === todayStr);
+
     const incomeToday = todayTrans
         .filter(t => t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + t.amount, 0);
+
+    const pendingToday = todayTrans
+        .filter(t => t.type === 'income' && t.isPending)
+        .reduce((sum, t) => sum + t.amount, 0);
+
     const expenseToday = todayTrans
         .filter(t => t.type === 'expense')
         .reduce((sum, t) => sum + t.amount, 0);
+
     const commissionPending = db.transactions
         .filter(t => t.type === 'income' && !t.commissionPaid)
         .reduce((sum, t) => sum + (t.commission || 0), 0);
+
     // Atualizar KPI cards
     document.getElementById('dash-appt-today').innerText = db.appointments
         .filter(a => a.date === todayStr && a.status === 'pending').length;
+
     document.getElementById('dash-rev-today').innerText = fmtMoney(incomeToday);
+
+    const revGrowthEl = document.getElementById('rev-growth');
+    const revSubtextEl = document.getElementById('dash-rev-subtext');
+    if (revSubtextEl) {
+        revSubtextEl.innerHTML = pendingToday > 0
+            ? `<span class="text-rose-500 font-bold">+ ${fmtMoney(pendingToday)} em fiados</span>`
+            : `<span class="text-slate-400">Tudo recebido hoje</span>`;
+    }
+
     document.getElementById('dash-comm-pending').innerText = fmtMoney(commissionPending);
+
     // Calcular crescimento vs ontem
-    const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
     const yesterdayIncome = db.transactions
         .filter(t => t.date === yesterdayStr && t.type === 'income' && !t.isPending)
         .reduce((sum, t) => sum + t.amount, 0);
+
     const growth = calculatePercentage(incomeToday, yesterdayIncome);
-    document.getElementById('rev-growth').innerText = `${growth}%`;
+    if (revGrowthEl) {
+        revGrowthEl.innerText = `${growth >= 0 ? '+' : ''}${growth}%`;
+        revGrowthEl.className = growth >= 0 ? 'text-green-500 font-bold' : 'text-red-500 font-bold';
+    }
 
     // Próximos Agendamentos
-    const upcoming = db.appointments.filter(a => a.date >= todayStr && a.status === 'pending').sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time)).slice(0, 5);
+    const upcoming = db.appointments
+        .filter(a => a.date >= todayStr && a.status === 'pending')
+        .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time))
+        .slice(0, 5);
+
     const listEl = document.getElementById('upcoming-appts');
     if (listEl) {
         listEl.innerHTML = upcoming.length === 0
@@ -488,9 +587,12 @@ function renderDashboard() {
                     <div class="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 p-2.5 rounded-lg text-center min-w-[55px] group-hover:bg-blue-500/10 group-hover:text-brand-blue transition-colors">
                         <span class="block font-bold text-sm text-center">${appt.time}</span>
                     </div>
-                    <div>
-                        <p class="text-sm font-bold text-slate-800 dark:text-white">${sanitizeHTML(appt.client)}</p>
-                        <p class="text-xs text-slate-500">${fmtDate(appt.date)} • ${sanitizeHTML(appt.serviceName)}</p>
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-slate-800 dark:text-white truncate">${sanitizeHTML(appt.client)}</p>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-brand-blue px-1.5 py-0.5 rounded font-medium truncate max-w-[80px]">${sanitizeHTML(appt.proName)}</span>
+                            <span class="text-[10px] text-slate-400 font-medium">${fmtDate(appt.date)} • ${sanitizeHTML(appt.serviceName)}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -506,14 +608,18 @@ function renderDashboard() {
     }
 
     // Gráfico de Tendência Semanal
-    const chartData = [];
+    const chartLabels = [];
+    const chartValues = [];
+    const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
     for (let i = 6; i >= 0; i--) {
         const d = new Date(); d.setDate(d.getDate() - i);
         const isoDate = d.toISOString().split('T')[0];
+        const dayLabel = weekDays[d.getDay()];
         const rev = db.transactions.filter(t => t.date === isoDate && t.type === 'income' && !t.isPending).reduce((acc, t) => acc + t.amount, 0);
-        chartData.push(rev);
+        chartValues.push(rev);
+        chartLabels.push(dayLabel);
     }
-    renderWeeklyChart(chartData);
+    renderWeeklyChart(chartValues, chartLabels);
 
     lucide.createIcons();
 }
@@ -526,48 +632,98 @@ function renderAgenda() {
 
     if (!headerEl || !bodyEl) return;
 
+    // Determinar horários de hoje
+    const dateObj = new Date(date + 'T12:00:00');
+    const dayOfWeek = dateObj.getDay(); // 0 = Domingo, 6 = Sábado
+
+    let startHour = db.settings.businessStart || 8;
+    let endHour = db.settings.businessEnd || 20;
+    let isActive = true;
+
+    if (dayOfWeek === 6) { // Sábado
+        const sat = db.settings.workDays?.saturday || { active: true, start: 9, end: 18 };
+        startHour = sat.start;
+        endHour = sat.end;
+        isActive = sat.active;
+    } else if (dayOfWeek === 0) { // Domingo
+        const sun = db.settings.workDays?.sunday || { active: false, start: 9, end: 14 };
+        startHour = sun.start;
+        endHour = sun.end;
+        isActive = sun.active;
+    }
+
+    if (!isActive) {
+        bodyEl.innerHTML = `
+            <div class="col-span-full py-20 text-center flex flex-col items-center justify-center">
+                <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="moon" class="w-8 h-8 text-slate-400"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Estabelecimento Fechado</h3>
+                <p class="text-slate-500 dark:text-slate-400">Não há expediente cadastrado para este dia.</p>
+            </div>
+        `;
+        lucide.createIcons();
+        return;
+    }
+
     headerEl.style.gridTemplateColumns = `100px repeat(${db.team.length}, 1fr)`;
     headerEl.innerHTML = `<div class="p-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center flex items-center justify-center bg-slate-50 dark:bg-slate-800/80">Horário</div>` + db.team.map(t => `<div class="p-4 text-sm font-bold text-slate-800 dark:text-white text-center truncate border-l border-slate-100 dark:border-white/5">${t.name}</div>`).join('');
 
+    const interval = db.settings.agendaInterval || 60;
     let html = '';
-    for (let h = 8; h <= 20; h++) {
-        const time = `${h.toString().padStart(2, '0')}:00`;
-        html += `<div class="grid divide-x divide-slate-100 dark:divide-white/5 border-b border-slate-100 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors" style="grid-template-columns: 100px repeat(${db.team.length}, 1fr)">`;
-        html += `<div class="p-3 text-xs font-bold text-slate-500 text-center flex items-center justify-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-brand-blue opacity-50"></i>${time}</div>`;
-        db.team.forEach(pro => {
-            const appt = db.appointments.find(a => a.date === date && a.time === time && a.proId === pro.id && a.status !== 'canceled');
-            if (appt) {
-                const isDone = appt.status === 'done' || appt.status === 'concluido';
-                const statusColor = isDone ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400' : 'bg-blue-500/10 border-blue-500 text-brand-blue dark:text-brand-lightblue';
-                const textColor = isDone ? 'text-emerald-700 dark:text-emerald-300' : 'text-blue-700 dark:text-blue-300';
 
-                html += `<div class="p-1 relative group cursor-pointer">
-                    <div class="h-full w-full ${statusColor} border-l-4 rounded p-2 text-xs hover:opacity-80 transition-colors flex flex-col justify-between">
-                        <div>
-                            <p class="font-bold ${textColor} truncate">${sanitizeHTML(appt.client)}</p>
-                            <p class="${textColor}/70 truncate">${sanitizeHTML(appt.serviceName)}</p>
+    for (let h = startHour; h <= endHour; h++) {
+        const slots = interval === 30 ? [`${h.toString().padStart(2, '0')}:00`, `${h.toString().padStart(2, '0')}:30`] : [`${h.toString().padStart(2, '0')}:00`];
+
+        slots.forEach(time => {
+            // Se for o último horário e for :30 em um intervalo de 30 min, e h for igual ao endHour, 
+            // talvez devêssemos parar. Mas geralmente o endHour é o último horário disponível para agendamento.
+
+            html += `<div class="grid divide-x divide-slate-100 dark:divide-white/5 border-b border-slate-100 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors" style="grid-template-columns: 100px repeat(${db.team.length}, 1fr)">`;
+            html += `<div class="p-3 text-xs font-bold text-slate-500 text-center flex items-center justify-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-brand-blue opacity-50"></i>${time}</div>`;
+
+            db.team.forEach(pro => {
+                const appt = db.appointments.find(a => a.date === date && a.time === time && a.proId === pro.id && a.status !== 'canceled');
+                if (appt) {
+                    const isDone = appt.status === 'done' || appt.status === 'concluido';
+                    const statusColor = isDone ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400' : 'bg-blue-500/10 border-blue-500 text-brand-blue dark:text-brand-lightblue';
+                    const textColor = isDone ? 'text-emerald-700 dark:text-emerald-300' : 'text-blue-700 dark:text-blue-300';
+
+                    html += `<div class="p-1 relative group cursor-pointer">
+                        <div class="h-full w-full ${statusColor} border-l-4 rounded p-2 text-xs hover:opacity-80 transition-colors flex flex-col justify-between">
+                            <div>
+                                <p class="font-bold ${textColor} truncate">${sanitizeHTML(appt.client)}</p>
+                                <p class="${textColor}/70 truncate">${sanitizeHTML(appt.serviceName)}</p>
+                            </div>
+                            <div class="flex justify-end gap-1 mt-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                ${!isDone ? `<button onclick="finishAppt('${appt.id}')" class="p-1 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 rounded" title="Concluir"><i data-lucide="check" class="w-3 h-3"></i></button>` : '<i data-lucide="check-circle" class="w-3 h-3 text-emerald-500"></i>'}
+                                ${!isDone ? `<button onclick="editAppt('${appt.id}')" class="p-1 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 rounded" title="Editar"><i data-lucide="edit-2" class="w-3 h-3"></i></button>` : ''}
+                                <button onclick="cancelAppt('${appt.id}')" class="p-1 text-red-600 dark:text-rose-400 hover:bg-red-500/20 rounded" title="Cancelar"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+                            </div>
                         </div>
-                        <div class="flex justify-end gap-1 mt-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                            ${!isDone ? `<button onclick="finishAppt('${appt.id}')" class="p-1 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 rounded" title="Concluir"><i data-lucide="check" class="w-3 h-3"></i></button>` : '<i data-lucide="check-circle" class="w-3 h-3 text-emerald-500"></i>'}
-                            <button onclick="cancelAppt('${appt.id}')" class="p-1 text-red-600 dark:text-rose-400 hover:bg-red-500/20 rounded" title="Cancelar"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
-                </div>`;
-            } else {
-                html += `<div class="p-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group relative" onclick="openApptModalWithContext('${date}', '${time}', '${pro.id}')"><i data-lucide="plus" class="w-4 h-4 text-brand-blue opacity-0 group-hover:opacity-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity"></i></div>`;
-            }
+                    </div>`;
+                } else {
+                    html += `<div class="p-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group relative" onclick="openApptModalWithContext('${date}', '${time}', '${pro.id}')"><i data-lucide="plus" class="w-4 h-4 text-brand-blue opacity-0 group-hover:opacity-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity"></i></div>`;
+                }
+            });
+            html += `</div>`;
         });
-        html += `</div>`;
     }
     bodyEl.innerHTML = html;
     lucide.createIcons();
 }
 
 function openApptModalWithContext(date, time, proId) {
-    document.getElementById('ap-date').value = date;
-    document.getElementById('ap-time').value = time;
-    document.getElementById('ap-pro').value = proId;
+    // Primeiro abre o modal para carregar os selects de serviços e barbeiros
     openApptModal();
+
+    // Define os valores de contexto
+    if (date) document.getElementById('ap-date').value = date;
+    if (time) document.getElementById('ap-time').value = time;
+    if (proId) document.getElementById('ap-pro').value = proId;
+
+    // Garante que o título do modal reflita o novo agendamento
+    document.querySelector('#apptModal h3').textContent = 'Novo Agendamento';
 }
 
 function changeAgendaDate(days) {
@@ -930,8 +1086,19 @@ function openClientDetails(clientId) {
     modal.classList.remove('hidden');
     lucide.createIcons();
 }
+
+function updateClientsDatalist() {
+    const list = document.getElementById('clients-list');
+    if (!list) return;
+    list.innerHTML = '';
+    db.clients.sort((a, b) => a.name.localeCompare(b.name)).forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        list.appendChild(opt);
+    });
+}
 // MODAIS E FORMULÁRIOS
-function openApptModal() {
+function openApptModal(clientId = null) {
     // Carregar Serviços
     const svcSelect = document.getElementById('ap-service');
     svcSelect.innerHTML = '<option value="">Selecione o Serviço...</option>';
@@ -956,6 +1123,15 @@ function openApptModal() {
     document.getElementById('ap-client').value = '';
     document.getElementById('ap-time').value = '';
     document.getElementById('ap-display-val').textContent = 'R$ 0,00';
+
+    // Se passar clientId, preenche o nome e bloqueia se desejar (ou apenas preenche)
+    if (clientId) {
+        const client = db.clients.find(c => c.id === clientId);
+        if (client) {
+            document.getElementById('ap-client').value = client.name;
+        }
+    }
+
     document.getElementById('apptModal').classList.remove('hidden');
 }
 function updateApptValue() {
@@ -1057,6 +1233,94 @@ function openModal(modalId) {
 function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
 }
+
+function openClientDetails(id) {
+    const client = db.clients.find(c => c.id === id);
+    if (!client) return;
+
+    // Calcular estatísticas
+    const history = db.transactions.filter(t => t.clientId === id && t.type === 'income');
+    const totalSpent = history.reduce((sum, t) => sum + t.amount, 0);
+    const visits = history.length;
+    const avgTicket = visits > 0 ? totalSpent / visits : 0;
+
+    const debtTransactions = db.transactions.filter(t => t.clientId === id && t.isPending);
+    const totalDebt = debtTransactions.reduce((sum, t) => sum + t.amount, 0);
+
+    // Preencher modal
+    document.getElementById('cd-name').textContent = client.name;
+    document.getElementById('cd-phone').textContent = client.phone || 'Sem telefone';
+    document.getElementById('cd-total-spent').textContent = fmtMoney(totalSpent);
+    document.getElementById('cd-visits').textContent = visits;
+    document.getElementById('cd-avg-ticket').textContent = fmtMoney(avgTicket);
+    document.getElementById('cd-notes').textContent = client.notes || 'Nenhuma observação.';
+
+    // Datas de visita
+    if (visits > 0) {
+        const sorted = history.sort((a, b) => new Date(a.date) - new Date(b.date));
+        document.getElementById('cd-first-visit').textContent = fmtDate(sorted[0].date);
+        document.getElementById('cd-last-visit').textContent = fmtDate(sorted[sorted.length - 1].date);
+    } else {
+        document.getElementById('cd-first-visit').textContent = '-';
+        document.getElementById('cd-last-visit').textContent = '-';
+    }
+
+    document.getElementById('cd-birthday').textContent = client.birthDate ? fmtDate(client.birthDate) : '-';
+
+    // Seção de Dívida
+    const debtSection = document.getElementById('cd-debt-section');
+    if (totalDebt > 0) {
+        debtSection.classList.remove('hidden');
+        document.getElementById('cd-debt-amount').textContent = fmtMoney(totalDebt);
+        document.getElementById('cd-btn-pay-debt').onclick = () => payClientDebt(id);
+    } else {
+        debtSection.classList.add('hidden');
+    }
+
+    // Botões de ação
+    const rawPhone = client.phone ? client.phone.replace(/\D/g, '') : '';
+    const btnWa = document.getElementById('cd-btn-whatsapp');
+    if (rawPhone) {
+        btnWa.closest('div').classList.remove('hidden');
+        btnWa.onclick = () => window.open(`https://wa.me/55${rawPhone}`, '_blank');
+    } else {
+        // Se desejar esconder o botão se não houver fone
+        // btnWa.closest('div').classList.add('hidden');
+    }
+
+    document.getElementById('cd-btn-schedule').onclick = () => {
+        closeModal('clientDetailsModal');
+        openApptModal(id);
+    };
+
+    document.getElementById('cd-btn-edit').onclick = () => {
+        closeModal('clientDetailsModal');
+        openClientModal(client);
+    };
+
+    document.getElementById('clientDetailsModal').classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function payClientDebt(clientId) {
+    const debtTransactions = db.transactions.filter(t => t.clientId === clientId && t.isPending);
+    if (debtTransactions.length === 0) return;
+
+    const total = debtTransactions.reduce((sum, t) => sum + t.amount, 0);
+    const client = db.clients.find(c => c.id === clientId);
+
+    if (confirm(`Confirmar o recebimento de ${fmtMoney(total)} referente ao fiado de ${client.name}?`)) {
+        debtTransactions.forEach(t => {
+            t.isPending = false;
+            // Opcional: Atualizar a descrição ou manter histórico
+        });
+        save();
+        showNotification('Dívida quitada com sucesso!', 'success');
+        openClientDetails(clientId); // Recarregar modal de detalhes
+        renderClients(); // Recarregar lista (para remover badge de fiado)
+        renderDashboard(); // Atualizar faturamento se necessário
+    }
+}
 function updateApptValue() {
     const sel = document.getElementById('ap-service');
     const price = parseFloat(sel.options[sel.selectedIndex]?.getAttribute('data-price')) || 0;
@@ -1077,9 +1341,15 @@ function submitAppt(e) {
         alert('Por favor, preencha todos os campos corretamente.');
         return;
     }
+
+    // Garantir que o cliente exista no banco de dados e obter o ID
+    const clientId = findOrCreateClient(client);
+    updateClientsDatalist(); // Atualizar lista se for um cliente novo
+
     const appointment = {
         id: id || getID(),
         client,
+        clientId,
         date,
         time,
         serviceId,
@@ -1104,8 +1374,18 @@ function submitAppt(e) {
     save();
     closeModal('apptModal');
     renderDashboard();
-    if (document.getElementById('view-agenda') && !document.getElementById('view-agenda').classList.contains('hide')) {
+    renderDashboard();
+
+    // Atualizar Agenda se ativa
+    const agendaView = document.getElementById('view-agenda');
+    if (agendaView && !agendaView.classList.contains('hide')) {
         renderAgenda();
+    }
+
+    // Atualizar Clientes se ativa (Caso relatado pelo usuário)
+    const clientsView = document.getElementById('view-clients');
+    if (clientsView && !clientsView.classList.contains('hide')) {
+        renderClients();
     }
     showNotification('Agendamento salvo com sucesso!', 'success');
 }
@@ -1255,6 +1535,7 @@ function submitClient(e) {
     save();
     closeModal('clientModal');
     renderClients();
+    updateClientsDatalist();
     showNotification('Cliente salvo com sucesso!', 'success');
 }
 // APPOINTMENT ACTIONS
@@ -1266,19 +1547,19 @@ function finishAppt(id) {
     if (!appt) return;
     currentCheckoutAppt = appt;
     currentCheckoutProducts = [];
-    
+
     document.getElementById('co-appt-id').value = id;
     document.getElementById('co-client-name').textContent = appt.client;
     document.getElementById('co-service-name').textContent = appt.serviceName;
     document.getElementById('co-service-price').textContent = `R$ ${appt.price.toFixed(2)}`;
-    
+
     updateCheckoutApptModal();
-    
+
     // Popular select de produtos
     const sel = document.getElementById('co-product-select');
     sel.innerHTML = '<option value="">Selecione um produto...</option>';
     db.inventory.forEach(p => {
-        if(p.quantity > 0) {
+        if (p.quantity > 0) {
             sel.innerHTML += `<option value="${p.id}">${p.name} - R$ ${parseFloat(p.price || p.unitPrice).toFixed(2)} (Estoque: ${p.quantity})</option>`;
         }
     });
@@ -1290,7 +1571,7 @@ function updateCheckoutApptModal() {
     const list = document.getElementById('co-products-list');
     list.innerHTML = '';
     let totalProd = 0;
-    
+
     currentCheckoutProducts.forEach((p, idx) => {
         totalProd += p.price;
         list.innerHTML += `
@@ -1306,17 +1587,17 @@ function updateCheckoutApptModal() {
         `;
     });
     lucide.createIcons();
-    
+
     const finalTotal = currentCheckoutAppt.price + totalProd;
     document.getElementById('co-total-price').textContent = `R$ ${finalTotal.toFixed(2)}`;
 }
 
 function addCheckoutApptProduct() {
     const sel = document.getElementById('co-product-select');
-    if(!sel.value) return;
-    
+    if (!sel.value) return;
+
     const product = db.inventory.find(i => i.id === sel.value);
-    if(product) {
+    if (product) {
         currentCheckoutProducts.push({
             id: product.id,
             name: product.name,
@@ -1349,10 +1630,10 @@ function confirmCheckoutAppt(paymentType) {
     currentCheckoutProducts.forEach(p => {
         totalProductsPrice += p.price;
         totalProductCommission += (p.price * globalCommPercent / 100);
-        
+
         // Baixa no estoque
         const invItem = db.inventory.find(i => i.id === p.id);
-        if(invItem && invItem.quantity > 0) {
+        if (invItem && invItem.quantity > 0) {
             invItem.quantity--;
             db.stockMovements.push({
                 id: getID(),
@@ -1368,7 +1649,7 @@ function confirmCheckoutAppt(paymentType) {
     });
 
     const isPending = (paymentType === 'pending');
-    
+
     const t = {
         id: getID(),
         type: 'income',
@@ -1381,9 +1662,9 @@ function confirmCheckoutAppt(paymentType) {
         clientId: clientId,
         commission: (appt.commissionVal || 0) + totalProductCommission,
         isPending: isPending,
-        productsOrigin: currentCheckoutProducts.map(p => ({id: p.id, name: p.name, price: p.price}))
+        productsOrigin: currentCheckoutProducts.map(p => ({ id: p.id, name: p.name, price: p.price }))
     };
-    
+
     db.transactions.push(t);
     save();
     renderDashboard();
@@ -1391,8 +1672,8 @@ function confirmCheckoutAppt(paymentType) {
         renderAgenda();
     }
     closeModal('checkoutApptModal');
-    
-    if(isPending) {
+
+    if (isPending) {
         showNotification('Fiado lançado na ficha do cliente!', 'warning');
     } else {
         showNotification('Corte e produtos finalizados no caixa!', 'success');
@@ -1431,25 +1712,27 @@ function editService(id) {
 function editClient(id) {
     const client = db.clients.find(c => c.id === id);
     if (client) {
-        // We need to implement openClientModal or similar if it doesn't exist, 
-        // but based on renderClients, we have openClientDetails. 
-        // Let's check if there is an openClientModal for editing.
-        // For now, let's assuming client editing might be needed too.
-        // Checking app.html line 1591 shows 'clientModal'.
-        // We need to see if openClientModal handles data.
-        // For now, sticking to the requested Team and Service edits.
-        // But wait, the original code had editClient too.
-        const modal = document.getElementById('clientModal');
-        if (modal) {
-            document.getElementById('cli-id').value = client.id;
-            document.getElementById('cli-name').value = client.name;
-            document.getElementById('cli-phone').value = client.phone;
-            document.getElementById('cli-email').value = client.email || '';
-            document.getElementById('cli-birthdate').value = client.birthDate || '';
-            document.getElementById('cli-notes').value = client.notes || '';
-            modal.classList.remove('hidden');
-        }
+        openClientModal(client);
     }
+}
+
+function editAppt(id) {
+    const appt = db.appointments.find(a => a.id === id);
+    if (!appt) return;
+
+    // Abrir o modal base (que limpa e carrega serviços/pros)
+    openApptModal();
+
+    // Preencher campos
+    document.getElementById('ap-id').value = appt.id;
+    document.getElementById('ap-client').value = appt.client;
+    document.getElementById('ap-date').value = appt.date;
+    document.getElementById('ap-time').value = appt.time;
+    document.getElementById('ap-service').value = appt.serviceId;
+    document.getElementById('ap-pro').value = appt.proId;
+
+    // Atualizar valor exibido
+    updateApptValue();
 }
 
 // REPORTS
@@ -1828,11 +2111,41 @@ function saveBusinessInfo() {
     db.settings.businessName = document.getElementById('biz-name').value;
     db.settings.businessOwner = document.getElementById('biz-owner').value;
     db.settings.businessDoc = document.getElementById('biz-doc').value;
-    db.settings.businessHours = document.getElementById('biz-hours').value;
+    // db.settings.businessHours = document.getElementById('biz-hours').value; // Deprecated
+
+    db.settings.agendaInterval = parseInt(document.getElementById('agenda-interval').value) || 60;
+    db.settings.businessStart = parseInt(document.getElementById('hour-start-week').value) || 8;
+    db.settings.businessEnd = parseInt(document.getElementById('hour-end-week').value) || 20;
+
+    db.settings.workDays = {
+        saturday: {
+            active: !document.getElementById('closed-sat').checked,
+            start: parseInt(document.getElementById('hour-start-sat').value) || 9,
+            end: parseInt(document.getElementById('hour-end-sat').value) || 18
+        },
+        sunday: {
+            active: !document.getElementById('closed-sun').checked,
+            start: parseInt(document.getElementById('hour-start-sun').value) || 9,
+            end: parseInt(document.getElementById('hour-end-sun').value) || 14
+        }
+    };
+
     const prodComm = parseFloat(document.getElementById('biz-prod-comm').value);
     db.settings.productCommission = isNaN(prodComm) ? 0 : prodComm;
     save();
     showNotification('Informações salvas com sucesso!', 'success');
+}
+
+function toggleDayInput(day) {
+    const isClosed = document.getElementById(`closed-${day}`).checked;
+    const wrapper = document.getElementById(`wrapper-${day}`);
+    if (wrapper) {
+        if (isClosed) {
+            wrapper.classList.add('opacity-50', 'pointer-events-none');
+        } else {
+            wrapper.classList.remove('opacity-50', 'pointer-events-none');
+        }
+    }
 }
 // BACKUP E RESTAURAÇÃO
 function downloadBackup() {

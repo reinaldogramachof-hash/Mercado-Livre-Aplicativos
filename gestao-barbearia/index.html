@@ -86,7 +86,7 @@
         <aside id="sidebar"
             class="sidebar glass-dark text-white fixed top-0 left-0 z-40 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
             <div
-                class="sidebar-header h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-amber-500/20">
+                class="sidebar-header h-20 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-amber-500/20">
                 <div
                     class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mr-3 shadow-lg shadow-amber-500/20 flex-shrink-0">
                     <i data-lucide="crown" class="w-5 h-5 text-slate-900"></i>
@@ -96,93 +96,94 @@
                     <p class="text-[11px] text-amber-300/70 font-medium tracking-wide">Sistema PRO • Gestão Completa</p>
                 </div>
             </div>
-            <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <nav class="p-4 space-y-1 flex-1 overflow-y-auto">
                 <button onclick="router('dashboard')" id="nav-dashboard"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group active-nav mb-1">
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group active-nav">
                     <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Visão Geral</span>
                 </button>
-                <div class="px-4 mb-2 mt-4 sidebar-section-divider">
+                <div class="px-4 mb-1 mt-3 sidebar-section-divider">
                     <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Operacional</span>
                 </div>
                 <button onclick="router('agenda')" id="nav-agenda"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1">
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group">
                     <i data-lucide="calendar" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Agenda</span>
                 </button>
                 <button onclick="router('clients')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-clients">
                     <i data-lucide="user" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Clientes</span>
                 </button>
                 <button onclick="router('pdv')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-pdv">
                     <i data-lucide="shopping-cart" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">PDV (Balcão)</span>
                 </button>
                 <!-- GESTÃO -->
-                <div class="px-4 mb-2 mt-4 sidebar-section-divider">
+                <div class="px-4 mb-1 mt-3 sidebar-section-divider">
                     <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Gestão</span>
                 </div>
                 <button onclick="router('finance')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-finance">
                     <i data-lucide="wallet" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Financeiro</span>
                 </button>
                 <button onclick="router('reports')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-reports">
                     <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Relatórios</span>
                 </button>
                 <button onclick="router('team')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-team">
                     <i data-lucide="users" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Barbeiros</span>
                 </button>
                 <button onclick="router('services')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-services">
                     <i data-lucide="scissors" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Serviços</span>
                 </button>
                 <button onclick="router('inventory')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-inventory">
                     <i data-lucide="package" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Estoque</span>
                 </button>
                 <!-- SISTEMA -->
-                <div class="px-4 mb-2 mt-4 sidebar-section-divider">
+                <div class="px-4 mb-1 mt-3 sidebar-section-divider">
                     <span class="text-[10px] font-bold text-white/40 uppercase tracking-wider">Sistema</span>
                 </div>
                 <button onclick="router('settings')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-settings">
                     <i data-lucide="settings" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Configurações</span>
                 </button>
                 <button onclick="router('instructions')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-instructions">
                     <i data-lucide="book-open" class="w-5 h-5 mr-3 text-white/60 group-hover:text-white"></i>
                     <span class="font-medium sidebar-label">Manual de Uso</span>
                 </button>
                 <button onclick="router('notifications')"
-                    class="nav-item w-full flex items-center px-4 py-2.5 rounded-xl hover:bg-white/10 transition-all group mb-1"
+                    class="nav-item w-full flex items-center px-4 py-2 rounded-xl hover:bg-white/10 transition-all group"
                     id="nav-notifications">
                     <div class="relative mr-3">
                         <i data-lucide="bell" class="w-5 h-5 text-white/60 group-hover:text-white"></i>
-                        <span class="notif-badge hidden absolute -top-1 -right-1 min-w-[14px] h-3.5 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center px-0.5">0</span>
+                        <span
+                            class="notif-badge hidden absolute -top-1 -right-1 min-w-[14px] h-3.5 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center px-0.5">0</span>
                     </div>
                     <span class="font-medium sidebar-label">Notificações</span>
                 </button>
             </nav>
-            <div class="p-4 border-t border-white/10 text-center sidebar-footer-content">
+            <div class="p-3 border-t border-white/10 text-center sidebar-footer-content">
                 <div
                     class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
                     <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
@@ -216,7 +217,8 @@
                     <button onclick="router('notifications')" title="Notificações"
                         class="relative p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
                         <i data-lucide="bell" class="w-5 h-5 text-slate-500 dark:text-slate-400"></i>
-                        <span class="notif-badge hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1">0</span>
+                        <span
+                            class="notif-badge hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1">0</span>
                     </button>
                     <div class="relative group">
                         <div
@@ -275,6 +277,8 @@
                                         0,00</h3>
                                     <p class="text-xs text-slate-500 mt-1">
                                         <span id="rev-growth" class="text-green-500">+0%</span> vs ontem
+                                    </p>
+                                    <p id="dash-rev-subtext" class="text-[10px] mt-1 uppercase tracking-tighter italic">
                                     </p>
                                 </div>
                                 <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
@@ -973,14 +977,86 @@
                                         class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
                                         placeholder="000.000.000-00">
                                 </div>
-                                <div>
-                                    <label
-                                        class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Horário
-                                        de
-                                        Funcionamento</label>
-                                    <input type="text" id="biz-hours"
-                                        class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
-                                        placeholder="Ex: 09:00 às 19:00">
+                                <div class="border-t border-slate-100 dark:border-white/5 pt-4 mt-4">
+                                    <h4 class="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center">
+                                        <i data-lucide="clock" class="w-4 h-4 mr-2 text-brand-blue"></i>
+                                        Configuração da Agenda
+                                    </h4>
+
+                                    <div class="grid grid-cols-1 gap-4 mb-4">
+                                        <div>
+                                            <label
+                                                class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase">Intervalo
+                                                da Grade</label>
+                                            <select id="agenda-interval"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none mt-1">
+                                                <option value="60">60 minutos (1h)</option>
+                                                <option value="30">30 minutos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dias de Semana -->
+                                    <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl mb-3">
+                                        <p
+                                            class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-2">
+                                            Segunda a Sexta</p>
+                                        <div class="flex items-center gap-2">
+                                            <input type="number" id="hour-start-week" min="0" max="23"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                                placeholder="Início (ex: 8)">
+                                            <span class="text-slate-400 text-xs">até</span>
+                                            <input type="number" id="hour-end-week" min="0" max="23"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                                placeholder="Fim (ex: 20)">
+                                        </div>
+                                    </div>
+
+                                    <!-- Sábado -->
+                                    <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl mb-3">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">
+                                                Sábado</p>
+                                            <label
+                                                class="flex items-center gap-1 text-[10px] text-slate-500 cursor-pointer">
+                                                <input type="checkbox" id="closed-sat" onchange="toggleDayInput('sat')">
+                                                Fechado
+                                            </label>
+                                        </div>
+                                        <div id="wrapper-sat" class="flex items-center gap-2">
+                                            <input type="number" id="hour-start-sat" min="0" max="23"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                                placeholder="09">
+                                            <span class="text-slate-400 text-xs">até</span>
+                                            <input type="number" id="hour-end-sat" min="0" max="23"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                                placeholder="18">
+                                        </div>
+                                    </div>
+
+                                    <!-- Domingo -->
+                                    <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl mb-4">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <p
+                                                class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">
+                                                Domingo</p>
+                                            <label
+                                                class="flex items-center gap-1 text-[10px] text-slate-500 cursor-pointer">
+                                                <input type="checkbox" id="closed-sun" onchange="toggleDayInput('sun')">
+                                                Fechado
+                                            </label>
+                                        </div>
+                                        <div id="wrapper-sun" class="flex items-center gap-2">
+                                            <input type="number" id="hour-start-sun" min="0" max="23"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                                placeholder="09">
+                                            <span class="text-slate-400 text-xs">até</span>
+                                            <input type="number" id="hour-end-sun" min="0" max="23"
+                                                class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white outline-none"
+                                                placeholder="14">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <label
@@ -1976,7 +2052,8 @@
                                             venda (Direta ou Cliente Cadastrado), a forma de pagamento e clique em
                                             <strong class="dark:text-white">Finalizar Venda</strong>. O estoque é
                                             descontado automaticamente e a comissão do profissional é registrada no
-                                            módulo Equipe.</p>
+                                            módulo Equipe.
+                                        </p>
                                     </div>
                                 </details>
                                 <details
@@ -2157,15 +2234,18 @@
                 <section id="view-notifications" class="view-section hide fade-in">
                     <div class="max-w-2xl mx-auto pb-12">
                         <!-- Header da View -->
-                        <div class="bg-white dark:bg-barber-card p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 mb-6">
+                        <div
+                            class="bg-white dark:bg-barber-card p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 mb-6">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-brand-dark flex items-center justify-center shadow-lg">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-brand-dark flex items-center justify-center shadow-lg">
                                         <i data-lucide="bell" class="w-6 h-6 text-white"></i>
                                     </div>
                                     <div>
                                         <h2 class="text-xl font-bold text-slate-800 dark:text-white">Notificações</h2>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">Atualizações, avisos e novidades do sistema</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Atualizações, avisos e
+                                            novidades do sistema</p>
                                     </div>
                                 </div>
                                 <button onclick="markAllAsRead()"
@@ -2185,7 +2265,8 @@
                         </div>
                         <!-- Rodapé -->
                         <div class="mt-8 text-center">
-                            <p class="text-[10px] text-slate-400 dark:text-slate-600">As notificações são enviadas pela equipe de suporte do sistema. Últimas 10 exibidas.</p>
+                            <p class="text-[10px] text-slate-400 dark:text-slate-600">As notificações são enviadas pela
+                                equipe de suporte do sistema. Últimas 10 exibidas.</p>
                         </div>
                     </div>
                 </section>
@@ -2382,9 +2463,10 @@
                     <div>
                         <label
                             class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 block uppercase">Cliente</label>
-                        <input type="text" id="ap-client" required
+                        <input type="text" id="ap-client" required list="clients-list"
                             class="w-full border dark:border-white/10 p-2 rounded-lg text-sm bg-white dark:bg-slate-800 dark:text-white focus:border-brand-blue outline-none"
                             placeholder="Nome do cliente">
+                        <datalist id="clients-list"></datalist>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
