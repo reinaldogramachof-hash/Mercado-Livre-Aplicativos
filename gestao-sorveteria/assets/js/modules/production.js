@@ -96,6 +96,13 @@ function renderProductionSchedule() {
 function openProductionModal() {
     const modal = document.getElementById('productionModal');
     if (modal) modal.classList.remove('hidden');
+
+    // Popular select de produtos
+    const prodSelect = document.getElementById('prod-product-link');
+    if (prodSelect) {
+        prodSelect.innerHTML = '<option value="">Nenhum produto específico</option>' +
+            db.products.map(p => `<option value="${p.id}">${sanitizeHTML(p.name)}${p.flavor ? ' — ' + p.flavor : ''}</option>`).join('');
+    }
 }
 
 function addIngredientRow() {
@@ -149,21 +156,31 @@ function saveProduction(e) {
         return;
     }
 
-    // Calcular total de ingredientes usados (convertido para kg)
-    let ingredientsUsed = 0;
+    // Coletar ingredientes como array estruturado
+    const ingredients = [];
+    let ingredientsUsed = 0; // mantém compatibilidade de exibição
     const ingredientRows = document.querySelectorAll('#prod-ingredients-list > div');
     ingredientRows.forEach(row => {
         const inputs = row.querySelectorAll('input');
+        const name = inputs[0]?.value?.trim() || '';
         const qty = parseFloat(inputs[1]?.value || 0);
         const unitIngr = row.querySelector('select')?.value || 'kg';
-        if (unitIngr === 'kg' || unitIngr === 'litro') ingredientsUsed += qty;
-        // unidades: peso negligível, ignora
+
+        if (name && qty > 0) {
+            ingredients.push({ name, qty, unit: unitIngr });
+            if (unitIngr === 'kg' || unitIngr === 'litro') ingredientsUsed += qty;
+        }
     });
+
+    // Vincular a um produto do catálogo (se disponível)
+    const productId = document.getElementById('prod-product-link')?.value || '';
 
     const item = {
         id: getID(),
         code: 'PRD' + Date.now().toString().slice(-4),
+        productId: productId || undefined,
         product, type, quantity, unit, date, notes,
+        ingredients,
         ingredientsUsed,
         status: 'produzindo',
         createdAt: new Date().toISOString()
@@ -186,7 +203,40 @@ function saveProduction(e) {
 
 function updateProductionStatus(id, status) {
     const item = db.production.find(i => i.id === id);
-    if (item) { item.status = status; save(); renderProduction(); showNotification('Status atualizado!', 'success'); }
+    if (!item) return;
+
+    item.status = status;
+
+    // Se marcar como 'pronto', baixar ingredientes e incrementar estoque
+    if (status === 'pronto') {
+        // Baixar ingredientes do estoque
+        (item.ingredients || []).forEach(ing => {
+            const invIdx = (db.inventory || []).findIndex(inv =>
+                inv.name.toLowerCase() === ing.name.toLowerCase()
+            );
+            if (invIdx > -1) {
+                const deduct = ing.unit === 'kg' || ing.unit === 'litro' ? ing.qty : ing.qty / 1000;
+                db.inventory[invIdx].stock = Math.max(0, db.inventory[invIdx].stock - deduct);
+
+                // Alerta se cair abaixo do mínimo
+                if (db.inventory[invIdx].stock < db.inventory[invIdx].minStock) {
+                    showNotification(`⚠️ Estoque baixo: ${db.inventory[invIdx].name}`, 'warning');
+                }
+            }
+        });
+
+        // Incrementar estoque do produto finalizado
+        if (item.productId) {
+            const pIdx = db.products.findIndex(p => p.id === item.productId);
+            if (pIdx > -1) {
+                db.products[pIdx].stock += item.quantity;
+            }
+        }
+    }
+
+    save();
+    renderProduction();
+    showNotification(`Status atualizado: ${status}!`, 'success');
 }
 
 function deleteProduction(id) {

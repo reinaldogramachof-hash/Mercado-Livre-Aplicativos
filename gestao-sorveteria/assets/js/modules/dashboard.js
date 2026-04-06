@@ -110,9 +110,9 @@ function renderFlavorSalesChart() {
                 const product = db.products.find(p => p.id === item.productId);
                 if (product) {
                     if (product.category === 'sorvete') {
-                        flavorSales[sale.date].sorvete += item.quantity;
+                        flavorSales[sale.date].sorvete += item.qty;
                     } else if (product.category === 'acai') {
-                        flavorSales[sale.date].acai += item.quantity;
+                        flavorSales[sale.date].acai += item.qty;
                     }
                 }
             });
@@ -268,7 +268,7 @@ function renderProductionOrders() {
                     <i data-lucide="factory" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <p class="text-sm font-medium text-gray-800">${order.flavor} - ${order.quantity} ${order.unit}</p>
+                    <p class="text-sm font-medium text-gray-800">${order.product || order.flavor || 'Produção'} - ${order.quantity} ${order.unit}</p>
                     <p class="text-xs text-gray-500">${order.type} • Início: ${new Date(order.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
             </div>
@@ -434,7 +434,7 @@ function logFreezerTemp(freezerId) {
     const critical = db.settings.criticalTemp || -12;
     if (freezer) {
         freezer.currentTemp = temp;
-        freezer.status = temp > critical ? 'critico' : temp > (critical - 3) ? 'alerta' : 'normal';
+        freezer.status = temp > critical ? 'critico' : temp > (critical - 3) ? 'alto' : 'normal';
     }
 
     save();

@@ -5,6 +5,16 @@
 let pdvCart = [];
 let lastSaleId = null;
 
+// ========== CLIENTES: Vinculação no PDV ==========
+function populateCustomerSelect() {
+    const sel = document.getElementById('customer-select');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Cliente avulso</option>' +
+        (db.clients || []).map(c =>
+            `<option value="${c.id}">${sanitizeHTML(c.name)}</option>`
+        ).join('');
+}
+
 function renderCashierProducts(event) {
     const searchInput = document.getElementById('product-search');
     const term = (searchInput?.value || '').toLowerCase();
@@ -12,6 +22,9 @@ function renderCashierProducts(event) {
     const emptyMsg = document.getElementById('pdv-empty-products');
 
     if (!grid) return;
+
+    // Popular select de clientes
+    populateCustomerSelect();
 
     // Filtra produtos ativos
     let filtered = db.products || [];
@@ -440,19 +453,41 @@ function finalizeSale() {
         changeValue: change
     };
 
-    // Baixa no Estoque (ignora produtos tipo massa/açaí sem controle unitário exato)
+    // Baixa no Estoque — suporta os 3 tipos de produtos
     pdvCart.forEach(item => {
+        const pIdx = db.products.findIndex(p => p.id === item.productId);
+        if (pIdx < 0) return;
+
         if (item.tipo === 'padrao') {
-            const pIdx = db.products.findIndex(p => p.id === item.productId);
-            if (pIdx > -1) {
-                db.products[pIdx].stock = Math.max(0, db.products[pIdx].stock - item.qty);
-            }
+            db.products[pIdx].stock = Math.max(0, db.products[pIdx].stock - item.qty);
+        } else if (item.tipo === 'acai') {
+            // Decrementa 1 porção de açaí
+            db.products[pIdx].stock = Math.max(0, db.products[pIdx].stock - 1);
+        } else if (item.tipo === 'massa') {
+            // item.details = '350g', extrair gramas e converter para unidade do estoque
+            const grams = parseFloat(item.details) || 0;
+            const unit = db.products[pIdx].unit || 'kg';
+            const deduct = unit === 'gramas' ? grams : grams / 1000; // converte para kg
+            db.products[pIdx].stock = Math.max(0, db.products[pIdx].stock - deduct);
         }
     });
 
     db.sales.unshift(sale); // Salva em db.sales
+
+    // Vinular cliente e acumular pontos (1 ponto a cada R$10)
+    const cid = document.getElementById('customer-select')?.value;
+    if (cid) {
+        sale.clientId = cid;
+        const ci = db.clients.findIndex(c => c.id === cid);
+        if (ci > -1) {
+            db.clients[ci].points = (db.clients[ci].points || 0) + Math.floor(total / 10);
+            if (!db.clients[ci].history) db.clients[ci].history = [];
+            db.clients[ci].history.unshift({ saleId: saleId, date: saleDate.split('T')[0], total });
+        }
+    }
+
     save();
-    
+
     // Limpar o Caixa
     pdvCart = [];
     if (document.getElementById('pdv-discount')) document.getElementById('pdv-discount').value = '';
@@ -484,14 +519,14 @@ function printSaleReceipt(id) {
     const sale = db.sales.find(s => s.id === id);
     if (!sale) return;
 
-    const cfg = db.config || {};
+    const cfg = db.settings || {};
     const win = window.open('', '_blank');
     if (!win) {
         showNotification('Bloqueador de pop-ups ativo.', 'warning');
         return;
     }
 
-    const storeName = cfg.name || 'Sorveteria & Açaí Pro';
+    const storeName = cfg.companyName || 'Sorveteria & Açaí Pro';
     const address   = cfg.address ? `END: ${cfg.address}<br>` : '';
     const phone     = cfg.phone   ? `FONE: ${cfg.phone}<br>` : '';
 

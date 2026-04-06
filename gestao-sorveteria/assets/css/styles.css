@@ -66,24 +66,52 @@ body {
 
 .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px -8px rgba(13, 148, 136, 0.15);
-    border-color: rgba(13, 148, 136, 0.3);
+    box-shadow: 0 12px 24px -8px rgba(13, 148, 136, 0.2);
+    border-color: rgba(13, 148, 136, 0.4);
+}
+
+.icon-pop {
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+    transition: filter 0.25s ease;
+}
+
+.icon-pop:hover {
+    filter: drop-shadow(0 0 5px currentColor);
+}
+
+.glass-icon {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .nav-item {
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 
 .nav-item:hover {
-    transform: translateX(4px);
+    background: rgba(255, 255, 255, 0.12) !important;
+    transform: translateX(2px);
+    color: white;
+}
+
+.nav-item:hover i {
+    color: #14B8A6 !important;
+    filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.4));
 }
 
 .active-nav {
-    background: rgba(255, 255, 255, 0.12) !important;
-    border-left: 3px solid #0D9488;
+    background: rgba(13, 148, 136, 0.2) !important;
+    border-left: 3px solid #14B8A6 !important;
     color: white !important;
-    box-shadow: inset 0 0 20px rgba(13, 148, 136, 0.12);
+    box-shadow: inset 0 0 24px rgba(13, 148, 136, 0.15), 0 0 12px rgba(13, 148, 136, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.active-nav i {
+    color: #14B8A6 !important;
+    filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.5));
 }
 
 /* ── Animations ── */
@@ -113,6 +141,11 @@ body {
 }
 
 /* ── Sidebar & Mobile ── */
+.sidebar {
+    background: linear-gradient(180deg, var(--brand-dark) 0%, rgba(15, 86, 110, 0.8) 100%);
+    box-shadow: inset -1px 0 0 rgba(0,0,0,0.3);
+}
+
 @media (max-width: 1024px) {
     .sidebar {
         transform: translateX(-100%);
@@ -120,6 +153,7 @@ body {
         z-index: 50;
         height: 100vh;
         width: 280px;
+        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.4);
     }
 
     .sidebar.open {
@@ -137,11 +171,15 @@ body {
     .main-content {
         margin-left: 280px;
     }
+
+    .sidebar-collapsed ~ .main-content {
+        margin-left: 72px;
+    }
 }
 
 /* ── Sidebar Collapsed Mode (Desktop) ── */
 .sidebar-collapsed {
-    width: 68px !important;
+    width: 72px !important;
 }
 
 .sidebar-collapsed .nav-label {
@@ -149,7 +187,7 @@ body {
 }
 
 .sidebar-collapsed .nav-section-title {
-    display: none;
+    display: none !important;
 }
 
 .sidebar-collapsed .sidebar-brand-text {
@@ -271,6 +309,15 @@ body {
     transition: width 0.3s ease;
 }
 
+/* ── Nav Section Titles ── */
+.nav-section-title {
+    transition: all 0.3s ease;
+}
+
+.nav-section-title span {
+    transition: all 0.3s ease;
+}
+
 /* ── Custom Scrollbar ── */
 ::-webkit-scrollbar {
     width: 6px;
@@ -347,6 +394,130 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ── Sidebar Icons Enhancement ── */
+.sidebar i[data-lucide] {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Sidebar Footer Enhancement ── */
+.sidebar-footer-text {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, transparent 100%);
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(13, 148, 136, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* DASHBOARD OPTIMIZATIONS */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* ── Dashboard Card Enhancements ── */
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    border-color: rgba(13, 148, 136, 0.4);
+    box-shadow: 0 8px 16px rgba(13, 148, 136, 0.08);
+}
+
+/* ── KPI Cards (Dashboard Stats) ── */
+.bg-white[class*="rounded-xl"] {
+    transition: all 0.25s ease;
+}
+
+/* ── Welcome Card Optimization ── */
+.bg-gradient-to-br[class*="from-teal"] {
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+}
+
+/* ── Header Icons in Cards ── */
+.view-section h3 i[data-lucide] {
+    transition: all 0.25s ease;
+    filter: drop-shadow(0 0 0 transparent);
+}
+
+.view-section h3:hover i[data-lucide] {
+    filter: drop-shadow(0 0 4px currentColor);
+    transform: scale(1.1);
+}
+
+/* ── Dashboard Section Spacing ── */
+.view-section > div {
+    transition: all 0.3s ease;
+}
+
+/* ── Chart Container Optimization ── */
+.chart-container {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.02) 0%, transparent 100%);
+    border-radius: 8px;
+    padding: 0 !important;
+}
+
+/* ── Responsive KPI Cards ── */
+@media (max-width: 768px) {
+    .view-section > .grid[class*="grid-cols-2"] {
+        gap: 12px;
+    }
+
+    .view-section > .grid[class*="grid-cols-2"] > div {
+        padding: 16px !important;
+    }
+
+    .view-section > .grid[class*="grid-cols-2"] .text-2xl {
+        font-size: 1.5rem;
+    }
+}
+
+/* ── Quick Actions Button Group ── */
+button[class*="bg-teal-50"],
+button[class*="bg-blue-50"],
+button[class*="bg-green-50"],
+button[class*="bg-cyan-50"] {
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+button[class*="bg-teal-50"]:hover,
+button[class*="bg-blue-50"]:hover,
+button[class*="bg-green-50"]:hover,
+button[class*="bg-cyan-50"]:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Section Headers ── */
+.view-section > .grid[class*="border-gray"] > div > div[class*="border-b"],
+.view-section > div[class*="rounded-2xl"] > div[class*="border-b"] {
+    background: linear-gradient(90deg, transparent 0%, rgba(13, 148, 136, 0.03) 100%);
+}
+
+/* ── Top Flavors List ── */
+#top-flavors > div {
+    transition: all 0.2s ease;
+    padding: 12px;
+}
+
+#top-flavors > div:hover {
+    background: rgba(13, 148, 136, 0.04);
+}
+
+/* ── Production Progress Bar ── */
+#production-bar {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+/* ── Recent Sales/Production Tables ── */
+.divide-y > div {
+    transition: all 0.2s ease;
+}
+
+.divide-y > div:hover {
+    background: rgba(13, 148, 136, 0.03);
 }
 
 /* ── Print Styles ── */
@@ -462,8 +633,8 @@ textarea::placeholder {
 .main-content .bg-green-50,
 .main-content .bg-teal-50,
 .main-content .bg-emerald-50 {
-    background-color: rgba(13, 148, 136, 0.15) !important;
-    border-color: rgba(13, 148, 136, 0.25) !important;
+    background-color: rgba(13, 148, 136, 0.12) !important;
+    border-color: rgba(13, 148, 136, 0.3) !important;
 }
 .main-content .bg-red-50,
 .main-content .bg-rose-50 {
@@ -488,14 +659,14 @@ textarea::placeholder {
 .main-content .text-green-700,
 .main-content .text-teal-700   { color: #6EE7B7 !important; }
 .main-content .text-green-600,
-.main-content .text-teal-600   { color: #99F6E4 !important; }
+.main-content .text-teal-600   { color: #2DD4BF !important; }
 .main-content .text-red-700,
 .main-content .text-rose-700   { color: #FCA5A5 !important; }
 .main-content .text-red-600    { color: #FECACA !important; }
 .main-content .text-blue-700,
 .main-content .text-indigo-700 { color: #93C5FD !important; }
 .main-content .text-cyan-600,
-.main-content .text-cyan-700   { color: #67E8F9 !important; }
+.main-content .text-cyan-700   { color: #22D3EE !important; }
 .main-content .text-orange-700 { color: #FDBA74 !important; }
 
 /* ── Modais — bg-white escapam do .main-content ── */
@@ -602,7 +773,7 @@ select option {
 }
 .main-content .bg-purple-100,
 .main-content .bg-violet-100 {
-    background-color: rgba(88, 28, 135, 0.25) !important;
+    background-color: rgba(147, 51, 234, 0.15) !important;
 }
 .main-content .bg-pink-100 {
     background-color: rgba(131, 24, 67, 0.2) !important;
@@ -676,4 +847,17 @@ select option {
 }
 #products-grid .text-teal-600 {
     color: #5EEAD4 !important;
+}
+
+/* ── PDV — Grid de Produtos ── */
+.cash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px;
+}
+
+@media (max-width: 640px) {
+    .cash-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }

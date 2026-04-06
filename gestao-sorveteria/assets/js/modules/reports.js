@@ -255,12 +255,30 @@ function renderReports() {
     const totalSales = filteredSales.reduce((sum, s) => sum + (s.total || 0), 0);
     const avgTicket  = filteredSales.length > 0 ? totalSales / filteredSales.length : 0;
 
+    // ── Custo e Lucro (usando product.cost) ──
+    let totalCost = 0;
+    filteredSales.forEach(s => {
+        (s.items || []).forEach(item => {
+            const product = db.products.find(p => p.id === item.productId);
+            totalCost += (product?.cost || 0) * (item.qty || 1);
+        });
+    });
+    const grossProfit = totalSales - totalCost;
+    const marginPct = totalSales > 0 ? (grossProfit / totalSales * 100) : 0;
+
     const repInc = document.getElementById('rep-inc');
     const repExp = document.getElementById('rep-exp');
     const repBal = document.getElementById('rep-bal');
+    const repCost = document.getElementById('rep-cost');
+    const repProfit = document.getElementById('rep-profit');
+    const repMargin = document.getElementById('rep-margin');
+
     if (repInc) repInc.textContent = fmtMoney(totalSales);
     if (repExp) repExp.textContent = `${filteredSales.length} venda(s)`;
     if (repBal) repBal.textContent = fmtMoney(avgTicket);
+    if (repCost) repCost.textContent = fmtMoney(totalCost);
+    if (repProfit) repProfit.textContent = fmtMoney(grossProfit);
+    if (repMargin) repMargin.textContent = `${marginPct.toFixed(1)}%`;
 
     // ── Breakdown por forma de pagamento ──
     const paymentEl = document.getElementById('rep-payment-breakdown');

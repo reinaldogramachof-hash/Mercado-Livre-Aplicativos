@@ -71,6 +71,14 @@ function renderTemperature() {
     }).join('');
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Popular select de freezer para o gráfico
+    const freezerSelect = document.getElementById('temp-chart-freezer');
+    if (freezerSelect) {
+        freezerSelect.innerHTML = '<option value="">Todos os freezers</option>' +
+            db.freezers.map(f => `<option value="${f.id}">${sanitizeHTML(f.name)}</option>`).join('');
+    }
+
     renderTemperatureLog();
     renderTemperatureChart();
 }
@@ -202,6 +210,10 @@ function renderTemperatureChart() {
     const chartArea = document.getElementById('temperature-chart');
     if (!chartArea) return;
 
+    // Verificar se há um filtro de freezer selecionado
+    const freezerSelect = document.getElementById('temp-chart-freezer');
+    const selectedFrozerId = freezerSelect ? freezerSelect.value : '';
+
     // Pegar últimas 24 horas
     const now = new Date();
     const hours = [];
@@ -211,10 +223,13 @@ function renderTemperatureChart() {
         hours.push(hour.toISOString().slice(0, 13)); // YYYY-MM-DDTHH
     }
 
-    // Agrupar temperaturas por hora
+    // Agrupar temperaturas por hora (opcional: filtrar por freezer)
     const hourlyTemps = {};
     hours.forEach(hour => {
-        const readings = db.temperatures.filter(t => t.timestamp.startsWith(hour));
+        let readings = db.temperatures.filter(t => t.timestamp.startsWith(hour));
+        if (selectedFrozerId) {
+            readings = readings.filter(t => t.freezerId === selectedFrozerId);
+        }
         if (readings.length > 0) {
             hourlyTemps[hour] = readings.reduce((a, b) => a + b.temperature, 0) / readings.length;
         } else {

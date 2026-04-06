@@ -40,9 +40,14 @@ function renderProductsCatalog(category = 'all') {
                     <div class="text-lg font-bold text-teal-600">
                         ${product.tipo === 'massa' ? fmtMoney(product.pricePerHundredGrams || 0) + '/100g' : (product.tipo === 'acai' ? 'Variável' : fmtMoney(product.price || 0))}
                     </div>
-                    <button onclick="deleteProduct('${product.id}')" class="text-gray-400 hover:text-red-600 p-1">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
+                    <div class="flex gap-1">
+                        <button onclick="openEditProductModal('${product.id}')" class="text-gray-400 hover:text-teal-600 p-1">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteProduct('${product.id}')" class="text-gray-400 hover:text-red-600 p-1">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,7 +71,57 @@ function filterProductCatalog(category) {
     renderProductsCatalog(category);
 }
 
+function openEditProductModal(id) {
+    const product = db.products.find(p => p.id === id);
+    if (!product) return;
+
+    // Atualizar título
+    const titleEl = document.getElementById('product-modal-title');
+    if (titleEl) titleEl.textContent = 'Editar Produto';
+
+    // Preencher formulário com dados do produto
+    document.getElementById('p-id').value = product.id;
+    document.getElementById('p-code').value = product.code || '';
+    document.getElementById('p-name').value = product.name || '';
+    document.getElementById('p-category').value = product.category || '';
+    document.getElementById('p-flavor').value = product.flavor || '';
+    document.getElementById('p-cost').value = product.cost || '';
+    document.getElementById('p-price').value = product.price || '';
+    document.getElementById('p-temperature').value = product.temperature || '';
+    document.getElementById('p-stock').value = product.stock || '';
+    document.getElementById('p-min-stock').value = product.minStock || '';
+    document.getElementById('p-unit').value = product.unit || 'unidade';
+    document.getElementById('p-ingredients').value = product.ingredients || '';
+    document.getElementById('p-description').value = product.description || '';
+    document.getElementById('p-tipo').value = product.tipo || 'padrao';
+
+    // Campos condicionais
+    if (product.tipo === 'massa') {
+        document.getElementById('p-price-hundred').value = product.pricePerHundredGrams || '';
+    }
+
+    if (product.tipo === 'acai' && product.sizes) {
+        document.getElementById('acai-sizes-list').innerHTML = '';
+        product.sizes.forEach(s => {
+            addAcaiSizeRow();
+            const rows = document.querySelectorAll('.acai-size-row');
+            const lastRow = rows[rows.length - 1];
+            lastRow.querySelector('.size-label').value = s.label;
+            lastRow.querySelector('.size-price').value = s.price;
+        });
+    } else {
+        document.getElementById('acai-sizes-list').innerHTML = '';
+    }
+
+    toggleProductTypeFields();
+    document.getElementById('productModal').classList.remove('hidden');
+}
+
 function openProductModal() {
+    // Resetar título
+    const titleEl = document.getElementById('product-modal-title');
+    if (titleEl) titleEl.textContent = 'Novo Produto';
+
     document.getElementById('p-id').value = '';
     document.getElementById('p-code').value = '';
     document.getElementById('p-name').value = '';

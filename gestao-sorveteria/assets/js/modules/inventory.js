@@ -267,7 +267,85 @@ function confirmStockEntry(itemId, source) {
 }
 
 function openStockTakeModal() {
-    showNotification('Inventário físico: atualize os estoques individualmente via entrada.', 'info');
+    // Remover modal anterior se existir
+    const old = document.getElementById('stocktake-modal');
+    if (old) old.remove();
+
+    // Agregar itens de inventory + products
+    const allItems = [
+        ...(db.inventory || []).map(i => ({...i, _src: 'inventory'})),
+        ...db.products.map(p => ({...p, _src: 'product'}))
+    ].filter(i => i.stock !== undefined);
+
+    if (allItems.length === 0) {
+        showNotification('Nenhum item para contar.', 'info');
+        return;
+    }
+
+    const modal = document.createElement('div');
+    modal.id = 'stocktake-modal';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+    modal.innerHTML = `
+        <div class="fixed inset-0 bg-black/50" onclick="document.getElementById('stocktake-modal')?.remove()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col z-10">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="font-bold text-gray-800">Inventário Físico</h3>
+                <button onclick="document.getElementById('stocktake-modal')?.remove()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <p class="text-sm text-gray-500 px-5 pt-3 pb-2">Informe as quantidades contadas. Deixe em branco para não alterar.</p>
+            <div class="overflow-y-auto flex-1 px-5 py-3 space-y-2">
+                ${allItems.map(item => `
+                    <div class="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-800">${sanitizeHTML(item.name)}</p>
+                            <p class="text-xs text-gray-400">Atual: ${item.stock} ${item.unit || ''}</p>
+                        </div>
+                        <input type="number" min="0" step="0.01" placeholder="Contado"
+                            data-id="${item.id}" data-src="${item._src}"
+                            class="stocktake-input w-28 border rounded-lg px-2 py-1.5 text-sm text-center outline-none focus:border-teal-400">
+                    </div>
+                `).join('')}
+            </div>
+            <div class="p-5 border-t border-gray-100 flex gap-3">
+                <button onclick="document.getElementById('stocktake-modal')?.remove()"
+                    class="flex-1 border border-gray-300 rounded-xl py-2 font-bold text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
+                <button onclick="confirmStockTake()"
+                    class="flex-1 bg-teal-500 text-white rounded-xl py-2 font-bold text-sm hover:bg-teal-600">Aplicar Ajustes</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    if (window.lucide) lucide.createIcons();
+}
+
+function confirmStockTake() {
+    let changes = 0;
+    document.querySelectorAll('.stocktake-input').forEach(input => {
+        if (input.value === '') return;
+        const qty = parseFloat(input.value);
+        if (isNaN(qty) || qty < 0) return;
+        const id = input.dataset.id;
+        const src = input.dataset.src;
+
+        if (src === 'inventory') {
+            const item = (db.inventory || []).find(x => x.id === id);
+            if (item) { item.stock = qty; changes++; }
+        } else {
+            const product = db.products.find(x => x.id === id);
+            if (product) { product.stock = qty; changes++; }
+        }
+    });
+
+    if (changes > 0) {
+        save();
+        document.getElementById('stocktake-modal')?.remove();
+        renderInventory();
+        showNotification(`✅ ${changes} item(ns) ajustado(s)!`, 'success');
+    } else {
+        showNotification('Nenhuma alteração foi feita.', 'warning');
+    }
 }
 
 function deleteInventoryItem(itemId, source) {
